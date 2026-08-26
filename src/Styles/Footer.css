@@ -1,0 +1,191 @@
+.footer {
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    #4d0000,
+    #780000,
+    #4d0000
+  );
+
+  color: white;
+  padding: 45px 55px;
+  box-sizing: border-box;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1.2fr 1fr;
+  gap: 50px;
+}
+
+.footer-logo {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.footer-logo img {
+  width: 75px;
+  height: auto;
+  display: block;
+}
+
+.footer-about p {
+  max-width: 330px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #f1dede;
+  margin-top: 5px;
+}
+
+
+.footer-section h3 {
+  font-size: 13px;
+  font-weight: 500;
+  font-style:normal;
+  margin: 0 0 15px;
+  color: #ffffff;
+}
+
+
+.footer-section p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #f1dede;
+  margin: 5px 0;
+}
+
+
+.footer-section a {
+  display: block;
+  text-decoration: none;
+  color: #f1dede;
+  font-size: 11px;
+  margin-bottom: 9px;
+
+  transition: 0.3s ease;
+}
+
+.footer-section a:hover {
+  color: white;
+  transform: translateX(3px);
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.social-icons span {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.social-icons svg {
+  width: 18px;
+  height: 18px;
+}
+
+.linkedin {
+  background-color: #0a66c2;
+  color: white;
+}
+
+.twitter {
+  background-color: #000;
+  color: white;
+}
+
+.instagram {
+  background: linear-gradient(
+    45deg,
+    #feda75,
+    #fa7e1e,
+    #d62976,
+    #962fbf,
+    #4f5bd5
+  );
+  color: white;
+}
+
+/* laptop */
+
+@media (max-width: 1100px) {
+
+  .footer {
+    padding: 40px 40px;
+  }
+
+  .footer-container {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+
+/* tablet */
+
+@media (max-width: 768px) {
+
+  .footer {
+    padding: 40px 35px;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 35px 40px;
+  }
+
+  .footer-about p {
+    max-width: 300px;
+  }
+}
+
+
+/* mobile */
+
+@media (max-width: 500px) {
+
+  .footer {
+    padding: 30px 20px;
+  }
+
+  .footer-container {
+    gap: 25px;
+  }
+
+  .footer-logo img {
+    width: 65px;
+  }
+
+  .footer-about p {
+    font-size: 11px;
+  }
+
+  .footer-section h3 {
+    font-size: 12px;
+  }
+
+  .footer-section p,
+  .footer-section a {
+    font-size: 10px;
+  }
+
+  .social-icons span {
+    width: 21px;
+    height: 21px;
+  }
+
+  .social-icons svg {
+    width: 15px;
+    height: 15px;
+  }
+}
