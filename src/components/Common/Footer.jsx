@@ -24,39 +24,54 @@ function Footer() {
 
             <div className="footer-section">
                 <h3>Contact Us</h3>
-                <p>Email: VibelyEvents.com</p>
-                <p>
-                    Address: 23/6, Galaxy Plaza,
-                    <br />
-                    Ananthapur, Andhra Pradesh.
-                </p>
+                 
+                <div className="footer-email">
+                    <p>Email : </p>
+
+                    <a href="mailto:support@vibely.com">
+                        support@vibely.com
+                    </a>
+                </div>
+
+                <div>
+                    <p>Adress : </p>
+                <a href="https://www.google.com/maps/search/?api=1&query=23%2F5%2C+Galaxy+Plaza%2C+Ananthapur%2C+Andhra+Pradesh" target="_blank"  rel=" noopener noreferrer">
+                    23/5, Galaxy plaza, Ananthapur, Andhra Pradesh.
+                </a>
+               </div>
             </div>
 
 
             <div className="footer-section">
                 <h3>Quick Links</h3>
-                <Link to="/">USP of Vibely Events</Link>
-                <Link to="/">Our Services</Link>
-                <Link to="/">Why Choose Us</Link>
-                <Link to="/">Portfolio</Link>
-                <Link to="/">Contact Us</Link>
+                <a href="#usp">USP of Vibely Events</a>
+
+                <a href="#services">Our Services</a>
+
+                <a href="#why-choose-us">Why Choose Us</a>
+
+                <a href="#portfolio">Portfolio</a>
+
+                <a href="#contact">Contact Us</a>
+                
             </div>
 
             <div className="footer-section">
                  <h3>FOLLOW US ON</h3>
 
             <div className="social-icons">
-                <span className="linkedin">
+                <a className="linkedin" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">
                 <FaLinkedinIn />
-                </span>
+                </a>
 
-                <span className="twitter">
+                <a  className="twitter" href="https://x.com/" target="_blank" rel="noreferrer">
                 <FaXTwitter />
-                </span>
+                </a>
 
-                <span className="instagram">
+                <a className="instagram" href="https://www.instagram.com/" target="_blank" rel="noreferrer">
                 <FaInstagram />
-                </span>
+                </a>
+
             </div>
             </div>
             

@@ -1,14 +1,13 @@
 import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
-import HomePage from '../../Pages/HomePage/HomePage'
 
-function Layout({Homepage}) {
+function Layout({ HomePage }) {
   return (
     <div>
-        <Header/>
-        <HomePage/>
-        <Footer/>
+      <Header />
+      <HomePage />
+      <Footer />
     </div>
   )
 }

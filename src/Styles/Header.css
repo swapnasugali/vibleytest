@@ -22,7 +22,7 @@
 nav {
   display: flex;
   gap: 35px;
-  margin-left: 60px;
+  margin-left: 100px;
 }
 
 .home{
@@ -38,21 +38,23 @@ nav a {
 }
 
 .search {
+  width: 250px;
+  height: 36px;
+
   display: flex;
   align-items: center;
+
   gap: 8px;
-
-  width: 250px;
-  height: 35px;
-
-  border: 1px solid #ccc;
-  border-radius: 20px;
 
   padding: 0 12px;
   box-sizing: border-box;
 
-  margin-left: auto;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  border-color: 1px solid  #4D0000;
+  margin-left: 15px;
 }
+
 
 .search input {
   width: 100%;
@@ -65,7 +67,7 @@ nav a {
   width: 40px;
   height: 40px;
 
-  margin-left: 20px;
+  margin-left: 15px;
 
   display: flex;
   align-items: center;
@@ -77,6 +79,7 @@ nav a {
   width: 32px;
   height: 32px;
 }
+
 
 /* Laptop */
 
@@ -96,6 +99,11 @@ nav a {
 
   .search {
     width: 220px;
+    margin-left: 18px;
+
+    .account{
+        margin-left: 15px;
+    }
   }
 
 }
@@ -123,7 +131,7 @@ nav a {
     width: 100px;
   }
 
-  .nav {
+  nav {
     order: 3;
 
     width: 100%;
@@ -139,7 +147,7 @@ nav a {
     flex-wrap: wrap;
   }
 
-  .nav a {
+  nav a {
     font-size: 12px;
   }
 
@@ -194,7 +202,7 @@ nav a {
     margin-left: 10px;
   }
 
-  .nav {
+  nav {
     order: 3;
 
     width: 100%;
@@ -214,9 +222,10 @@ nav a {
     padding-bottom: 5px;
   }
 
-  .nav a {
+  nav a {
     flex-shrink: 0;
 
     font-size: 11px;
   }
 }
+
