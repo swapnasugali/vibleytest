@@ -5,6 +5,10 @@ import mehandi from "../../assets/mehandi.png"
 import stage from "../../assets/stage.png"
 import LookingFor from "../../components/Common/Home/LookingFor"
 import PlanningFor from "../../components/Common/Home/PlanningFor"
+import MostHappeningEvents from '../../components/Common/Home/MostHappeningEvents'
+import ExploreServices from '../../components/Common/Home/ExploreServices'
+import FeaturedProviders from '../../components/Common/Home/FeaturedProviders'
+import ContactSection from '../../components/Common/Home/ContactSection'
 
 function HomePage() {
   return (
@@ -39,6 +43,10 @@ function HomePage() {
         </section>
        <LookingFor/>
        <PlanningFor/>
+       <MostHappeningEvents/>
+       <ExploreServices/>
+    <FeaturedProviders/>
+    <ContactSection/>
     </div> 
              
   )
