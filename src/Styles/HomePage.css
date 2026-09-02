@@ -1,3 +1,5 @@
+
+
 .landing-section {
   width: 100%;
   display: flex;
@@ -50,22 +52,24 @@
 .main-content h1 {
   margin: 0;
   color: #f5f5f5;
-  font-size: 52px;
+  font-size: 90px;
   font-weight: 700;
+  font:bold;
   line-height: 1.1;
 }
 
 .main-content h2 {
   margin: 6px 0 14px;
   color: #f0f0f0;
-  font-size: 40px;
+  font-size: 102px;
   font-weight: 400;
-  font-style: italic;
+  font-family: "OliverOblique" !important;
   line-height: 1;
 }
 
 .main-content p span {
-    color:darkgoldenrod
+    color:darkgoldenrod;
+    font-size:26px;
 }
 
 .main-content h2 span {
@@ -102,7 +106,9 @@
   bottom: 5px;
   left: 10px;
   color: white;
-  font-size: 12px;
+  width:322px;
+  height:24px;
+  font-size: 22px;
   margin: 0;
   left: 50%;
   transform: translateX(-50%);

@@ -7,146 +7,174 @@ const SuggestMe = () => {
         relative
         mt-6
         w-full
-        overflow-visible
+        overflow-hidden
         rounded-[4px]
         bg-gradient-to-r
         from-[#fff0c9]
         via-[#fff9e9]
         to-[#f6f6f6]
-
-        h-[180px]
-        sm:h-[200px]
-        md:h-[230px]
-        lg:h-[250px]
-        xl:h-[270px]
       "
     >
-      {/* Content */}
       <div
         className="
+          relative
           flex
-          h-full
+          min-h-[180px]
           w-full
-          flex-col
           items-center
           justify-center
           px-4
-          text-center
+          py-6
 
+          sm:min-h-[200px]
           sm:px-6
 
-          md:w-[70%]
+          md:min-h-[230px]
           md:px-8
 
-          lg:w-[72%]
-          lg:px-10
+          lg:min-h-[260px]
+          lg:px-12
 
-          xl:w-[75%]
+          xl:min-h-[290px]
+          xl:px-16
         "
       >
-        {/* Heading */}
-        <h3
+        {/* ================= CONTENT ================= */}
+        <div
           className="
-            max-w-[280px]
-            text-[14px]
-            font-medium
-            leading-relaxed
-            text-[#3b3b3b]
-
-            sm:max-w-[420px]
-            sm:text-[16px]
-
-            md:max-w-[500px]
-            md:text-[18px]
-
-            lg:max-w-[600px]
-            lg:text-[20px]
-
-            xl:max-w-[650px]
-            xl:text-[22px]
-          "
-        >
-          Not sure where to start? Let us recommend the best organizer /
-          service for your event.
-        </h3>
-
-        {/* Button */}
-        <button
-          type="button"
-          className="
-            mt-4
+            z-10
             flex
-            h-[38px]
-            w-[145px]
-            cursor-pointer
+            w-full
+            flex-col
             items-center
             justify-center
-            rounded-[4px]
-            bg-[#a90000]
-            text-[12px]
-            font-semibold
-            uppercase
-            text-white
-            transition
-            hover:bg-[#850000]
+            text-center
 
-            sm:h-[40px]
-            sm:w-[150px]
-            sm:text-[13px]
+            md:w-[65%]
 
-            md:h-[44px]
-            md:w-[165px]
-            md:text-[14px]
+            lg:w-[68%]
 
-            lg:h-[46px]
-            lg:w-[175px]
-            lg:text-[15px]
+            xl:w-[70%]
           "
         >
-          Suggest Me
-        </button>
+          {/* Heading */}
+          <h3
+            className="
+              max-w-[300px]
+              text-[14px]
+              font-medium
+              leading-relaxed
+              text-[#3b3b3b]
 
-        {/* Bottom Text */}
-        <p
+              sm:max-w-[450px]
+              sm:text-[16px]
+
+              md:max-w-[500px]
+              md:text-[18px]
+
+              lg:max-w-[650px]
+              lg:text-[20px]
+
+              xl:text-[22px]
+            "
+          >
+            Not sure where to start? Let us recommend the best organizer /
+            service for your event.
+          </h3>
+
+          {/* Button */}
+          <button
+            type="button"
+            className="
+              mt-4
+              flex
+              h-10
+              w-[145px]
+              cursor-pointer
+              items-center
+              justify-center
+              rounded-[4px]
+              bg-[#a90000]
+              text-[12px]
+              font-semibold
+              uppercase
+              text-white
+              transition
+              hover:bg-[#850000]
+
+              sm:w-[155px]
+              sm:text-[13px]
+
+              md:h-11
+              md:w-[165px]
+              md:text-[14px]
+
+              lg:h-12
+              lg:w-[180px]
+              lg:text-[15px]
+
+              xl:w-[190px]
+              xl:text-[16px]
+            "
+          >
+            Suggest Me
+          </button>
+
+          {/* Bottom Text */}
+          <p
+            className="
+              mt-4
+              text-[10px]
+              italic
+              text-[#252525]
+
+              sm:text-[11px]
+
+              md:text-[12px]
+
+              lg:text-[13px]
+
+              xl:text-[14px]
+            "
+          >
+            Attend the Short Survey, and we will suggest you the best!
+          </p>
+        </div>
+
+        {/* ================= CHARACTER ================= */}
+        <div
           className="
-            mt-4
-            text-[10px]
-            italic
-            text-[#252525]
+            absolute
+            bottom-0
+            right-0
+            hidden
+          
+            items-end
+            justify-end
 
-            sm:text-[11px]
+            md:flex
+            md:h-full
+            md:w-[35%]
 
-            md:text-[12px]
+            lg:w-[32%]
 
-            lg:text-[13px]
+            xl:w-[30%]
           "
         >
-          Attend the Short Survey, and we will suggest you the best!
-        </p>
+          <img
+            src={character}
+            alt="Vibely character"
+            className="
+              h-auto
+              max-h-full
+              w-auto
+              max-w-full
+              object-contain
+              object-bottom
+            "
+          />
+        </div>
       </div>
-
-      {/* Character */}
-      <img
-        src={character}
-        alt="Vibely character"
-        className="
-          absolute
-          bottom-0
-          right-[3%]
-          z-20
-          hidden
-          h-auto
-          w-auto
-          object-contain
-
-          md:block
-          md:h-[230px]
-
-          lg:h-[250px]
-
-          xl:h-[270px]
-        "
-      />
     </section>
   );
 };

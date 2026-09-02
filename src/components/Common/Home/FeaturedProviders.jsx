@@ -1,4 +1,6 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
+
 import {
   FaArrowLeft,
   FaArrowRight,
@@ -16,6 +18,7 @@ const providers = [
     location: "Kondapalli, Hyderabad",
     image: provider1,
     offer: "STARTING FROM ₹25,000",
+    portfolioPath: "/photography-portfolio",
   },
   {
     category: "Catering",
@@ -23,6 +26,7 @@ const providers = [
     location: "Kukatpally, Hyderabad",
     image: provider2,
     offer: "BEST PRICES PER PLATE",
+    portfolioPath: "/catering-portfolio",
   },
   {
     category: "Lighting",
@@ -30,20 +34,7 @@ const providers = [
     location: "Madhapur, Hyderabad",
     image: provider3,
     offer: "COMBO WITH DJ SERVICES",
-  },
-  {
-    category: "Lighting",
-    name: "ELITE LIGHTING SERVICES",
-    location: "Madhapur, Hyderabad",
-    image: provider3,
-    offer: "COMBO WITH DJ SERVICES",
-  },
-  {
-    category: "Lighting",
-    name: "ELITE LIGHTING SERVICES",
-    location: "Madhapur, Hyderabad",
-    image: provider3,
-    offer: "COMBO WITH DJ SERVICES",
+    portfolioPath: "/lighting-portfolio",
   },
 ];
 
@@ -75,7 +66,7 @@ const FeaturedProviders = () => {
   };
 
   return (
-    <section className="w-full bg-[#fffdfa] px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12 lg:px-14 xl:px-16">
+    <section className="w-full px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12 lg:px-14 xl:px-16">
       <div className="mx-auto w-full max-w-[1400px]">
 
         {/* Heading */}
@@ -142,8 +133,8 @@ const FeaturedProviders = () => {
                   </div>
 
                   {/* Portfolio */}
-                  <button
-                    type="button"
+                  <Link
+                    to={provider.portfolioPath}
                     className="absolute right-3 top-3 z-10 flex cursor-pointer items-center gap-[2px] text-[10px] font-medium text-[#f4b400]"
                   >
                     <span>Portfolio</span>
@@ -152,7 +143,7 @@ const FeaturedProviders = () => {
                       <FaChevronRight className="text-[8px]" />
                       <FaChevronRight className="text-[8px]" />
                     </span>
-                  </button>
+                  </Link>
 
                   {/* Bottom Offer */}
                   <div className="absolute bottom-0 left-0 z-10">
@@ -161,7 +152,6 @@ const FeaturedProviders = () => {
                         {provider.offer}
                       </span>
 
-                      {/* Curved Right Side */}
                       <div className="absolute -right-[14px] top-0 h-[30px] w-[28px] rounded-tr-full bg-[#272727]/90" />
                     </div>
                   </div>
@@ -171,7 +161,6 @@ const FeaturedProviders = () => {
                 {/* Provider Details */}
                 <div className="flex items-center justify-between gap-3 px-3 py-3 sm:px-4 sm:py-4">
 
-                  {/* Name and Location */}
                   <div className="min-w-0">
                     <h3 className="text-[18px] font-medium text-black sm:text-[20px] md:text-[22px]">
                       {provider.name}
@@ -182,7 +171,6 @@ const FeaturedProviders = () => {
                     </p>
                   </div>
 
-                  {/* Book Now */}
                   <button
                     type="button"
                     className="h-[45px] w-[120px] shrink-0 cursor-pointer rounded-[4px] bg-[#A63A2A] text-[14px] font-semibold text-white transition hover:bg-[#8f3023] sm:w-[130px] sm:text-[15px]"

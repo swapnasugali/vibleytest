@@ -22,7 +22,7 @@ function LookingFor() {
     <div className="flex flex-1 flex-col gap-4 md:flex-row">
 
       {/* Service Providers */}
-      <div className="relative flex-1 overflow-hidden rounded-md bg-[#a82f2b] px-8 py-4 text-center text-white">
+      <div className="relative flex-1 h-[104px] w-full lg:w-[650px] overflow-hidden rounded-md bg-[#a82f2b] px-8 py-4 text-center text-white">
 
         {/* Left dashed line */}
         <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80"></div>
@@ -34,11 +34,11 @@ function LookingFor() {
         {/* bottom small curve */}
         <div className="absolute -bottom-4 right-12 h-8 w-[72px] rounded-t-full bg-[#f5f4f2]"></div>
 
-        <h3 className="relative z-40 text-[12px] font-semibold">
+        <h3 className="relative z-40 text-[22px] font-semibold">
           SERVICE PROVIDERS
         </h3>
 
-        <p className="relative z-40 mt-2 text-[8px] leading-4 text-white">
+        <p className="relative z-40 mt-2 text-[12px] leading-4 text-white">
           Experts who provide specific event services for your special occasion.
         </p>
 
@@ -46,7 +46,7 @@ function LookingFor() {
 
 
       {/* Event Organizers */}
-      <div className="relative flex-1 overflow-hidden rounded-md bg-[#e59a00] px-8 py-4 text-center text-white">
+      <div className="relative flex-1 h-[104px] w-full lg:w-[650px]overflow-hidden rounded-md bg-[#e59a00] px-8 py-4 text-center text-white">
 
         {/* Left dashed line */}
         <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80"></div>
@@ -57,11 +57,11 @@ function LookingFor() {
         {/* Bottom curve */}
         <div className="absolute -bottom-4 right-12 h-8 w-[72px] rounded-t-full bg-[#f5f4f2]"></div>
 
-        <h3 className="relative text-[12px] font-semibold">
+        <h3 className="relative text-[22px] font-semibold">
           EVENT ORGANIZERS
         </h3>
 
-        <p className="relative mt-2 text-[8px] leading-4 text-white">
+        <p className="relative mt-2 text-[12px] leading-4 text-white">
           Experts who plan and manage your complete event from start to finish.
         </p>
 

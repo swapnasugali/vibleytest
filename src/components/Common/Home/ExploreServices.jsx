@@ -70,7 +70,7 @@ const ExploreServices = () => {
   };
 
   return (
-    <section className="w-full bg-[#f8f8f8] py-8 sm:py-10 md:py-12">
+    <section className="w-full py-8 sm:py-10 md:py-12">
       <div className="mx-auto w-full px-5 sm:px-10 md:px-12">
 
         {/* Heading */}

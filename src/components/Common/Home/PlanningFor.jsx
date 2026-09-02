@@ -98,7 +98,7 @@ function PlanningFor() {
             {/* Theme */}
             <div className="flex min-h-0 flex-col">
               {/* Yellow Divider */}
-              <div className="h-[14px] shrink-0 bg-[#ffb400] md:h-[16px]" />
+              <div className="h-[14px] shrink-0 bg-[#ffb400] font-semibold text-[32px] md:h-[16px]" />
 
               <EventCard
                 image={theme}
@@ -124,7 +124,7 @@ function PlanningFor() {
                     Social <br /> Events
                   </>
                 }
-                className="aspect-[3/4] md:min-h-0 md:flex-1 md:aspect-auto"
+                className="aspect-[3/4] md:min-h-0 md:flex-1 font-semibold text-[32px] md:aspect-auto"
                 small
               />
             </div>
