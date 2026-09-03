@@ -76,6 +76,7 @@ const SuggestMe = () => {
               lg:text-[20px]
 
               xl:text-[22px]
+              hover:text-blue-400
             "
           >
             Not sure where to start? Let us recommend the best organizer /
@@ -115,6 +116,10 @@ const SuggestMe = () => {
 
               xl:w-[190px]
               xl:text-[16px]
+              hover:bg-blue-500
+              hover:text-red-500
+              hover:scale-105
+              hover:brightness-110
             "
           >
             Suggest Me
@@ -135,6 +140,12 @@ const SuggestMe = () => {
               lg:text-[13px]
 
               xl:text-[14px]
+
+              hover:text-blue-500
+              hover:scale-105
+              hover:brightness-110
+              transition-transform
+              duration-300
             "
           >
             Attend the Short Survey, and we will suggest you the best!
@@ -159,6 +170,10 @@ const SuggestMe = () => {
             lg:w-[32%]
 
             xl:w-[30%]
+            hover:scale-105
+            hover:brightness-110
+            transition-transform
+
           "
         >
           <img
@@ -171,6 +186,8 @@ const SuggestMe = () => {
               max-w-full
               object-contain
               object-bottom
+              hover:scale-105
+              hover:contrast-110
             "
           />
         </div>

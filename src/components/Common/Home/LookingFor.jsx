@@ -2,7 +2,7 @@ import React from 'react'
 
 function LookingFor() {
   return (
-    <section className="w-full bg-[#f5f4f2] py-8 px-6">
+    <section className="w-full bg-[#f5f4f2] py-8 px-6 hover:brightness-140 sm:px-8 md:px-12 lg:px-16">
   
   <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
 
@@ -19,10 +19,10 @@ function LookingFor() {
 
 
     {/* Options */}
-    <div className="flex flex-1 flex-col gap-4 md:flex-row">
+    <div className="flex flex-1 flex-col gap-4 md:flex-row ">
 
       {/* Service Providers */}
-      <div className="relative flex-1 h-[104px] w-full lg:w-[650px] overflow-hidden rounded-md bg-[#a82f2b] px-8 py-4 text-center text-white">
+      <div className="relative flex-1 h-[104px] w-full lg:w-[650px] overflow-hidden rounded-md bg-[#a82f2b] px-8 py-4 text-center text-white hover:scale-105 hover:brightness-110 transition-transform duration-300">
 
         {/* Left dashed line */}
         <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80"></div>
@@ -46,7 +46,7 @@ function LookingFor() {
 
 
       {/* Event Organizers */}
-      <div className="relative flex-1 h-[104px] w-full lg:w-[650px]overflow-hidden rounded-md bg-[#e59a00] px-8 py-4 text-center text-white">
+      <div className="relative flex-1 h-[104px] w-full lg:w-[650px]overflow-hidden rounded-md bg-[#e59a00] px-8 py-4 text-center text-white hover:scale-105 hover:brightness-110 transition-transform duration-300">
 
         {/* Left dashed line */}
         <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80"></div>

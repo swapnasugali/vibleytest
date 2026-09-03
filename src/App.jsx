@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Common/Layout";
 import HomePage from "./Pages/HomePage/HomePage";
 
-import PhotographyPortfolio from "./components/Common/Portfolio/PhotographyProfolio";
-import CateringPortfolio from "./components/Common/Portfolio/CateringPortfolio";
-import LightingPortfolio from "./components/Common/Portfolio/LightingPortfolio";
+import PhotographyPortfolio from "./Pages/Portfolio/PhotographyProfolio";
+import CateringPortfolio from "./Pages/Portfolio/LightingPortfolio";
+import LightingPortfolio from "./Pages/Portfolio/CateringPortfolio";
 
 function App() {
   return (

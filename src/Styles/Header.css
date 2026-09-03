@@ -39,19 +39,24 @@
 }
 
 .desktop-nav a {
+  display: inline-block;
+
   color: #252525;
   font-size: 22px;
-  font-weight: semi-bold;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
+
+  transition: all 0.3s ease;
 }
 
 .desktop-nav a:hover {
-  color: #590303;
+  color: #5f11e7;
+  transform: scale(1.05);
 }
 
 .desktop-nav .home {
-  color: #ef1414;
+  color: #ef1414 !important;
 }
 
 /* ================= SEARCH ================= */
@@ -63,29 +68,30 @@
   width: 453px;
   height: 61px;
 
-  padding:  15px;
-  gap: 8px;
+  padding: 20px;
+  gap: 10px;
 
-  border: #4D0000 solid 1px;
-  border-radius: 180px;
+  border: 2px solid #e10e0e;
+  border-radius: 250px;
 
   background-color: #ffffff;
 }
 
 .search svg {
   flex-shrink: 0;
+
   font-size: 14px;
   color: #555555;
 }
 
 .search input {
   width: 339px;
-  height:27px;
+  height: 27px;
 
   border: none;
   outline: none;
 
-  font-size: 11px;
+  font-size: 17px;
   background: transparent;
 }
 
@@ -109,6 +115,12 @@
 
   border-radius: 50%;
   object-fit: cover;
+
+  transition: transform 0.3s ease;
+}
+
+.account img:hover {
+  transform: scale(1.1);
 }
 
 /* ================= HAMBURGER BUTTON ================= */
@@ -163,6 +175,10 @@
   .search {
     width: 200px;
   }
+
+  .search input {
+    width: 100%;
+  }
 }
 
 /* =====================================================
@@ -199,6 +215,7 @@
 
   .search input {
     min-width: 0;
+    width: 100%;
     font-size: 10px;
   }
 
@@ -258,14 +275,17 @@
     text-decoration: none;
 
     border-bottom: 1px solid #eeeeee;
-  }
 
-  .mobile-nav a:last-child {
-    border-bottom: none;
+    transition: all 0.3s ease;
   }
 
   .mobile-nav a:hover {
     color: #a90000;
+    transform: translateX(5px);
+  }
+
+  .mobile-nav a:last-child {
+    border-bottom: none;
   }
 }
 

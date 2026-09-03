@@ -26,7 +26,7 @@ function PlanningFor() {
       "
     >
       {/* Heading */}
-      <h2 className="mb-5 text-center text-[15px] font-medium text-white sm:text-[16px]">
+      <h2 className="mb-5 text-center text-[15px] font-medium text-white sm:text-[16px] hover:text-pink-500 hover:scale-105">
         What Are You Planning For <span>?</span>
       </h2>
 
@@ -50,7 +50,7 @@ function PlanningFor() {
           <EventCard
             image={wedding}
             title="Weddings"
-            className="aspect-[4/3] md:h-[50%] md:aspect-auto"
+            className="aspect-[4/3] md:h-[50%] md:aspect-auto transition-transform duration-900 hover:scale-105 hover:brightness-150"
           />
 
           {/* Yellow Divider */}
@@ -60,7 +60,7 @@ function PlanningFor() {
           <EventCard
             image={family}
             title="Family / Get Togethers"
-            className="aspect-[4/3] md:flex-1 md:aspect-auto"
+            className="aspect-[4/3] md:flex-1 md:aspect-auto transition-transform duration-900 hover:scale-105 hover:brightness-150"
           />
         </div>
 
@@ -70,7 +70,7 @@ function PlanningFor() {
           <EventCard
             image={corporate}
             title="Mice / Corporate Events"
-            className="aspect-[16/10] md:h-[60%] md:aspect-auto"
+            className="aspect-[16/10] md:h-[60%] md:aspect-auto transition-transform duration-900 hover:scale-105 hover:brightness-150"
           />
 
           {/* Red Divider */}
@@ -80,7 +80,7 @@ function PlanningFor() {
           <EventCard
             image={birthday}
             title="Birthdays / Anniversaries"
-            className="aspect-[16/9] md:flex-1 md:aspect-auto"
+            className="aspect-[16/9] md:flex-1 md:aspect-auto transition-transform duration-900 hover:scale-105 hover:brightness-150  "
           />
         </div>
 
@@ -90,7 +90,7 @@ function PlanningFor() {
           <EventCard
             image={concert}
             title="Concerts / DJ Nights"
-            className="aspect-[16/9] md:h-[42%] md:aspect-auto"
+            className="aspect-[16/9] md:h-[42%] md:aspect-auto transition-transform duration-900 hover:scale-105 hover:brightness-130"
           />
 
           {/* Theme + Social */}
@@ -107,7 +107,7 @@ function PlanningFor() {
                     Theme <br /> Parties
                   </>
                 }
-                className="aspect-[3/4] md:min-h-0 md:flex-1 md:aspect-auto"
+                className="aspect-[3/4] md:min-h-0 md:flex-1 md:aspect-auto transition-transform duration-900 hover:scale-105 hover:brightness-130"
                 small
               />
             </div>
@@ -124,7 +124,7 @@ function PlanningFor() {
                     Social <br /> Events
                   </>
                 }
-                className="aspect-[3/4] md:min-h-0 md:flex-1 font-semibold text-[32px] md:aspect-auto"
+                className="aspect-[3/4] md:min-h-0 md:flex-1 font-semibold text-[32px] md:aspect-auto transition-transform duration-900 hover:scale-105 hover:brightness-130"
                 small
               />
             </div>
@@ -171,9 +171,9 @@ function EventCard({
       <div className="absolute inset-0 bg-black/35" />
 
       {/* Bottom Title */}
-      <div className="absolute bottom-0 left-0 w-full bg-black/55 px-2 py-2 text-center">
+      <div className="absolute bottom-0 left-0 w-full bg-black/55 px-2 py-2 text-center ">
         <p
-          className={`font-semibold text-white ${
+          className={`font-semibold text-white hover:text-blue-500 hover:scale-105 hover:brightness-130${
             small
               ? "text-[12px] sm:text-[13px]"
               : "text-[14px] sm:text-[16px] md:text-[17px]"

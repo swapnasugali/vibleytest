@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./../../Styles/Header.css";
 import { Link } from "react-router-dom";
+
 import logo from "../../assets/logo.png";
 import account from "../../assets/account.jpg";
+
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 
 function Header() {
@@ -14,6 +16,7 @@ function Header() {
 
   return (
     <header className="header">
+
       {/* Logo */}
       <Link to="/" className="logo" onClick={closeMenu}>
         <img src={logo} alt="Vibely" />
@@ -21,6 +24,7 @@ function Header() {
 
       {/* Desktop Navigation */}
       <nav className="desktop-nav">
+
         <Link to="/" className="home">
           HOME
         </Link>
@@ -36,6 +40,7 @@ function Header() {
         <Link to="/about-us">
           ABOUT US
         </Link>
+
       </nav>
 
       {/* Search */}
@@ -55,6 +60,7 @@ function Header() {
 
       {/* Hamburger Button - Mobile Only */}
       <button
+        type="button"
         className="menu-button"
         onClick={() => setMenuOpen(!menuOpen)}
         aria-label="Toggle menu"
@@ -64,6 +70,7 @@ function Header() {
 
       {/* Mobile Navigation */}
       <nav className={`mobile-nav ${menuOpen ? "active" : ""}`}>
+
         <Link to="/" onClick={closeMenu}>
           HOME
         </Link>
@@ -79,7 +86,9 @@ function Header() {
         <Link to="/about-us" onClick={closeMenu}>
           ABOUT US
         </Link>
+
       </nav>
+
     </header>
   );
 }

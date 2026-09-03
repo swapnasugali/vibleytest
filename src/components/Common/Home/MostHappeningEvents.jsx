@@ -45,8 +45,10 @@ const MostHappeningEvents = () => {
 
   const visibleCards = 3;
 
+  const maxIndex = organizers.length - visibleCards;
+
   const handleNext = () => {
-    if (currentIndex < organizers.length - visibleCards) {
+    if (currentIndex < maxIndex) {
       setCurrentIndex(currentIndex + 1);
     }
   };
@@ -63,7 +65,7 @@ const MostHappeningEvents = () => {
 
         {/* Heading + Filter */}
         <div className="relative mb-7 flex items-center justify-center">
-          <h2 className="text-center text-[19px] w-[578px] h-[44px] font-medium text-[#344054] sm:text-[22px] md:text-[25px]">
+          <h2 className="text-center text-[19px] w-[578px] h-[44px] font-medium text-[#344054] sm:text-[22px] md:mb-0 md:text-[25px] hover:text-pink-500 hover:scale-105">
             Most Happening Event Organizers
           </h2>
 
@@ -86,13 +88,15 @@ const MostHappeningEvents = () => {
         <div className="relative">
 
           {/* Left Arrow */}
-          <button
-            onClick={handlePrevious}
-            aria-label="Previous"
-            className="absolute -left-3 top-[45%] cursor-pointer z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-left-5 md:-left-7 lg:-left-10"
-          >
-            <FaArrowLeft className="text-[10px]" />
-          </button>
+          {currentIndex > 0 && (
+            <button
+              onClick={handlePrevious}
+              aria-label="Previous"
+              className="absolute -left-3 top-[45%] cursor-pointer z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-left-5 md:-left-7 lg:-left-10"
+            >
+              <FaArrowLeft className="text-[10px]" />
+            </button>
+          )}
 
           {/* Slider Container */}
           <div className="overflow-hidden pt-5 pl-3">
@@ -108,7 +112,7 @@ const MostHappeningEvents = () => {
                   className="min-w-full sm:min-w-[calc(50%-14px)] lg:min-w-[calc(33.333%-19px)]"
                 >
                   {/* Image Area */}
-                  <div className="relative aspect-[1.85/1] w-full">
+                  <div className="relative aspect-[1.85/1] w-full transition-transform duration-300 hover:scale-105 hover:brightness-130">
 
                     {/* Main Image */}
                     <div className="h-full w-full overflow-hidden">
@@ -120,7 +124,7 @@ const MostHappeningEvents = () => {
                     </div>
 
                     {/* Organizer Logo */}
-                    <div className="absolute -left-3 -top-3 z-40 flex h-[58px] w-[58px] items-center justify-center rounded-[16px] bg-white p-2 shadow-[6px_6px_12px_rgba(255,255,255,0.9)] sm:h-[60px] sm:w-[60px] md:h-[62px] md:w-[62px]">
+                    <div className="absolute -left-3 -top-3 z-40 flex h-[58px] w-[58px] items-center justify-center rounded-[16px] bg-white p-2 shadow-[6px_6px_12px_rgba(255,255,255,0.9)] sm:h-[60px] sm:w-[60px] md:h-[62px] md:w-[62px] hover:scale-105 hover:brightness-110 transition-transform duration-300">
                       <img
                         src={organizer.logo}
                         alt={`${organizer.name} logo`}
@@ -152,11 +156,12 @@ const MostHappeningEvents = () => {
                             C 0 8 8 0 18 0
                             Z
                           "
-                          fill="#A63A2A"
+                          fill="#c0321c"
                         />
                       </svg>
 
                       <div className="relative z-10 flex h-full items-center gap-2 px-5">
+
                         {/* Star Badge */}
                         <span className="relative flex h-[20px] w-[20px] shrink-0 items-center justify-center">
                           <svg
@@ -183,7 +188,7 @@ const MostHappeningEvents = () => {
                                 L9.6 7.1
                                 Z
                               "
-                              fill="#F4B400"
+                              fill="#ffbe0c"
                             />
                           </svg>
 
@@ -198,7 +203,7 @@ const MostHappeningEvents = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="mt-2 font-medium color-[#000000] w-[514px] h-[21px] leading-4 text-black sm:text-[12px]">
+                  <p className="mt-2 font-medium color-[#000000] w-[514px] h-[21px] leading-4 text-black sm:text-[12px] hover:text-blue-500">
                     {organizer.description}
                   </p>
                 </div>
@@ -207,13 +212,15 @@ const MostHappeningEvents = () => {
           </div>
 
           {/* Right Arrow */}
-          <button
-            onClick={handleNext}
-            aria-label="Next"
-            className="absolute -right-3 top-[45%] cursor-pointer z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-right-5 md:-right-7 lg:-right-10"
-          >
-            <FaArrowRight className="text-[10px]" />
-          </button>
+          {currentIndex < maxIndex && (
+            <button
+              onClick={handleNext}
+              aria-label="Next"
+              className="absolute -right-3 top-[45%] cursor-pointer z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-right-5 md:-right-7 lg:-right-10"
+            >
+              <FaArrowRight className="text-[10px]" />
+            </button>
+          )}
 
         </div>
       </div>

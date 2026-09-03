@@ -73,7 +73,7 @@ const ContactForm = () => {
       <div className="mx-auto w-full max-w-[1400px]">
 
         {/* ================= HEADING ================= */}
-        <h2 className="mb-6 text-center text-[26px] font-medium text-[#252525] sm:text-[30px] md:text-[32px] lg:text-[34px]">
+        <h2 className="mb-6 text-center text-[26px] font-medium text-[#252525] sm:text-[30px] md:text-[32px] lg:text-[34px] hover:text-pink-500 hover:scale-105">
           Let us Connect
         </h2>
 
@@ -104,7 +104,7 @@ const ContactForm = () => {
               >
 
                 {/* NAME */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%]">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Your Name :
                   </label>
@@ -143,7 +143,7 @@ const ContactForm = () => {
                 </div>
 
                 {/* EMAIL */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%]">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Email :
                   </label>
@@ -181,7 +181,7 @@ const ContactForm = () => {
                 </div>
 
                 {/* CONTACT NUMBER */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%]">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Contact Number :
                   </label>
@@ -223,7 +223,7 @@ const ContactForm = () => {
                 </div>
 
                 {/* EVENT TYPE */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%]">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Event Type :
                   </label>
@@ -261,7 +261,7 @@ const ContactForm = () => {
                 </div>
 
                 {/* NOTES */}
-                <div className="grid grid-cols-[38%_1fr] items-start gap-[3%]">
+                <div className="grid grid-cols-[38%_1fr] items-start gap-[3%] hover:scale-105 transition-transform duration-300">
                   <label className="pt-2 font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Notes / Query :
                   </label>
@@ -299,7 +299,7 @@ const ContactForm = () => {
                 </div>
 
                 {/* CHECKBOXES */}
-                <div className="mt-[3%] flex justify-center gap-10 text-[10px] text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
+                <div className="mt-[3%] flex justify-center gap-10 text-[10px] text-[#FFE9C0] md:text-[11px] lg:text-[12px] hover:scale-105 transition-transform duration-300">
                   <CustomCheckbox
                     label="Call"
                     name="call"
@@ -431,7 +431,7 @@ const ContactForm = () => {
           {/* SUBMIT BUTTON */}
           <button
             type="submit"
-            className="mx-auto mt-5 flex h-11 w-[180px] cursor-pointer items-center justify-center rounded-[7px] bg-[#c98500] px-6 text-[16px] font-semibold uppercase text-white transition hover:bg-[#a96f00] sm:h-12 sm:w-[210px] sm:text-[18px] md:h-[50px] md:w-[230px] md:text-[20px] lg:h-[54px] lg:w-[250px] lg:text-[22px]"
+            className="mx-auto mt-5 flex h-11 w-[180px] cursor-pointer items-center justify-center rounded-[7px] bg-[#c98500] px-6 text-[16px] font-semibold uppercase text-white transition hover:bg-[#a96f00] sm:h-12 sm:w-[210px] sm:text-[18px] md:h-[50px] md:w-[230px] md:text-[20px] lg:h-[54px] lg:w-[250px] lg:text-[22px] cursor-pointer hover:bg-blue-300 hover:text-red-400"
           >
             Submit
           </button>

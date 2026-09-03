@@ -14,11 +14,11 @@ function HomePage() {
   return (
     <div>
         <section className = "landing-section">
-            <div className="main-event">
+            <div className="main-event transition-transform duration-1500 hover:scale-105 hover:contrast-125">
                 <img src = {mainEvent} alt="event"/>
             
 
-                <div className="main-content">
+                <div className="main-content transition-transform duration-300 hover:-translate-y-2">
                     <h1>We Organize.</h1>
                     <h2>You <span>CELEBRATE!</span></h2>
                     <p>
@@ -29,12 +29,12 @@ function HomePage() {
             </div>
 
             <div className="side-images">
-                <div className="side-card">
+                <div className="side-card transition-transform duration-1500 hover:scale-105 hover:contrast-125">
                     <img src={mehandi} alt="Premium Events"/>
                     <p>. Premium Events Stage Sets</p>
                 </div>
 
-                <div className="side-card">
+                <div className="side-card transition-transform duration-1500 hover:scale-105 hover:contrast-125">
                     <img src ={stage} alt="Outdoor Mehendi"/>
                     <p>. Outdoor Mehendi / Family Events</p>
                 </div>
