@@ -5,6 +5,8 @@ import PortfolioHero from "../../components/Portfolio/PortfolioHero";
 import ProviderDetails from "../../components/Portfolio/ProviderDetails";
 import ProviderAbout from "../../components/Portfolio/ProviderAbout";
 import ProviderFeatured from "../../components/Portfolio/ProviderFeatured";
+import CorporateGala from "../../components/Portfolio/CorporateGala";
+import SanviBirthday from "../../components/Portfolio/SanviBirthday";
 
 function PhotographyPortfolio() {
   return (
@@ -20,6 +22,8 @@ function PhotographyPortfolio() {
       <ProviderDetails/>
       <ProviderAbout/>
       <ProviderFeatured/>
+      <CorporateGala/>
+      <SanviBirthday/>
 
     </div>
   );
