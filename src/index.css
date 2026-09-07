@@ -11,3 +11,13 @@ body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
 }
+
+@font-face {
+  font-family: "MonteCarlo";
+  src: url("../assets/fonts/MonteCarlo-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+.MonteCarlo {
+  font-family: "MonteCarlo", cursive;
+}

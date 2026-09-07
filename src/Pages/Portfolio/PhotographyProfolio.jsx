@@ -7,6 +7,10 @@ import ProviderAbout from "../../components/Portfolio/ProviderAbout";
 import ProviderFeatured from "../../components/Portfolio/ProviderFeatured";
 import CorporateGala from "../../components/Portfolio/CorporateGala";
 import SanviBirthday from "../../components/Portfolio/SanviBirthday";
+import CapturedMoments from "../../components/Portfolio/CapturedMoments";
+import MostPopularServices from "../../components/Portfolio/MostPopularServices";
+import ExploreOtherServiceProviders from "../../components/Portfolio/ExploreOtherServiceProviders";
+
 
 function PhotographyPortfolio() {
   return (
@@ -24,6 +28,9 @@ function PhotographyPortfolio() {
       <ProviderFeatured/>
       <CorporateGala/>
       <SanviBirthday/>
+      <CapturedMoments/>
+      <MostPopularServices/>
+      <ExploreOtherServiceProviders/>
 
     </div>
   );

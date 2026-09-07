@@ -18,7 +18,7 @@ const providers = [
     location: "Kondapalli, Hyderabad",
     image: provider1,
     offer: "STARTING FROM ₹25,000",
-    portfolioPath: "/photography-portfolio",
+    portfolioPath: "/portfolio/photography",
   },
   {
     category: "Catering",
@@ -26,7 +26,7 @@ const providers = [
     location: "Kukatpally, Hyderabad",
     image: provider2,
     offer: "BEST PRICES PER PLATE",
-    portfolioPath: "/catering-portfolio",
+    portfolioPath: "/portfolio/catering",
   },
   {
     category: "Lighting",
@@ -34,7 +34,7 @@ const providers = [
     location: "Madhapur, Hyderabad",
     image: provider3,
     offer: "COMBO WITH DJ SERVICES",
-    portfolioPath: "/lighting-portfolio",
+    portfolioPath: "/portfolio/lighting",
   },
   {
     category: "Lighting",
@@ -42,7 +42,7 @@ const providers = [
     location: "Madhapur, Hyderabad",
     image: provider3,
     offer: "COMBO WITH DJ SERVICES",
-    portfolioPath: "/lighting-portfolio",
+    portfolioPath: "/portfolio/lighting",
   },
   {
     category: "Lighting",
@@ -50,14 +50,13 @@ const providers = [
     location: "Madhapur, Hyderabad",
     image: provider3,
     offer: "COMBO WITH DJ SERVICES",
-    portfolioPath: "/lighting-portfolio",
+    portfolioPath: "/portfolio/lighting",
   },
 ];
 
 const FeaturedProviders = () => {
   const sliderRef = useRef(null);
 
-  // Arrow visibility
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
 
@@ -105,7 +104,7 @@ const FeaturedProviders = () => {
       <div className="mx-auto w-full max-w-[1400px]">
 
         {/* Heading */}
-        <h2 className="mb-7 text-[19px] font-medium text-[#252525] sm:text-[22px] md:mb-8 md:text-[25px] hover:text-pink-500 hover:scale-105">
+        <h2 className="mb-7 text-[19px] font-medium text-[#252525] transition-all duration-300 hover:scale-105 hover:text-pink-500 sm:text-[22px] md:mb-8 md:text-[25px]">
           Featured Service Providers
         </h2>
 
@@ -155,7 +154,7 @@ const FeaturedProviders = () => {
               >
 
                 {/* Image Area */}
-                <div className="relative aspect-[1.75/1] w-full overflow-hidden bg-[#f2f2f2] hover:scale-105 hover:brightness-110 transition-transform duration-300">
+                <div className="relative aspect-[1.75/1] w-full overflow-hidden bg-[#f2f2f2] transition-transform duration-300 hover:scale-105 hover:brightness-110">
 
                   {/* Provider Image */}
                   <img
@@ -166,7 +165,7 @@ const FeaturedProviders = () => {
 
                   {/* Category */}
                   <div className="absolute left-2 top-2 z-10 flex h-[25px] w-[112px] items-center justify-center rounded-[4px] border border-white/50 bg-[rgba(39,39,39,0.37)]">
-                    <span className="text-[10px] font-semibold text-white sm:text-[11px] hover:text-blue-500 hover:scale-105 hover:brightness-130 transition-transform duration-300">
+                    <span className="text-[10px] font-semibold text-white transition-all duration-300 hover:scale-105 hover:text-blue-500 sm:text-[11px]">
                       {provider.category}
                     </span>
                   </div>
@@ -174,7 +173,23 @@ const FeaturedProviders = () => {
                   {/* Portfolio */}
                   <Link
                     to={provider.portfolioPath}
-                    className="absolute right-3 top-3 z-10 flex cursor-pointer items-center gap-[2px] text-[10px] font-medium text-[#f4b400]"
+                    className="
+                      absolute
+                      right-3
+                      top-3
+                      z-10
+                      flex
+                      cursor-pointer
+                      items-center
+                      gap-[2px]
+                      text-[10px]
+                      font-medium
+                      text-[#f4b400]
+                      transition-all
+                      duration-300
+                      hover:scale-105
+                      hover:text-white
+                    "
                   >
                     <span>Portfolio</span>
 
@@ -187,7 +202,7 @@ const FeaturedProviders = () => {
                   {/* Bottom Offer */}
                   <div className="absolute bottom-0 left-0 z-10">
                     <div className="relative flex h-[30px] items-center bg-[#272727]/90 px-3 pr-6">
-                      <span className="relative z-10 whitespace-nowrap text-[10px] font-medium uppercase text-white hover:text-green-500">
+                      <span className="relative z-10 whitespace-nowrap text-[10px] font-medium uppercase text-white transition-colors duration-300 hover:text-green-500">
                         {provider.offer}
                       </span>
 
@@ -201,18 +216,36 @@ const FeaturedProviders = () => {
                 <div className="flex items-center justify-between gap-3 px-3 py-3 sm:px-4 sm:py-4">
 
                   <div className="min-w-0">
-                    <h3 className="text-[18px] font-medium text-black sm:text-[20px] md:text-[22px] hover:text-blue-500">
+                    <h3 className="text-[18px] font-medium text-black transition-colors duration-300 hover:text-blue-500 sm:text-[20px] md:text-[22px]">
                       {provider.name}
                     </h3>
 
-                    <p className="mt-1 text-[11px] font-normal text-black sm:text-[12px] md:text-[13px] hover:text-yellow-500">
+                    <p className="mt-1 text-[11px] font-normal text-black transition-colors duration-300 hover:text-yellow-500 sm:text-[12px] md:text-[13px]">
                       {provider.location}
                     </p>
                   </div>
 
                   <button
                     type="button"
-                    className="h-[45px] w-[120px] shrink-0 cursor-pointer rounded-[4px] bg-[#A63A2A] text-[14px] font-semibold text-white transition hover:bg-[#8f3023] sm:w-[130px] sm:text-[15px] hover:bg-blue-500 hover:text-red-500 hover:scale-105 hover:brightness-110 transition-transform duration-300"
+                    className="
+                      h-[45px]
+                      w-[120px]
+                      shrink-0
+                      cursor-pointer
+                      rounded-[4px]
+                      bg-[#A63A2A]
+                      text-[14px]
+                      font-semibold
+                      text-white
+                      transition-all
+                      duration-300
+                      hover:scale-105
+                      hover:bg-blue-500
+                      hover:text-red-500
+                      hover:brightness-110
+                      sm:w-[130px]
+                      sm:text-[15px]
+                    "
                   >
                     BOOK NOW
                   </button>
