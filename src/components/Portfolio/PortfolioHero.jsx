@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import photography from "../../assets/photography1.png";
-import catering from "../../assets/catering1.jpg";
-import lighting from "../../assets/lightining3.avif";
+import cateringlogo from "../../assets/catering-logo.jpg";
+import lightinglogo from "../../assets/lighting-logo.jpg";
 
 const portfolioData = {
   photography: {
@@ -13,12 +13,12 @@ const portfolioData = {
   },
 
   catering: {
-    image: catering,
+    image: cateringlogo,
     alt: "Mangalam Caterers",
   },
 
   lighting: {
-    image: lighting,
+    image: lightinglogo,
     alt: "Elite Lighting Services",
   },
 };
@@ -26,13 +26,23 @@ const portfolioData = {
 const PortfolioHero = () => {
   const { type } = useParams();
 
-  const data = portfolioData[type] || portfolioData.photography;
+  const data =
+    portfolioData[type] || portfolioData.photography;
 
   return (
     <section className="w-full bg-black p-0">
-      <div className="relative flex w-full items-center justify-center overflow-hidden">
+      <div
+        className="
+          relative
+          flex
+          w-full
+          items-center
+          justify-center
+          overflow-hidden
+        "
+      >
+        {/* ================= HERO IMAGE ================= */}
 
-        {/* Hero Image */}
         <img
           src={data.image}
           alt={data.alt}
@@ -40,7 +50,7 @@ const PortfolioHero = () => {
             block
             h-[400px]
             w-full
-            object-contain
+            object-cover
             object-center
 
             sm:h-[500px]
@@ -51,7 +61,8 @@ const PortfolioHero = () => {
           "
         />
 
-        {/* Left Arrow */}
+        {/* ================= LEFT ARROW ================= */}
+
         <button
           type="button"
           className="
@@ -68,10 +79,17 @@ const PortfolioHero = () => {
           "
           aria-label="Previous image"
         >
-          <FaChevronLeft className="text-xl sm:text-2xl md:text-3xl" />
+          <FaChevronLeft
+            className="
+              text-xl
+              sm:text-2xl
+              md:text-3xl
+            "
+          />
         </button>
 
-        {/* Right Arrow */}
+        {/* ================= RIGHT ARROW ================= */}
+
         <button
           type="button"
           className="
@@ -88,9 +106,14 @@ const PortfolioHero = () => {
           "
           aria-label="Next image"
         >
-          <FaChevronRight className="text-xl sm:text-2xl md:text-3xl" />
+          <FaChevronRight
+            className="
+              text-xl
+              sm:text-2xl
+              md:text-3xl
+            "
+          />
         </button>
-
       </div>
     </section>
   );
