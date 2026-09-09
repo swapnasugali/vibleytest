@@ -246,7 +246,7 @@ const MostPopularServices = () => {
       <h2
         className="
           text-center
-          text-[18px]
+          text-[26px]
           font-medium
           leading-[1.2]
           text-[#252525]
@@ -960,7 +960,7 @@ const MostPopularServices = () => {
           <svg
             width="38"
             height="48"
-            viewBox="0 0 36 46"
+            viewBox="0 0 38 48"
             xmlns="http://www.w3.org/2000/svg"
             className="shrink-0"
           >

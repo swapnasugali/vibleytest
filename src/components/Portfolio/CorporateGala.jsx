@@ -36,7 +36,7 @@ import corporatelight5 from "../../assets/corporatelight5.jpg";
 // VIDEOS
 // =====================================================
 
-import photographyVideo from "../../assets/videos/corportae-photography-video.mp4";
+import photographyVideo from "../../assets/Videos/corportae-photography-video.mp4";
 import cateringVideo from "../../assets/Videos/corporate-food-video.mp4";
 import lightingVideo from "../../assets/Videos/corporate-light-video.mp4";
 
@@ -423,7 +423,7 @@ const CorporateGala = () => {
               leading-[1.2]
               text-[#087d67]
 
-              sm:text-[38px]
+              sm:text-[44px]
             "
           >
             {data.heading}
@@ -439,7 +439,7 @@ const CorporateGala = () => {
               leading-[1.8]
               text-[#555555]
 
-              sm:text-[11px]
+              sm:text-[14px]
             "
           >
             {data.paragraph1}
@@ -455,7 +455,7 @@ const CorporateGala = () => {
               leading-[1.8]
               text-[#555555]
 
-              sm:text-[11px]
+              sm:text-[14px]
             "
           >
             {data.paragraph2}

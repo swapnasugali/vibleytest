@@ -7,10 +7,11 @@ import {
   FaUsers,
   FaClock,
   FaThumbsUp,
-  FaCheckCircle,
 } from "react-icons/fa";
 
 import { GiPartyPopper } from "react-icons/gi";
+import { FiArrowUpRight } from "react-icons/fi";
+import { PiSealCheckFill } from "react-icons/pi";
 
 // ================= LOGOS =================
 
@@ -211,17 +212,17 @@ const ProviderDetails = () => {
                   flex
                   items-center
                   gap-1
-                  rounded-[2px]
+                  rounded-[3px]
                   bg-[#ffbd00]
                   px-2
-                  py-[2px]
+                  py-[3px]
                   text-[7px]
                   font-bold
+                  leading-none
                   text-black
                 "
               >
-                <FaCheckCircle className="text-[7px]" />
-
+                <PiSealCheckFill className="text-[11px] text-black" />
                 VERIFIED
               </span>
 
@@ -256,7 +257,7 @@ const ProviderDetails = () => {
                   whitespace-nowrap
                 "
               >
-                <FaStar className="text-[9px] text-[#ffd000]" />
+                <FaStar className="text-[12px] text-[#ffd000]" />
 
                 <span>
                   {provider.rating}
@@ -273,7 +274,7 @@ const ProviderDetails = () => {
                   whitespace-nowrap
                 "
               >
-                <FaMapMarkerAlt className="text-[9px] text-[#ffd000]" />
+                <FaMapMarkerAlt className="text-[12px] text-[#ffd000]" />
 
                 <span>
                   {provider.location}
@@ -295,9 +296,12 @@ const ProviderDetails = () => {
           <button
             type="button"
             className="
+              flex
               w-fit
               shrink-0
               cursor-pointer
+              items-center
+              gap-1
               rounded-[5px]
               bg-[#e50909]
               px-4
@@ -311,12 +315,13 @@ const ProviderDetails = () => {
 
               sm:px-5
               sm:py-2.5
-              sm:text-[10px]
+              sm:text-[12px]
 
               md:text-[11px]
             "
           >
-            Request Quote ↗
+            Request Quote
+            <FiArrowUpRight className="text-sm" />
           </button>
 
         </div>
@@ -377,7 +382,7 @@ const ProviderDetails = () => {
                   text-[7px]
                   text-white/70
 
-                  sm:text-[8px]
+                  sm:text-[12px]
                 "
               >
                 Total Events
@@ -388,7 +393,7 @@ const ProviderDetails = () => {
                   text-[10px]
                   font-medium
 
-                  sm:text-[11px]
+                  sm:text-[18px]
                 "
               >
                 {provider.totalEvents}
@@ -434,7 +439,7 @@ const ProviderDetails = () => {
                   text-[7px]
                   text-white/70
 
-                  sm:text-[8px]
+                  sm:text-[12px]
                 "
               >
                 Experience
@@ -445,7 +450,7 @@ const ProviderDetails = () => {
                   text-[10px]
                   font-medium
 
-                  sm:text-[11px]
+                  sm:text-[18px]
                 "
               >
                 {provider.experience}
@@ -491,7 +496,7 @@ const ProviderDetails = () => {
                   text-[7px]
                   text-white/70
 
-                  sm:text-[8px]
+                  sm:text-[12px]
                 "
               >
                 Starting From
@@ -502,7 +507,7 @@ const ProviderDetails = () => {
                   text-[10px]
                   font-medium
 
-                  sm:text-[11px]
+                  sm:text-[18px]
                 "
               >
                 {provider.startingFrom}
@@ -548,7 +553,7 @@ const ProviderDetails = () => {
                   text-[7px]
                   text-white/70
 
-                  sm:text-[8px]
+                  sm:text-[12px]
                 "
               >
                 Response Rate
@@ -559,7 +564,7 @@ const ProviderDetails = () => {
                   text-[10px]
                   font-medium
 
-                  sm:text-[11px]
+                  sm:text-[18px]
                 "
               >
                 {provider.responseRate}

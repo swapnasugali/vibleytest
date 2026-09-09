@@ -27,7 +27,7 @@ import lighting44 from "../../assets/lighting44.jpg";
 import lighting55 from "../../assets/lighting55.jpg";
 
 // =====================================================
-// DATA
+// PORTFOLIO DATA
 // =====================================================
 
 const portfolioData = {
@@ -54,6 +54,8 @@ const portfolioData = {
 
     description:
       "The United Agro Event 2026, bringing together progressive farmers, agricultural leaders, and emerging agro innovators under one inspiring platform, was thoughtfully captured and documented by our team. From engaging interactions to powerful showcase moments, every frame highlighted the energy, vision, and collaborative spirit that made the event truly memorable.",
+
+    buttonText: "Contact Us",
   },
 
   catering: {
@@ -79,6 +81,8 @@ const portfolioData = {
 
     description:
       "Our catering team creates delicious and beautifully presented food experiences for weddings, celebrations, corporate events, and special occasions. Every dish is prepared with quality ingredients, traditional flavours, attractive presentation, and professional service.",
+
+    buttonText: "Contact Us",
   },
 
   lighting: {
@@ -104,6 +108,8 @@ const portfolioData = {
 
     description:
       "Our professional lighting team creates elegant and vibrant lighting arrangements for weddings, parties, corporate events, and celebrations. From decorative lights to stage illumination, every setup is carefully planned to create the perfect atmosphere.",
+
+    buttonText: "Contact Us",
   },
 };
 
@@ -124,6 +130,7 @@ const ExploreCapturedMoments = () => {
         bg-[#f7f7f7]
         px-4
         py-6
+
         sm:px-6
         md:px-8
         lg:px-10
@@ -137,10 +144,10 @@ const ExploreCapturedMoments = () => {
       <h2
         className="
           text-center
-          text-[17px]
+          text-[24px]
           font-medium
           leading-[1.2]
-          text-[#222222]
+          text-[#252525]
 
           sm:text-[18px]
           md:text-[19px]
@@ -148,6 +155,7 @@ const ExploreCapturedMoments = () => {
       >
         Explore All Captured Moments
       </h2>
+
 
       {/* =================================================
           FILTERS
@@ -164,14 +172,14 @@ const ExploreCapturedMoments = () => {
           items-center
           gap-x-7
           gap-y-3
-          text-[10px]
-          text-[#222222]
+          text-[18px]
+          text-[#2E2E2E]
 
-          sm:text-[11px]
+          sm:text-[12px]
         "
       >
 
-        {/* ================= EVENT TYPE ================= */}
+        {/* EVENT TYPE */}
 
         <div className="flex items-center gap-2">
 
@@ -189,11 +197,11 @@ const ExploreCapturedMoments = () => {
               border-black
               bg-white
               px-2
-              text-[9px]
+              text-[14px]
               text-[#e00000]
               outline-none
 
-              sm:text-[10px]
+              sm:text-[11px]
             "
           >
             <option value="Corporate">
@@ -211,7 +219,8 @@ const ExploreCapturedMoments = () => {
 
         </div>
 
-        {/* ================= SERVICE TYPE ================= */}
+
+        {/* SERVICE TYPE */}
 
         <div className="flex items-center gap-2">
 
@@ -255,6 +264,7 @@ const ExploreCapturedMoments = () => {
 
       </div>
 
+
       {/* =================================================
           MAIN CARD
           ================================================= */}
@@ -292,7 +302,7 @@ const ExploreCapturedMoments = () => {
           "
         >
 
-          {/* ================= LEFT HEADER ================= */}
+          {/* LEFT */}
 
           <div className="flex items-center gap-2">
 
@@ -315,7 +325,7 @@ const ExploreCapturedMoments = () => {
 
               <FaCamera
                 className="
-                  text-[6px]
+                  text-[12px]
                   text-white
 
                   sm:text-[7px]
@@ -334,13 +344,15 @@ const ExploreCapturedMoments = () => {
 
           </div>
 
-          {/* ================= RIGHT HEADER ================= */}
+
+          {/* RIGHT */}
 
           <span className="whitespace-nowrap">
             {data.eventTitle}
           </span>
 
         </div>
+
 
         {/* =================================================
             CARD BODY
@@ -391,7 +403,7 @@ const ExploreCapturedMoments = () => {
             <ul
               className="
                 space-y-2
-                text-[9px]
+                text-[16px]
                 leading-[1.4]
                 text-[#333333]
 
@@ -423,6 +435,7 @@ const ExploreCapturedMoments = () => {
 
           </div>
 
+
           {/* =================================================
               RIGHT CONTENT
               ================================================= */}
@@ -441,26 +454,29 @@ const ExploreCapturedMoments = () => {
                 grid-cols-1
                 gap-2
 
-                sm:grid-cols-2
+                sm:grid-cols-1
 
-                lg:h-[250px]
-                lg:grid-cols-[1fr_1fr_1.2fr_1.2fr]
-                lg:grid-rows-[115px_130px]
+                lg:h-[435px]
+                lg:grid-cols-[1fr_1fr_1.4fr_1.4fr]
+                lg:grid-rows-[190px_240px]
                 lg:gap-[5px]
               "
             >
 
-              {/* ================= IMAGE 1 ================= */}
+              {/* =================================================
+                  IMAGE 1
+                  TOP LEFT
+                  ================================================= */}
 
               <div
                 className="
                   h-[180px]
                   w-full
                   overflow-hidden
-                  rounded-[2px]
+                  rounded-[3px]
                   bg-white
 
-                  sm:h-[180px]
+                  sm:h-[220px]
 
                   lg:h-auto
                   lg:col-start-1
@@ -481,17 +497,21 @@ const ExploreCapturedMoments = () => {
 
               </div>
 
-              {/* ================= IMAGE 2 ================= */}
+
+              {/* =================================================
+                  IMAGE 2
+                  TOP SECOND
+                  ================================================= */}
 
               <div
                 className="
                   h-[180px]
                   w-full
                   overflow-hidden
-                  rounded-[2px]
+                  rounded-[3px]
                   bg-white
 
-                  sm:h-[180px]
+                  sm:h-[220px]
 
                   lg:h-auto
                   lg:col-start-2
@@ -512,17 +532,20 @@ const ExploreCapturedMoments = () => {
 
               </div>
 
-              {/* ================= IMAGE 3 ================= */}
+
+              {/* =================================================
+                  IMAGE 3
+                  BOTTOM WIDE
+                  ================================================= */}
 
               <div
                 className="
                   h-[240px]
                   w-full
                   overflow-hidden
-                  rounded-[2px]
+                  rounded-[3px]
                   bg-white
 
-                  sm:col-span-2
                   sm:h-[240px]
 
                   lg:h-auto
@@ -545,14 +568,18 @@ const ExploreCapturedMoments = () => {
 
               </div>
 
-              {/* ================= IMAGE 4 ================= */}
+
+              {/* =================================================
+                  IMAGE 4
+                  MIDDLE FULL HEIGHT
+                  ================================================= */}
 
               <div
                 className="
                   h-[280px]
                   w-full
                   overflow-hidden
-                  rounded-[2px]
+                  rounded-[3px]
                   bg-white
 
                   sm:h-[280px]
@@ -577,14 +604,18 @@ const ExploreCapturedMoments = () => {
 
               </div>
 
-              {/* ================= IMAGE 5 ================= */}
+
+              {/* =================================================
+                  IMAGE 5
+                  RIGHT FULL HEIGHT
+                  ================================================= */}
 
               <div
                 className="
                   h-[280px]
                   w-full
                   overflow-hidden
-                  rounded-[2px]
+                  rounded-[3px]
                   bg-white
 
                   sm:h-[280px]
@@ -611,6 +642,7 @@ const ExploreCapturedMoments = () => {
 
             </div>
 
+
             {/* =================================================
                 DESCRIPTION
                 ================================================= */}
@@ -619,7 +651,7 @@ const ExploreCapturedMoments = () => {
               className="
                 mt-2
                 px-1
-                text-[7px]
+                text-[12px]
                 leading-[1.45]
                 text-[#555555]
 
@@ -635,6 +667,7 @@ const ExploreCapturedMoments = () => {
 
       </div>
 
+
       {/* =================================================
           CONTACT BUTTON
           ================================================= */}
@@ -649,8 +682,8 @@ const ExploreCapturedMoments = () => {
             bg-[#b00000]
             px-4
             py-2
-            text-[9px]
-            font-medium
+            text-[16px]
+            font-semibold
             text-white
             transition-all
             duration-300
@@ -658,7 +691,7 @@ const ExploreCapturedMoments = () => {
             hover:bg-[#8f0000]
           "
         >
-          Contact Us
+          {data.buttonText}
         </button>
 
       </div>

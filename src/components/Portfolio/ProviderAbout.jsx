@@ -1,6 +1,54 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { FaAward } from "react-icons/fa";
+
+// ================= AWARD ICON =================
+
+const AwardIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="28"
+      viewBox="0 0 24 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="mt-1 shrink-0"
+      aria-hidden="true"
+    >
+      {/* Award Circle */}
+      <circle
+        cx="12"
+        cy="10"
+        r="7.5"
+        stroke="#A40000"
+        strokeWidth="2"
+      />
+
+      {/* Yellow Star */}
+      <path
+        d="M12 4.8L13.45 8.05L17 8.4L14.35 10.75L15.1 14.2L12 12.4L8.9 14.2L9.65 10.75L7 8.4L10.55 8.05L12 4.8Z"
+        fill="#FFBD00"
+      />
+
+      {/* Left Ribbon */}
+      <path
+        d="M6 15L3.5 20.8L8.2 20.2L10.5 24.5L12 18"
+        stroke="#A40000"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* Right Ribbon */}
+      <path
+        d="M18 15L20.5 20.8L15.8 20.2L13.5 24.5L12 20"
+        stroke="#A40000"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
 
 // ================= PORTFOLIO DATA =================
 
@@ -108,14 +156,9 @@ const ProviderAbout = () => {
               }`}
             >
 
-              <FaAward
-                className="
-                  mt-1
-                  shrink-0
-                  text-[15px]
-                  text-[#e50909]
-                "
-              />
+              {/* ================= AWARD SYMBOL ================= */}
+
+              <AwardIcon />
 
               <div>
 
