@@ -52,17 +52,18 @@ const AwardIcon = () => {
 
 // ================= PORTFOLIO DATA =================
 
-const portfolioData = {
-  photography: {
-    heading:
-      "Artlane - Creating unforgettable moments since ages.",
+const portfolioData = [
+  {
+    id: "photo001",
+    name: "Artlane Studio",
+    title: "Creating unforgettable moments since ages.",
 
     description:
       "Artlane Studio is an award-winning wedding and event photography studio based in Hyderabad, capturing beautiful moments through a creative and cinematic lens. Our team focuses on natural emotions, beautiful lighting, and timeless memories.",
 
     awards: [
       {
-        title: "International Wedding Excellence Award – 2024",
+        title: "International Wedding Excellence Award 2024",
         description:
           "Honored for creating visually rich and memorable wedding stories with a strong focus on creativity and emotion.",
       },
@@ -74,16 +75,17 @@ const portfolioData = {
     ],
   },
 
-  catering: {
-    heading:
-      "Mangalam Caterers - Serving delicious memories for every occasion.",
+  {
+    id: "catering001",
+    name: "Mangalam Caterers",
+    title: "Serving delicious memories for every occasion.",
 
     description:
       "Mangalam Caterers provides quality catering services for weddings, corporate events, birthdays, and special celebrations. Our team focuses on delicious food, attractive presentation, hygienic preparation, and professional service.",
 
     awards: [
       {
-        title: "Best Wedding Catering Service – 2024",
+        title: "Best Wedding Catering Service 2024",
         description:
           "Recognized for providing delicious traditional and modern cuisine with excellent service for wedding celebrations.",
       },
@@ -95,16 +97,17 @@ const portfolioData = {
     ],
   },
 
-  lighting: {
-    heading:
-      "Elite Lighting Services - Creating the perfect atmosphere for every event.",
+  {
+    id: "lighting001",
+    name: "Elite Lighting Services",
+    title: "Creating the perfect atmosphere for every event.",
 
     description:
       "Elite Lighting Services provides professional lighting solutions for weddings, parties, corporate events, and celebrations. Our team creates attractive stage, decorative, and event lighting setups according to the theme and requirements.",
 
     awards: [
       {
-        title: "Best Event Lighting Service – 2024",
+        title: "Best Event Lighting Service 2024",
         description:
           "Recognized for creative lighting arrangements and professional event setups for weddings and special celebrations.",
       },
@@ -115,15 +118,29 @@ const portfolioData = {
       },
     ],
   },
-};
+];
 
-// ================= COMPONENT =================
+// ================= COMPONENT ================
 
 const ProviderAbout = () => {
-  const { type } = useParams();
+  // URL nunchi ID tiskuntunnam
+  const { id } = useParams();
 
-  const data =
-    portfolioData[type] || portfolioData.photography;
+  // Particular ID Find
+  const data = portfolioData.find((item) => item.id === id);
+
+  // ID wrong/unavailable
+  if (!data) {
+    return (
+      <section className="w-full bg-[#f7f7f7] px-6 py-5 sm:px-8 md:px-10">
+        <div className="rounded-lg bg-white px-4 py-4">
+          <p className="text-[16px] text-[#5A403E]">
+            Portfolio data not found.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full bg-[#f7f7f7] px-6 py-5 sm:px-8 md:px-10">
@@ -135,7 +152,7 @@ const ProviderAbout = () => {
         <div className="rounded-lg bg-white px-4 py-4">
 
           <h2 className="text-[22px] font-medium italic text-[#555555]">
-            {data.heading}
+            {data.name} - {data.title}
           </h2>
 
           <p className="mt-4 text-[16px] leading-5 text-[#5A403E]">

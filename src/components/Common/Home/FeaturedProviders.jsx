@@ -18,7 +18,9 @@ const providers = [
     location: "Kondapalli, Hyderabad",
     image: provider1,
     offer: "STARTING FROM ₹25,000",
-    portfolioPath: "/portfolio/photography",
+
+    // ID added
+    portfolioPath: "/portfolio/photography/photo001",
   },
   {
     category: "Catering",
@@ -26,7 +28,9 @@ const providers = [
     location: "Kukatpally, Hyderabad",
     image: provider2,
     offer: "BEST PRICES PER PLATE",
-    portfolioPath: "/portfolio/catering",
+
+    // ID added
+    portfolioPath: "/portfolio/catering/catering001",
   },
   {
     category: "Lighting",
@@ -34,7 +38,9 @@ const providers = [
     location: "Madhapur, Hyderabad",
     image: provider3,
     offer: "COMBO WITH DJ SERVICES",
-    portfolioPath: "/portfolio/lighting",
+
+    // ID added
+    portfolioPath: "/portfolio/lighting/lighting001",
   },
   {
     category: "Lighting",
@@ -42,7 +48,9 @@ const providers = [
     location: "Madhapur, Hyderabad",
     image: provider3,
     offer: "COMBO WITH DJ SERVICES",
-    portfolioPath: "/portfolio/lighting",
+
+    // ID added
+    portfolioPath: "/portfolio/lighting/lighting001",
   },
   {
     category: "Lighting",
@@ -50,7 +58,9 @@ const providers = [
     location: "Madhapur, Hyderabad",
     image: provider3,
     offer: "COMBO WITH DJ SERVICES",
-    portfolioPath: "/portfolio/lighting",
+
+    // ID added
+    portfolioPath: "/portfolio/lighting/lighting001",
   },
 ];
 

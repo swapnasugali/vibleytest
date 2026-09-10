@@ -4,6 +4,7 @@ import Layout from "./components/Common/Layout";
 import HomePage from "./Pages/HomePage/HomePage";
 
 import PortfolioPage from "./Pages/Portfolio/PortfolioPage";
+import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
 
 function App() {
   return (
@@ -18,8 +19,14 @@ function App() {
 
         {/* Dynamic Portfolio Page */}
         <Route
-          path="/portfolio/:type"
+          path="/portfolio/:type/:id"
           element={<Layout HomePage={PortfolioPage} />}
+        />
+
+          {/* Dynamic ServiceCategoryPage */}
+        <Route
+          path="/services/:id"
+          element={<Layout HomePage={ServiceCategoryPage} />}
         />
 
       </Routes>

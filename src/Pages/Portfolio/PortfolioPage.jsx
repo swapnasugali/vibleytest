@@ -13,7 +13,7 @@ import MostPopularServices from "../../components/Portfolio/MostPopularServices"
 import ExploreOtherServiceProviders from "../../components/Portfolio/ExploreOtherServiceProviders";
 
 const PortfolioPage = () => {
-  const { type } = useParams();
+  const { type, id } = useParams();
 
   return (
     <div className="w-full">
@@ -24,7 +24,7 @@ const PortfolioPage = () => {
 
       <ProviderDetails type={type} />
 
-      <ProviderAbout type={type} />
+      <ProviderAbout type={type} id={id} />
 
       <ProviderFeatured type={type} />
 
@@ -37,7 +37,6 @@ const PortfolioPage = () => {
       <MostPopularServices type={type} />
 
       <ExploreOtherServiceProviders type={type} />
-
 
     </div>
   );

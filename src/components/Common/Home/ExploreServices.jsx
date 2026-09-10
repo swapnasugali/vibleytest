@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import photography from "../../../assets/photography.png";
@@ -11,33 +12,40 @@ const categories = [
   {
     name: "Photography",
     image: photography,
+    path: "/services/1",
   },
   {
     name: "Catering",
     image: catering,
+    path: "/services/2",
   },
   {
     name: "Venue booking",
     image: venue,
+    path: "/services/3",
   },
   {
     name: "Stage Decor",
     image: stage,
+    path: "/services/4",
     active: true,
   },
   {
     name: "DJ / Sound Sys",
     image: dj,
+    path: "/services/5",
     yellowBottom: true,
   },
   {
     name: "DJ / Sound Sys",
     image: dj,
+    path: "/services/5",
     yellowBottom: true,
   },
   {
     name: "DJ / Sound Sys",
     image: dj,
+    path: "/services/5",
     yellowBottom: true,
   },
 ];
@@ -92,7 +100,7 @@ const ExploreServices = () => {
       <div className="mx-auto w-full px-5 sm:px-10 md:px-12">
 
         {/* Heading */}
-        <h2 className="mb-8 text-center text-[20px] font-medium text-[#252525] sm:text-[22px] md:mb-9 md:text-[24px] hover:text-pink-500 hover:scale-105">
+        <h2 className="mb-8 text-center text-[20px] font-medium text-[#252525] hover:scale-105 hover:text-pink-500 sm:text-[22px] md:mb-9 md:text-[24px]">
           Explore Services by Category
         </h2>
 
@@ -130,7 +138,8 @@ const ExploreServices = () => {
               "
             >
               {categories.map((category, index) => (
-                <div
+                <Link
+                  to={category.path}
                   key={`${category.name}-${index}`}
                   className="
                     flex
@@ -150,18 +159,18 @@ const ExploreServices = () => {
                     <div className="flex w-[180px] flex-col items-center">
 
                       {/* Stage Decor Image */}
-                      <div className="relative mt-2 flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#d1d5db] bg-[#f1f2f4] hover:scale-105 hover:brightness-110 transition-transform duration-300">
+                      <div className="relative mt-2 flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#d1d5db] bg-[#f1f2f4] transition-transform duration-300 hover:scale-105 hover:brightness-110">
 
                         <img
                           src={category.image}
                           alt={category.name}
-                          className="relative z-10 h-[126px] w-[126px] object-contain hover:text-blue-500 hover:scale-105 hover:brightness-130 transition-transform duration-300"
+                          className="relative z-10 h-[126px] w-[126px] object-contain transition-transform duration-300 hover:scale-105 hover:brightness-130"
                         />
 
                       </div>
 
                       {/* Stage Decor Name */}
-                      <p className="mt-3 whitespace-nowrap text-center text-[24px] font-medium text-[#222] hover:text-blue-500 hover:brightness-110 transition-transform duration-300">
+                      <p className="mt-3 whitespace-nowrap text-center text-[24px] font-medium text-[#222] transition-transform duration-300 hover:text-blue-500 hover:brightness-110">
                         {category.name}
                       </p>
 
@@ -169,7 +178,7 @@ const ExploreServices = () => {
                   ) : (
                     <>
                       {/* Normal Category Circle */}
-                      <div className="relative flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#d1d5db] bg-[#f1f2f4] hover:scale-105 hover:brightness-110 transition-transform duration-300">
+                      <div className="relative flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#d1d5db] bg-[#f1f2f4] transition-transform duration-300 hover:scale-105 hover:brightness-110">
 
                         <img
                           src={category.image}
@@ -185,12 +194,13 @@ const ExploreServices = () => {
                       </div>
 
                       {/* Category Name */}
-                      <p className="mt-3 whitespace-nowrap text-center text-[24px] font-medium text-[#222] hover:text-blue-500 hover:brightness-110 transition-transform duration-300">
+                      <p className="mt-3 whitespace-nowrap text-center text-[24px] font-medium text-[#222] transition-transform duration-300 hover:text-blue-500 hover:brightness-110">
                         {category.name}
                       </p>
                     </>
                   )}
-                </div>
+
+                </Link>
               ))}
             </div>
           </div>
