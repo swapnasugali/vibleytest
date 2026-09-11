@@ -125,7 +125,6 @@ const ExploreOtherServiceProviders = () => {
         xl:px-12
       "
     >
-
       {/* ==================================================
           HEADING
           ================================================== */}
@@ -159,7 +158,6 @@ const ExploreOtherServiceProviders = () => {
           max-w-[1250px]
         "
       >
-
         {/* ==================================================
             LEFT ARROW
             ================================================== */}
@@ -214,9 +212,7 @@ const ExploreOtherServiceProviders = () => {
             xl:gap-10
           "
         >
-
           {providers.map((provider, index) => (
-
             <div
               key={index}
               className="
@@ -224,7 +220,6 @@ const ExploreOtherServiceProviders = () => {
                 min-w-0
               "
             >
-
               {/* ==================================================
                   IMAGE
                   ================================================== */}
@@ -246,7 +241,6 @@ const ExploreOtherServiceProviders = () => {
                   xl:h-[240px]
                 "
               >
-
                 <img
                   src={provider.image}
                   alt={provider.name}
@@ -269,7 +263,7 @@ const ExploreOtherServiceProviders = () => {
                     top-2
                     rounded-[2px]
                     border
-                    border-white
+                    border-white/40
                     bg-black/60
                     px-2
                     py-1
@@ -294,27 +288,30 @@ const ExploreOtherServiceProviders = () => {
                   type="button"
                   className="
                     absolute
-                    right-2
-                    top-2
+                    right-3
+                    top-3
                     flex
                     cursor-pointer
                     items-center
                     gap-1
-                    text-[9px]
-                    font-semibold
+                    text-[10px]
+                    font-medium
                     text-[#ffd000]
-                    transition-all
-                    duration-300
-                    hover:scale-105
+                    transition-colors
+                    duration-200
+                    hover:text-white
 
-                    sm:text-[10px]
-
-                    md:text-[11px]
+                    sm:right-4
+                    sm:text-[11px]
                   "
                 >
-                  Portfolio
+                  <span>
+                    Portfolio
+                  </span>
 
-                  <FaChevronRight className="text-[11px]" />
+                  <span className="font-bold text-white">
+                    &gt;&gt;
+                  </span>
                 </button>
 
                 {/* ==================================================
@@ -340,7 +337,6 @@ const ExploreOtherServiceProviders = () => {
                 >
                   STARTING FROM {provider.price}
                 </div>
-
               </div>
 
               {/* ==================================================
@@ -356,7 +352,6 @@ const ExploreOtherServiceProviders = () => {
                   gap-4
                 "
               >
-
                 {/* ================= NAME ================= */}
 
                 <div
@@ -365,7 +360,6 @@ const ExploreOtherServiceProviders = () => {
                     flex-1
                   "
                 >
-
                   <h3
                     className="
                       truncate
@@ -398,7 +392,6 @@ const ExploreOtherServiceProviders = () => {
                   >
                     {provider.location}
                   </p>
-
                 </div>
 
                 {/* ==================================================
@@ -434,13 +427,9 @@ const ExploreOtherServiceProviders = () => {
                 >
                   BOOK NOW
                 </button>
-
               </div>
-
             </div>
-
           ))}
-
         </div>
 
         {/* ==================================================
@@ -476,11 +465,9 @@ const ExploreOtherServiceProviders = () => {
         >
           <FaChevronRight className="text-[11px]" />
         </button>
-
       </div>
-
     </section>
   );
 };
 
-export default ExploreOtherServiceProviders;
+export default ExploreOtherServiceProviders; 

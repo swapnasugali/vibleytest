@@ -1,49 +1,25 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-// =====================================================
-// CATERING IMAGES
-// =====================================================
+import photo011 from "../../assets/photo041.jpg";
+import photo012 from "../../assets/photo042.jpg";
+import photo013 from "../../assets/photo043.jpg";
 
-import catering021 from "../../assets/catering021.png";
-import catering022 from "../../assets/catering022.png";
-import catering023 from "../../assets/catering023.png";
+import catering011 from "../../assets/catering041.png";
+import catering012 from "../../assets/catering042.png";
+import catering013 from "../../assets/catering043.png";
 
-// =====================================================
-// EVENT IMAGES
-// =====================================================
+import event011 from "../../assets/event041.jpg";
+import event012 from "../../assets/event042.jpg";
+import event013 from "../../assets/event043.jpg";
 
-import event021 from "../../assets/event021.jpg";
-import event022 from "../../assets/event022.jpg";
-import event023 from "../../assets/event023.jpg";
+import stage011 from "../../assets/stage041.jpg";
+import stage012 from "../../assets/stage042.jpg";
+import stage013 from "../../assets/stage043.jpg";
 
-// =====================================================
-// STAGE DECOR IMAGES
-// =====================================================
-
-import stage021 from "../../assets/stage021.jpg";
-import stage022 from "../../assets/stage022.jpg";
-import stage023 from "../../assets/stage023.jpg";
-
-// =====================================================
-// PHOTOGRAPHY IMAGES
-// =====================================================
-
-import photo021 from "../../assets/photo021.jpg";
-import photo022 from "../../assets/photo022.jpg";
-import photo023 from "../../assets/photo023.jpg";
-
-// =====================================================
-// DJ IMAGES
-// =====================================================
-
-import dj021 from "../../assets/dj021.jpg";
-import dj022 from "../../assets/dj022.jpg";
-import dj023 from "../../assets/dj023.jpg";
-
-// =====================================================
-// ICONS
-// =====================================================
+import dj011 from "../../assets/dj041.jpg";
+import dj012 from "../../assets/dj042.jpg";
+import dj013 from "../../assets/dj043.jpg";
 
 import {
   FaChevronLeft,
@@ -52,211 +28,246 @@ import {
 } from "react-icons/fa";
 
 // =====================================================
-// TRUSTED SERVICE DATA
+// FEATURED EXPERT DATA
 // =====================================================
 
-const trustedServiceData = {
+const featuredExpertsData = {
   // ===================================================
-  // 1. PHOTOGRAPHY
+  // PHOTOGRAPHY
   // ===================================================
 
   1: {
-    id: 1,
-    headingStart: "Trusted",
-    headingHighlight: "Photography",
+    headingFirst: "Authentic",
+    headingSecond: "Photography",
     headingEnd: "Experts",
 
-    cards: [
+    experts: [
       {
-        id: 1,
-        category: "PHOTOGRAPHY",
-        image: photo021,
-        label: "CANDID & TRADITIONAL PHOTOGRAPHY",
+        id: 101,
+        category: "WEDDING",
+        image: photo011,
+        label: "CANDID WEDDING MOMENTS",
         name: "ARTLANE STUDIO",
         location: "Kondapur, Hyderabad",
-        portfolioId: 1,
+
+        // NEW PORTFOLIO ID
+        portfolioId: 101,
       },
+
       {
-        id: 2,
-        category: "PRE-WEDDING",
-        image: photo022,
-        label: "CREATIVE COUPLE PORTRAITS",
-        name: "PIXEL PERFECT STUDIO",
-        location: "Madhapur, Hyderabad",
-        portfolioId: 2,
+        id: 102,
+        category: "PRE WEDDING",
+        image: photo012,
+        label: "BEAUTIFUL PRE WEDDING",
+        name: "PIXEL STORIES",
+        location: "Kukatpally, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 102,
       },
+
       {
-        id: 3,
-        category: "EVENT PHOTOGRAPHY",
-        image: photo023,
-        label: "PROFESSIONAL EVENT COVERAGE",
-        name: "MOMENTS PHOTOGRAPHY",
-        location: "Gachibowli, Hyderabad",
-        portfolioId: 3,
+        id: 103,
+        category: "CANDID",
+        image: photo013,
+        label: "CREATIVE PHOTOGRAPHY",
+        name: "CLICK ART STUDIO",
+        location: "Manikonda, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 103,
       },
     ],
   },
 
   // ===================================================
-  // 2. CATERING
+  // CATERING
   // ===================================================
 
   2: {
-    id: 2,
-    headingStart: "Trusted",
-    headingHighlight: "Pure Veg",
-    headingEnd: "Caterers",
+    headingFirst: "Authentic",
+    headingSecond: "Meat & Grill",
+    headingEnd: "Experts",
 
-    cards: [
+    experts: [
       {
-        id: 1,
-        category: "PURE VEG",
-        image: catering021,
+        id: 201,
+        category: "VEG / NON VEG",
+        image: catering011,
         label: "CUSTOMIZED MENU OPTIONS",
-        name: "IYYENGAR CATERERS",
-        location: "HBY, Hyderabad",
-        portfolioId: 1,
+        name: "BABU KHAN CATERERS",
+        location: "BHEL, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 201,
       },
+
       {
-        id: 2,
-        category: "PURE VEG",
-        image: catering022,
-        label: "MORE THAN 50+ VARIETIES",
-        name: "SAMPRADA CATERING",
+        id: 202,
+        category: "VEG / NON VEG",
+        image: catering012,
+        label: "TASTE IN EVERY SERVE",
+        name: "RAJA BAB CATERING",
         location: "Nizampet, Hyderabad",
-        portfolioId: 2,
+
+        // NEW PORTFOLIO ID
+        portfolioId: 202,
       },
+
       {
-        id: 3,
-        category: "PURE VEG",
-        image: catering023,
-        label: "DIVINE EATING EXPERIENCE",
+        id: 203,
+        category: "VEG / NON VEG",
+        image: catering013,
+        label: "SEA FOOD SPECIALISTS",
         name: "SWACHH CATERERS",
         location: "Manikonda, Hyderabad",
-        portfolioId: 3,
+
+        // NEW PORTFOLIO ID
+        portfolioId: 203,
       },
     ],
   },
 
   // ===================================================
-  // 3. EVENT
+  // EVENT DECOR
   // ===================================================
 
   3: {
-    id: 3,
-    headingStart: "Trusted",
-    headingHighlight: "Event",
+    headingFirst: "Beautiful",
+    headingSecond: "Event Decor",
     headingEnd: "Experts",
 
-    cards: [
+    experts: [
       {
-        id: 1,
+        id: 301,
         category: "WEDDING DECOR",
-        image: event021,
-        label: "ELEGANT WEDDING DECORATIONS",
-        name: "ROYAL EVENT DECORS",
-        location: "Banjara Hills, Hyderabad",
-        portfolioId: 1,
+        image: event011,
+        label: "ELEGANT EVENT DECOR",
+        name: "ROYAL DECORS",
+        location: "Kondapur, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 301,
       },
+
       {
-        id: 2,
+        id: 302,
+        category: "FLORAL DECOR",
+        image: event012,
+        label: "BEAUTIFUL FLORAL DESIGNS",
+        name: "FLOWER EVENTS",
+        location: "Kukatpally, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 302,
+      },
+
+      {
+        id: 303,
         category: "EVENT DECOR",
-        image: event022,
-        label: "TRADITIONAL & MODERN THEMES",
-        name: "DREAM DECORATORS",
-        location: "Jubilee Hills, Hyderabad",
-        portfolioId: 2,
-      },
-      {
-        id: 3,
-        category: "VENUE DECOR",
-        image: event023,
-        label: "BEAUTIFUL VENUE SETUPS",
-        name: "GRAND EVENTS",
-        location: "Hitech City, Hyderabad",
-        portfolioId: 3,
+        image: event013,
+        label: "PREMIUM EVENT DECOR",
+        name: "ELITE DECORS",
+        location: "Manikonda, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 303,
       },
     ],
   },
 
   // ===================================================
-  // 4. STAGE DECOR
+  // STAGE DECOR
   // ===================================================
 
   4: {
-    id: 4,
-    headingStart: "Trusted",
-    headingHighlight: "Stage",
-    headingEnd: "Decor Experts",
+    headingFirst: "Premium",
+    headingSecond: "Stage Decor",
+    headingEnd: "Experts",
 
-    cards: [
+    experts: [
       {
-        id: 1,
-        category: "STAGE DECOR",
-        image: stage021,
-        label: "ROYAL STAGE DESIGNS",
-        name: "ROYAL STAGE DECORS",
-        location: "Kukatpally, Hyderabad",
-        portfolioId: 1,
-      },
-      {
-        id: 2,
+        id: 401,
         category: "WEDDING STAGE",
-        image: stage022,
-        label: "PREMIUM WEDDING STAGES",
-        name: "GRAND STAGE EVENTS",
-        location: "Miyapur, Hyderabad",
-        portfolioId: 2,
+        image: stage011,
+        label: "PREMIUM WEDDING STAGE",
+        name: "ROYAL STAGE DECORS",
+        location: "Kondapur, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 401,
       },
+
       {
-        id: 3,
-        category: "EVENT STAGE",
-        image: stage023,
-        label: "CREATIVE STAGE SETUPS",
-        name: "DREAM STAGE DECORS",
-        location: "Secunderabad, Hyderabad",
-        portfolioId: 3,
+        id: 402,
+        category: "FLORAL STAGE",
+        image: stage012,
+        label: "BEAUTIFUL FLORAL STAGE",
+        name: "FLOWER STAGE EVENTS",
+        location: "Kukatpally, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 402,
+      },
+
+      {
+        id: 403,
+        category: "TRADITIONAL",
+        image: stage013,
+        label: "TRADITIONAL STAGE DECOR",
+        name: "MANGALAM STAGES",
+        location: "Manikonda, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 403,
       },
     ],
   },
 
   // ===================================================
-  // 5. DJ / SOUND
+  // DJ & SOUND
   // ===================================================
 
   5: {
-    id: 5,
-    headingStart: "Trusted",
-    headingHighlight: "DJ & Sound",
+    headingFirst: "Professional",
+    headingSecond: "DJ & Sound",
     headingEnd: "Experts",
 
-    cards: [
+    experts: [
       {
-        id: 1,
+        id: 501,
         category: "DJ",
-        image: dj021,
+        image: dj011,
         label: "PROFESSIONAL DJ SERVICES",
         name: "DJ BEATS",
-        location: "Madhapur, Hyderabad",
-        portfolioId: 1,
+        location: "Kondapur, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 501,
       },
+
       {
-        id: 2,
-        category: "DJ & SOUND",
-        image: dj022,
-        label: "PREMIUM SOUND SYSTEMS",
-        name: "PARTY BEATS",
-        location: "Gachibowli, Hyderabad",
-        portfolioId: 2,
+        id: 502,
+        category: "LIVE MUSIC",
+        image: dj012,
+        label: "LIVE MUSIC AVAILABLE",
+        name: "MUSIC VIBES",
+        location: "Kukatpally, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 502,
       },
+
       {
-        id: 3,
-        category: "DJ EVENTS",
-        image: dj023,
-        label: "LIVE DJ & MUSIC",
-        name: "RHYTHM EVENTS",
-        location: "Hitech City, Hyderabad",
-        portfolioId: 3,
+        id: 503,
+        category: "SOUND SYSTEM",
+        image: dj013,
+        label: "PREMIUM SOUND SYSTEM",
+        name: "BASS EVENTS",
+        location: "Manikonda, Hyderabad",
+
+        // NEW PORTFOLIO ID
+        portfolioId: 503,
       },
     ],
   },
@@ -266,21 +277,14 @@ const trustedServiceData = {
 // COMPONENT
 // =====================================================
 
-function TrustedPureVegCaterers() {
+function AuthenticMeatGrill() {
   const { id } = useParams();
-  const navigate = useNavigate();
 
-  // ===================================================
-  // SERVICE ID
-  // ===================================================
+  const navigate = useNavigate();
 
   const serviceId = Number(id);
 
-  // ===================================================
-  // GET SERVICE
-  // ===================================================
-
-  const service = trustedServiceData[serviceId];
+  const service = featuredExpertsData[serviceId];
 
   // ===================================================
   // INVALID ID
@@ -288,20 +292,10 @@ function TrustedPureVegCaterers() {
 
   if (!service) {
     return (
-      <section
-        className="
-          flex
-          min-h-[300px]
-          w-full
-          items-center
-          justify-center
-          bg-white
-          px-5
-        "
-      >
+      <section className="flex min-h-[300px] w-full items-center justify-center bg-white px-5">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-800">
-            Service Not Found
+            Featured Service Not Found
           </h2>
 
           <p className="mt-2 text-sm text-gray-500">
@@ -316,21 +310,23 @@ function TrustedPureVegCaterers() {
   // PORTFOLIO
   // ===================================================
 
-  const handlePortfolio = (portfolioId) => {
+  const handlePortfolio = (expert) => {
     /*
       IMPORTANT:
 
       Old:
       /portfolio/${serviceId}/${portfolioId}
 
-      New:
-      /trusted-portfolio/${serviceId}/${portfolioId}
+      This could open your old portfolio page.
 
-      So this will NOT open your old/common portfolio page.
+      New:
+      /service-portfolio/${serviceId}/${expert.portfolioId}
+
+      This creates a separate route for these new portfolio cards.
     */
 
     navigate(
-      `/trusted-portfolio/${serviceId}/${portfolioId}`
+      `/service-portfolio/${serviceId}/${expert.portfolioId}`
     );
   };
 
@@ -339,9 +335,7 @@ function TrustedPureVegCaterers() {
   // ===================================================
 
   const handleBookNow = (expertName) => {
-    console.log(
-      `Booking request for ${expertName}`
-    );
+    console.log(`Booking request for ${expertName}`);
   };
 
   // ===================================================
@@ -366,6 +360,7 @@ function TrustedPureVegCaterers() {
         lg:py-12
       "
     >
+
       {/* =================================================
           HEADING
       ================================================= */}
@@ -388,7 +383,6 @@ function TrustedPureVegCaterers() {
             font-medium
             leading-tight
             tracking-normal
-            text-[#252525]
 
             sm:text-[22px]
 
@@ -397,29 +391,31 @@ function TrustedPureVegCaterers() {
             lg:text-[25px]
           "
         >
-          {/* BLACK */}
+
+          {/* FIRST WORD */}
 
           <span className="text-[#252525]">
-            {service.headingStart}{" "}
+            {service.headingFirst}{" "}
           </span>
 
-          {/* GREEN */}
+          {/* HIGHLIGHT */}
 
-          <span className="text-[#16803b]">
-            {service.headingHighlight}
+          <span className="text-[#a90000]">
+            {service.headingSecond}
           </span>
 
-          {/* BLACK */}
+          {/* LAST WORD */}
 
           <span className="text-[#252525]">
             {" "}
             {service.headingEnd}
           </span>
+
         </h2>
       </div>
 
       {/* =================================================
-          MAIN CARD CONTAINER
+          CARDS CONTAINER
       ================================================= */}
 
       <div
@@ -430,6 +426,7 @@ function TrustedPureVegCaterers() {
           max-w-[1240px]
         "
       >
+
         {/* =================================================
             DESKTOP LEFT ARROW
         ================================================= */}
@@ -479,7 +476,9 @@ function TrustedPureVegCaterers() {
             lg:gap-9
           "
         >
-          {service.cards.map((expert) => (
+
+          {service.experts.map((expert) => (
+
             <div
               key={expert.id}
               className="
@@ -488,13 +487,18 @@ function TrustedPureVegCaterers() {
                 min-w-0
                 overflow-hidden
                 bg-white
+
                 shadow-[0_4px_18px_rgba(0,0,0,0.12)]
+
                 transition-all
                 duration-300
+
                 hover:-translate-y-1
+
                 hover:shadow-[0_8px_25px_rgba(0,0,0,0.16)]
               "
             >
+
               {/* =================================================
                   IMAGE
               ================================================= */}
@@ -513,6 +517,7 @@ function TrustedPureVegCaterers() {
                   lg:h-[240px]
                 "
               >
+
                 <img
                   src={expert.image}
                   alt={expert.name}
@@ -521,15 +526,15 @@ function TrustedPureVegCaterers() {
                     w-full
                     object-cover
                     object-center
+
                     transition-transform
                     duration-500
+
                     group-hover:scale-[1.02]
                   "
                 />
 
-                {/* =================================================
-                    IMAGE OVERLAY
-                ================================================= */}
+                {/* IMAGE OVERLAY */}
 
                 <div
                   className="
@@ -569,28 +574,31 @@ function TrustedPureVegCaterers() {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    handlePortfolio(expert.portfolioId)
-                  }
+                  onClick={() => handlePortfolio(expert)}
                   className="
                     absolute
                     right-3
                     top-3
+
                     flex
                     cursor-pointer
                     items-center
                     gap-1
+
                     text-[10px]
                     font-medium
                     text-[#ffd000]
+
                     transition-colors
                     duration-200
+
                     hover:text-white
 
                     sm:right-4
                     sm:text-[11px]
                   "
                 >
+
                   <span>
                     Portfolio
                   </span>
@@ -599,6 +607,7 @@ function TrustedPureVegCaterers() {
                     size={12}
                     className="text-white"
                   />
+
                 </button>
 
                 {/* =================================================
@@ -611,9 +620,12 @@ function TrustedPureVegCaterers() {
                     bottom-0
                     left-0
                     max-w-[85%]
+
                     bg-[#350b0b]
+
                     px-3
                     py-2
+
                     text-[8px]
                     font-medium
                     tracking-wide
@@ -626,10 +638,11 @@ function TrustedPureVegCaterers() {
                 >
                   {expert.label}
                 </div>
+
               </div>
 
               {/* =================================================
-                  CARD DETAILS
+                  DETAILS
               ================================================= */}
 
               <div
@@ -645,6 +658,7 @@ function TrustedPureVegCaterers() {
                   md:pb-4
                 "
               >
+
                 <div
                   className="
                     flex
@@ -653,11 +667,13 @@ function TrustedPureVegCaterers() {
                     gap-3
                   "
                 >
+
                   {/* =================================================
                       NAME + LOCATION
                   ================================================= */}
 
                   <div className="min-w-0">
+
                     <h3
                       className="
                         truncate
@@ -689,6 +705,7 @@ function TrustedPureVegCaterers() {
                     >
                       {expert.location}
                     </p>
+
                   </div>
 
                   {/* =================================================
@@ -704,15 +721,21 @@ function TrustedPureVegCaterers() {
                       flex-shrink-0
                       cursor-pointer
                       rounded-sm
+
                       bg-[#b00000]
+
                       px-3.5
                       py-2
+
                       text-[9px]
                       font-semibold
                       text-white
+
                       transition-colors
                       duration-200
+
                       hover:bg-[#8f0000]
+
                       active:scale-95
 
                       sm:px-4
@@ -725,10 +748,15 @@ function TrustedPureVegCaterers() {
                   >
                     BOOK NOW
                   </button>
+
                 </div>
+
               </div>
+
             </div>
+
           ))}
+
         </div>
 
         {/* =================================================
@@ -744,17 +772,26 @@ function TrustedPureVegCaterers() {
             top-1/2
             z-20
             hidden
+
             h-[38px]
             w-[38px]
+
             -translate-y-1/2
+
             cursor-pointer
+
             items-center
             justify-center
+
             rounded-full
+
             bg-[#c94f55]
+
             text-white
+
             transition-all
             duration-200
+
             hover:bg-[#a91f28]
 
             xl:flex
@@ -762,6 +799,7 @@ function TrustedPureVegCaterers() {
         >
           <FaChevronRight size={13} />
         </button>
+
       </div>
 
       {/* =================================================
@@ -781,6 +819,7 @@ function TrustedPureVegCaterers() {
           xl:hidden
         "
       >
+
         {/* LEFT */}
 
         <button
@@ -794,9 +833,13 @@ function TrustedPureVegCaterers() {
             items-center
             justify-center
             rounded-full
+
             bg-[#c94f55]
+
             text-white
+
             transition
+
             hover:bg-[#a91f28]
           "
         >
@@ -816,17 +859,23 @@ function TrustedPureVegCaterers() {
             items-center
             justify-center
             rounded-full
+
             bg-[#c94f55]
+
             text-white
+
             transition
+
             hover:bg-[#a91f28]
           "
         >
           <FaChevronRight size={11} />
         </button>
+
       </div>
+
     </section>
   );
 }
 
-export default TrustedPureVegCaterers;
+export default AuthenticMeatGrill;

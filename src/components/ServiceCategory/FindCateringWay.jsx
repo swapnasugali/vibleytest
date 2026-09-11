@@ -402,7 +402,7 @@ const FindCateringWay = () => {
           mt-9
           grid
           w-full
-          max-w-[1200px]
+          max-w-[1250px]
           grid-cols-2
           place-items-start
           justify-items-center
@@ -416,12 +416,12 @@ const FindCateringWay = () => {
 
           md:mt-10
           md:grid-cols-5
-          md:gap-x-9
+          md:gap-x-10
           md:gap-y-0
 
           lg:mt-10
-          lg:max-w-[1200px]
-          lg:gap-x-10
+          lg:max-w-[1250px]
+          lg:gap-x-12
         "
       >
 
@@ -430,51 +430,54 @@ const FindCateringWay = () => {
             key={index}
             className="
               flex
-              w-[180px]
+              w-[190px]
               flex-col
               items-center
               text-center
 
-              sm:w-[190px]
+              sm:w-[200px]
 
-              md:w-[205px]
+              md:w-[215px]
 
-              lg:w-[215px]
+              lg:w-[225px]
             "
           >
 
             {/* =================================================
-                IMAGE
+                CIRCLE IMAGE
             ================================================= */}
 
             <div
               className="
-                h-[155px]
-                w-[155px]
+                h-[170px]
+                w-[170px]
+                shrink-0
                 overflow-hidden
                 rounded-full
                 bg-white
-                p-1
+                p-1.5
                 shadow-sm
 
-                sm:h-[165px]
-                sm:w-[165px]
+                sm:h-[180px]
+                sm:w-[180px]
 
-                md:h-[185px]
-                md:w-[185px]
+                md:h-[200px]
+                md:w-[200px]
 
-                lg:h-[195px]
-                lg:w-[195px]
+                lg:h-[210px]
+                lg:w-[210px]
               "
             >
               <img
                 src={category.image}
                 alt={category.title}
                 className="
+                  block
                   h-full
                   w-full
                   rounded-full
                   object-cover
+                  object-center
                 "
               />
             </div>
@@ -497,7 +500,7 @@ const FindCateringWay = () => {
                 className={`
                   h-[6px]
                   w-[6px]
-                  flex-shrink-0
+                  shrink-0
                   rounded-full
                   ${category.dot}
                 `}
@@ -535,82 +538,101 @@ const FindCateringWay = () => {
           relative
           z-10
           mx-auto
-          mt-9
+          mt-10
           flex
           w-full
-          max-w-[1200px]
+          max-w-[1250px]
           items-center
           justify-between
-          px-1
+          gap-10
+          px-3
 
-          sm:mt-10
-          sm:px-4
+          sm:mt-11
+          sm:gap-14
+          sm:px-5
 
-          md:mt-10
-          md:px-7
+          md:mt-12
+          md:gap-20
+          md:px-8
 
-          lg:mt-9
-          lg:px-9
+          lg:mt-11
+          lg:gap-24
+          lg:px-12
         "
       >
 
-        {/* LEFT */}
+        {/* =================================================
+            LEFT MUGGU
+        ================================================= */}
 
         <img
           src={mugguBottom}
           alt=""
           className="
             h-[34px]
-            w-[34%]
+            w-[30%]
             object-contain
             opacity-60
             mix-blend-multiply
 
             sm:h-[40px]
+            sm:w-[28%]
 
             md:h-[48px]
+            md:w-[27%]
 
             lg:h-[55px]
+            lg:w-[26%]
           "
         />
 
-        {/* CENTER */}
+        {/* =================================================
+            CENTER MUGGU
+        ================================================= */}
 
         <img
           src={mugguBottom}
           alt=""
           className="
             h-[34px]
-            w-[34%]
+            w-[30%]
             object-contain
             opacity-60
             mix-blend-multiply
 
             sm:h-[40px]
+            sm:w-[28%]
 
             md:h-[48px]
+            md:w-[27%]
 
             lg:h-[55px]
+            lg:w-[26%]
           "
         />
 
-        {/* RIGHT */}
+        {/* =================================================
+            RIGHT MUGGU
+        ================================================= */}
 
         <img
           src={mugguBottom}
           alt=""
           className="
             h-[34px]
-            w-[34%]
+            w-[30%]
             object-contain
             opacity-60
             mix-blend-multiply
 
             sm:h-[40px]
+            sm:w-[28%]
 
             md:h-[48px]
+            md:w-[27%]
 
             lg:h-[55px]
+            lg:w-[26%]
           "
         />
 

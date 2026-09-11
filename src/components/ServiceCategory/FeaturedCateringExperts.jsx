@@ -47,6 +47,8 @@ import dj013 from "../../assets/dj013.jpg";
 
 import {
   FaAngleDoubleRight,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 // =====================================================
@@ -55,7 +57,7 @@ import {
 
 const featuredServiceData = {
   // ===================================================
-  // PHOTOGRAPHY
+  // 1. PHOTOGRAPHY
   // ===================================================
 
   1: {
@@ -96,7 +98,7 @@ const featuredServiceData = {
   },
 
   // ===================================================
-  // CATERING
+  // 2. CATERING
   // ===================================================
 
   2: {
@@ -137,7 +139,7 @@ const featuredServiceData = {
   },
 
   // ===================================================
-  // EVENT
+  // 3. EVENT
   // ===================================================
 
   3: {
@@ -178,7 +180,7 @@ const featuredServiceData = {
   },
 
   // ===================================================
-  // STAGE DECOR
+  // 4. STAGE DECOR
   // ===================================================
 
   4: {
@@ -219,7 +221,7 @@ const featuredServiceData = {
   },
 
   // ===================================================
-  // DJ / SOUND
+  // 5. DJ / SOUND
   // ===================================================
 
   5: {
@@ -266,10 +268,17 @@ const featuredServiceData = {
 
 const FeaturedCateringExperts = () => {
   const { id } = useParams();
-
   const navigate = useNavigate();
 
+  // ===================================================
+  // SERVICE ID
+  // ===================================================
+
   const serviceId = Number(id);
+
+  // ===================================================
+  // GET SERVICE DATA
+  // ===================================================
 
   const service = featuredServiceData[serviceId];
 
@@ -292,7 +301,9 @@ const FeaturedCateringExperts = () => {
   // ===================================================
 
   const handlePortfolio = (expert) => {
-    navigate(`/portfolio/${serviceId}/${expert.portfolioId}`);
+    navigate(
+      `/service/${serviceId}/portfolio/${expert.portfolioId}`
+    );
   };
 
   // ===================================================
@@ -330,26 +341,38 @@ const FeaturedCateringExperts = () => {
           HEADING
       ================================================= */}
 
-      <h2
+      <div
         className="
+          mb-8
           text-center
-          text-[21px]
-          font-medium
-          leading-tight
-          text-[#252525]
 
-          sm:text-[22px]
+          sm:mb-9
 
-          md:text-[23px]
-
-          lg:text-[25px]
+          md:mb-10
         "
       >
-        <span className="text-[#f0a900]">
-          Featured
-        </span>{" "}
-        {service.title.replace("Featured ", "")}
-      </h2>
+        <h2
+          className="
+            text-[21px]
+            font-medium
+            leading-tight
+            tracking-normal
+            text-[#252525]
+
+            sm:text-[22px]
+
+            md:text-[23px]
+
+            lg:text-[25px]
+          "
+        >
+          <span className="text-[#f0a900]">
+            Featured
+          </span>{" "}
+
+          {service.title.replace("Featured ", "")}
+        </h2>
+      </div>
 
       {/* =================================================
           MAIN CARD CONTAINER
@@ -387,6 +410,7 @@ const FeaturedCateringExperts = () => {
             h-[38px]
             w-[38px]
             -translate-y-1/2
+            cursor-pointer
             items-center
             justify-center
             rounded-full
@@ -399,9 +423,7 @@ const FeaturedCateringExperts = () => {
             xl:flex
           "
         >
-          <span className="mb-1 text-[27px] leading-none">
-            ‹
-          </span>
+          <FaChevronLeft size={13} />
         </button>
 
         {/* =================================================
@@ -471,17 +493,17 @@ const FeaturedCateringExperts = () => {
                 <span
                   className="
                     absolute
-                    left-2.5
-                    top-2.5
+                    left-3
+                    top-3
                     bg-black/65
                     px-2.5
                     py-1.5
-                    text-[8px]
+                    text-[9px]
                     font-medium
                     tracking-wide
                     text-white
 
-                    sm:text-[9px]
+                    sm:text-[10px]
                   "
                 >
                   {expert.category}
@@ -496,26 +518,26 @@ const FeaturedCateringExperts = () => {
                   onClick={() => handlePortfolio(expert)}
                   className="
                     absolute
-                    right-2.5
-                    top-2.5
+                    right-3
+                    top-3
                     flex
                     cursor-pointer
                     items-center
                     gap-1
-                    text-[9px]
+                    text-[10px]
                     font-medium
                     text-[#ffc400]
                     transition
                     duration-200
                     hover:text-white
 
-                    sm:right-3
-                    sm:text-[10px]
+                    sm:right-4
+                    sm:text-[11px]
                   "
                 >
-                  <span>Portfolio</span>
-
-                  {/* WHITE >> SYMBOL */}
+                  <span>
+                    Portfolio
+                  </span>
 
                   <FaAngleDoubleRight
                     size={12}
@@ -524,7 +546,7 @@ const FeaturedCateringExperts = () => {
                 </button>
 
                 {/* =================================================
-                    IMAGE BOTTOM LABEL
+                    BOTTOM LABEL
                 ================================================= */}
 
                 <span
@@ -533,7 +555,8 @@ const FeaturedCateringExperts = () => {
                     bottom-0
                     left-0
                     max-w-[85%]
-                    bg-black/75
+                    rounded-tr-[12px]
+                    bg-[#350b0b]
                     px-3
                     py-2
                     text-[8px]
@@ -542,6 +565,8 @@ const FeaturedCateringExperts = () => {
                     text-white
 
                     sm:text-[9px]
+
+                    md:text-[10px]
                   "
                 >
                   {expert.label}
@@ -601,7 +626,9 @@ const FeaturedCateringExperts = () => {
 
                 </div>
 
-                {/* BOOK NOW */}
+                {/* =================================================
+                    BOOK NOW
+                ================================================= */}
 
                 <button
                   type="button"
@@ -654,6 +681,7 @@ const FeaturedCateringExperts = () => {
             h-[38px]
             w-[38px]
             -translate-y-1/2
+            cursor-pointer
             items-center
             justify-center
             rounded-full
@@ -666,9 +694,7 @@ const FeaturedCateringExperts = () => {
             xl:flex
           "
         >
-          <span className="mb-1 text-[27px] leading-none">
-            ›
-          </span>
+          <FaChevronRight size={13} />
         </button>
 
       </div>
@@ -700,6 +726,7 @@ const FeaturedCateringExperts = () => {
             flex
             h-8
             w-8
+            cursor-pointer
             items-center
             justify-center
             rounded-full
@@ -709,9 +736,7 @@ const FeaturedCateringExperts = () => {
             hover:bg-[#a90000]
           "
         >
-          <span className="mb-1 text-[21px] leading-none">
-            ‹
-          </span>
+          <FaChevronLeft size={11} />
         </button>
 
         {/* RIGHT */}
@@ -723,6 +748,7 @@ const FeaturedCateringExperts = () => {
             flex
             h-8
             w-8
+            cursor-pointer
             items-center
             justify-center
             rounded-full
@@ -732,9 +758,7 @@ const FeaturedCateringExperts = () => {
             hover:bg-[#a90000]
           "
         >
-          <span className="mb-1 text-[21px] leading-none">
-            ›
-          </span>
+          <FaChevronRight size={11} />
         </button>
 
       </div>

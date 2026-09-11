@@ -3,6 +3,10 @@ import ServiceCategoryHero from '../../components/ServiceCategory/ServiceCategor
 import FindCateringWay from '../../components/ServiceCategory/FindCateringWay'
 import FeaturedCateringExperts from '../../components/ServiceCategory/FeaturedCateringExperts'
 import TrustedPureVegCaterers from '../../components/ServiceCategory/TrustedPureVegCaterers'
+import FlatOf from '../../components/ServiceCategory/FlatOf'
+import AuthenticMeatGrill from '../../components/ServiceCategory/AuthenticMeatGrill'
+import Premium from '../../components/ServiceCategory/Premium'
+import Confused from '../../components/ServiceCategory/Confused'
 
 function ServiceCategoryPage() {
   return (
@@ -12,6 +16,10 @@ function ServiceCategoryPage() {
             <FindCateringWay/>
             <FeaturedCateringExperts/>
             <TrustedPureVegCaterers/>
+            <FlatOf/>
+            <AuthenticMeatGrill/>
+            <Premium/>
+            <Confused/>
         </div>
     
   )

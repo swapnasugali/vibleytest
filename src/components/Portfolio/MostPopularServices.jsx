@@ -213,8 +213,7 @@ const serviceData = {
 const MostPopularServices = () => {
   const { type } = useParams();
 
-  const data =
-    serviceData[type] || serviceData.photography;
+  const data = serviceData[type] || serviceData.photography;
 
   return (
     <section
@@ -238,10 +237,9 @@ const MostPopularServices = () => {
         lg:pt-12
       "
     >
-
       {/* ==================================================
           HEADING
-          ================================================== */}
+      ================================================== */}
 
       <h2
         className="
@@ -261,7 +259,7 @@ const MostPopularServices = () => {
 
       {/* ==================================================
           SERVICE CARDS
-          ================================================== */}
+      ================================================== */}
 
       <div
         className="
@@ -277,28 +275,35 @@ const MostPopularServices = () => {
           sm:gap-7
 
           lg:grid-cols-3
-          lg:items-start
+          lg:items-stretch
           lg:gap-8
         "
       >
-
         {/* ==================================================
             LEFT COLUMN - FIXED PACKAGE
-            ================================================== */}
+        ================================================== */}
 
-        <div className="flex w-full flex-col">
-
+        <div
+          className="
+            flex
+            h-full
+            w-full
+            flex-col
+          "
+        >
           <div
             className="
+              flex
+              h-full
               min-h-[510px]
               w-full
+              flex-col
               overflow-hidden
               rounded-[7px]
               bg-white
               shadow-[0_2px_6px_rgba(0,0,0,0.25)]
             "
           >
-
             {/* Top Label */}
 
             <div
@@ -328,7 +333,6 @@ const MostPopularServices = () => {
                 text-white
               "
             >
-
               <span
                 className="
                   text-[13px]
@@ -351,53 +355,43 @@ const MostPopularServices = () => {
               >
                 Consists of :
               </span>
-
             </div>
 
             {/* Services */}
 
-            <div className="px-4 py-5">
+            <div className="flex-1 px-4 py-5">
+              {data.fixedPackage.services.map((service, index) => (
+                <div
+                  key={service.title}
+                  className={index > 0 ? "mt-5" : ""}
+                >
+                  <h3
+                    className="
+                      text-[13px]
+                      font-semibold
+                      leading-[1.35]
+                      text-[#570000]
 
-              {data.fixedPackage.services.map(
-                (service, index) => (
-                  <div
-                    key={service.title}
-                    className={
-                      index > 0
-                        ? "mt-5"
-                        : ""
-                    }
+                      sm:text-[14px]
+                    "
                   >
+                    {service.title}
+                  </h3>
 
-                    <h3
-                      className="
-                        text-[13px]
-                        font-semibold
-                        leading-[1.35]
-                        text-[#570000]
+                  <p
+                    className="
+                      mt-1.5
+                      text-[9px]
+                      leading-[1.6]
+                      text-[#555555]
 
-                        sm:text-[14px]
-                      "
-                    >
-                      {service.title}
-                    </h3>
-
-                    <p
-                      className="
-                        mt-1.5
-                        text-[9px]
-                        leading-[1.6]
-                        text-[#555555]
-
-                        sm:text-[10px]
-                      "
-                    >
-                      {service.description}
-                    </p>
-
-                  </div>
-                )
-              )}
+                      sm:text-[10px]
+                    "
+                  >
+                    {service.description}
+                  </p>
+                </div>
+              ))}
 
               {/* Divider */}
 
@@ -430,7 +424,6 @@ const MostPopularServices = () => {
               {/* Add On */}
 
               <div className="mt-4">
-
                 <h3
                   className="
                     text-[13px]
@@ -456,9 +449,7 @@ const MostPopularServices = () => {
                 >
                   {data.fixedPackage.addOn.description}
                 </p>
-
               </div>
-
             </div>
 
             {/* Price */}
@@ -472,7 +463,6 @@ const MostPopularServices = () => {
                 text-white
               "
             >
-
               <p
                 className="
                   text-[10px]
@@ -481,7 +471,6 @@ const MostPopularServices = () => {
                 "
               >
                 Starting from{" "}
-
                 <span
                   className="
                     text-[19px]
@@ -516,7 +505,6 @@ const MostPopularServices = () => {
                   hover:scale-105
                 "
               >
-
                 <FaPhone
                   className="
                     rotate-90
@@ -526,11 +514,8 @@ const MostPopularServices = () => {
                 />
 
                 Register Pack
-
               </button>
-
             </div>
-
           </div>
 
           {/* View Packages */}
@@ -550,35 +535,35 @@ const MostPopularServices = () => {
           >
             View all packages
           </button>
-
         </div>
 
         {/* ==================================================
             MIDDLE COLUMN - SERVICES
-            ================================================== */}
+        ================================================== */}
 
         <div
           className="
             flex
+            h-full
             w-full
             flex-col
             gap-5
           "
         >
-
           {data.services.map((service) => (
-
             <div
               key={service.title}
               className="
+                flex
                 min-h-[235px]
+                flex-1
+                flex-col
                 overflow-hidden
                 rounded-[7px]
                 bg-white
                 shadow-[0_2px_6px_rgba(0,0,0,0.25)]
               "
             >
-
               {/* Label */}
 
               <div
@@ -608,7 +593,6 @@ const MostPopularServices = () => {
                   text-white
                 "
               >
-
                 <span
                   className="
                     text-[13px]
@@ -631,13 +615,11 @@ const MostPopularServices = () => {
                 >
                   Consists of :
                 </span>
-
               </div>
 
               {/* Content */}
 
-              <div className="px-4 py-5">
-
+              <div className="flex-1 px-4 py-5">
                 <h3
                   className="
                     text-[13px]
@@ -663,21 +645,19 @@ const MostPopularServices = () => {
                 >
                   {service.description}
                 </p>
-
               </div>
 
               {/* Price */}
 
               <div
                 className="
-                  bg-[#b00000]
+                  bg-[#970000]
                   px-4
                   py-5
                   text-center
                   text-white
                 "
               >
-
                 <p
                   className="
                     text-[10px]
@@ -686,7 +666,6 @@ const MostPopularServices = () => {
                   "
                 >
                   Starting from{" "}
-
                   <span
                     className="
                       text-[19px]
@@ -721,7 +700,6 @@ const MostPopularServices = () => {
                     hover:scale-105
                   "
                 >
-
                   <FaPhone
                     className="
                       rotate-90
@@ -731,13 +709,9 @@ const MostPopularServices = () => {
                   />
 
                   Register Pack
-
                 </button>
-
               </div>
-
             </div>
-
           ))}
 
           {/* View Services */}
@@ -756,12 +730,11 @@ const MostPopularServices = () => {
           >
             View all Services
           </button>
-
         </div>
 
         {/* ==================================================
             RIGHT COLUMN - ADD ONS
-            ================================================== */}
+        ================================================== */}
 
         <div
           className="
@@ -771,9 +744,7 @@ const MostPopularServices = () => {
             gap-5
           "
         >
-
           {data.addOns.map((addOn) => (
-
             <div
               key={addOn.title}
               className="
@@ -784,7 +755,6 @@ const MostPopularServices = () => {
                 shadow-[0_2px_6px_rgba(0,0,0,0.25)]
               "
             >
-
               {/* Label */}
 
               <div
@@ -815,7 +785,6 @@ const MostPopularServices = () => {
                   text-white
                 "
               >
-
                 <span
                   className="
                     text-[13px]
@@ -838,13 +807,11 @@ const MostPopularServices = () => {
                 >
                   Consists of :
                 </span>
-
               </div>
 
               {/* Content */}
 
               <div className="px-4 py-5">
-
                 <h3
                   className="
                     text-[13px]
@@ -882,7 +849,6 @@ const MostPopularServices = () => {
                   "
                 >
                   Starting from{" "}
-
                   <span
                     className="
                       text-[19px]
@@ -894,11 +860,8 @@ const MostPopularServices = () => {
                     {addOn.price}
                   </span>
                 </p>
-
               </div>
-
             </div>
-
           ))}
 
           {/* View Add Ons */}
@@ -917,14 +880,12 @@ const MostPopularServices = () => {
           >
             View all Add Ons
           </button>
-
         </div>
-
       </div>
 
       {/* ==================================================
           TERMS AND CONDITIONS
-          ================================================== */}
+      ================================================== */}
 
       <div
         className="
@@ -938,7 +899,6 @@ const MostPopularServices = () => {
           lg:py-12
         "
       >
-
         <button
           type="button"
           className="
@@ -954,7 +914,6 @@ const MostPopularServices = () => {
             md:text-[18px]
           "
         >
-
           {/* Orange Search / Pin Shape */}
 
           <svg
@@ -964,7 +923,6 @@ const MostPopularServices = () => {
             xmlns="http://www.w3.org/2000/svg"
             className="shrink-0"
           >
-
             <path
               d="
                 M18 0
@@ -997,7 +955,6 @@ const MostPopularServices = () => {
               strokeWidth="2.5"
               strokeLinecap="round"
             />
-
           </svg>
 
           {/* Terms Text */}
@@ -1005,11 +962,8 @@ const MostPopularServices = () => {
           <span className="whitespace-nowrap">
             Terms and Conditions
           </span>
-
         </button>
-
       </div>
-
     </section>
   );
 };

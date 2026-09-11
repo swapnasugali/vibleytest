@@ -164,7 +164,7 @@ const ServiceCategoryHero = () => {
             "
             style={{
               borderRadius:
-                "10% 0 0 50% / 50% 0 0 100%",
+                "10% 0 0 40% / 50% 0 0 100%",
             }}
           >
 
