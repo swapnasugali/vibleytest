@@ -636,9 +636,9 @@ const FindCateringWay = () => {
           "
         />
 
-      </div>
+        </div>
 
-    </section>
+        </section>
   );
 };
 

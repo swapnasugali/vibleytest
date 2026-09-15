@@ -824,8 +824,11 @@ function TrustedPureVegCaterers() {
         >
           <FaChevronRight size={11} />
         </button>
-      </div>
-    </section>
+
+        </div>
+
+        </section>
+        
   );
 }
 

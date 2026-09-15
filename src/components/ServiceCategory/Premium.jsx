@@ -812,8 +812,11 @@ const Premium = () => {
         >
           <FaChevronRight size={11} />
         </button>
-      </div>
+
+        </div>
+
     </section>
+    
   );
 };
 

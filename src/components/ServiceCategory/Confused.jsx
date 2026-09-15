@@ -436,11 +436,12 @@ const Confused = () => {
 
           )}
 
-        </div>
+          </div>
 
-      </div>
+          </div>
 
-    </section>
+          </section>
+          
   );
 };
 

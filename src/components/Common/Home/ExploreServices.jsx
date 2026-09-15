@@ -53,26 +53,26 @@ const categories = [
 const ExploreServices = () => {
   const sliderRef = useRef(null);
 
-  const [showLeft, setShowLeft] = useState(false);
-  const [showRight, setShowRight] = useState(true);
+  const [isAtStart, setIsAtStart] = useState(true);
+  const [isAtEnd, setIsAtEnd] = useState(false);
 
   const handleScroll = () => {
     if (sliderRef.current) {
       const slider = sliderRef.current;
 
-      const isAtStart = slider.scrollLeft <= 0;
+      const atStart = slider.scrollLeft <= 0;
 
-      const isAtEnd =
+      const atEnd =
         slider.scrollLeft + slider.clientWidth >=
         slider.scrollWidth - 1;
 
-      setShowLeft(!isAtStart);
-      setShowRight(!isAtEnd);
+      setIsAtStart(atStart);
+      setIsAtEnd(atEnd);
     }
   };
 
   const handlePrevious = () => {
-    if (sliderRef.current) {
+    if (sliderRef.current && !isAtStart) {
       const firstCard = sliderRef.current.children[0];
       const gap = 24;
 
@@ -84,7 +84,7 @@ const ExploreServices = () => {
   };
 
   const handleNext = () => {
-    if (sliderRef.current) {
+    if (sliderRef.current && !isAtEnd) {
       const firstCard = sliderRef.current.children[0];
       const gap = 24;
 
@@ -108,16 +108,15 @@ const ExploreServices = () => {
         <div className="relative flex items-center">
 
           {/* Left Arrow */}
-          {showLeft && (
-            <button
-              type="button"
-              onClick={handlePrevious}
-              aria-label="Previous"
-              className="absolute -left-3 top-[85px] z-30 flex cursor-pointer items-center justify-center text-[#222] sm:-left-5 md:-left-7"
-            >
-              <FaChevronLeft className="text-[22px] font-light" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handlePrevious}
+            disabled={isAtStart}
+            aria-label="Previous"
+            className="absolute -left-3 top-[85px] z-30 flex cursor-pointer items-center justify-center text-[#222] disabled:cursor-not-allowed sm:-left-5 md:-left-7"
+          >
+            <FaChevronLeft className="text-[22px] font-light" />
+          </button>
 
           {/* Outer Container */}
           <div className="w-full overflow-hidden px-1">
@@ -206,16 +205,15 @@ const ExploreServices = () => {
           </div>
 
           {/* Right Arrow */}
-          {showRight && (
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Next"
-              className="absolute -right-3 top-[85px] z-30 flex cursor-pointer items-center justify-center text-[#222] sm:-right-5 md:-right-7"
-            >
-              <FaChevronRight className="text-[22px] font-light" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={isAtEnd}
+            aria-label="Next"
+            className="absolute -right-3 top-[85px] z-30 flex cursor-pointer items-center justify-center text-[#222] disabled:cursor-not-allowed sm:-right-5 md:-right-7"
+          >
+            <FaChevronRight className="text-[22px] font-light" />
+          </button>
 
         </div>
       </div>
