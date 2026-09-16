@@ -6,6 +6,9 @@ import HomePage from "./Pages/HomePage/HomePage";
 
 import PortfolioPage from "./Pages/Portfolio/PortfolioPage";
 import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
+import DashboardHero from "./components/ProviderDashboard/DashboardHero";
+import ProviderHeader from "./components/ProviderDashboard/ProviderHeader";
+import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
 
 
 // ======================================================
@@ -20,27 +23,29 @@ function AppRoutes() {
   }, [pathname]);
 
   return (
-    <Routes>
+    // <Routes>
 
-      {/* Home Page */}
-      <Route
-        path="/"
-        element={<Layout HomePage={HomePage} />}
-      />
+    //   {/* Home Page */}
+    //   <Route
+    //     path="/"
+    //     element={<Layout HomePage={HomePage} />}
+    //   />
 
-      {/* Dynamic Portfolio Page */}
-      <Route
-        path="/portfolio/:type/:id"
-        element={<Layout HomePage={PortfolioPage} />}
-      />
+    //   {/* Dynamic Portfolio Page */}
+    //   <Route
+    //     path="/portfolio/:type/:id"
+    //     element={<Layout HomePage={PortfolioPage} />}
+    //   />
 
-      {/* Dynamic ServiceCategoryPage */}
-      <Route
-        path="/services/:id"
-        element={<Layout HomePage={ServiceCategoryPage} />}
-      />
+    //   {/* Dynamic ServiceCategoryPage */}
+    //   <Route
+    //     path="/services/:id"
+    //     element={<Layout HomePage={ServiceCategoryPage} />}
+    //   />
+<div>
+    <ProviderDashboard/>
+</div>
 
-    </Routes>
   );
 }
 
