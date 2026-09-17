@@ -9,6 +9,7 @@ import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
 import DashboardHero from "./components/ProviderDashboard/DashboardHero";
 import ProviderHeader from "./components/ProviderDashboard/ProviderHeader";
 import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
+import DashboardOverlays from "./components/ProviderDashboard/DashboardOverlays";
 
 
 // ======================================================
@@ -44,6 +45,7 @@ function AppRoutes() {
     //   />
 <div>
     <ProviderDashboard/>
+    <DashboardOverlays/>
 </div>
 
   );
