@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ThumbnailBadgeTextOverlay from "./ThumbnailBadgeTextOverlay";
 import LeadStatusOverlay from "./LeadStatusOverlay";
 import AvailabilityCalendarOverlay from "./AvailabilityCalendarOverlay";
+import AvailabilityCalendar1 from "./AvailabilityCalendar1";
 
 const DashboardOverlays = () => {
   const [showThumbnail, setShowThumbnail] = useState(true);
@@ -45,6 +46,10 @@ const DashboardOverlays = () => {
             />
           </div>
         )}
+
+        <div>
+          <AvailabilityCalendar1/>
+        </div>
 
       </div>
 
