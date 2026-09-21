@@ -10,45 +10,56 @@ import {
 // SINGLE CALENDAR CARD
 // =====================================================
 
-const AvailabilityCalendarCard = ({
+const AvailabilityCalendarCard1 = ({
   initialSelectedDate = null,
   initialNote = "",
   showRedDate = false,
   showSavedDate = false,
 }) => {
-  const [selectedDate, setSelectedDate] = useState(initialSelectedDate);
+
+  const [selectedDate, setSelectedDate] = useState(
+    initialSelectedDate
+  );
+
   const [note, setNote] = useState(initialNote);
 
+  const [saved, setSaved] = useState(showSavedDate);
+
+
+  // ===================================================
+  // MAY 2026
+  // ===================================================
+
   const weeks = [
-    ["1", "2", "3", "4", "5", "6", "7"],
-    ["8", "9", "10", "11", "12", "13", "14"],
-    ["15", "16", "17", "18", "19", "20", "21"],
-    ["22", "23", "24", "25", "26", "27", "28"],
-    ["29", "30", "31", "", "", "", ""],
+    ["", "", "", "", 1, 2, 3],
+    [4, 5, 6, 7, 8, 9, 10],
+    [11, 12, 13, 14, 15, 16, 17],
+    [18, 19, 20, 21, 22, 23, 24],
+    [25, 26, 27, 28, 29, 30, 31],
   ];
 
-  const yellowDates = ["25", "26", "31"];
 
-  const handleDateClick = (day) => {
-    if (!day) return;
+  // ===================================================
+  // SAVE
+  // ===================================================
 
-    setSelectedDate(Number(day));
+  const handleSave = () => {
+    if (selectedDate) {
+      setSaved(true);
+    }
   };
+
 
   return (
     <div
       className="
-        flex
-        h-[253px]
-        w-[182px]
-        flex-none
-        flex-col
-        rounded-[6px]
+        w-full
+        rounded-[7px]
         border
-        border-[#d8d8d8]
+        border-[#d5d5d5]
         bg-white
-        p-[7px]
-        shadow-[0_1px_3px_rgba(0,0,0,0.10)]
+        p-[9px]
+        shadow-[0_1px_4px_rgba(0,0,0,0.08)]
       "
     >
 
@@ -56,56 +67,44 @@ const AvailabilityCalendarCard = ({
       {/* MONTH HEADER */}
       {/* ================================================= */}
 
-      <div
-        className="
-          flex
-          h-[17px]
-          shrink-0
-          items-center
-          justify-between
-          px-[34px]
-        "
-      >
+      <div className="mb-[7px] flex items-center justify-between">
 
         <button
           type="button"
+          aria-label="Previous month"
           className="
             flex
-            h-[13px]
-            w-[13px]
+            h-[16px]
+            w-[16px]
             items-center
             justify-center
-            bg-transparent
+            text-[7px]
+            text-[#444]
           "
         >
-          <FaChevronLeft className="text-[5px] text-[#222]" />
+          <FaChevronLeft />
         </button>
 
 
-        <span
-          className="
-            whitespace-nowrap
-            text-[7px]
-            font-bold
-            text-[#b00000]
-          "
-        >
+        <p className="text-[8px] font-bold text-[#b40000]">
           MAY 2026
-        </span>
+        </p>
 
 
         <button
           type="button"
+          aria-label="Next month"
           className="
             flex
-            h-[13px]
-            w-[13px]
+            h-[16px]
+            w-[16px]
             items-center
             justify-center
-            bg-transparent
+            text-[7px]
+            text-[#444]
           "
         >
-          <FaChevronRight className="text-[5px] text-[#222]" />
+          <FaChevronRight />
         </button>
 
       </div>
@@ -115,211 +114,169 @@ const AvailabilityCalendarCard = ({
       {/* CALENDAR */}
       {/* ================================================= */}
 
-      <div
-        className="
-          mt-[4px]
-          shrink-0
-          rounded-[7px]
-          bg-[#f2f2f2]
-          px-[7px]
-          py-[6px]
-        "
-      >
+      <div className="rounded-[5px] bg-[#f2f2f2] p-[5px]">
 
-        {weeks.map((week, weekIndex) => (
+        <div className="space-y-[3px]">
 
-          <div
-            key={weekIndex}
-            className="
-              mb-[3px]
-              grid
-              grid-cols-7
-              gap-[3px]
-            "
-          >
+          {weeks.map((week, weekIndex) => (
 
-            {week.map((day, dayIndex) => {
+            <div
+              key={weekIndex}
+              className="grid grid-cols-7 gap-[2px]"
+            >
 
-              const isYellow = yellowDates.includes(day);
+              {week.map((day, dayIndex) => {
 
-              const isRed =
-                day === "27" &&
-                showRedDate;
-
-              const isSelected =
-                day !== "" &&
-                Number(day) === selectedDate;
+                if (day === "") {
+                  return (
+                    <div
+                      key={dayIndex}
+                      className="h-[16px] w-[16px]"
+                    />
+                  );
+                }
 
 
-              return (
+                const isYellow =
+                  day === 25 ||
+                  day === 26 ||
+                  day === 31;
 
-                <button
-                  key={`${weekIndex}-${dayIndex}`}
-                  type="button"
-                  disabled={!day}
-                  onClick={() => handleDateClick(day)}
-                  className={`
-                    flex
-                    h-[17px]
-                    w-[17px]
-                    items-center
-                    justify-center
-                    rounded-[2px]
-                    p-0
-                    text-[7px]
-                    leading-none
 
-                    ${
-                      !day
-                        ? "bg-transparent"
-                        : isRed
-                        ? "border-[1px] border-[#e00000] bg-white font-bold text-[#222]"
-                        : isYellow
-                        ? "bg-[#ffc400] font-bold text-white"
-                        : isSelected
-                        ? "bg-white font-bold text-[#222]"
-                        : "bg-[#dedede] text-[#777]"
-                    }
-                  `}
-                >
-                  {day}
-                </button>
+                const isRed =
+                  showRedDate && day === 27;
 
-              );
-            })}
 
-          </div>
+                const isSelected =
+                  selectedDate === day;
 
-        ))}
+
+                return (
+                  <button
+                    key={dayIndex}
+                    type="button"
+                    onClick={() => setSelectedDate(day)}
+                    className={`
+                      flex
+                      h-[16px]
+                      w-[16px]
+                      items-center
+                      justify-center
+                      rounded-[3px]
+                      text-[6px]
+                      font-medium
+
+                      ${
+                        isRed
+                          ? "bg-[#ef4444] text-white"
+                          : isSelected
+                          ? "bg-[#f4bd00] text-white"
+                          : isYellow
+                          ? "bg-[#f4bd00] text-white"
+                          : "bg-[#e3e3e3] text-[#555]"
+                      }
+                    `}
+                  >
+                    {day}
+                  </button>
+                );
+
+              })}
+
+            </div>
+
+          ))}
+
+        </div>
 
       </div>
 
 
       {/* ================================================= */}
-      {/* MARK DATE SECTION */}
+      {/* MARK DATE */}
       {/* ================================================= */}
 
-      <div className="mt-[8px] min-w-0 flex-1">
+      <div className="mt-[9px] flex items-center justify-between">
 
-        {/* MARK DATE HEADER */}
+        <p className="text-[7px] font-semibold text-[#555]">
+          MARK DATE
+        </p>
 
-        <div className="flex items-center justify-between">
+        <p className="text-[7px] text-[#777]">
+          {selectedDate
+            ? `${selectedDate}th MAY`
+            : "--- MAY"}
+        </p>
 
-          <span
-            className="
-              whitespace-nowrap
-              text-[7px]
-              font-bold
-              uppercase
-              text-[#888]
-            "
-          >
-            MARK DATE
-          </span>
+      </div>
 
 
-          <span
-            className="
-              whitespace-nowrap
-              text-[7px]
-              text-[#888]
-            "
-          >
-            {showSavedDate
-              ? "27th MAY"
-              : "---- MAY"}
-          </span>
+      {/* ================================================= */}
+      {/* INFO */}
+      {/* ================================================= */}
 
-        </div>
+      <div className="mt-[6px] flex items-start gap-[4px]">
+
+        <FaInfoCircle className="mt-[1px] text-[7px] text-[#f4a900]" />
+
+        <p className="text-[5.5px] leading-[8px] text-[#777]">
+          mark/note only date by clicking on the date
+        </p>
+
+      </div>
 
 
-        {/* ================================================= */}
-        {/* INFO */}
-        {/* ================================================= */}
+      {/* ================================================= */}
+      {/* INPUT */}
+      {/* ================================================= */}
 
-        <div
-          className="
-            mt-[8px]
-            flex
-            items-center
-            gap-[3px]
-            whitespace-nowrap
-          "
+      <input
+        type="text"
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        placeholder="Enter text"
+        className="
+          mt-[6px]
+          h-[20px]
+          w-full
+          rounded-[3px]
+          border
+          border-[#dddddd]
+          px-[5px]
+          text-[6px]
+          text-[#555]
+          outline-none
+          placeholder:text-[#aaa]
+          focus:border-[#b40000]
+        "
+      />
+
+
+      {/* ================================================= */}
+      {/* SAVE */}
+      {/* ================================================= */}
+
+      <div className="mt-[7px] flex justify-end">
+
+        <button
+          type="button"
+          onClick={handleSave}
+          className={`
+            rounded-[3px]
+            px-[13px]
+            py-[4px]
+            text-[6px]
+            font-medium
+            text-white
+            ${
+              saved
+                ? "bg-[#7b0000]"
+                : "bg-[#a87979] hover:bg-[#8f5555]"
+            }
+          `}
         >
-
-          <FaInfoCircle
-            className="
-              shrink-0
-              text-[7px]
-              text-[#ffb000]
-            "
-          />
-
-          <span
-            className="
-              whitespace-nowrap
-              text-[6px]
-              text-[#666]
-            "
-          >
-            mark/note any date by clicking on the date
-          </span>
-
-        </div>
-
-
-        {/* ================================================= */}
-        {/* INPUT */}
-        {/* ================================================= */}
-
-        <input
-          type="text"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder="Enter Text"
-          className="
-            mt-[7px]
-            h-[24px]
-            w-full
-            rounded-[2px]
-            border
-            border-[#e2e2e2]
-            bg-white
-            px-[6px]
-            text-[7px]
-            text-[#444]
-            outline-none
-            placeholder:text-[#aaa]
-            focus:border-[#b00000]
-          "
-        />
-
-
-        {/* ================================================= */}
-        {/* SAVE */}
-        {/* ================================================= */}
-
-        <div className="mt-[9px] flex justify-end">
-
-          <button
-            type="button"
-            className="
-              h-[20px]
-              min-w-[43px]
-              rounded-[3px]
-              bg-[#b98787]
-              px-[11px]
-              text-[7px]
-              font-semibold
-              text-white
-              transition
-              hover:bg-[#8b0000]
-            "
-          >
-            Save
-          </button>
-
-        </div>
+          Save
+        </button>
 
       </div>
 
@@ -329,69 +286,57 @@ const AvailabilityCalendarCard = ({
 
 
 // =====================================================
-// AVAILABILITY CALENDAR 1
+// COMPONENT 294
+// FOUR CALENDAR STATES
 // =====================================================
 
 const AvailabilityCalendar1 = () => {
   return (
-    <div className="w-full bg-white">
-
-      {/* ================================================= */}
-      {/* FOUR CARDS SIDE BY SIDE */}
-      {/* ================================================= */}
+    <div className="w-full">
 
       <div
         className="
-          flex
-          w-fit
-          flex-nowrap
-          items-start
-          gap-[18px]
+          grid
+          w-full
+          grid-cols-1
+          gap-4
+          sm:grid-cols-2
+          lg:grid-cols-4
+          lg:gap-[14px]
         "
       >
 
-        {/* ================================================= */}
-        {/* CARD 1 */}
-        {/* ================================================= */}
-
-        <AvailabilityCalendarCard
+        {/* CALENDAR 1 */}
+        <AvailabilityCalendarCard1
           initialSelectedDate={24}
         />
 
 
-        {/* ================================================= */}
-        {/* CARD 2 */}
-        {/* ================================================= */}
-
-        <AvailabilityCalendarCard
+        {/* CALENDAR 2 */}
+        <AvailabilityCalendarCard1
           initialSelectedDate={24}
           showRedDate={true}
         />
 
 
-        {/* ================================================= */}
-        {/* CARD 3 */}
-        {/* ================================================= */}
-
-        <AvailabilityCalendarCard
+        {/* CALENDAR 3 */}
+        <AvailabilityCalendarCard1
           initialSelectedDate={27}
           showRedDate={true}
           showSavedDate={true}
         />
 
 
-        {/* ================================================= */}
-        {/* CARD 4 */}
-        {/* ================================================= */}
-
-        <AvailabilityCalendarCard
+        {/* CALENDAR 4 */}
+        <AvailabilityCalendarCard1
           initialSelectedDate={27}
-          initialNote="2 Events at the same location."
+          initialNote="2 events at the same location."
           showRedDate={true}
           showSavedDate={true}
         />
 
       </div>
+
     </div>
   );
 };
