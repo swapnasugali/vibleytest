@@ -15,7 +15,7 @@ const ThumbnailBadgeTextOverlay = ({ onClose }) => {
         <button
           type="button"
           onClick={onClose}
-          className="flex h-[19px] w-[19px] items-center justify-center rounded-full border-[1.5px] border-[#d00000] bg-white text-[#d00000]"
+          className="flex h-[19px] w-[19px] items-center justify-center rounded-full border-[1.5px] border-[#d00000] bg-white text-[#d00000] cursor-pointer"
         >
           <FaTimes className="text-[8px]" />
         </button>

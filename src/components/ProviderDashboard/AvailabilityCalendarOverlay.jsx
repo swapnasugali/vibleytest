@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaTimes,
   FaChevronLeft,
@@ -7,13 +7,103 @@ import {
 } from "react-icons/fa";
 
 const AvailabilityCalendarOverlay = ({ onClose }) => {
-  const weeks = [
-    ["1", "2", "3", "4", "5", "6", "7"],
-    ["8", "9", "10", "11", "12", "13", "14"],
-    ["15", "16", "17", "18", "19", "20", "21"],
-    ["22", "23", "24", "25", "26", "27", "28"],
-    ["29", "30", "31", "", "", "", ""],
+
+  // =====================================================
+  // START WITH MAY 2026
+  // =====================================================
+
+  const [currentDate, setCurrentDate] = useState(
+    new Date(2026, 4, 1)
+  );
+
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  const monthNames = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
   ];
+
+  // =====================================================
+  // PREVIOUS MONTH
+  // =====================================================
+
+  const handlePreviousMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentYear,
+        currentMonth - 1,
+        1
+      )
+    );
+  };
+
+  // =====================================================
+  // NEXT MONTH
+  // =====================================================
+
+  const handleNextMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentYear,
+        currentMonth + 1,
+        1
+      )
+    );
+  };
+
+  // =====================================================
+  // DYNAMIC CALENDAR DAYS
+  // =====================================================
+
+  const daysInMonth = new Date(
+    currentYear,
+    currentMonth + 1,
+    0
+  ).getDate();
+
+  const firstDayOfMonth = new Date(
+    currentYear,
+    currentMonth,
+    1
+  ).getDay();
+
+  const calendarDays = [];
+
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    calendarDays.push("");
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    calendarDays.push(day.toString());
+  }
+
+  const weeks = [];
+
+  for (let i = 0; i < calendarDays.length; i += 7) {
+    const week = calendarDays.slice(i, i + 7);
+
+    while (week.length < 7) {
+      week.push("");
+    }
+
+    weeks.push(week);
+  }
+
+
+  // =====================================================
+  // DATE LIST
+  // =====================================================
 
   const dates = [
     {
@@ -79,12 +169,13 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
         <button
           type="button"
           onClick={onClose}
-          className="flex h-[19px] w-[19px] items-center justify-center rounded-full border-[1.5px] border-[#d00000] bg-white text-[#d00000]"
+          className="flex h-[19px] w-[19px] items-center justify-center rounded-full border-[1.5px] border-[#d00000] bg-white text-[#d00000] cursor-pointer"
         >
           <FaTimes className="text-[8px]" />
         </button>
 
       </div>
+
 
       {/* MAIN CONTENT */}
       <div className="grid w-full grid-cols-1 gap-4 bg-white px-[14px] py-[13px] sm:grid-cols-[1fr_250px]">
@@ -100,6 +191,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
 
               {/* DATE */}
               <div>
+
                 <p className="text-[7px] font-bold leading-[9px] text-[#222]">
                   {item.date}
                 </p>
@@ -107,7 +199,9 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
                 <p className="mt-[2px] text-[7px] leading-[9px] text-[#777]">
                   {item.day}
                 </p>
+
               </div>
+
 
               {/* STATUS */}
               <p
@@ -128,6 +222,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
 
         </div>
 
+
         {/* RIGHT CALENDAR */}
         <div className="min-w-0 bg-white">
 
@@ -136,25 +231,38 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
             {/* MONTH HEADER */}
             <div className="flex h-[30px] items-center justify-between rounded-[7px] bg-[#f1f1f1] px-[15px]">
 
+              {/* PREVIOUS MONTH */}
+
               <button
                 type="button"
+                onClick={handlePreviousMonth}
                 className="flex items-center justify-center bg-transparent"
+                aria-label="Previous month"
               >
                 <FaChevronLeft className="text-[7px] text-[#222]" />
               </button>
 
+
+              {/* DYNAMIC MONTH */}
+
               <span className="text-[9px] font-bold text-[#c00000]">
-                MAY 2026
+                {monthNames[currentMonth]} {currentYear}
               </span>
+
+
+              {/* NEXT MONTH */}
 
               <button
                 type="button"
+                onClick={handleNextMonth}
                 className="flex items-center justify-center bg-transparent"
+                aria-label="Next month"
               >
                 <FaChevronRight className="text-[7px] text-[#222]" />
               </button>
 
             </div>
+
 
             {/* CALENDAR BODY */}
             <div className="mt-[8px] rounded-[7px] bg-[#f3f3f3] px-[8px] py-[8px]">
@@ -167,12 +275,21 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
 
                   {week.map((day, dayIndex) => {
 
+                    // Original May 2026 yellow dates
                     const yellow =
-                      day === "25" ||
-                      day === "26" ||
-                      day === "31";
+                      currentYear === 2026 &&
+                      currentMonth === 4 &&
+                      (
+                        day === "25" ||
+                        day === "26" ||
+                        day === "31"
+                      );
 
-                    const selected = day === "24";
+                    // Original selected date
+                    const selected =
+                      currentYear === 2026 &&
+                      currentMonth === 4 &&
+                      day === "24";
 
                     return (
                       <div
@@ -202,6 +319,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
 
             </div>
 
+
             {/* MARK DATE SECTION */}
             <div className="mt-[12px] border-t border-gray-200 bg-white pt-[10px]">
 
@@ -218,6 +336,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
 
               </div>
 
+
               {/* INFORMATION */}
               <div className="mt-[10px] flex items-center gap-[5px]">
 
@@ -228,6 +347,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
                 </span>
 
               </div>
+
 
               {/* INPUT */}
               <input
@@ -249,6 +369,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
                   focus:border-gray-300
                 "
               />
+
 
               {/* SAVE */}
               <div className="mt-[13px] flex justify-end">

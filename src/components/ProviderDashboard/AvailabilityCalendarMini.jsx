@@ -1,208 +1,337 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
 
 const AvailabilityCalendarMini = ({ marked = false }) => {
+  // =====================================================
+  // START WITH MAY 2026
+  // =====================================================
 
-  const days = [
-    ["27", "28", "29", "30", "1", "2", "3"],
-    ["4", "5", "6", "7", "8", "9", "10"],
-    ["11", "12", "13", "14", "15", "16", "17"],
-    ["18", "19", "20", "21", "22", "23", "24"],
-    ["25", "26", "27", "28", "29", "30", "31"],
+  const [currentDate, setCurrentDate] = useState(
+    new Date(2026, 4, 1)
+  );
+
+  // =====================================================
+  // MONTH NAMES
+  // =====================================================
+
+  const monthNames = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
   ];
 
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  // =====================================================
+  // PREVIOUS MONTH
+  // =====================================================
+
+  const handlePreviousMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentYear,
+        currentMonth - 1,
+        1
+      )
+    );
+  };
+
+  // =====================================================
+  // NEXT MONTH
+  // =====================================================
+
+  const handleNextMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentYear,
+        currentMonth + 1,
+        1
+      )
+    );
+  };
+
+  // =====================================================
+  // DAYS IN CURRENT MONTH
+  // =====================================================
+
+  const daysInMonth = new Date(
+    currentYear,
+    currentMonth + 1,
+    0
+  ).getDate();
+
+  // =====================================================
+  // FIRST DAY OF CURRENT MONTH
+  // =====================================================
+
+  const firstDayOfMonth = new Date(
+    currentYear,
+    currentMonth,
+    1
+  ).getDay();
+
+  // =====================================================
+  // CREATE CALENDAR DAYS
+  // =====================================================
+
+  const calendarDays = [];
+
+  // Empty spaces before first date
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    calendarDays.push("");
+  }
+
+  // Actual dates
+  for (let day = 1; day <= daysInMonth; day++) {
+    calendarDays.push(day);
+  }
+
+  // =====================================================
+  // CREATE WEEKS
+  // =====================================================
+
+  const weeks = [];
+
+  for (let i = 0; i < calendarDays.length; i += 7) {
+    const week = calendarDays.slice(i, i + 7);
+
+    while (week.length < 7) {
+      week.push("");
+    }
+
+    weeks.push(week);
+  }
+
+  // =====================================================
+  // RETURN
+  // =====================================================
+
   return (
-    <div className="relative w-[108px]">
+    <div
+      className="
+        w-[115px]
+        rounded-[7px]
+        border
+        border-[#d5d5d5]
+        bg-white
+        p-[8px]
+        shadow-[0_1px_4px_rgba(0,0,0,0.08)]
+      "
+    >
 
-      <div
-        className="
-          w-[108px]
-          rounded-[6px]
-          border
-          border-[#d5d5d5]
-          bg-white
-          p-[7px]
-          shadow-[0_1px_4px_rgba(0,0,0,0.08)]
-        "
-      >
+      {/* ================================================= */}
+      {/* MONTH HEADER */}
+      {/* ================================================= */}
 
-        {/* HEADER */}
+      <div className="mb-[6px] flex items-center justify-between">
 
-        <div className="mb-[5px] flex items-center justify-between">
+        {/* PREVIOUS */}
 
-          <button
-            type="button"
-            aria-label="Previous month"
-            className="text-[6px] text-[#444]"
-          >
-            <FaChevronLeft />
-          </button>
-
-          <p className="text-[7px] font-bold text-[#b40000]">
-            MAY 2026
-          </p>
-
-          <button
-            type="button"
-            aria-label="Next month"
-            className="text-[6px] text-[#444]"
-          >
-            <FaChevronRight />
-          </button>
-
-        </div>
+        <button
+          type="button"
+          onClick={handlePreviousMonth}
+          aria-label="Previous month"
+          className="
+            flex
+            h-[16px]
+            w-[16px]
+            items-center
+            justify-center
+            text-[7px]
+            text-[#444]
+            hover:text-[#b40000]
+          "
+        >
+          <FaChevronLeft />
+        </button>
 
 
-        {/* CALENDAR */}
+        {/* MONTH + YEAR */}
 
-        <div className="rounded-[4px] bg-[#f2f2f2] p-[4px]">
-
-          <div className="space-y-[2px]">
-
-            {days.map((week, weekIndex) => (
-
-              <div
-                key={weekIndex}
-                className="grid grid-cols-7 gap-[2px]"
-              >
-
-                {week.map((day, dayIndex) => {
-
-                  const isYellow =
-                    day === "25" ||
-                    day === "26" ||
-                    day === "31";
-
-                  const isRed =
-                    marked && day === "27";
-
-                  return (
-                    <div
-                      key={dayIndex}
-                      className={`
-                        flex
-                        h-[11px]
-                        w-[11px]
-                        items-center
-                        justify-center
-                        rounded-[2px]
-                        text-[5px]
-
-                        ${
-                          isRed
-                            ? "bg-[#ef4444] text-white"
-                            : isYellow
-                            ? "bg-[#f4bd00] text-white"
-                            : "bg-[#e3e3e3] text-[#555]"
-                        }
-                      `}
-                    >
-                      {day}
-                    </div>
-                  );
-
-                })}
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
-
-
-        {/* MARK DATE */}
-
-        <div className="mt-[7px] flex items-center justify-between">
-
-          <p className="text-[6px] font-semibold text-[#555]">
-            MARK DATE
-          </p>
-
-          <p className="text-[6px] text-[#777]">
-            {marked ? "27th MAY" : "24th MAY"}
-          </p>
-
-        </div>
-
-
-        {/* INFO */}
-
-        <p className="mt-[4px] text-[4.5px] leading-[6px] text-[#777]">
-          🟡 mark/note only date by clicking on the date
+        <p
+          className="
+            text-[7px]
+            font-bold
+            text-[#b40000]
+          "
+        >
+          {monthNames[currentMonth]} {currentYear}
         </p>
 
 
-        {/* INPUT */}
+        {/* NEXT */}
 
-        <input
-          type="text"
-          placeholder="Enter text"
+        <button
+          type="button"
+          onClick={handleNextMonth}
+          aria-label="Next month"
           className="
-            mt-[5px]
+            flex
             h-[16px]
-            w-full
-            rounded-[2px]
-            border
-            border-[#ddd]
-            px-[4px]
-            text-[5px]
-            outline-none
+            w-[16px]
+            items-center
+            justify-center
+            text-[7px]
+            text-[#444]
+            hover:text-[#b40000]
           "
-        />
-
-
-        {/* SAVE */}
-
-        <div className="mt-[5px] flex justify-end">
-
-          <button
-            type="button"
-            className={`
-              rounded-[2px]
-              px-[10px]
-              py-[3px]
-              text-[5px]
-              text-white
-              ${
-                marked
-                  ? "bg-[#7b0000]"
-                  : "bg-[#a87979]"
-              }
-            `}
-          >
-            Save
-          </button>
-
-        </div>
+        >
+          <FaChevronRight />
+        </button>
 
       </div>
 
 
-      {/* MARK DONE */}
+      {/* ================================================= */}
+      {/* CALENDAR */}
+      {/* ================================================= */}
 
-      {marked && (
+      <div
+        className="
+          rounded-[5px]
+          bg-[#f2f2f2]
+          p-[5px]
+        "
+      >
+
+        {/* WEEK DAYS */}
+
         <div
           className="
-            absolute
-            right-[-35px]
-            top-[50px]
-            rounded-[3px]
-            bg-white
-            px-[4px]
-            py-[2px]
-            text-[5px]
-            text-[#555]
-            shadow-sm
+            mb-[3px]
+            grid
+            grid-cols-7
+            gap-[2px]
           "
         >
-          Mark Done
+
+          {[
+            "S",
+            "M",
+            "T",
+            "W",
+            "T",
+            "F",
+            "S",
+          ].map((day, index) => (
+            <div
+              key={index}
+              className="
+                flex
+                h-[14px]
+                w-[12px]
+                items-center
+                justify-center
+                text-[5px]
+                font-semibold
+                text-[#777]
+              "
+            >
+              {day}
+            </div>
+          ))}
+
         </div>
-      )}
+
+
+        {/* DATES */}
+
+        <div className="space-y-[2px]">
+
+          {weeks.map((week, weekIndex) => (
+            <div
+              key={weekIndex}
+              className="
+                grid
+                grid-cols-7
+                gap-[2px]
+              "
+            >
+
+              {week.map((day, dayIndex) => {
+
+                // Empty calendar cell
+                if (day === "") {
+                  return (
+                    <div
+                      key={dayIndex}
+                      className="
+                        h-[14px]
+                        w-[12px]
+                      "
+                    />
+                  );
+                }
+
+                // =================================================
+                // ORIGINAL MAY 2026 YELLOW DATES
+                // =================================================
+
+                const isYellow =
+                  currentYear === 2026 &&
+                  currentMonth === 4 &&
+                  (
+                    day === 25 ||
+                    day === 26 ||
+                    day === 31
+                  );
+
+                // =================================================
+                // ORIGINAL MAY 2026 MARKED DATE
+                // =================================================
+
+                const isMarked =
+                  marked &&
+                  currentYear === 2026 &&
+                  currentMonth === 4 &&
+                  day === 27;
+
+                return (
+                  <div
+                    key={dayIndex}
+                    className={`
+                      flex
+                      h-[14px]
+                      w-[12px]
+                      items-center
+                      justify-center
+                      rounded-[2px]
+                      text-[5px]
+                      font-medium
+
+                      ${
+                        isMarked
+                          ? "bg-[#ef4444] text-white"
+                          : isYellow
+                          ? "bg-[#f4bd00] text-white"
+                          : "bg-[#e3e3e3] text-[#555]"
+                      }
+                    `}
+                  >
+                    {day}
+                  </div>
+                );
+              })}
+
+            </div>
+          ))}
+
+        </div>
+
+      </div>
 
     </div>
   );

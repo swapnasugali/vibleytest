@@ -153,6 +153,7 @@ const LeadActions = () => {
 
                 md:px-5
                 md:text-[10px]
+                cursor-pointer
               "
             >
               Respond

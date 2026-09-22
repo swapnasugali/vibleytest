@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -38,13 +38,150 @@ const CalendarEvent = ({
 
 const AvailabilityCalendar = () => {
 
-  const weeks = [
-    ["1", "2", "3", "4", "5", "6", "7"],
-    ["8", "9", "10", "11", "12", "13", "14"],
-    ["15", "16", "17", "18", "19", "20", "21"],
-    ["22", "23", "24", "25", "26", "27", "28"],
-    ["29", "30", "31", "", "", "", ""],
+  /*
+   * Keep May 2026 as the default month.
+   */
+  const [currentDate, setCurrentDate] = useState(
+    new Date(2026, 4, 1)
+  );
+
+
+  /*
+   * Month names
+   */
+  const monthNames = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
   ];
+
+
+  /*
+   * Previous month
+   */
+  const handlePreviousMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - 1,
+        1
+      )
+    );
+  };
+
+
+  /*
+   * Next month
+   */
+  const handleNextMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        1
+      )
+    );
+  };
+
+
+  /*
+   * Current month and year
+   */
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+
+  /*
+   * Number of days in current month
+   */
+  const daysInMonth = new Date(
+    currentYear,
+    currentMonth + 1,
+    0
+  ).getDate();
+
+
+  /*
+   * First day of current month
+   */
+  const firstDayOfMonth = new Date(
+    currentYear,
+    currentMonth,
+    1
+  ).getDay();
+
+
+  /*
+   * Create calendar days
+   */
+  const calendarDays = [];
+
+
+  // Empty spaces before first day
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    calendarDays.push("");
+  }
+
+
+  // Add actual days
+  for (let day = 1; day <= daysInMonth; day++) {
+    calendarDays.push(String(day));
+  }
+
+
+  /*
+   * Create weeks
+   */
+  const weeks = [];
+
+  for (let i = 0; i < calendarDays.length; i += 7) {
+    const week = calendarDays.slice(i, i + 7);
+
+    while (week.length < 7) {
+      week.push("");
+    }
+
+    weeks.push(week);
+  }
+
+
+  /*
+   * May 2026 selected dates.
+   *
+   * This keeps your original May 25 and May 26
+   * yellow selected design.
+   */
+  const isSelected = (day) => {
+    if (currentYear === 2026 && currentMonth === 4) {
+      return day === "25" || day === "26";
+    }
+
+    return false;
+  };
+
+
+  /*
+   * May 24 is your original TODAY date.
+   *
+   * This is only shown for May 2026.
+   */
+  const isToday = (day) => {
+    return (
+      currentYear === 2026 &&
+      currentMonth === 4 &&
+      day === "24"
+    );
+  };
+
 
   return (
     <div className="w-full rounded-lg bg-white">
@@ -53,14 +190,14 @@ const AvailabilityCalendar = () => {
       <div className="flex min-h-[48px] w-full items-center justify-between border-b border-gray-200 px-4 sm:px-5 md:px-6">
 
         <h2 className="text-[10px] font-bold uppercase text-gray-800 sm:text-[11px]">
-          Availability Calender
+          Availability Calendar
         </h2>
 
         <a
           href="#"
           className="whitespace-nowrap text-[8px] text-gray-700 underline sm:text-[9px]"
         >
-          Edit Calender
+          Edit Calendar
         </a>
 
       </div>
@@ -74,6 +211,7 @@ const AvailabilityCalendar = () => {
 
           <div className="space-y-4">
 
+            {/* MAY 24 */}
             <CalendarEvent
               date="MAY 24, 2026"
               day="TODAY"
@@ -81,6 +219,7 @@ const AvailabilityCalendar = () => {
               statusColor="text-green-600"
             />
 
+            {/* MAY 25 */}
             <CalendarEvent
               date="MAY 25, 2026"
               day="SATURDAY"
@@ -88,6 +227,7 @@ const AvailabilityCalendar = () => {
               statusColor="text-red-600 underline"
             />
 
+            {/* MAY 26 */}
             <CalendarEvent
               date="MAY 26, 2026"
               day="SUNDAY"
@@ -96,6 +236,7 @@ const AvailabilityCalendar = () => {
             />
 
           </div>
+
 
           {/* VIEW ALL */}
           <a
@@ -116,13 +257,32 @@ const AvailabilityCalendar = () => {
             {/* MONTH HEADER */}
             <div className="flex h-[30px] items-center justify-between bg-gray-100 px-3">
 
-              <FaChevronLeft className="text-[7px] text-gray-700" />
+              {/* PREVIOUS MONTH */}
+              <button
+                type="button"
+                onClick={handlePreviousMonth}
+                className="flex h-5 w-5 items-center justify-center rounded hover:bg-gray-200"
+                aria-label="Previous month"
+              >
+                <FaChevronLeft className="text-[7px] text-gray-700" />
+              </button>
 
+
+              {/* MONTH + YEAR */}
               <span className="text-[8px] font-bold text-[#b00000]">
-                MAY 2026
+                {monthNames[currentMonth]} {currentYear}
               </span>
 
-              <FaChevronRight className="text-[7px] text-gray-700" />
+
+              {/* NEXT MONTH */}
+              <button
+                type="button"
+                onClick={handleNextMonth}
+                className="flex h-5 w-5 items-center justify-center rounded hover:bg-gray-200"
+                aria-label="Next month"
+              >
+                <FaChevronRight className="text-[7px] text-gray-700" />
+              </button>
 
             </div>
 
@@ -138,10 +298,8 @@ const AvailabilityCalendar = () => {
 
                   {week.map((day, dayIndex) => {
 
-                    const isSelected =
-                      day === "25" || day === "26";
-
-                    const isToday = day === "24";
+                    const selected = isSelected(day);
+                    const todayDate = isToday(day);
 
                     return (
                       <div
@@ -155,9 +313,9 @@ const AvailabilityCalendar = () => {
                           text-[7px]
 
                           ${
-                            isSelected
+                            selected
                               ? "bg-yellow-400 font-bold text-white"
-                              : isToday
+                              : todayDate
                               ? "bg-white font-bold text-gray-800"
                               : day
                               ? "bg-gray-200 text-gray-500"

@@ -251,7 +251,7 @@ const DashboardStats = () => {
         {/* CONTENT */}
         <div className="min-w-0 flex-1">
 
-          <h3 className="whitespace-nowrap text-center text-[10px] font-bold text-[#760000] sm:text-[11px]">
+          <h3 className="whitespace-nowrap text-center text-[10px] font-bold text-[#760000] sm:text-[9px]">
             Thumbnail Badge Text
           </h3>
 

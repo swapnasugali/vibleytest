@@ -5,7 +5,6 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 
-
 // =====================================================
 // SINGLE CALENDAR CARD
 // =====================================================
@@ -16,28 +15,150 @@ const AvailabilityCalendarCard1 = ({
   showRedDate = false,
   showSavedDate = false,
 }) => {
+  // ===================================================
+  // SELECTED DATE
+  // ===================================================
 
   const [selectedDate, setSelectedDate] = useState(
     initialSelectedDate
   );
 
+  // ===================================================
+  // NOTE
+  // ===================================================
+
   const [note, setNote] = useState(initialNote);
+
+  // ===================================================
+  // SAVED STATE
+  // ===================================================
 
   const [saved, setSaved] = useState(showSavedDate);
 
+  // ===================================================
+  // START WITH MAY 2026
+  // ===================================================
+
+  const [currentDate, setCurrentDate] = useState(
+    new Date(2026, 4, 1)
+  );
 
   // ===================================================
-  // MAY 2026
+  // MONTH NAMES
   // ===================================================
 
-  const weeks = [
-    ["", "", "", "", 1, 2, 3],
-    [4, 5, 6, 7, 8, 9, 10],
-    [11, 12, 13, 14, 15, 16, 17],
-    [18, 19, 20, 21, 22, 23, 24],
-    [25, 26, 27, 28, 29, 30, 31],
+  const monthNames = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
   ];
 
+  // ===================================================
+  // CURRENT MONTH
+  // ===================================================
+
+  const currentMonth = currentDate.getMonth();
+
+  // ===================================================
+  // CURRENT YEAR
+  // ===================================================
+
+  const currentYear = currentDate.getFullYear();
+
+  // ===================================================
+  // PREVIOUS MONTH
+  // ===================================================
+
+  const handlePreviousMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentYear,
+        currentMonth - 1,
+        1
+      )
+    );
+
+    setSelectedDate(null);
+    setSaved(false);
+  };
+
+  // ===================================================
+  // NEXT MONTH
+  // ===================================================
+
+  const handleNextMonth = () => {
+    setCurrentDate(
+      new Date(
+        currentYear,
+        currentMonth + 1,
+        1
+      )
+    );
+
+    setSelectedDate(null);
+    setSaved(false);
+  };
+
+  // ===================================================
+  // NUMBER OF DAYS IN CURRENT MONTH
+  // ===================================================
+
+  const daysInMonth = new Date(
+    currentYear,
+    currentMonth + 1,
+    0
+  ).getDate();
+
+  // ===================================================
+  // FIRST DAY OF CURRENT MONTH
+  // ===================================================
+
+  const firstDayOfMonth = new Date(
+    currentYear,
+    currentMonth,
+    1
+  ).getDay();
+
+  // ===================================================
+  // CREATE CALENDAR DAYS
+  // ===================================================
+
+  const calendarDays = [];
+
+  // Empty spaces before first date
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    calendarDays.push("");
+  }
+
+  // Actual dates
+  for (let day = 1; day <= daysInMonth; day++) {
+    calendarDays.push(day);
+  }
+
+  // ===================================================
+  // CREATE WEEKS
+  // ===================================================
+
+  const weeks = [];
+
+  for (let i = 0; i < calendarDays.length; i += 7) {
+    const week = calendarDays.slice(i, i + 7);
+
+    while (week.length < 7) {
+      week.push("");
+    }
+
+    weeks.push(week);
+  }
 
   // ===================================================
   // SAVE
@@ -49,6 +170,9 @@ const AvailabilityCalendarCard1 = ({
     }
   };
 
+  // ===================================================
+  // RETURN
+  // ===================================================
 
   return (
     <div
@@ -69,9 +193,11 @@ const AvailabilityCalendarCard1 = ({
 
       <div className="mb-[7px] flex items-center justify-between">
 
+        {/* PREVIOUS MONTH */}
         <button
           type="button"
           aria-label="Previous month"
+          onClick={handlePreviousMonth}
           className="
             flex
             h-[16px]
@@ -80,20 +206,22 @@ const AvailabilityCalendarCard1 = ({
             justify-center
             text-[7px]
             text-[#444]
+            hover:text-[#b40000]
           "
         >
           <FaChevronLeft />
         </button>
 
-
+        {/* MONTH AND YEAR */}
         <p className="text-[8px] font-bold text-[#b40000]">
-          MAY 2026
+          {monthNames[currentMonth]} {currentYear}
         </p>
 
-
+        {/* NEXT MONTH */}
         <button
           type="button"
           aria-label="Next month"
+          onClick={handleNextMonth}
           className="
             flex
             h-[16px]
@@ -102,13 +230,13 @@ const AvailabilityCalendarCard1 = ({
             justify-center
             text-[7px]
             text-[#444]
+            hover:text-[#b40000]
           "
         >
           <FaChevronRight />
         </button>
 
       </div>
-
 
       {/* ================================================= */}
       {/* CALENDAR */}
@@ -119,7 +247,6 @@ const AvailabilityCalendarCard1 = ({
         <div className="space-y-[3px]">
 
           {weeks.map((week, weekIndex) => (
-
             <div
               key={weekIndex}
               className="grid grid-cols-7 gap-[2px]"
@@ -127,6 +254,7 @@ const AvailabilityCalendarCard1 = ({
 
               {week.map((day, dayIndex) => {
 
+                // Empty space
                 if (day === "") {
                   return (
                     <div
@@ -136,20 +264,35 @@ const AvailabilityCalendarCard1 = ({
                   );
                 }
 
+                // =================================================
+                // ORIGINAL MAY 2026 YELLOW DATES
+                // =================================================
 
                 const isYellow =
-                  day === 25 ||
-                  day === 26 ||
-                  day === 31;
+                  currentYear === 2026 &&
+                  currentMonth === 4 &&
+                  (
+                    day === 25 ||
+                    day === 26 ||
+                    day === 31
+                  );
 
+                // =================================================
+                // ORIGINAL MAY 2026 RED DATE
+                // =================================================
 
                 const isRed =
-                  showRedDate && day === 27;
+                  showRedDate &&
+                  currentYear === 2026 &&
+                  currentMonth === 4 &&
+                  day === 27;
 
+                // =================================================
+                // SELECTED DATE
+                // =================================================
 
                 const isSelected =
                   selectedDate === day;
-
 
                 return (
                   <button
@@ -180,17 +323,14 @@ const AvailabilityCalendarCard1 = ({
                     {day}
                   </button>
                 );
-
               })}
 
             </div>
-
           ))}
 
         </div>
 
       </div>
-
 
       {/* ================================================= */}
       {/* MARK DATE */}
@@ -204,12 +344,11 @@ const AvailabilityCalendarCard1 = ({
 
         <p className="text-[7px] text-[#777]">
           {selectedDate
-            ? `${selectedDate}th MAY`
-            : "--- MAY"}
+            ? `${selectedDate}th ${monthNames[currentMonth]}`
+            : `--- ${monthNames[currentMonth]}`}
         </p>
 
       </div>
-
 
       {/* ================================================= */}
       {/* INFO */}
@@ -224,7 +363,6 @@ const AvailabilityCalendarCard1 = ({
         </p>
 
       </div>
-
 
       {/* ================================================= */}
       {/* INPUT */}
@@ -251,7 +389,6 @@ const AvailabilityCalendarCard1 = ({
         "
       />
 
-
       {/* ================================================= */}
       {/* SAVE */}
       {/* ================================================= */}
@@ -268,6 +405,7 @@ const AvailabilityCalendarCard1 = ({
             text-[6px]
             font-medium
             text-white
+
             ${
               saved
                 ? "bg-[#7b0000]"
@@ -306,28 +444,37 @@ const AvailabilityCalendar1 = () => {
         "
       >
 
+        {/* ================================================= */}
         {/* CALENDAR 1 */}
+        {/* ================================================= */}
+
         <AvailabilityCalendarCard1
           initialSelectedDate={24}
         />
 
-
+        {/* ================================================= */}
         {/* CALENDAR 2 */}
+        {/* ================================================= */}
+
         <AvailabilityCalendarCard1
           initialSelectedDate={24}
           showRedDate={true}
         />
 
-
+        {/* ================================================= */}
         {/* CALENDAR 3 */}
+        {/* ================================================= */}
+
         <AvailabilityCalendarCard1
           initialSelectedDate={27}
           showRedDate={true}
           showSavedDate={true}
         />
 
-
+        {/* ================================================= */}
         {/* CALENDAR 4 */}
+        {/* ================================================= */}
+
         <AvailabilityCalendarCard1
           initialSelectedDate={27}
           initialNote="2 events at the same location."
