@@ -12,7 +12,7 @@ const ProviderHeader = () => {
     <header className="w-full border-b border-gray-200 bg-[#fffdf9]">
 
       {/* DESKTOP / MOBILE HEADER */}
-      <div className="mx-auto flex min-h-[72px] w-full max-w-[960px] items-center justify-between px-4 sm:px-5">
+      <div className="flex min-h-[72px] w-full items-center justify-between px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
 
         {/* LOGO */}
         <div className="shrink-0">
@@ -22,49 +22,49 @@ const ProviderHeader = () => {
             <span className="text-[#d71920]">ly</span>
           </div>
 
-          <p className="ml-2 mt-1 text-[7px] leading-none text-black">
+          <p className="ml-2 mt-1 text-[14.49px] leading-none text-black">
             Vendors
           </p>
 
-          <p className="ml-3 mt-1 text-[7px] leading-none text-black">
+          <p className="ml-3 mt-1 text-[14.49px] leading-none text-black">
             PORTAL
           </p>
         </div>
 
         {/* DESKTOP NAVIGATION */}
-        <nav className="hidden items-center gap-5 md:flex lg:gap-7">
+        <nav className="hidden items-center gap-5 md:flex lg:gap-8 xl:gap-10">
 
           <a
             href="#"
-            className="whitespace-nowrap text-[9px] font-bold text-[#d00000] lg:text-[10px]"
+            className="whitespace-nowrap text-[16px] font-bold text-[#d00000] lg:text-[16px]"
           >
             DASHBOARD
           </a>
 
           <a
             href="#"
-            className="whitespace-nowrap text-[9px] text-gray-800 lg:text-[10px]"
+            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
           >
             PROFILE
           </a>
 
           <a
             href="#"
-            className="whitespace-nowrap text-[9px] text-gray-800 lg:text-[10px]"
+            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
           >
             PORTFOLIO
           </a>
 
           <a
             href="#"
-            className="whitespace-nowrap text-[9px] text-gray-800 lg:text-[10px]"
+            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
           >
             SERVICES / PRICING
           </a>
 
           <a
             href="#"
-            className="whitespace-nowrap text-[9px] text-gray-800 lg:text-[10px]"
+            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
           >
             LEADS
           </a>
@@ -97,7 +97,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[11px] font-bold text-[#d00000]"
+              className="text-[16px] font-semibold text-[#d00000]"
               onClick={() => setMenuOpen(false)}
             >
               DASHBOARD
@@ -105,7 +105,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[11px] text-gray-800"
+              className="text-[16px] text-gray-800 font-medium"
               onClick={() => setMenuOpen(false)}
             >
               PROFILE
@@ -113,7 +113,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[11px] text-gray-800"
+              className="text-[16px] text-gray-800 font-medium"
               onClick={() => setMenuOpen(false)}
             >
               PORTFOLIO
@@ -121,7 +121,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[11px] text-gray-800"
+              className="text-[16px] text-gray-800 font-medium"
               onClick={() => setMenuOpen(false)}
             >
               SERVICES / PRICING
@@ -129,7 +129,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[11px] text-gray-800"
+              className="text-[16px] text-gray-800 font-medium"
               onClick={() => setMenuOpen(false)}
             >
               LEADS

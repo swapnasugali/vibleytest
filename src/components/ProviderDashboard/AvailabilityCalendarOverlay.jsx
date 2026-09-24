@@ -7,11 +7,6 @@ import {
 } from "react-icons/fa";
 
 const AvailabilityCalendarOverlay = ({ onClose }) => {
-
-  // =====================================================
-  // START WITH MAY 2026
-  // =====================================================
-
   const [currentDate, setCurrentDate] = useState(
     new Date(2026, 4, 1)
   );
@@ -34,37 +29,17 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
     "DECEMBER",
   ];
 
-  // =====================================================
-  // PREVIOUS MONTH
-  // =====================================================
-
   const handlePreviousMonth = () => {
     setCurrentDate(
-      new Date(
-        currentYear,
-        currentMonth - 1,
-        1
-      )
+      new Date(currentYear, currentMonth - 1, 1)
     );
   };
-
-  // =====================================================
-  // NEXT MONTH
-  // =====================================================
 
   const handleNextMonth = () => {
     setCurrentDate(
-      new Date(
-        currentYear,
-        currentMonth + 1,
-        1
-      )
+      new Date(currentYear, currentMonth + 1, 1)
     );
   };
-
-  // =====================================================
-  // DYNAMIC CALENDAR DAYS
-  // =====================================================
 
   const daysInMonth = new Date(
     currentYear,
@@ -72,17 +47,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
     0
   ).getDate();
 
-  const firstDayOfMonth = new Date(
-    currentYear,
-    currentMonth,
-    1
-  ).getDay();
-
   const calendarDays = [];
-
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    calendarDays.push("");
-  }
 
   for (let day = 1; day <= daysInMonth; day++) {
     calendarDays.push(day.toString());
@@ -99,11 +64,6 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
 
     weeks.push(week);
   }
-
-
-  // =====================================================
-  // DATE LIST
-  // =====================================================
 
   const dates = [
     {
@@ -156,69 +116,150 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
     },
   ];
 
+  const isSelected = (day) => {
+    if (currentYear === 2026 && currentMonth === 4) {
+      return (
+        day === "25" ||
+        day === "26" ||
+        day === "31"
+      );
+    }
+
+    return false;
+  };
+
+  const isBoldDate = (day) => {
+    return [
+      "24",
+      "27",
+      "28",
+      "29",
+      "30",
+      "31",
+    ].includes(day);
+  };
+
   return (
-    <div className="w-full overflow-hidden rounded-[8px] border border-gray-300 bg-white shadow-sm">
+    <div
+      className="
+        h-full
+        w-[105%]
+        overflow-hidden
+        rounded-[8px]
+        border
+        border-gray-300
+        bg-white
+        shadow-sm
+      "
+    >
 
       {/* HEADER */}
-      <div className="flex h-[36px] items-center justify-between border-b border-gray-200 bg-white px-[14px]">
-
-        <h2 className="text-[9px] font-bold uppercase tracking-[0.1px] text-[#171717]">
+      <div
+        className="
+          flex
+          h-[36px]
+          items-center
+          justify-between
+          border-b
+          border-gray-200
+          bg-white
+          px-[14px]
+        "
+      >
+        <h2 className="text-[16px] font-semibold uppercase tracking-[0.1px] text-[#171717]">
           Availability Calender
         </h2>
 
         <button
           type="button"
           onClick={onClose}
-          className="flex h-[19px] w-[19px] items-center justify-center rounded-full border-[1.5px] border-[#d00000] bg-white text-[#d00000] cursor-pointer"
+          className="
+            flex
+            h-[19px]
+            w-[19px]
+            cursor-pointer
+            items-center
+            justify-center
+            rounded-full
+            border-[1.5px]
+            border-[#d00000]
+            bg-white
+            text-[#d00000]
+          "
         >
           <FaTimes className="text-[8px]" />
         </button>
-
       </div>
 
 
       {/* MAIN CONTENT */}
-      <div className="grid w-full grid-cols-1 gap-4 bg-white px-[14px] py-[13px] sm:grid-cols-[1fr_250px]">
+      <div
+        className="
+          grid
+          w-full
+          grid-cols-1
+          gap-6
+          bg-white
+          px-[14px]
+          pb-[16px]
+          pt-[12px]
+          sm:grid-cols-[1fr_290px]
+        "
+      >
 
         {/* LEFT DATE LIST */}
         <div className="min-w-0 bg-white">
 
-          {dates.map((item, index) => (
-            <div
-              key={index}
-              className="mb-[9px] flex min-h-[31px] items-start justify-between"
-            >
+          <div className="flex flex-col gap-[17px]">
 
-              {/* DATE */}
-              <div>
+            {dates.map((item, index) => (
+              <div
+                key={index}
+                className="
+                  flex
+                  min-h-[32px]
+                  items-center
+                  justify-between
+                  gap-5
+                "
+              >
 
-                <p className="text-[7px] font-bold leading-[9px] text-[#222]">
-                  {item.date}
-                </p>
+                {/* DATE + DAY */}
+                <div className="min-w-0">
 
-                <p className="mt-[2px] text-[7px] leading-[9px] text-[#777]">
-                  {item.day}
+                  <p className="text-[14px] font-semibold leading-[12px] text-[#222]">
+                    {item.date}
+                  </p>
+
+                  <p className="mt-[6px] text-[14px] font-light leading-[11px] text-[#777]">
+                    {item.day}
+                  </p>
+
+                </div>
+
+
+                {/* STATUS */}
+                <p
+                  className={`
+                    shrink-0
+                    text-right
+                    text-[14px]
+                    font-semibold
+                    leading-[12px]
+                    ${
+                      item.available
+                        ? "text-green-600"
+                        : "text-red-600 underline"
+                    }
+                  `}
+                >
+                  {item.status}
                 </p>
 
               </div>
+            ))}
 
-
-              {/* STATUS */}
-              <p
-                className={`
-                  ml-2 whitespace-nowrap pt-[5px] text-right text-[8px] font-semibold
-                  ${
-                    item.available
-                      ? "text-green-600"
-                      : "text-red-600 underline"
-                  }
-                `}
-              >
-                {item.status}
-              </p>
-
-            </div>
-          ))}
+          </div>
 
         </div>
 
@@ -226,84 +267,118 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
         {/* RIGHT CALENDAR */}
         <div className="min-w-0 bg-white">
 
-          <div className="rounded-[8px] border border-gray-300 bg-white p-[10px] shadow-[0_1px_4px_rgba(0,0,0,0.12)]">
+          <div
+            className="
+              rounded-[8px]
+              border
+              border-gray-300
+              bg-white
+              p-[11px]
+              shadow-[0_1px_4px_rgba(0,0,0,0.12)]
+            "
+          >
 
             {/* MONTH HEADER */}
-            <div className="flex h-[30px] items-center justify-between rounded-[7px] bg-[#f1f1f1] px-[15px]">
-
-              {/* PREVIOUS MONTH */}
+            <div
+              className="
+                flex
+                h-[32px]
+                items-center
+                justify-between
+                rounded-[7px]
+                bg-[#f1f1f1]
+                px-[14px]
+              "
+            >
 
               <button
                 type="button"
                 onClick={handlePreviousMonth}
-                className="flex items-center justify-center bg-transparent"
+                className="
+                  flex
+                  h-[21px]
+                  w-[21px]
+                  items-center
+                  justify-center
+                  bg-transparent
+                "
                 aria-label="Previous month"
               >
-                <FaChevronLeft className="text-[7px] text-[#222]" />
+                <FaChevronLeft className="text-[7px] cursor-pointer text-[#222]" />
               </button>
 
 
-              {/* DYNAMIC MONTH */}
-
-              <span className="text-[9px] font-bold text-[#c00000]">
+              <span className="text-[18px] font-bold text-[#c00000]">
                 {monthNames[currentMonth]} {currentYear}
               </span>
 
 
-              {/* NEXT MONTH */}
-
               <button
                 type="button"
                 onClick={handleNextMonth}
-                className="flex items-center justify-center bg-transparent"
+                className="
+                  flex
+                  h-[21px]
+                  w-[21px]
+                  items-center
+                  justify-center
+                  bg-transparent
+                "
                 aria-label="Next month"
               >
-                <FaChevronRight className="text-[7px] text-[#222]" />
+                <FaChevronRight className="text-[7px] cursor-pointer text-[#222]" />
               </button>
 
             </div>
 
 
-            {/* CALENDAR BODY */}
-            <div className="mt-[8px] rounded-[7px] bg-[#f3f3f3] px-[8px] py-[8px]">
+            {/* CALENDAR GRID */}
+            <div
+              className="
+                mt-[9px]
+                rounded-[7px]
+                bg-[#f3f3f3]
+                px-[9px]
+                py-[9px]
+              "
+            >
 
               {weeks.map((week, weekIndex) => (
                 <div
                   key={weekIndex}
-                  className="mb-[4px] grid grid-cols-7 gap-[4px]"
+                  className="
+                    mb-[5px]
+                    grid
+                    grid-cols-7
+                    gap-[5px]
+                    last:mb-0
+                  "
                 >
 
                   {week.map((day, dayIndex) => {
 
-                    // Original May 2026 yellow dates
-                    const yellow =
-                      currentYear === 2026 &&
-                      currentMonth === 4 &&
-                      (
-                        day === "25" ||
-                        day === "26" ||
-                        day === "31"
-                      );
-
-                    // Original selected date
-                    const selected =
-                      currentYear === 2026 &&
-                      currentMonth === 4 &&
-                      day === "24";
+                    const selected = isSelected(day);
+                    const boldDate = isBoldDate(day);
 
                     return (
                       <div
                         key={`${weekIndex}-${dayIndex}`}
                         className={`
-                          flex h-[21px] items-center justify-center rounded-[3px]
+                          flex
+                          h-[22px]
+                          items-center
+                          justify-center
+                          rounded-[3px]
                           text-[8px]
                           ${
-                            yellow
+                            selected
                               ? "bg-[#ffc400] font-bold text-white"
-                              : selected
-                              ? "bg-white font-bold text-black"
                               : day
-                              ? "bg-[#dedede] text-[#777]"
+                              ? `bg-[#dedede] text-[#777] ${
+                                  boldDate
+                                    ? "font-bold text-black"
+                                    : ""
+                                }`
                               : "bg-transparent"
                           }
                         `}
@@ -320,29 +395,37 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
             </div>
 
 
-            {/* MARK DATE SECTION */}
-            <div className="mt-[12px] border-t border-gray-200 bg-white pt-[10px]">
+            {/* MARK DATE */}
+            <div
+              className="
+                mt-[14px]
+                border-t
+                border-gray-200
+                bg-white
+                pt-[11px]
+              "
+            >
 
-              {/* TITLE */}
+              {/* MARK DATE HEADER */}
               <div className="flex items-center justify-between">
 
-                <span className="text-[9px] font-bold uppercase text-[#888]">
+                <span className="text-[15px] font-semibold uppercase leading-none text-[#888]">
                   MARK DATE
                 </span>
 
-                <span className="text-[8px] text-[#888]">
+                <span className="text-[15px] leading-none text-[#888]">
                   ---- MAY
                 </span>
 
               </div>
 
 
-              {/* INFORMATION */}
-              <div className="mt-[10px] flex items-center gap-[5px]">
+              {/* INFO */}
+              <div className="mt-[11px] flex items-center gap-[7px]">
 
                 <FaInfoCircle className="shrink-0 text-[9px] text-[#ffb000]" />
 
-                <span className="whitespace-nowrap text-[7px] text-[#666]">
+                <span className="text-[12px] font-light leading-[15px] text-[#666]">
                   mark/note any date by clicking on the date
                 </span>
 
@@ -355,14 +438,14 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
                 placeholder="Enter Text"
                 className="
                   mt-[11px]
-                  h-[30px]
+                  h-[31px]
                   w-full
                   rounded-[3px]
                   border
                   border-gray-200
                   bg-white
                   px-[9px]
-                  text-[8px]
+                  text-[13px]
                   text-gray-700
                   outline-none
                   placeholder:text-gray-400
@@ -372,17 +455,17 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
 
 
               {/* SAVE */}
-              <div className="mt-[13px] flex justify-end">
+              <div className="mt-[12px] flex justify-end">
 
                 <button
                   type="button"
                   className="
-                    h-[27px]
+                    h-[28px]
                     rounded-[4px]
                     bg-[#b98686]
-                    px-[17px]
-                    text-[9px]
-                    font-semibold
+                    px-[18px]
+                    text-[14px]
+                    font-medium
                     text-white
                   "
                 >

@@ -16,11 +16,11 @@ const ServiceCard = ({ title, value }) => {
         px-2
       "
     >
-      <p className="text-[9px] font-medium text-gray-700 sm:text-[10px]">
+      <p className="text-[14px] font-semibold text-gray-700 sm:text-[14px]">
         {title}
       </p>
 
-      <p className="mt-3 text-[38px] font-bold leading-none text-gray-900 sm:text-[40px]">
+      <p className="mt-3 text-[49.32px] font-bold leading-none text-gray-900 sm:text-[49.32px]">
         {value}
       </p>
     </div>
@@ -34,13 +34,13 @@ const ServicesPricing = () => {
       {/* HEADER */}
       <div className="flex min-h-[48px] w-full items-center justify-between border-b border-gray-200 px-4 sm:px-5 md:px-6">
 
-        <h2 className="text-[10px] font-bold uppercase text-gray-800 sm:text-[11px]">
+        <h2 className="text-[16px] font-semibold uppercase text-gray-800 sm:text-[16px]">
           Services / Pricing
         </h2>
 
         <a
           href="#"
-          className="whitespace-nowrap text-[8px] text-gray-700 underline sm:text-[9px]"
+          className="whitespace-nowrap text-[14px] font-medium text-gray-700 underline sm:text-[14px]"
         >
           view all services
         </a>

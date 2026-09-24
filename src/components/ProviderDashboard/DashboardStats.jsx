@@ -188,17 +188,17 @@ const DashboardStats = () => {
         {/* CONTENT */}
         <div className="flex min-w-0 flex-1 flex-col items-center text-center">
 
-          <h3 className="whitespace-nowrap text-[10px] font-bold text-[#760000] sm:text-[11px]">
+          <h3 className="whitespace-nowrap text-[16px] font-semibold text-[#760000] sm:text-[16px]">
             Profile Completion
           </h3>
 
-          <p className="mt-1 text-[25px] font-bold leading-none text-gray-900">
+          <p className="mt-1 text-[24.27px] font-bold leading-none text-gray-900">
             95%
           </p>
 
           <a
             href="#"
-            className="mt-5 whitespace-nowrap text-[9px] text-gray-700 underline sm:text-[10px]"
+            className="mt-5 whitespace-nowrap text-[14px] text-gray-700 font-medium underline sm:text-[14px]"
           >
             Complete Profile
           </a>
@@ -223,11 +223,11 @@ const DashboardStats = () => {
         {/* CONTENT */}
         <div className="flex min-w-0 flex-1 flex-col items-center text-center">
 
-          <h3 className="whitespace-nowrap text-[10px] font-bold text-[#760000] sm:text-[11px]">
+          <h3 className="whitespace-nowrap text-[16px] font-semibold text-[#760000] sm:text-[16px]">
             Conversion Rate
           </h3>
 
-          <p className="mt-2 text-[25px] font-bold leading-none text-gray-900">
+          <p className="mt-2 text-[24.27px] font-bold leading-none text-gray-900">
             75%
           </p>
 
@@ -251,17 +251,17 @@ const DashboardStats = () => {
         {/* CONTENT */}
         <div className="min-w-0 flex-1">
 
-          <h3 className="whitespace-nowrap text-center text-[10px] font-bold text-[#760000] sm:text-[9px]">
+          <h3 className="whitespace-nowrap text-center text-[16px] font-semibold text-[#760000] sm:text-[16px]">
             Thumbnail Badge Text
           </h3>
 
-          <div className="mt-2 w-full rounded-md bg-gray-200 px-2 py-2 text-center text-[8px] text-gray-500 sm:text-[9px]">
+          <div className="mt-2 w-full rounded-md bg-gray-200 px-2 py-2 text-center text-[12px] text-gray-500 sm:text-[12px]">
             Starting from 12,000
           </div>
 
           <a
             href="#"
-            className="mt-5 block text-center text-[9px] text-gray-700 underline sm:text-[10px]"
+            className="mt-5 block text-center text-[14px] text-gray-700 underline font-medium sm:text-[14px]"
           >
             Info and Edit
           </a>
@@ -275,11 +275,11 @@ const DashboardStats = () => {
       ===================================================== */}
       <div className="flex min-h-[118px] w-full flex-col items-center justify-center rounded-lg bg-white px-4 py-4 text-center">
 
-        <h3 className="whitespace-nowrap text-[10px] font-bold text-[#760000] sm:text-[11px]">
+        <h3 className="whitespace-nowrap text-[16px] font-semibold text-[#760000] sm:text-[16px]">
           Min. High value Lead
         </h3>
 
-        <p className="mt-2 text-[25px] font-bold leading-none text-gray-900">
+        <p className="mt-2 text-[24.27px] font-bold leading-none text-gray-900">
           50,000
         </p>
 

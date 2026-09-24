@@ -15,37 +15,21 @@ const AvailabilityCalendarCard1 = ({
   showRedDate = false,
   showSavedDate = false,
 }) => {
-  // ===================================================
-  // SELECTED DATE
-  // ===================================================
-
   const [selectedDate, setSelectedDate] = useState(
     initialSelectedDate
   );
 
-  // ===================================================
-  // NOTE
-  // ===================================================
-
   const [note, setNote] = useState(initialNote);
 
-  // ===================================================
-  // SAVED STATE
-  // ===================================================
-
   const [saved, setSaved] = useState(showSavedDate);
-
-  // ===================================================
-  // START WITH MAY 2026
-  // ===================================================
 
   const [currentDate, setCurrentDate] = useState(
     new Date(2026, 4, 1)
   );
 
-  // ===================================================
+  // =====================================================
   // MONTH NAMES
-  // ===================================================
+  // =====================================================
 
   const monthNames = [
     "JANUARY",
@@ -62,21 +46,12 @@ const AvailabilityCalendarCard1 = ({
     "DECEMBER",
   ];
 
-  // ===================================================
-  // CURRENT MONTH
-  // ===================================================
-
   const currentMonth = currentDate.getMonth();
-
-  // ===================================================
-  // CURRENT YEAR
-  // ===================================================
-
   const currentYear = currentDate.getFullYear();
 
-  // ===================================================
+  // =====================================================
   // PREVIOUS MONTH
-  // ===================================================
+  // =====================================================
 
   const handlePreviousMonth = () => {
     setCurrentDate(
@@ -91,9 +66,9 @@ const AvailabilityCalendarCard1 = ({
     setSaved(false);
   };
 
-  // ===================================================
+  // =====================================================
   // NEXT MONTH
-  // ===================================================
+  // =====================================================
 
   const handleNextMonth = () => {
     setCurrentDate(
@@ -108,9 +83,9 @@ const AvailabilityCalendarCard1 = ({
     setSaved(false);
   };
 
-  // ===================================================
-  // NUMBER OF DAYS IN CURRENT MONTH
-  // ===================================================
+  // =====================================================
+  // DAYS IN MONTH
+  // =====================================================
 
   const daysInMonth = new Date(
     currentYear,
@@ -118,35 +93,19 @@ const AvailabilityCalendarCard1 = ({
     0
   ).getDate();
 
-  // ===================================================
-  // FIRST DAY OF CURRENT MONTH
-  // ===================================================
-
-  const firstDayOfMonth = new Date(
-    currentYear,
-    currentMonth,
-    1
-  ).getDay();
-
-  // ===================================================
-  // CREATE CALENDAR DAYS
-  // ===================================================
+  // =====================================================
+  // CALENDAR DAYS
+  // =====================================================
 
   const calendarDays = [];
 
-  // Empty spaces before first date
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    calendarDays.push("");
-  }
-
-  // Actual dates
   for (let day = 1; day <= daysInMonth; day++) {
     calendarDays.push(day);
   }
 
-  // ===================================================
-  // CREATE WEEKS
-  // ===================================================
+  // =====================================================
+  // CREATE ROWS
+  // =====================================================
 
   const weeks = [];
 
@@ -160,9 +119,9 @@ const AvailabilityCalendarCard1 = ({
     weeks.push(week);
   }
 
-  // ===================================================
+  // =====================================================
   // SAVE
-  // ===================================================
+  // =====================================================
 
   const handleSave = () => {
     if (selectedDate) {
@@ -170,300 +129,399 @@ const AvailabilityCalendarCard1 = ({
     }
   };
 
-  // ===================================================
-  // RETURN
-  // ===================================================
-
   return (
     <div
       className="
+        flex
+        min-h-[330px]
         w-full
-        rounded-[7px]
+        flex-col
+        overflow-hidden
+        rounded-[8px]
         border
-        border-[#d5d5d5]
+        border-gray-300
         bg-white
-        p-[9px]
-        shadow-[0_1px_4px_rgba(0,0,0,0.08)]
+        shadow-sm
       "
     >
-
       {/* ================================================= */}
-      {/* MONTH HEADER */}
+      {/* HEADER */}
       {/* ================================================= */}
 
-      <div className="mb-[7px] flex items-center justify-between">
-
-        {/* PREVIOUS MONTH */}
-        <button
-          type="button"
-          aria-label="Previous month"
-          onClick={handlePreviousMonth}
+      <div
+        className="
+          flex
+          h-[40px]
+          shrink-0
+          items-center
+          border-b
+          border-gray-200
+          bg-white
+          px-[13px]
+        "
+      >
+        <h2
           className="
-            flex
-            h-[16px]
-            w-[16px]
-            items-center
-            justify-center
-            text-[7px]
-            text-[#444]
-            hover:text-[#b40000]
+            text-[15px]
+            font-semibold
+            uppercase
+            tracking-[0.1px]
+            text-[#171717]
           "
         >
-          <FaChevronLeft />
-        </button>
-
-        {/* MONTH AND YEAR */}
-        <p className="text-[8px] font-bold text-[#b40000]">
-          {monthNames[currentMonth]} {currentYear}
-        </p>
-
-        {/* NEXT MONTH */}
-        <button
-          type="button"
-          aria-label="Next month"
-          onClick={handleNextMonth}
-          className="
-            flex
-            h-[16px]
-            w-[16px]
-            items-center
-            justify-center
-            text-[7px]
-            text-[#444]
-            hover:text-[#b40000]
-          "
-        >
-          <FaChevronRight />
-        </button>
-
+          Availability Calender
+        </h2>
       </div>
 
       {/* ================================================= */}
-      {/* CALENDAR */}
+      {/* CONTENT */}
       {/* ================================================= */}
 
-      <div className="rounded-[5px] bg-[#f2f2f2] p-[5px]">
+      <div
+        className="
+          flex
+          flex-1
+          flex-col
+          bg-white
+          px-[12px]
+          pb-[12px]
+          pt-[11px]
+        "
+      >
+        {/* ================================================= */}
+        {/* MONTH HEADER */}
+        {/* ================================================= */}
 
-        <div className="space-y-[3px]">
+        <div
+          className="
+            flex
+            h-[31px]
+            shrink-0
+            items-center
+            justify-between
+            rounded-[6px]
+            bg-[#f1f1f1]
+            px-[12px]
+          "
+        >
+          <button
+            type="button"
+            onClick={handlePreviousMonth}
+            aria-label="Previous month"
+            className="
+              flex
+              h-[18px]
+              w-[18px]
+              items-center
+              justify-center
+              text-[#222]
+              cursor-pointer
+            "
+          >
+            <FaChevronLeft className="text-[7px]" />
+          </button>
 
-          {weeks.map((week, weekIndex) => (
-            <div
-              key={weekIndex}
-              className="grid grid-cols-7 gap-[2px]"
-            >
+          <span
+            className="
+              text-[18px]
+              font-bold
+              text-[#c00000]
+            "
+          >
+            {monthNames[currentMonth]} {currentYear}
+          </span>
 
-              {week.map((day, dayIndex) => {
-
-                // Empty space
-                if (day === "") {
-                  return (
-                    <div
-                      key={dayIndex}
-                      className="h-[16px] w-[16px]"
-                    />
-                  );
-                }
-
-                // =================================================
-                // ORIGINAL MAY 2026 YELLOW DATES
-                // =================================================
-
-                const isYellow =
-                  currentYear === 2026 &&
-                  currentMonth === 4 &&
-                  (
-                    day === 25 ||
-                    day === 26 ||
-                    day === 31
-                  );
-
-                // =================================================
-                // ORIGINAL MAY 2026 RED DATE
-                // =================================================
-
-                const isRed =
-                  showRedDate &&
-                  currentYear === 2026 &&
-                  currentMonth === 4 &&
-                  day === 27;
-
-                // =================================================
-                // SELECTED DATE
-                // =================================================
-
-                const isSelected =
-                  selectedDate === day;
-
-                return (
-                  <button
-                    key={dayIndex}
-                    type="button"
-                    onClick={() => setSelectedDate(day)}
-                    className={`
-                      flex
-                      h-[16px]
-                      w-[16px]
-                      items-center
-                      justify-center
-                      rounded-[3px]
-                      text-[6px]
-                      font-medium
-
-                      ${
-                        isRed
-                          ? "bg-[#ef4444] text-white"
-                          : isSelected
-                          ? "bg-[#f4bd00] text-white"
-                          : isYellow
-                          ? "bg-[#f4bd00] text-white"
-                          : "bg-[#e3e3e3] text-[#555]"
-                      }
-                    `}
-                  >
-                    {day}
-                  </button>
-                );
-              })}
-
-            </div>
-          ))}
-
+          <button
+            type="button"
+            onClick={handleNextMonth}
+            aria-label="Next month"
+            className="
+              flex
+              h-[18px]
+              w-[18px]
+              items-center
+              justify-center
+              text-[#222]
+              cursor-pointer
+            "
+          >
+            <FaChevronRight className="text-[7px]" />
+          </button>
         </div>
 
-      </div>
+        {/* ================================================= */}
+        {/* CALENDAR */}
+        {/* ================================================= */}
 
-      {/* ================================================= */}
-      {/* MARK DATE */}
-      {/* ================================================= */}
-
-      <div className="mt-[9px] flex items-center justify-between">
-
-        <p className="text-[7px] font-semibold text-[#555]">
-          MARK DATE
-        </p>
-
-        <p className="text-[7px] text-[#777]">
-          {selectedDate
-            ? `${selectedDate}th ${monthNames[currentMonth]}`
-            : `--- ${monthNames[currentMonth]}`}
-        </p>
-
-      </div>
-
-      {/* ================================================= */}
-      {/* INFO */}
-      {/* ================================================= */}
-
-      <div className="mt-[6px] flex items-start gap-[4px]">
-
-        <FaInfoCircle className="mt-[1px] text-[7px] text-[#f4a900]" />
-
-        <p className="text-[5.5px] leading-[8px] text-[#777]">
-          mark/note only date by clicking on the date
-        </p>
-
-      </div>
-
-      {/* ================================================= */}
-      {/* INPUT */}
-      {/* ================================================= */}
-
-      <input
-        type="text"
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        placeholder="Enter text"
-        className="
-          mt-[6px]
-          h-[20px]
-          w-full
-          rounded-[3px]
-          border
-          border-[#dddddd]
-          px-[5px]
-          text-[6px]
-          text-[#555]
-          outline-none
-          placeholder:text-[#aaa]
-          focus:border-[#b40000]
-        "
-      />
-
-      {/* ================================================= */}
-      {/* SAVE */}
-      {/* ================================================= */}
-
-      <div className="mt-[7px] flex justify-end">
-
-        <button
-          type="button"
-          onClick={handleSave}
-          className={`
-            rounded-[3px]
-            px-[13px]
-            py-[4px]
-            text-[6px]
-            font-medium
-            text-white
-
-            ${
-              saved
-                ? "bg-[#7b0000]"
-                : "bg-[#a87979] hover:bg-[#8f5555]"
-            }
-          `}
+        <div
+          className="
+            mt-[7px]
+            w-full
+            rounded-[6px]
+            bg-[#f2f2f2]
+            px-[7px]
+            py-[7px]
+          "
         >
-          Save
-        </button>
+          <div className="flex w-full flex-col gap-[4px]">
 
+            {weeks.map((week, weekIndex) => (
+              <div
+                key={weekIndex}
+                className="
+                  grid
+                  w-full
+                  grid-cols-7
+                  gap-[3px]
+                "
+              >
+                {week.map((day, dayIndex) => {
+                  if (day === "") {
+                    return (
+                      <div
+                        key={dayIndex}
+                        className="h-[17px] w-full"
+                      />
+                    );
+                  }
+
+                  // =================================================
+                  // YELLOW DATES
+                  // =================================================
+
+                  const isYellowDate =
+                    currentYear === 2026 &&
+                    currentMonth === 4 &&
+                    (
+                      day === 25 ||
+                      day === 26 ||
+                      day === 31
+                    );
+
+                  // =================================================
+                  // RED DATE
+                  // =================================================
+
+                  const isRedDate =
+                    showRedDate &&
+                    currentYear === 2026 &&
+                    currentMonth === 4 &&
+                    day === 27;
+
+                  // =================================================
+                  // SELECTED DATE
+                  // =================================================
+
+                  const isSelected =
+                    selectedDate === day;
+
+                  return (
+                    <button
+                      key={dayIndex}
+                      type="button"
+                      onClick={() => setSelectedDate(day)}
+                      className={`
+                        flex
+                        h-[17px]
+                        w-full
+                        items-center
+                        justify-center
+                        rounded-[3px]
+                        text-[6px]
+                        font-medium
+                        ${
+                          isRedDate
+                            ? "border border-[#ef4444] bg-[#f5f5f5] font-bold text-[#222]"
+                            : isSelected
+                            ? "bg-[#ffc400] font-bold text-white"
+                            : isYellowDate
+                            ? "bg-[#ffc400] font-bold text-white"
+                            : "bg-[#dedede] text-[#777]"
+                        }
+                      `}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+
+          </div>
+        </div>
+
+        {/* ================================================= */}
+        {/* MARK DATE */}
+        {/* ================================================= */}
+
+        <div
+          className="
+            mt-[10px]
+            border-t
+            border-[#dddddd]
+            pt-[9px]
+          "
+        >
+          <div className="flex items-center justify-between">
+
+            <span
+              className="
+                text-[16px]
+                font-semibold
+                uppercase
+                leading-none
+                text-[#777]
+              "
+            >
+              MARK DATE
+            </span>
+
+            <span
+              className="
+                text-[16px]
+                leading-none
+                text-[#777]
+              "
+            >
+              {selectedDate
+                ? `${selectedDate}th MAY`
+                : `---- MAY`}
+            </span>
+
+          </div>
+
+          {/* ================================================= */}
+          {/* INFO */}
+          {/* ================================================= */}
+
+          <div
+            className="
+              mt-[7px]
+              flex
+              items-center
+              gap-[4px]
+            "
+          >
+            <FaInfoCircle
+              className="
+                shrink-0
+                text-[7px]
+                text-[#ffb000]
+              "
+            />
+
+            <span
+              className="
+                text-[12px]
+                font-light
+                leading-[9px]
+                text-[#666]
+              "
+            >
+              mark/note any date by clicking on the date
+            </span>
+          </div>
+
+          {/* ================================================= */}
+          {/* INPUT */}
+          {/* ================================================= */}
+
+          <input
+            type="text"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Enter Text"
+            className="
+              mt-[7px]
+              h-[25px]
+              w-[300px]
+              rounded-[2px]
+              border
+              border-[#000000]
+              bg-white
+              px-[6px]
+              text-[12px]
+              text-[#000000]
+              outline-none
+              placeholder:text-[#999]
+            "
+          />
+
+          {/* ================================================= */}
+          {/* SAVE */}
+          {/* ================================================= */}
+
+          <div className="mt-[8px] flex justify-end">
+
+            <button
+              type="button"
+              onClick={handleSave}
+              className={`
+                h-[21px]
+                rounded-[4px]
+                w-[100px]
+                h-[32px]
+                px-[14px]
+                text-[20px]
+                font-medium
+                text-white
+                cursor-pointer
+                ${
+                  saved
+                    ? "bg-[#7d0000]"
+                    : "bg-[#b98686]"
+                }
+              `}
+            >
+              Save
+            </button>
+
+          </div>
+        </div>
       </div>
-
     </div>
   );
 };
 
 
 // =====================================================
-// COMPONENT 294
-// FOUR CALENDAR STATES
+// MAIN COMPONENT
 // =====================================================
 
 const AvailabilityCalendar1 = () => {
   return (
     <div className="w-full">
 
+      {/* ================================================= */}
+      {/* CARDS PARENT */}
+      {/* ================================================= */}
+
       <div
         className="
+          ml-[140px]
           grid
-          w-full
+          w-[calc(100%-100px)]
           grid-cols-1
-          gap-4
+          gap-[16px]
           sm:grid-cols-2
           lg:grid-cols-4
-          lg:gap-[14px]
         "
       >
 
-        {/* ================================================= */}
-        {/* CALENDAR 1 */}
-        {/* ================================================= */}
+        {/* CARD 1 */}
 
         <AvailabilityCalendarCard1
           initialSelectedDate={24}
         />
 
-        {/* ================================================= */}
-        {/* CALENDAR 2 */}
-        {/* ================================================= */}
+        {/* CARD 2 */}
 
         <AvailabilityCalendarCard1
           initialSelectedDate={24}
           showRedDate={true}
         />
 
-        {/* ================================================= */}
-        {/* CALENDAR 3 */}
-        {/* ================================================= */}
+        {/* CARD 3 */}
 
         <AvailabilityCalendarCard1
           initialSelectedDate={27}
@@ -471,19 +529,16 @@ const AvailabilityCalendar1 = () => {
           showSavedDate={true}
         />
 
-        {/* ================================================= */}
-        {/* CALENDAR 4 */}
-        {/* ================================================= */}
+        {/* CARD 4 */}
 
         <AvailabilityCalendarCard1
           initialSelectedDate={27}
-          initialNote="2 events at the same location."
+          initialNote="2 Events at the same location."
           showRedDate={true}
           showSavedDate={true}
         />
 
       </div>
-
     </div>
   );
 };

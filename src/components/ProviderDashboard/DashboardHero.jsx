@@ -9,15 +9,16 @@ const DashboardHero = () => {
     <>
       <section className="w-full border-b border-gray-200 bg-[#f8f7f7]">
 
-        <div className="mx-auto flex min-h-[72px] w-full max-w-[960px] flex-col gap-3 px-4 py-4 sm:px-5 md:flex-row md:items-center md:justify-between md:gap-0 md:py-0">
+        {/* DASHBOARD HERO CONTENT */}
+        <div className="flex min-h-[72px] w-full flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-0 md:py-0 md:px-8 lg:px-10 xl:px-12">
 
           {/* TITLE */}
           <div>
-            <h1 className="text-[17px] font-semibold text-[#292929] sm:text-[18px]">
+            <h1 className="text-[26px] font-medium text-[#252525] sm:text-[26px]">
               Service Provider Dashboard
             </h1>
 
-            <p className="mt-1 text-[10px] text-gray-400 sm:text-[11px]">
+            <p className="mt-1 text-[16px] text-gray-300 sm:text-[16px]">
               Track leads, respond faster, and manage your services efficiently.
             </p>
           </div>
@@ -25,7 +26,7 @@ const DashboardHero = () => {
           {/* AVAILABILITY */}
           <div className="flex items-center gap-3">
 
-            <span className="text-[9px] font-bold uppercase text-gray-800 sm:text-[10px]">
+            <span className="text-[16px] font-semibold uppercase text-[#000000] sm:text-[16px]">
               Availability Calender
             </span>
 

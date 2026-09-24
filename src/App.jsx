@@ -8,9 +8,9 @@ import PortfolioPage from "./Pages/Portfolio/PortfolioPage";
 import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
 import DashboardHero from "./components/ProviderDashboard/DashboardHero";
 import ProviderHeader from "./components/ProviderDashboard/ProviderHeader";
-import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
-import DashboardOverlays from "./components/ProviderDashboard/DashboardOverlays";
-
+// import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
+// import DashboardOverlays from "./components/ProviderDashboard/DashboardOverlays";
+import ProfilePage from "./components/ProfilerPage/ProfilerPage";
 
 // ======================================================
 // APP ROUTES
@@ -44,8 +44,9 @@ function AppRoutes() {
     //     element={<Layout HomePage={ServiceCategoryPage} />}
     //   />
 <div>
-    <ProviderDashboard/>
-    <DashboardOverlays/>
+    {/* <ProviderDashboard/> */}
+    {/* <DashboardOverlays/> */}
+    <ProfilePage/>
 </div>
 
   );

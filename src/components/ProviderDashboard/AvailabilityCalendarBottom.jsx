@@ -5,24 +5,13 @@ import DateMarkedBadge from "./DateMarkedBadge";
 
 const AvailabilityCalendarBottom = () => {
   return (
-    <div className="w-full">
+    <div className="full">
 
-      <div
-        className="
-          flex
-          flex-col
-          items-start
-          gap-8
-          sm:flex-row
-          sm:items-start
-        "
-      >
+      <div className="flex items-start gap-[35px]">
 
-        {/* ================================================= */}
         {/* TWO MINI CALENDARS */}
-        {/* ================================================= */}
 
-        <div className="flex w-[115px] flex-col items-center gap-[28px]">
+        <div className="flex w-[115px] flex-col items-center gap-[38px]">
 
           <AvailabilityCalendarMini />
 
@@ -31,30 +20,25 @@ const AvailabilityCalendarBottom = () => {
         </div>
 
 
-        {/* ================================================= */}
-        {/* TWO DATE MARKED BADGES */}
-        {/* ================================================= */}
+        {/* DATE MARKED BADGES */}
 
-        <div
-          className="
-            flex
-            w-[100px]
-            flex-col
-            items-center
-            gap-[45px]
-            pt-[65px]
-          "
-        >
+        <div className="flex w-[125px] flex-col items-start">
 
-          <DateMarkedBadge
-            type="orange"
-            date="27th MAY, 2026"
-          />
+          {/* First badge - beside 2nd calendar */}
+          <div className="pt-[250px]">
+            <DateMarkedBadge
+              type="orange"
+              date="27th MAY, 2026"
+            />
+          </div>
 
-          <DateMarkedBadge
-            type="green"
-            date="27th MAY, 2026"
-          />
+          {/* Second badge - after 2nd calendar */}
+          <div className="mt-[65px]">
+            <DateMarkedBadge
+              type="green"
+              date="27th MAY, 2026"
+            />
+          </div>
 
         </div>
 

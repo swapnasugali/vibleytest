@@ -74,27 +74,12 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
   ).getDate();
 
   // =====================================================
-  // FIRST DAY OF CURRENT MONTH
-  // =====================================================
-
-  const firstDayOfMonth = new Date(
-    currentYear,
-    currentMonth,
-    1
-  ).getDay();
-
-  // =====================================================
   // CREATE CALENDAR DAYS
+  // START DIRECTLY FROM 1
   // =====================================================
 
   const calendarDays = [];
 
-  // Empty spaces before first date
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    calendarDays.push("");
-  }
-
-  // Actual dates
   for (let day = 1; day <= daysInMonth; day++) {
     calendarDays.push(day);
   }
@@ -153,24 +138,23 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
             text-[7px]
             text-[#444]
             hover:text-[#b40000]
+            cursor-pointer
           "
         >
           <FaChevronLeft />
         </button>
 
-
         {/* MONTH + YEAR */}
 
         <p
           className="
-            text-[7px]
+            text-[12px]
             font-bold
             text-[#b40000]
           "
         >
           {monthNames[currentMonth]} {currentYear}
         </p>
-
 
         {/* NEXT */}
 
@@ -187,13 +171,13 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
             text-[7px]
             text-[#444]
             hover:text-[#b40000]
+            cursor-pointer
           "
         >
           <FaChevronRight />
         </button>
 
       </div>
-
 
       {/* ================================================= */}
       {/* CALENDAR */}
@@ -246,7 +230,6 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
 
         </div>
 
-
         {/* DATES */}
 
         <div className="space-y-[2px]">
@@ -277,7 +260,7 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
                 }
 
                 // =================================================
-                // ORIGINAL MAY 2026 YELLOW DATES
+                // MAY 2026 YELLOW DATES
                 // =================================================
 
                 const isYellow =
@@ -290,7 +273,7 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
                   );
 
                 // =================================================
-                // ORIGINAL MAY 2026 MARKED DATE
+                // MAY 2026 MARKED DATE
                 // =================================================
 
                 const isMarked =
@@ -314,7 +297,7 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
 
                       ${
                         isMarked
-                          ? "bg-[#ef4444] text-white"
+                          ? "border border-[#ef4444] bg-transparent text-[#555]"
                           : isYellow
                           ? "bg-[#f4bd00] text-white"
                           : "bg-[#e3e3e3] text-[#555]"
