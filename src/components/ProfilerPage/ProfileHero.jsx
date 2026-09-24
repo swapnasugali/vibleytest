@@ -14,7 +14,7 @@ import { PiSealCheckFill } from "react-icons/pi";
 // LOCAL ASSETS
 // =====================================================
 
-import profileCover from "../../assets/Photography1.png";
+import profileCover from "../../assets/photography1.png";
 import profileLogo from "../../assets/artlane-logo.png";
 
 const ProfileHero = () => {
