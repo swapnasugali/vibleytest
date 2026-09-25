@@ -1,61 +1,109 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+// ============================================
+// App.jsx
+// ============================================
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+
 import { useEffect } from "react";
 
+// ============================================
+// Layout
+// ============================================
+
 import Layout from "./components/Common/Layout";
+
+// ============================================
+// Pages
+// ============================================
+
 import HomePage from "./Pages/HomePage/HomePage";
 
 import PortfolioPage from "./Pages/Portfolio/PortfolioPage";
-import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
-import DashboardHero from "./components/ProviderDashboard/DashboardHero";
-import ProviderHeader from "./components/ProviderDashboard/ProviderHeader";
-// import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
-// import DashboardOverlays from "./components/ProviderDashboard/DashboardOverlays";
-import ProfilePage from "./components/ProfilerPage/ProfilerPage";
 
-// ======================================================
-// APP ROUTES
-// ======================================================
+import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
+
+// Service Provider Page
+import ProfilerPage from "./components/ProfilerPage/ProfilerPage";
+import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
+
+// ============================================
+// App Routes
+// ============================================
 
 function AppRoutes() {
   const { pathname } = useLocation();
 
+  // Scroll to top whenever route changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
   return (
-    // <Routes>
+    <Routes>
 
-    //   {/* Home Page */}
-    //   <Route
-    //     path="/"
-    //     element={<Layout HomePage={HomePage} />}
-    //   />
+      {/* ========================================
+          Home Page
+          URL: /
+          ======================================== */}
 
-    //   {/* Dynamic Portfolio Page */}
-    //   <Route
-    //     path="/portfolio/:type/:id"
-    //     element={<Layout HomePage={PortfolioPage} />}
-    //   />
+      <Route
+        path="/"
+        element={
+          <Layout HomePage={HomePage} />
+        }
+      />
 
-    //   {/* Dynamic ServiceCategoryPage */}
-    //   <Route
-    //     path="/services/:id"
-    //     element={<Layout HomePage={ServiceCategoryPage} />}
-    //   />
-<div>
-    {/* <ProviderDashboard/> */}
-    {/* <DashboardOverlays/> */}
-    <ProfilePage/>
-</div>
+      {/* ========================================
+          Portfolio Page
+          Example:
+          /portfolio/photography/1
+          ======================================== */}
 
+      <Route
+        path="/portfolio/:type/:id"
+        element={
+          <Layout HomePage={PortfolioPage} />
+        }
+      />
+
+      {/* ========================================
+          Service Category Page
+          Example:
+          /services/1
+          ======================================== */}
+
+      <Route
+        path="/services/:id"
+        element={
+          <Layout HomePage={ServiceCategoryPage} />
+        }
+      />
+
+      {/* ========================================
+          Service Provider Page
+          URL:
+          /service-providers
+          ======================================== */}
+
+      <Route
+        path="/service-providers"
+        element={
+          <Layout HomePage={ProviderDashboard} />
+        }
+      />
+
+    </Routes>
   );
 }
 
-
-// ======================================================
-// APP
-// ======================================================
+// ============================================
+// Main App
+// ============================================
 
 function App() {
   return (
@@ -64,5 +112,9 @@ function App() {
     </BrowserRouter>
   );
 }
+
+// ============================================
+// Export
+// ============================================
 
 export default App;
