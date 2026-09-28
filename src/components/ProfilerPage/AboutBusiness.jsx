@@ -3,7 +3,8 @@ import { FaPen} from "react-icons/fa";
 
 const AboutBusiness = () => {
   return (
-    <section className="w-full rounded-[4px] bg-white">
+    <section className="w-full rounded-[4px] bg-white"
+    style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* ================================================= */}
       {/* HEADER */}

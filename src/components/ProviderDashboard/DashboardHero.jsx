@@ -7,7 +7,10 @@ const DashboardHero = () => {
 
   return (
     <>
-      <section className="w-full border-b border-gray-200 bg-[#f8f7f7]">
+      <section
+        className="w-full border-b border-gray-200 bg-[#f8f7f7]"
+        style={{ fontFamily: "Poppins, sans-serif" }}
+      >
 
         {/* DASHBOARD HERO CONTENT */}
         <div className="flex min-h-[72px] w-full flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-0 md:py-0 md:px-8 lg:px-10 xl:px-12">

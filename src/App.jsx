@@ -12,24 +12,34 @@ import {
 import { useEffect } from "react";
 
 // ============================================
-// Layout
+// Common Layout
 // ============================================
 
 import Layout from "./components/Common/Layout";
 
 // ============================================
-// Pages
+// Public Pages
 // ============================================
 
 import HomePage from "./Pages/HomePage/HomePage";
 
-import PortfolioPage from "./Pages/Portfolio/PortfolioPage";
+import PublicPortfolioPage from "./Pages/Portfolio/PortfolioPage";
 
 import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
 
-// Service Provider Page
-import ProfilerPage from "./components/ProfilerPage/ProfilerPage";
+// ============================================
+// Service Provider Pages
+// ============================================
+
 import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
+
+import ProfilerPage from "./components/ProfilerPage/ProfilerPage";
+
+// ============================================
+// Service Provider Portfolio Page
+// ============================================
+
+import ProviderPortfolioPage from "./components/ProfilerPage/Portifolio/PortfolioPage";
 
 // ============================================
 // App Routes
@@ -47,8 +57,8 @@ function AppRoutes() {
     <Routes>
 
       {/* ========================================
-          Home Page
-          URL: /
+          HOME
+          Main Header + Home + Footer
           ======================================== */}
 
       <Route
@@ -59,22 +69,20 @@ function AppRoutes() {
       />
 
       {/* ========================================
-          Portfolio Page
-          Example:
-          /portfolio/photography/1
+          PUBLIC PORTFOLIO
+          Main Header + Portfolio + Footer
           ======================================== */}
 
       <Route
         path="/portfolio/:type/:id"
         element={
-          <Layout HomePage={PortfolioPage} />
+          <Layout HomePage={PublicPortfolioPage} />
         }
       />
 
       {/* ========================================
-          Service Category Page
-          Example:
-          /services/1
+          SERVICE CATEGORY
+          Main Header + Service Category + Footer
           ======================================== */}
 
       <Route
@@ -85,15 +93,35 @@ function AppRoutes() {
       />
 
       {/* ========================================
-          Service Provider Page
-          URL:
-          /service-providers
+          SERVICE PROVIDER DASHBOARD
           ======================================== */}
 
       <Route
         path="/service-providers"
         element={
-          <Layout HomePage={ProviderDashboard} />
+          <ProviderDashboard />
+        }
+      />
+
+      {/* ========================================
+          SERVICE PROVIDER PROFILE
+          ======================================== */}
+
+      <Route
+        path="/service-providers/profile"
+        element={
+          <ProfilerPage />
+        }
+      />
+
+      {/* ========================================
+          SERVICE PROVIDER PROFILE PORTFOLIO
+          ======================================== */}
+
+      <Route
+        path="/service-providers/profile/portfolio"
+        element={
+          <ProviderPortfolioPage />
         }
       />
 

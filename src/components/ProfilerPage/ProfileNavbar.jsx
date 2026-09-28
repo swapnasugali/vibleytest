@@ -1,75 +1,261 @@
+// ============================================
+// ProfileNavbar.jsx
+// ============================================
+
 import React, { useState } from "react";
-import { FaRegUserCircle, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaRegUserCircle,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const ProfileNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="relative h-[80px] w-full bg-[#fffdf9]">
+    <header
+      className="relative h-[80px] w-full bg-[#fffdf9]"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
 
-      {/* ================================================= */}
-      {/* NAVBAR */}
-      {/* ================================================= */}
+      {/* ============================================
+          NAVBAR
+          ============================================ */}
 
       <div className="flex h-full items-center justify-between px-[20px] sm:px-[35px] md:px-[55px]">
 
-        {/* ================================================= */}
-        {/* LOGO */}
-        {/* ================================================= */}
+        {/* ============================================
+            LOGO
+            SAME AS ProviderHeader
+            ============================================ */}
 
-        <div className="flex w-[120px] flex-col leading-none">
-          <span className="text-[27px] font-extrabold italic tracking-[-2px] text-[#b40000]">
-            Vibely
-          </span>
+        <div className="shrink-0">
 
-          <span className="ml-[8px] text-[8px] font-medium tracking-[0.5px] text-[#777]">
+          {/* VIBELY */}
+
+          <div className="relative h-[58px] w-[125px]">
+
+            {/* V */}
+
+            <span
+              className="
+                absolute
+                left-0
+                top-[8px]
+                text-[44px]
+                font-black
+                italic
+                leading-none
+                tracking-[-7px]
+                text-[#d71920]
+              "
+              style={{
+                transform: "skewX(-8deg)",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: 900,
+              }}
+            >
+              V
+            </span>
+
+
+            {/* i */}
+
+            <span
+              className="
+                absolute
+                left-[25px]
+                top-[9px]
+                text-[42px]
+                font-black
+                italic
+                leading-none
+                tracking-[-7px]
+                text-[#f2a900]
+              "
+              style={{
+                transform: "skewX(-10deg)",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: 900,
+              }}
+            >
+              i
+            </span>
+
+
+            {/* b */}
+
+            <span
+              className="
+                absolute
+                left-[43px]
+                top-[8px]
+                text-[43px]
+                font-black
+                italic
+                leading-none
+                tracking-[-7px]
+                text-[#d71920]
+              "
+              style={{
+                transform: "skewX(-8deg)",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: 900,
+              }}
+            >
+              b
+            </span>
+
+
+            {/* e */}
+
+            <span
+              className="
+                absolute
+                left-[68px]
+                top-[9px]
+                text-[42px]
+                font-black
+                italic
+                leading-none
+                tracking-[-7px]
+                text-[#d71920]
+              "
+              style={{
+                transform: "skewX(-8deg)",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: 900,
+              }}
+            >
+              e
+            </span>
+
+
+            {/* l */}
+
+            <span
+              className="
+                absolute
+                left-[89px]
+                top-[5px]
+                text-[46px]
+                font-black
+                italic
+                leading-none
+                tracking-[-8px]
+                text-[#f2a900]
+              "
+              style={{
+                transform: "skewX(-8deg)",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: 900,
+              }}
+            >
+              l
+            </span>
+
+
+            {/* y */}
+
+            <span
+              className="
+                absolute
+                left-[99px]
+                top-[9px]
+                text-[43px]
+                font-black
+                italic
+                leading-none
+                tracking-[-7px]
+                text-[#d71920]
+              "
+              style={{
+                transform: "skewX(-12deg)",
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: 900,
+              }}
+            >
+              y
+            </span>
+
+          </div>
+
+
+          {/* VENDORS */}
+
+          <p className="ml-2 mt-[-3px] text-[14.49px] font-normal leading-none text-black">
             Vendors
-          </span>
+          </p>
 
-          <span className="ml-[8px] text-[8px] font-medium tracking-[0.5px] text-[#777]">
+
+          {/* PORTAL */}
+
+          <p className="ml-3 mt-1 text-[14.49px] font-normal leading-none text-black">
             PORTAL
-          </span>
+          </p>
+
         </div>
 
-        {/* ================================================= */}
-        {/* DESKTOP NAVIGATION */}
-        {/* ================================================= */}
+
+        {/* ============================================
+            DESKTOP NAVIGATION
+            ============================================ */}
 
         <nav className="hidden items-center gap-[36px] md:flex">
 
-          <button className="text-[12px] font-medium text-[#222]">
+          <Link
+            to="/service-providers"
+            className="text-[22px] font-medium text-[#222]"
+          >
             DASHBOARD
-          </button>
+          </Link>
 
-          <button className="text-[12px] font-medium text-[#e53935]">
+
+          <Link
+            to="/service-providers/profile"
+            className="text-[22px] font-medium text-[#e53935]"
+          >
             PROFILE
-          </button>
+          </Link>
 
-          <button className="text-[12px] font-medium text-[#222]">
+
+          <Link
+            to="/service-providers/profile/portfolio"
+            className="text-[22px] font-medium text-[#222]"
+          >
             PORTFOLIO
-          </button>
+          </Link>
 
-          <button className="text-[12px] font-medium text-[#222]">
+
+          <button
+            type="button"
+            className="text-[22px] font-medium text-[#222]"
+          >
             SERVICES / PRICING
           </button>
 
-          <button className="text-[12px] font-medium text-[#222]">
+
+          <button
+            type="button"
+            className="text-[22px] font-medium text-[#222]"
+          >
             LEADS
           </button>
 
         </nav>
 
-        {/* ================================================= */}
-        {/* RIGHT SIDE */}
-        {/* ================================================= */}
+
+        {/* ============================================
+            RIGHT SIDE
+            ============================================ */}
 
         <div className="flex items-center gap-[18px]">
 
-          {/* USER ICON */}
+          <FaRegUserCircle
+            className="text-[32px] text-[#b5b5b5] sm:text-[36px]"
+          />
 
-          <FaRegUserCircle className="text-[32px] text-[#b5b5b5] sm:text-[36px]" />
-
-          {/* HAMBURGER - MOBILE ONLY */}
 
           <button
             type="button"
@@ -83,9 +269,10 @@ const ProfileNavbar = () => {
 
       </div>
 
-      {/* ================================================= */}
-      {/* MOBILE MENU */}
-      {/* ================================================= */}
+
+      {/* ============================================
+          MOBILE MENU
+          ============================================ */}
 
       {menuOpen && (
         <nav
@@ -103,8 +290,9 @@ const ProfileNavbar = () => {
           "
         >
 
-          <button
-            type="button"
+          <Link
+            to="/service-providers"
+            onClick={() => setMenuOpen(false)}
             className="
               block
               w-full
@@ -119,10 +307,12 @@ const ProfileNavbar = () => {
             "
           >
             DASHBOARD
-          </button>
+          </Link>
 
-          <button
-            type="button"
+
+          <Link
+            to="/service-providers/profile"
+            onClick={() => setMenuOpen(false)}
             className="
               block
               w-full
@@ -137,10 +327,12 @@ const ProfileNavbar = () => {
             "
           >
             PROFILE
-          </button>
+          </Link>
 
-          <button
-            type="button"
+
+          <Link
+            to="/service-providers/profile/portfolio"
+            onClick={() => setMenuOpen(false)}
             className="
               block
               w-full
@@ -155,10 +347,12 @@ const ProfileNavbar = () => {
             "
           >
             PORTFOLIO
-          </button>
+          </Link>
+
 
           <button
             type="button"
+            onClick={() => setMenuOpen(false)}
             className="
               block
               w-full
@@ -175,8 +369,10 @@ const ProfileNavbar = () => {
             SERVICES / PRICING
           </button>
 
+
           <button
             type="button"
+            onClick={() => setMenuOpen(false)}
             className="
               block
               w-full

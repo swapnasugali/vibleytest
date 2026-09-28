@@ -32,12 +32,15 @@ const Legend = ({ color, label, count }) => {
 
 const LeadStatusSummary = () => {
   return (
-    <div className="w-full rounded-lg bg-white">
+    <div
+      className="w-full rounded-lg bg-white"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
 
       {/* HEADER */}
       <div className="flex min-h-[50px] w-full items-center border-b border-gray-200 px-4 sm:min-h-[58px] sm:px-6 md:px-8 lg:px-10 xl:px-12">
 
-        <h2 className="text-[16px] font-semibold uppercase text-gray-800 sm:text-[16px] md:text-[12px]">
+        <h2 className="text-[16px] font-semibold uppercase text-gray-800 sm:text-[16px]">
           Lead Status Summary
         </h2>
 

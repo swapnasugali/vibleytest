@@ -34,7 +34,10 @@ const leads = [
 
 const LeadActions = () => {
   return (
-    <div className="w-full rounded-lg bg-white">
+    <div
+      className="w-full rounded-lg bg-white"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
 
       {/* HEADER */}
       <div className="flex min-h-[50px] w-full items-center justify-between border-b border-gray-200 px-4 sm:min-h-[58px] sm:px-6 md:px-8 lg:px-10 xl:px-12">
@@ -45,7 +48,7 @@ const LeadActions = () => {
 
         <a
           href="#"
-          className="whitespace-nowrap text-[14px] text-[#252525] font-medium underline sm:text-[14px]"
+          className="whitespace-nowrap text-[14px] font-medium text-[#252525] underline sm:text-[14px]"
         >
           view all leads
         </a>

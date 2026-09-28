@@ -3,7 +3,8 @@ import { FiBookOpen, FiImage, FiPlusCircle } from "react-icons/fi";
 
 const PortfolioEmptyState = ({ onAddPortfolio }) => {
   return (
-    <section className="flex min-h-[600px] items-center justify-center pt-[80px]">
+    <section className="flex min-h-[600px] items-center justify-center pt-[80px]"
+    style={{ fontFamily: "Poppins, sans-serif" }}>
       <div className="flex w-full flex-col items-center">
 
         {/* Portfolio Empty Card */}

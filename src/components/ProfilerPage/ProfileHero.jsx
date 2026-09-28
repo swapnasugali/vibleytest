@@ -19,7 +19,8 @@ import profileLogo from "../../assets/artlane-logo.png";
 
 const ProfileHero = () => {
   return (
-    <section className="w-full overflow-hidden rounded-[6px] border border-[#777] bg-[#eeeeee]">
+    <section className="w-full overflow-hidden rounded-[6px] border border-[#777] bg-[#eeeeee]"
+    style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* ================================================= */}
       {/* COVER IMAGE */}

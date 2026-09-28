@@ -3,7 +3,6 @@ import {
   FiArrowLeft,
   FiCalendar,
   FiImage,
-  FiPlayCircle,
   FiSave,
   FiUploadCloud,
 } from "react-icons/fi";
@@ -82,21 +81,13 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
     const newSection = {
       id: Date.now(),
-
       title: eventTitle,
-
       serviceType,
-
       eventType,
-
       eventDate,
-
       aboutEvent,
-
       featured,
-
       photos,
-
       videos,
     };
 
@@ -104,7 +95,10 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
   };
 
   return (
-    <section className="w-full">
+    <section
+      className="w-full"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
 
       {/* =========================================================
           PAGE HEADER
@@ -143,9 +137,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           "
         >
           <FiArrowLeft className="h-[13px] w-[13px]" />
-
           Back to Portfolio
         </button>
+
       </div>
 
       {/* =========================================================
@@ -158,16 +152,13 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
         ======================================================= */}
         <div className="px-[38px] pb-5 pt-[20px]">
 
-          {/* =====================================================
-              EVENT INFORMATION HEADER
-          ===================================================== */}
+          {/* EVENT INFORMATION HEADER */}
           <div className="flex items-center justify-between border-b border-[#eeeeee] pb-[7px]">
 
-            <h2 className="text-[16px] font-medium text-[#777]">
+            <h2 className="text-[26px] font-medium text-[#777]">
               Event Information
             </h2>
 
-            {/* Featured */}
             <button
               type="button"
               onClick={() => setFeatured(!featured)}
@@ -203,12 +194,10 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
           </div>
 
-          {/* =====================================================
-              EVENT TITLE
-          ===================================================== */}
+          {/* EVENT TITLE */}
           <div className="mt-[17px]">
 
-            <label className="mb-[5px] block text-[11px] font-semibold text-[#333]">
+            <label className="mb-[5px] block text-[18px] font-semibold text-[#333]">
               Event Title<span className="text-[#d00000]">*</span>
             </label>
 
@@ -224,23 +213,21 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 border
                 border-[#c9c9c9]
                 px-[10px]
-                text-[10px]
+                text-[16px]
                 text-[#333]
                 outline-none
                 placeholder:text-[#999]
                 focus:border-[#970000]
               "
             />
+
           </div>
 
-          {/* =====================================================
-              SERVICE TYPE + EVENT TYPE
-          ===================================================== */}
+          {/* SERVICE TYPE + EVENT TYPE */}
           <div className="mt-[14px] grid grid-cols-1 gap-3 sm:grid-cols-2">
 
-            {/* Service Type */}
             <div>
-              <label className="mb-[5px] block text-[11px] font-semibold text-[#333]">
+              <label className="mb-[5px] block text-[18px] font-semibold text-[#333]">
                 Service Type<span className="text-[#d00000]">*</span>
               </label>
 
@@ -256,7 +243,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   border-[#c9c9c9]
                   bg-white
                   px-[10px]
-                  text-[10px]
+                  text-[16px]
                   text-[#555]
                   outline-none
                   focus:border-[#970000]
@@ -270,9 +257,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               </select>
             </div>
 
-            {/* Event Type */}
             <div>
-              <label className="mb-[5px] block text-[11px] font-semibold text-[#333]">
+              <label className="mb-[5px] block text-[18px] font-semibold text-[#333]">
                 Event Type<span className="text-[#d00000]">*</span>
               </label>
 
@@ -288,7 +274,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   border-[#c9c9c9]
                   bg-white
                   px-[10px]
-                  text-[10px]
+                  text-[16px]
                   text-[#555]
                   outline-none
                   focus:border-[#970000]
@@ -304,12 +290,10 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
           </div>
 
-          {/* =====================================================
-              EVENT DATE
-          ===================================================== */}
+          {/* EVENT DATE */}
           <div className="mt-[14px] max-w-[340px]">
 
-            <label className="mb-[5px] block text-[11px] font-semibold text-[#333]">
+            <label className="mb-[5px] block text-[18px] font-semibold text-[#333]">
               Event Date
             </label>
 
@@ -326,7 +310,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   border
                   border-[#c9c9c9]
                   px-[10px]
-                  text-[10px]
+                  text-[16px]
                   text-[#555]
                   outline-none
                   focus:border-[#970000]
@@ -349,21 +333,19 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             </div>
           </div>
 
-          {/* =====================================================
-              ABOUT EVENT
-          ===================================================== */}
+          {/* ABOUT EVENT */}
           <div className="mt-[14px]">
 
             <div className="mb-[5px] flex items-center justify-between">
 
-              <label className="text-[11px] font-semibold text-[#333]">
+              <label className="text-[18px] font-semibold text-[#333]">
                 About Event
                 <span className="ml-1 font-normal italic text-[#777]">
                   (Optional)
                 </span>
               </label>
 
-              <span className="text-[9px] text-[#333]">
+              <span className="text-[18px] text-[#333]">
                 {aboutEvent.length} / {MAX_ABOUT_LENGTH} Characters
               </span>
 
@@ -384,7 +366,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 border-[#c9c9c9]
                 px-[10px]
                 py-[8px]
-                text-[10px]
+                text-[16px]
                 text-[#555]
                 outline-none
                 placeholder:text-[#999]
@@ -394,12 +376,10 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
           </div>
 
-          {/* =====================================================
-              MEDIA UPLOAD HEADER
-          ===================================================== */}
+          {/* MEDIA UPLOAD HEADER */}
           <div className="mt-[20px] flex items-center justify-between border-b border-[#eeeeee] pb-[7px]">
 
-            <h2 className="text-[16px] font-medium text-[#777]">
+            <h2 className="text-[26px] font-medium text-[#777]">
               Media Upload
             </h2>
 
@@ -407,8 +387,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               type="button"
               className="
                 cursor-pointer
-                text-[9px]
-                text-[#333]
+                text-[16px]
+                text-[#2E2E2E]
                 underline
                 underline-offset-2
               "
@@ -423,9 +403,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           ===================================================== */}
           <div className="mt-[12px] grid grid-cols-1 gap-3 lg:grid-cols-[340px_1fr]">
 
-            {/* ===================================================
-                UPLOAD BOX
-            =================================================== */}
+            {/* UPLOAD BOX */}
             <div
               className="
                 flex
@@ -440,7 +418,6 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               "
             >
 
-              {/* Upload Icon */}
               <div
                 className="
                   mb-[8px]
@@ -457,15 +434,14 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 <FiUploadCloud className="h-[17px] w-[17px] text-[#e11]" />
               </div>
 
-              <p className="text-[10px] text-[#777]">
+              <p className="text-[16px] text-[#777]">
                 Upload photos, clips of the event
               </p>
 
-              <p className="mt-[2px] text-[9px] text-[#999]">
+              <p className="mt-[2px] text-[13px] text-[#999]">
                 (.jpg, png, webp supported)
               </p>
 
-              {/* Hidden Photo Input */}
               <input
                 ref={photoInputRef}
                 type="file"
@@ -475,7 +451,6 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 onChange={handlePhotoChange}
               />
 
-              {/* Hidden Video Input */}
               <input
                 ref={videoInputRef}
                 type="file"
@@ -485,7 +460,6 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 onChange={handleVideoChange}
               />
 
-              {/* Upload Buttons */}
               <div className="mt-[11px] flex items-center gap-[8px]">
 
                 <button
@@ -498,7 +472,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                     rounded-[2px]
                     bg-[#d83c3c]
                     px-[9px]
-                    text-[7px]
+                    text-[12px]
                     font-semibold
                     text-white
                   "
@@ -518,7 +492,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                     border-[#bdbdbd]
                     bg-white
                     px-[9px]
-                    text-[7px]
+                    text-[12px]
                     font-semibold
                     text-[#555]
                   "
@@ -527,91 +501,160 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 </button>
 
               </div>
+
             </div>
 
             {/* ===================================================
-                MEDIA DIMENSION PREVIEWS
+                FOUR IMAGE BOXES
             =================================================== */}
             <div className="grid grid-cols-4 gap-[7px]">
 
-              {/* 1080 x 1920 */}
+              {/* =================================================
+                  BOX 1 - 3 IMAGES
+              ================================================= */}
               <div className="flex flex-col items-center">
 
-                <div className="relative flex h-[77px] w-full items-center justify-center rounded-[3px] border border-[#c9c9c9] bg-white">
+                <div
+                  className="
+                    relative
+                    h-[131px]
+                    w-[132px]
+                    overflow-hidden
+                    rounded-[3px]
+                    border
+                    border-[#c9c9c9]
+                    bg-white
+                  "
+                >
 
+                  {/* 3 IMAGES TEXT */}
+                  <span
+                    className="
+                      absolute
+                      left-[5px]
+                      top-[5px]
+                      z-20
+                      text-[9px]
+                      font-medium
+                      text-[#555]
+                    "
+                  >
+                    3 Images
+                  </span>
+
+                  {/* IMAGE 1 */}
                   {photos[0]?.url ? (
                     <img
                       src={photos[0].url}
                       alt=""
-                      className="h-full w-full rounded-[3px] object-cover"
+                      className="
+                        absolute
+                        bottom-[5px]
+                        left-[5px]
+                        h-[72px]
+                        w-[37px]
+                        rounded-[2px]
+                        object-cover
+                      "
                     />
                   ) : (
-                    <FiImage className="h-[14px] w-[14px] text-[#777]" />
+                    <FiImage
+                      className="
+                        absolute
+                        bottom-[34px]
+                        left-[13px]
+                        h-[14px]
+                        w-[14px]
+                        text-[#777]
+                      "
+                    />
                   )}
 
-                  <span className="absolute left-[4px] top-[4px] text-[6px] text-[#555]">
-                    {photos.length > 0 ? "1" : "3"} images
-                  </span>
-
-                </div>
-
-                <span className="mt-[5px] text-[7px] text-[#555]">
-                  (1080 x 1920)
-                </span>
-
-              </div>
-
-              {/* 1920 x 1080 */}
-              <div className="flex flex-col items-center">
-
-                <div className="flex h-[77px] w-full items-center justify-center rounded-[3px] border border-[#c9c9c9] bg-white">
-
+                  {/* IMAGE 2 */}
                   {photos[1]?.url ? (
                     <img
                       src={photos[1].url}
                       alt=""
-                      className="h-full w-full rounded-[3px] object-cover"
+                      className="
+                        absolute
+                        bottom-[5px]
+                        left-1/2
+                        h-[72px]
+                        w-[37px]
+                        -translate-x-1/2
+                        rounded-[2px]
+                        object-cover
+                      "
                     />
                   ) : (
-                    <FiImage className="h-[14px] w-[14px] text-[#777]" />
+                    <FiImage
+                      className="
+                        absolute
+                        bottom-[34px]
+                        left-1/2
+                        h-[14px]
+                        w-[14px]
+                        -translate-x-1/2
+                        text-[#777]
+                      "
+                    />
                   )}
 
-                </div>
-
-                <span className="mt-[5px] text-[7px] text-[#555]">
-                  (1920 x 1080)
-                </span>
-
-              </div>
-
-              {/* 1080 x 1080 */}
-              <div className="flex flex-col items-center">
-
-                <div className="flex h-[77px] w-full items-center justify-center rounded-[3px] border border-[#c9c9c9] bg-white">
-
+                  {/* IMAGE 3 */}
                   {photos[2]?.url ? (
                     <img
                       src={photos[2].url}
                       alt=""
-                      className="h-full w-full rounded-[3px] object-cover"
+                      className="
+                        absolute
+                        bottom-[5px]
+                        right-[5px]
+                        h-[72px]
+                        w-[37px]
+                        rounded-[2px]
+                        object-cover
+                      "
                     />
                   ) : (
-                    <FiImage className="h-[14px] w-[14px] text-[#777]" />
+                    <FiImage
+                      className="
+                        absolute
+                        bottom-[34px]
+                        right-[13px]
+                        h-[14px]
+                        w-[14px]
+                        text-[#777]
+                      "
+                    />
                   )}
 
                 </div>
+            
 
-                <span className="mt-[5px] text-[7px] text-[#555]">
-                  (1080 x 1080)
+                <span className="mt-[5px] text-[9px] text-[#555]">
+                  (1080 X 1920)
                 </span>
 
               </div>
 
-              {/* 1080 x 1080 */}
+              {/* =================================================
+                  BOX 2
+              ================================================= */}
               <div className="flex flex-col items-center">
 
-                <div className="flex h-[77px] w-full items-center justify-center rounded-[3px] border border-[#c9c9c9] bg-white">
-
+                <div
+                  className="
+                    flex
+                    h-[131px]
+                    w-[132px]
+                    items-center
+                    justify-center
+                    rounded-[3px]
+                    border
+                    border-[#c9c9c9]
+                    bg-white
+                  "
+                >
                   {photos[3]?.url ? (
                     <img
                       src={photos[3].url}
@@ -619,23 +662,73 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                       className="h-full w-full rounded-[3px] object-cover"
                     />
                   ) : (
-                    <FiImage className="h-[14px] w-[14px] text-[#777]" />
+                    <FiImage className="h-[18px] w-[18px] text-[#777]" />
                   )}
-
                 </div>
 
-                <span className="mt-[5px] text-[7px] text-[#555]">
-                  (1080 x 1080)
+                <span className="mt-[5px] text-[9px] text-[#555]">
+                  (1920 X 1080)
                 </span>
 
+              </div>
+
+              {/* =================================================
+                  BOX 3
+              ================================================= */}
+              <div className="flex flex-col items-center">
+
+                <div
+                  className="
+                    flex
+                    h-[131px]
+                    w-[132px]
+                    items-center
+                    justify-center
+                    rounded-[3px]
+                    border
+                    border-[#c9c9c9]
+                    bg-white
+                  "
+                >
+                  <FiImage className="h-[18px] w-[18px] text-[#777]" />
+                </div>
+
+                <span className="mt-[5px] text-[9px] text-[#555]">
+                  (1080 X 1080)
+                </span>
+
+              </div>
+
+              {/* =================================================
+                  BOX 4
+              ================================================= */}
+              <div className="flex flex-col items-center">
+        
+                <div
+                  className="
+                    flex
+                    h-[131px]
+                    w-[132px]
+                    items-center
+                    justify-center
+                    rounded-[3px]
+                    border
+                    border-[#c9c9c9]
+                    bg-white
+                  "
+                >
+                    
+                  <FiImage className="h-[18px] w-[18px] text-[#777]" />
+                  (1080 X 1080)
+                  
+                </div>
+                
               </div>
 
             </div>
           </div>
 
-          {/* =====================================================
-              UPLOAD NOTE
-          ===================================================== */}
+          {/* UPLOAD NOTE */}
           <p className="mt-[8px] max-w-[680px] text-[8px] leading-[13px] text-[#777]">
             <span className="font-medium">Note :</span> Kindly upload
             photos according to the mentioned dimensions for the best

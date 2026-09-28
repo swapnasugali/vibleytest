@@ -26,7 +26,8 @@ const PortfolioList = ({
   });
 
   return (
-    <section className="w-full">
+    <section className="w-full"
+    style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* =========================================================
           PAGE HEADER

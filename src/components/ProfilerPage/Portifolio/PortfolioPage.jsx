@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import ProfileNavbar from "../ProfileNavbar";
 import PortfolioEmptyState from "./PortfolioEmptyState";
@@ -6,44 +6,61 @@ import PortfolioSectionForm from "./PortfolioSectionForm";
 import PortfolioList from "./PortfolioList";
 
 const PortfolioPage = () => {
-  return (
-    <div className="min-h-screen bg-[#f7f6f6]">
+  const [showForm, setShowForm] = useState(false);
+  const [portfolioSections, setPortfolioSections] = useState([]);
 
-      {/* =========================================================
-          PROFILE NAVBAR
-      ========================================================= */}
+  // OPEN ADD PORTFOLIO FORM
+  const handleAddPortfolio = () => {
+    setShowForm(true);
+  };
+
+  // BACK TO PORTFOLIO
+  const handleBack = () => {
+    setShowForm(false);
+  };
+
+  // SAVE PORTFOLIO SECTION
+  const handleSave = (newSection) => {
+    setPortfolioSections((previousSections) => [
+      ...previousSections,
+      newSection,
+    ]);
+
+    setShowForm(false);
+  };
+
+  return (
+    <div
+      className="min-h-screen bg-[#f7f6f6]"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
+      {/* =====================================================
+          PROFILE / PORTFOLIO HEADER
+      ===================================================== */}
       <ProfileNavbar />
 
-      {/* =========================================================
+      {/* =====================================================
           PORTFOLIO CONTENT
-      ========================================================= */}
-      <main className="mx-auto w-full max-w-[960px] px-5 py-5">
+      ===================================================== */}
+      <main className="w-full px-[20px] py-[20px] sm:px-[35px] md:px-[55px]">
 
-        {/* =======================================================
-            1. EMPTY PORTFOLIO
-        ======================================================= */}
-        <PortfolioEmptyState
-          onAddPortfolio={() => {}}
-        />
-
-        {/* =======================================================
-            2. MANAGE PORTFOLIO FORM
-        ======================================================= */}
-        <PortfolioSectionForm
-          onBack={() => {}}
-          onSave={() => {}}
-        />
-
-        {/* =======================================================
-            3. PORTFOLIO LIST
-        ======================================================= */}
-        <PortfolioList
-          sections={[]}
-          onAddPortfolio={() => {}}
-        />
+        {showForm ? (
+          <PortfolioSectionForm
+            onBack={handleBack}
+            onSave={handleSave}
+          />
+        ) : portfolioSections.length === 0 ? (
+          <PortfolioEmptyState
+            onAddPortfolio={handleAddPortfolio}
+          />
+        ) : (
+          <PortfolioList
+            sections={portfolioSections}
+            onAddPortfolio={handleAddPortfolio}
+          />
+        )}
 
       </main>
-
     </div>
   );
 };

@@ -13,7 +13,8 @@ import CredibilityForTrustSignals from "./CredibilityForTrustSignals";
 
 const ProfilePage = () => {
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
+    <div className="min-h-screen bg-[#f5f5f5]"
+    style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* ================================================= */}
       {/* NAVBAR */}

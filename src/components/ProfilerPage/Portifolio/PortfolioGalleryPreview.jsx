@@ -27,6 +27,7 @@ const PortfolioGalleryPreview = ({
         overflow-hidden
         bg-white
       "
+      style={{ fontFamily: "Poppins, sans-serif" }}
     >
 
       {/* =========================================================

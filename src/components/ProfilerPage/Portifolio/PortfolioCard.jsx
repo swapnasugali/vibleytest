@@ -11,7 +11,8 @@ import PortfolioGalleryPreview from "./PortfolioGalleryPreview";
 
 const PortfolioCard = ({ section }) => {
   return (
-    <article className="overflow-hidden rounded-[7px] bg-white">
+    <article className="overflow-hidden rounded-[7px] bg-white"
+    style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* =========================================================
           CARD HEADER
