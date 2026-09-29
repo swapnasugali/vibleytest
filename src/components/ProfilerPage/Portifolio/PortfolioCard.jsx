@@ -1,116 +1,284 @@
 import React from "react";
+
 import {
-  FiEdit2,
+  FiEdit,
   FiEye,
   FiTrash2,
-  FiImage,
-  FiPlayCircle,
+  FiCamera,
 } from "react-icons/fi";
 
 import PortfolioGalleryPreview from "./PortfolioGalleryPreview";
 
-const PortfolioCard = ({ section }) => {
+const PortfolioCard = ({
+  section,
+  onDelete,
+  showGallery = false,
+}) => {
+  /* =========================================================
+     DELETE
+  ========================================================= */
+
+  const handleDelete = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this portfolio section?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    if (onDelete) {
+      onDelete(section.id);
+    }
+  };
+
+  const photos = section.photos || [];
+  const videos = section.videos || [];
+
   return (
-    <article className="overflow-hidden rounded-[7px] bg-white"
-    style={{ fontFamily: "Poppins, sans-serif" }}>
+    <article
+      className="
+        w-full
+        overflow-hidden
+        rounded-[7px]
+        bg-white
+      "
+      style={{
+        fontFamily: "Poppins, sans-serif",
+      }}
+    >
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-      {/* =========================================================
-          CARD HEADER
-      ========================================================= */}
-      <div className="flex items-start justify-between px-[28px] pb-3 pt-[17px]">
-
+      <div
+        className="
+          flex
+          items-start
+          justify-between
+          px-[27px]
+          pb-[11px]
+          pt-[14px]
+        "
+      >
         {/* LEFT */}
-        <div>
 
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="min-w-0">
+          {/* TITLE */}
 
-            <h2 className="text-[15px] font-medium text-[#333]">
+          <div
+            className="
+              flex
+              flex-wrap
+              items-center
+              gap-[7px]
+            "
+          >
+            <h2
+              className="
+                text-[14px]
+                font-medium
+                leading-[19px]
+                text-[#333333]
+              "
+            >
               {section.title}
             </h2>
 
             {section.featured && (
               <span
                 className="
+                  inline-flex
+                  h-[19px]
+                  items-center
+                  gap-[3px]
                   rounded-[3px]
                   bg-[#f5ad00]
-                  px-[8px]
-                  py-[4px]
-                  text-[8px]
+                  px-[7px]
+                  text-[7px]
                   font-semibold
+                  leading-none
                   text-white
                 "
               >
                 ★ Featured
               </span>
             )}
-
           </div>
 
-          <div className="mt-[8px] flex items-center gap-1">
+          {/* SERVICE + EVENT */}
+
+          <div
+            className="
+              mt-[7px]
+              flex
+              items-center
+              gap-[5px]
+            "
+          >
+            {/* SERVICE */}
 
             <span
               className="
+                inline-flex
+                h-[20px]
+                items-center
                 rounded-[3px]
-                bg-[#222]
-                px-[10px]
-                py-[4px]
-                text-[8px]
+                bg-[#222222]
+                px-[9px]
+                text-[7px]
                 font-medium
+                leading-none
                 text-white
               "
             >
-              <FiImage className="mr-1 inline h-[9px] w-[9px]" />
-              {section.serviceType}
+              <FiCamera
+                className="mr-[4px]"
+                size={8}
+              />
+
+              {section.serviceType ||
+                "General Photography"}
             </span>
 
-            <span className="text-[8px] font-medium text-[#333]">
-              {section.eventType}
-            </span>
+            {/* DIVIDER */}
 
+            <span
+              className="
+                h-[17px]
+                w-[1px]
+                bg-[#777777]
+              "
+            />
+
+            {/* EVENT */}
+
+            <span
+              className="
+                text-[7px]
+                font-medium
+                leading-none
+                text-[#333333]
+              "
+            >
+              {section.eventType ||
+                "Corporate Event"}
+            </span>
           </div>
-
         </div>
 
-        {/* RIGHT ACTIONS */}
-        <div className="flex items-center gap-5">
+        {/* ===================================================
+            ACTION ICONS
+        =================================================== */}
+
+        <div
+          className="
+            ml-[15px]
+            flex
+            shrink-0
+            items-center
+            gap-[20px]
+            pt-[1px]
+          "
+        >
+          {/* EDIT */}
 
           <button
             type="button"
-            className="cursor-pointer text-[#222] hover:text-[#970000]"
+            aria-label="Edit portfolio"
+            className="
+              flex
+              h-[18px]
+              w-[18px]
+              cursor-pointer
+              items-center
+              justify-center
+              border-0
+              bg-transparent
+              p-0
+              text-[#222222]
+              transition
+              hover:text-[#a60000]
+            "
           >
-            <FiEdit2 className="h-[17px] w-[17px]" />
+            <FiEdit
+              size={18}
+              strokeWidth={2.2}
+            />
           </button>
+
+          {/* DELETE */}
 
           <button
             type="button"
-            className="cursor-pointer text-[#650000] hover:text-[#970000]"
+            onClick={handleDelete}
+            aria-label="Delete portfolio"
+            className="
+              flex
+              h-[18px]
+              w-[18px]
+              cursor-pointer
+              items-center
+              justify-center
+              border-0
+              bg-transparent
+              p-0
+              text-[#850000]
+              transition
+              hover:text-[#c00000]
+            "
           >
-            <FiTrash2 className="h-[17px] w-[17px]" />
+            <FiTrash2
+              size={17}
+              strokeWidth={2.2}
+            />
           </button>
+
+          {/* EYE */}
 
           <button
             type="button"
-            className="cursor-pointer text-[#222] hover:text-[#970000]"
+            aria-label="View portfolio"
+            className="
+              flex
+              h-[18px]
+              w-[18px]
+              cursor-pointer
+              items-center
+              justify-center
+              border-0
+              bg-transparent
+              p-0
+              text-[#222222]
+              transition
+              hover:text-[#a60000]
+            "
           >
-            <FiEye className="h-[18px] w-[18px]" />
+            <FiEye
+              size={18}
+              strokeWidth={2.3}
+            />
           </button>
-
         </div>
-
       </div>
 
-      {/* =========================================================
+      {/* =====================================================
           GALLERY
-      ========================================================= */}
-      <div className="px-[28px] pb-[17px]">
+      ===================================================== */}
 
-        <PortfolioGalleryPreview
-          photos={section.photos}
-          videos={section.videos}
-        />
-
-      </div>
-
+      {showGallery && (
+        <div
+          className="
+            px-[18px]
+            pb-[15px]
+          "
+        >
+          <PortfolioGalleryPreview
+            photos={photos}
+            videos={videos}
+          />
+        </div>
+      )}
     </article>
   );
 };

@@ -13,19 +13,11 @@ import CredibilityForTrustSignals from "./CredibilityForTrustSignals";
 
 const ProfilePage = () => {
   return (
-    <div className="min-h-screen bg-[#f5f5f5]"
-    style={{ fontFamily: "Poppins, sans-serif" }}>
-
-      {/* ================================================= */}
-      {/* NAVBAR */}
-      {/* ================================================= */}
-
+    <div
+      className="min-h-screen bg-[#f5f5f5]"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
       <ProfileNavbar />
-
-
-      {/* ================================================= */}
-      {/* MAIN CONTENT */}
-      {/* ================================================= */}
 
       <main
         className="
@@ -37,17 +29,7 @@ const ProfilePage = () => {
           lg:px-[40px]
         "
       >
-
-        {/* ================================================= */}
-        {/* PROFILE HERO */}
-        {/* ================================================= */}
-
         <ProfileHero />
-
-
-        {/* ================================================= */}
-        {/* PROFILE DETAILS */}
-        {/* ================================================= */}
 
         <div
           className="
@@ -58,40 +40,19 @@ const ProfilePage = () => {
             lg:grid-cols-2
           "
         >
-
-          {/* ================================================= */}
-          {/* LEFT COLUMN */}
-          {/* ================================================= */}
-
           <div className="flex min-w-0 flex-col gap-[10px]">
-
             <BasicInfo />
-
             <ServiceArea />
-
             <ServicePolicy />
-
           </div>
-
-
-          {/* ================================================= */}
-          {/* RIGHT COLUMN */}
-          {/* ================================================= */}
 
           <div className="flex min-w-0 flex-col gap-[10px]">
-
             <AboutBusiness />
-
             <ContactPreferences />
-
             <CredibilityForTrustSignals />
-
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 };
