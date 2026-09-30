@@ -181,28 +181,28 @@ const ProviderHeader = () => {
 
           <a
             href="/service-providers/profile"
-            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
+            className="whitespace-nowrap text-[16px] text-gray-900 lg:text-[16px]"
           >
             PROFILE
           </a>
 
           <a
             href="#"
-            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
+            className="whitespace-nowrap text-[16px] text-gray-900 lg:text-[16px]"
           >
             PORTFOLIO
           </a>
 
           <a
             href="#"
-            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
+            className="whitespace-nowrap text-[16px] text-gray-900 lg:text-[16px]"
           >
             SERVICES / PRICING
           </a>
 
           <a
             href="#"
-            className="whitespace-nowrap text-[16px] text-gray-800 lg:text-[16px]"
+            className="whitespace-nowrap text-[16px] text-gray-900 lg:text-[16px]"
           >
             LEADS
           </a>
@@ -243,7 +243,7 @@ const ProviderHeader = () => {
 
             <a
               href="/service-providers/profile"
-              className="text-[16px] font-medium text-gray-800"
+              className="text-[16px] font-medium text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               PROFILE
@@ -251,7 +251,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[16px] font-medium text-gray-800"
+              className="text-[16px] font-medium text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               PORTFOLIO
@@ -259,7 +259,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[16px] font-medium text-gray-800"
+              className="text-[16px] font-medium text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               SERVICES / PRICING
@@ -267,7 +267,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[16px] font-medium text-gray-800"
+              className="text-[16px] font-medium text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               LEADS

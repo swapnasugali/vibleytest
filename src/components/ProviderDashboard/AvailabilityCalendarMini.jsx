@@ -115,6 +115,7 @@ const AvailabilityCalendarMini = ({ marked = false }) => {
         p-[8px]
         shadow-[0_1px_4px_rgba(0,0,0,0.08)]
       "
+       style={{ fontFamily: "Poppins, sans-serif" }}
     >
 
       {/* ================================================= */}

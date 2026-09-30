@@ -29,7 +29,8 @@ const ServiceCard = ({ title, value }) => {
 
 const ServicesPricing = () => {
   return (
-    <div className="w-full rounded-lg bg-white">
+    <div className="w-full rounded-lg bg-white"
+     style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* HEADER */}
       <div className="flex min-h-[48px] w-full items-center justify-between border-b border-gray-200 px-4 sm:px-5 md:px-6">

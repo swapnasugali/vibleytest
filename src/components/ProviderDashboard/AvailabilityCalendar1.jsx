@@ -143,6 +143,7 @@ const AvailabilityCalendarCard1 = ({
         bg-white
         shadow-sm
       "
+       style={{ fontFamily: "Poppins, sans-serif" }}
     >
       {/* ================================================= */}
       {/* HEADER */}

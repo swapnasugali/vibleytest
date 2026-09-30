@@ -17,7 +17,8 @@ import AvailabilityCalendarBottom from "./AvailabilityCalendarBottom";
 
 const ProviderDashboard = () => {
   return (
-    <div className="min-h-screen w-full bg-[#f7f6f6]">
+    <div className="min-h-screen w-full bg-[#f7f6f6]"
+     style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* HEADER */}
       <ProviderHeader />

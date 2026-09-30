@@ -151,6 +151,7 @@ const AvailabilityCalendarOverlay = ({ onClose }) => {
         bg-white
         shadow-sm
       "
+       style={{ fontFamily: "Poppins, sans-serif" }}
     >
 
       {/* HEADER */}

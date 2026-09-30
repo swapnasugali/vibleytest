@@ -22,6 +22,7 @@ const DateMarkedBadge = ({
         border-[#e00000]
         bg-white
       "
+       style={{ fontFamily: "Poppins, sans-serif" }}
     >
 
       {/* CHECK ICON */}

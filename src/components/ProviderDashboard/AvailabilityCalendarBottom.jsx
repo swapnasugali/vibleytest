@@ -5,7 +5,8 @@ import DateMarkedBadge from "./DateMarkedBadge";
 
 const AvailabilityCalendarBottom = () => {
   return (
-    <div className="full">
+    <div className="full"
+     style={{ fontFamily: "Poppins, sans-serif" }}>
 
       <div className="flex items-start gap-[35px]">
 

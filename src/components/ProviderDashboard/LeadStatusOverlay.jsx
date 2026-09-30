@@ -3,7 +3,8 @@ import { FaTimes } from "react-icons/fa";
 
 const LeadStatusOverlay = ({ onClose }) => {
   return (
-    <div className="w-full overflow-hidden rounded-[8px] border border-gray-300 bg-white shadow-sm md:w-[95%]">
+    <div className="w-full overflow-hidden rounded-[8px] border border-gray-300 bg-white shadow-sm md:w-[95%]"
+     style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* HEADER */}
       <div className="flex h-[36px] items-center justify-between border-b border-gray-200 bg-white px-[13px]">

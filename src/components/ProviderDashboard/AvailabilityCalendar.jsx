@@ -11,7 +11,8 @@ const CalendarEvent = ({
   statusColor,
 }) => {
   return (
-    <div className="flex w-full items-center justify-between border-b border-gray-200 pb-3">
+    <div className="flex w-full items-center justify-between border-b border-gray-200 pb-3"
+     style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* DATE */}
       <div className="min-w-0">

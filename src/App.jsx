@@ -16,59 +16,124 @@ import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
 import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
 import ProfilerPage from "./components/ProfilerPage/ProfilerPage";
 
-import ProviderPortfolioPage from "./components/ProfilerPage/Portifolio/PortfolioPage";
+/* =========================================================
+   PROVIDER PORTFOLIO
+   Separate folder:
+   src/components/PortfolioPages/PortfolioPage.jsx
+========================================================= */
+
+import ProviderPortfolioPage from "./components/ProtfolioPages/PortfolioPage";
+
 
 function AppRoutes() {
   const { pathname } = useLocation();
+
+
+  /* =========================================================
+     SCROLL TO TOP WHEN ROUTE CHANGES
+  ========================================================= */
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+
   return (
     <Routes>
 
+
+      {/* =====================================================
+          HOME
+      ===================================================== */}
+
       <Route
         path="/"
-        element={<Layout HomePage={HomePage} />}
+        element={
+          <Layout HomePage={HomePage} />
+        }
       />
+
+
+      {/* =====================================================
+          PUBLIC PORTFOLIO
+      ===================================================== */}
 
       <Route
         path="/portfolio/:type/:id"
-        element={<Layout HomePage={PublicPortfolioPage} />}
+        element={
+          <Layout HomePage={PublicPortfolioPage} />
+        }
       />
+
+
+      {/* =====================================================
+          SERVICES
+      ===================================================== */}
 
       <Route
         path="/services/:id"
-        element={<Layout HomePage={ServiceCategoryPage} />}
+        element={
+          <Layout HomePage={ServiceCategoryPage} />
+        }
       />
+
+
+      {/* =====================================================
+          PROVIDER DASHBOARD
+      ===================================================== */}
 
       <Route
         path="/service-providers"
-        element={<ProviderDashboard />}
+        element={
+          <ProviderDashboard />
+        }
       />
+
+
+      {/* =====================================================
+          PROVIDER PROFILE
+      ===================================================== */}
 
       <Route
         path="/service-providers/profile"
-        element={<ProfilerPage />}
+        element={
+          <ProfilerPage />
+        }
       />
 
-      {/* PROVIDER PORTFOLIO */}
+
+      {/* =====================================================
+          PROVIDER PORTFOLIO
+          
+          IMPORTANT:
+          DO NOT WRAP THIS WITH Layout.
+          
+          PortfolioPage.jsx contains the
+          Vendors Portal header itself.
+      ===================================================== */}
+
       <Route
         path="/service-providers/profile/portfolio"
-        element={<ProviderPortfolioPage />}
+        element={
+          <ProviderPortfolioPage />
+        }
       />
+
 
     </Routes>
   );
 }
 
+
 function App() {
   return (
     <BrowserRouter>
+
       <AppRoutes />
+
     </BrowserRouter>
   );
 }
+
 
 export default App;

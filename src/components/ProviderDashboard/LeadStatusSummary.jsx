@@ -3,7 +3,8 @@ import { FaBookOpen } from "react-icons/fa6";
 
 const Legend = ({ color, label, count }) => {
   return (
-    <div className="flex min-w-0 items-center gap-2">
+    <div className="flex min-w-0 items-center gap-2"
+     style={{ fontFamily: "Poppins, sans-serif" }}>
 
       {/* CIRCLE */}
       <span
