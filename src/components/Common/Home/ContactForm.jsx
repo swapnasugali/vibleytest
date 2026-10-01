@@ -73,7 +73,7 @@ const ContactForm = () => {
       <div className="mx-auto w-full max-w-[1400px]">
 
         {/* ================= HEADING ================= */}
-        <h2 className="mb-6 text-center text-[26px] font-medium text-[#252525] sm:text-[30px] md:text-[32px] lg:text-[34px] hover:text-pink-500 hover:scale-105">
+        <h2 className="mb-6 text-center text-[26px] font-medium text-[#252525] hover:text-pink-500 hover:scale-105 sm:text-[30px] md:text-[32px] lg:text-[34px]">
           Let us Connect
         </h2>
 
@@ -97,6 +97,9 @@ const ContactForm = () => {
                   w-[52%]
                   -translate-x-1/2
                   -translate-y-1/2
+
+                  min-[500px]:w-[58%]
+                  min-[600px]:w-[54%]
                   md:w-[50%]
                   lg:w-[46%]
                   xl:w-[40%]
@@ -132,6 +135,8 @@ const ContactForm = () => {
                         text-white
                         outline-none
                         placeholder:text-[#E16158]
+
+                        min-[500px]:h-[22px]
                         md:h-[26px]
                         md:text-[10px]
                         lg:h-[34px]
@@ -170,6 +175,8 @@ const ContactForm = () => {
                         text-white
                         outline-none
                         placeholder:text-[#E16158]
+
+                        min-[500px]:h-[22px]
                         md:h-[26px]
                         md:text-[10px]
                         lg:h-[34px]
@@ -212,6 +219,8 @@ const ContactForm = () => {
                         text-white
                         outline-none
                         placeholder:text-[#E16158]
+
+                        min-[500px]:h-[22px]
                         md:h-[26px]
                         md:text-[10px]
                         lg:h-[34px]
@@ -250,6 +259,8 @@ const ContactForm = () => {
                         text-white
                         outline-none
                         placeholder:text-[#E16158]
+
+                        min-[500px]:h-[22px]
                         md:h-[26px]
                         md:text-[10px]
                         lg:h-[34px]
@@ -288,6 +299,8 @@ const ContactForm = () => {
                         text-white
                         outline-none
                         placeholder:text-[#E16158]
+
+                        min-[500px]:h-[32px]
                         md:h-[52px]
                         md:text-[10px]
                         lg:h-[66px]
@@ -299,7 +312,7 @@ const ContactForm = () => {
                 </div>
 
                 {/* CHECKBOXES */}
-                <div className="mt-[3%] flex justify-center gap-10 text-[10px] text-[#FFE9C0] md:text-[11px] lg:text-[12px] hover:scale-105 transition-transform duration-300">
+                <div className="mt-[3%] flex justify-center gap-10 text-[10px] text-[#FFE9C0] hover:scale-105 transition-transform duration-300 md:text-[11px] lg:text-[12px]">
                   <CustomCheckbox
                     label="Call"
                     name="call"
@@ -431,7 +444,38 @@ const ContactForm = () => {
           {/* SUBMIT BUTTON */}
           <button
             type="submit"
-            className="mx-auto mt-5 flex h-11 w-[180px] cursor-pointer items-center justify-center rounded-[7px] bg-[#c98500] px-6 text-[16px] font-semibold uppercase text-white transition hover:bg-[#a96f00] sm:h-12 sm:w-[210px] sm:text-[18px] md:h-[50px] md:w-[230px] md:text-[20px] lg:h-[54px] lg:w-[250px] lg:text-[22px] cursor-pointer hover:bg-blue-300 hover:text-red-400"
+            className="
+              mx-auto
+              mt-5
+              flex
+              h-11
+              w-[180px]
+              cursor-pointer
+              items-center
+              justify-center
+              rounded-[7px]
+              bg-[#c98500]
+              px-6
+              text-[16px]
+              font-semibold
+              uppercase
+              text-white
+              transition
+              hover:bg-blue-300
+              hover:text-red-400
+
+              sm:h-12
+              sm:w-[210px]
+              sm:text-[18px]
+
+              md:h-[50px]
+              md:w-[230px]
+              md:text-[20px]
+
+              lg:h-[54px]
+              lg:w-[250px]
+              lg:text-[22px]
+            "
           >
             Submit
           </button>

@@ -38,9 +38,6 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
 
-  /* =========================================================
-      PHOTO UPLOAD
-  ========================================================= */
   const handlePhotoChange = (event) => {
     const selectedFiles = Array.from(event.target.files || []);
 
@@ -62,9 +59,6 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
     event.target.value = "";
   };
 
-  /* =========================================================
-      VIDEO UPLOAD
-  ========================================================= */
   const handleVideoChange = (event) => {
     const selectedFiles = Array.from(event.target.files || []);
 
@@ -76,9 +70,6 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
     event.target.value = "";
   };
 
-  /* =========================================================
-      SAVE
-  ========================================================= */
   const handleSave = () => {
     if (!eventTitle.trim()) {
       alert("Please enter Event Title");
@@ -105,27 +96,44 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
       className="w-full"
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
-      {/* =====================================================
-          PAGE HEADER
-          SAME 96% WIDTH AS MAIN CARD
-      ===================================================== */}
+      {/* PAGE HEADER */}
       <div
         className="
           mx-auto
-          mb-4
+          mb-[20px]
           flex
-          w-[96%]
+          w-[calc(100%-24px)]
+          max-w-[1100px]
           items-start
           justify-between
           gap-4
+          px-0
+          sm:w-[calc(100%-32px)]
         "
       >
-        <div>
-          <h1 className="text-[34px] font-semibold text-[#292929]">
+        <div className="min-w-0">
+          <h1
+            className="
+              text-[34px]
+              font-semibold
+              leading-[1.2]
+              text-[#292929]
+              sm:text-[30px]
+            "
+          >
             Manage Portfolio
           </h1>
 
-          <p className="mt-[2px] text-[18px] text-[#9F9F9F]">
+          <p
+            className="
+              mt-[4px]
+              max-w-[800px]
+              text-[18px]
+              leading-[21px]
+              text-[#9F9F9F]
+              sm:text-[15px]
+            "
+          >
             Create Structured event-based portfolio sections to showcase
             your best work and attract clients
           </p>
@@ -136,67 +144,82 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           onClick={onBack}
           className="
             flex
-            h-[31px]
-            min-w-[210px]
+            h-[57px]
+            min-w-[365px]
+            shrink-0
             cursor-pointer
             items-center
             justify-center
-            gap-2
+            gap-[6px]
             rounded-[4px]
             bg-[#a60000]
-            px-4
-            text-[11px]
+            px-[10px]
+            text-[18px]
             font-semibold
             text-white
             hover:bg-[#850000]
           "
         >
-          <FiArrowLeft className="h-[13px] w-[13px]" />
+          <FiArrowLeft className="h-[12px] w-[12px]" />
           Back to Portfolio
         </button>
       </div>
 
-      {/* =====================================================
-          MAIN CARD
-          SAME 96% WIDTH
-      ===================================================== */}
+      {/* MAIN CARD */}
       <div
         className="
           mx-auto
-          w-[96%]
+          w-[calc(100%-24px)]
+          max-w-[1100px]
           overflow-hidden
           rounded-[7px]
           bg-white
           shadow-[0_1px_4px_rgba(0,0,0,0.03)]
+          sm:w-[calc(100%-32px)]
         "
       >
-        <div className="px-[38px] pb-5 pt-[20px]">
-
-          {/* =================================================
-              EVENT INFORMATION
-          ================================================= */}
+        {/* FORM CONTENT */}
+        <div
+          className="
+            px-[18px]
+            pb-[18px]
+            pt-[18px]
+            sm:px-[38px]
+            sm:pb-[20px]
+            sm:pt-[20px]
+          "
+        >
+          {/* EVENT INFORMATION */}
           <div
             className="
               flex
               items-center
               justify-between
+              gap-3
               border-b
               border-[#eeeeee]
               pb-[7px]
             "
           >
-            <h2 className="text-[26px] font-medium text-[#737373]">
+            <h2
+              className="
+                text-[21px]
+                font-medium
+                text-[#737373]
+                sm:text-[26px]
+              "
+            >
               Event Information
             </h2>
 
-            {/* FEATURED OUTLINED BOX */}
             <button
               type="button"
               onClick={() => setFeatured(!featured)}
               className="
                 flex
-                h-[39px]
-                w-[181px]
+                h-[34px]
+                w-[151px]
+                shrink-0
                 cursor-pointer
                 items-center
                 justify-between
@@ -204,12 +227,12 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 border
                 border-[#000000]
                 bg-white
-                px-[13px]
+                px-[10px]
               "
             >
               <span
                 className="
-                  text-[26px]
+                  text-[20px]
                   font-medium
                   leading-none
                   text-[#737373]
@@ -221,8 +244,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               <span
                 className={`
                   relative
-                  h-[20px]
-                  w-[36px]
+                  h-[18px]
+                  w-[31px]
                   shrink-0
                   rounded-full
                   transition
@@ -237,8 +260,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   className={`
                     absolute
                     top-[2px]
-                    h-[16px]
-                    w-[16px]
+                    h-[14px]
+                    w-[14px]
                     rounded-full
                     bg-white
                     shadow-[0_1px_3px_rgba(0,0,0,0.25)]
@@ -254,10 +277,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             </button>
           </div>
 
-          {/* =================================================
-              EVENT TITLE
-          ================================================= */}
-          <div className="mt-[17px]">
+          {/* EVENT TITLE */}
+          <div className="mt-[14px]">
             <label
               className="
                 mb-[5px]
@@ -274,7 +295,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             <input
               type="text"
               value={eventTitle}
-              onChange={(event) => setEventTitle(event.target.value)}
+              onChange={(event) =>
+                setEventTitle(event.target.value)
+              }
               placeholder="Ex : Universal Media's Grand Launch Event 2026"
               className="
                 h-[31px]
@@ -292,15 +315,13 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             />
           </div>
 
-          {/* =================================================
-              SERVICE + EVENT TYPE
-          ================================================= */}
+          {/* SERVICE TYPE + EVENT TYPE */}
           <div
             className="
-              mt-[14px]
+              mt-[13px]
               grid
               grid-cols-1
-              gap-3
+              gap-[12px]
               sm:grid-cols-2
             "
           >
@@ -320,7 +341,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
               <select
                 value={serviceType}
-                onChange={(event) => setServiceType(event.target.value)}
+                onChange={(event) =>
+                  setServiceType(event.target.value)
+                }
                 className="
                   h-[31px]
                   w-full
@@ -360,7 +383,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
               <select
                 value={eventType}
-                onChange={(event) => setEventType(event.target.value)}
+                onChange={(event) =>
+                  setEventType(event.target.value)
+                }
                 className="
                   h-[31px]
                   w-full
@@ -385,10 +410,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             </div>
           </div>
 
-          {/* =================================================
-              EVENT DATE
-          ================================================= */}
-          <div className="mt-[14px] max-w-[340px]">
+          {/* EVENT DATE */}
+          <div className="mt-[13px] max-w-[347px]">
             <label
               className="
                 mb-[5px]
@@ -401,37 +424,36 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               Event Date
             </label>
 
-            <div className="relative">
-              <input
-                type="date"
-                value={eventDate}
-                onChange={(event) => setEventDate(event.target.value)}
-                className="
-                  h-[31px]
-                  w-full
-                  rounded-[4px]
-                  border
-                  border-[#c9c9c9]
-                  px-[10px]
-                  text-[16px]
-                  text-[#555]
-                  outline-none
-                  focus:border-[#970000]
-                "
-              />
-            </div>
+            <input
+              type="date"
+              value={eventDate}
+              onChange={(event) =>
+                setEventDate(event.target.value)
+              }
+              className="
+                h-[31px]
+                w-full
+                rounded-[4px]
+                border
+                border-[#c9c9c9]
+                px-[10px]
+                text-[16px]
+                text-[#555]
+                outline-none
+                focus:border-[#970000]
+              "
+            />
           </div>
 
-          {/* =================================================
-              ABOUT EVENT
-          ================================================= */}
-          <div className="mt-[14px]">
+          {/* ABOUT EVENT */}
+          <div className="mt-[13px]">
             <div
               className="
                 mb-[5px]
                 flex
                 items-center
                 justify-between
+                gap-2
               "
             >
               <label
@@ -453,9 +475,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 >
                   (Optional)
                 </span>
-              </label>
+              </label>``
 
-              <span className="text-[18px] text-[#333]">
+              <span className="shrink-0 text-[13px] text-[#333]">
                 {aboutEvent.length} / {MAX_ABOUT_LENGTH} Characters
               </span>
             </div>
@@ -463,19 +485,21 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             <textarea
               value={aboutEvent}
               maxLength={MAX_ABOUT_LENGTH}
-              onChange={(event) => setAboutEvent(event.target.value)}
+              onChange={(event) =>
+                setAboutEvent(event.target.value)
+              }
               placeholder="Ex : Universal media hired us for this auspicious event, we are glad to..."
               className="
                 h-[31px]
                 min-h-[31px]
                 w-full
-                resize-none
+                resize-y
                 rounded-[4px]
                 border
                 border-[#c9c9c9]
                 px-[10px]
-                py-[8px]
-                text-[16px]
+                py-[5px]
+                text-[13px]
                 text-[#555]
                 outline-none
                 placeholder:text-[#999]
@@ -484,12 +508,10 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             />
           </div>
 
-          {/* =================================================
-              MEDIA UPLOAD HEADER
-          ================================================= */}
+          {/* MEDIA HEADER */}
           <div
             className="
-              mt-[20px]
+              mt-[18px]
               flex
               items-center
               justify-between
@@ -498,11 +520,16 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               pb-[7px]
             "
           >
-            <h2 className="text-[26px] font-medium text-[#777]">
+            <h2
+              className="
+                text-[26px]
+                font-medium
+                text-[#777]
+              "
+            >
               Media Upload
             </h2>
 
-            {/* GRID PREVIEW - NO OUTLINE */}
             <button
               type="button"
               className="
@@ -511,7 +538,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 border-0
                 bg-transparent
                 p-0
-                text-[16px]
+                text-[13px]
                 text-[#2E2E2E]
                 underline
                 underline-offset-2
@@ -522,23 +549,24 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             </button>
           </div>
 
-          {/* =================================================
-              MEDIA AREA
-          ================================================= */}
+          {/* MEDIA AREA */}
           <div
             className="
               mt-[12px]
               flex
+              flex-col
               items-start
-              gap-[20px]
+              gap-[14px]
+              lg:flex-row
             "
           >
-            {/* LEFT UPLOAD BOX */}
+            {/* UPLOAD BOX */}
             <div
               className="
                 flex
-                h-[262px]
-                w-[586px]
+                h-[292px]
+                w-full
+                max-w-[500px]
                 shrink-0
                 flex-col
                 items-center
@@ -551,10 +579,10 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             >
               <div
                 className="
-                  mb-[8px]
+                  mb-[7px]
                   flex
-                  h-[39px]
-                  w-[39px]
+                  h-[34px]
+                  w-[34px]
                   items-center
                   justify-center
                   rounded-full
@@ -563,19 +591,15 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 "
               >
                 <FiUploadCloud
-                  className="
-                    h-[17px]
-                    w-[17px]
-                    text-[#e11]
-                  "
+                  className="h-[16px] w-[16px] text-[#e11]"
                 />
               </div>
 
-              <p className="text-[16.77px] text-[#6D6D6D]">
+              <p className="text-[16px] text-[#6D6D6D]">
                 Upload photos, clips of the event
               </p>
 
-              <p className="mt-[2px] text-[13.72px] text-[#6D6D6D]">
+              <p className="mt-[1px] text-[13px] text-[#6D6D6D]">
                 (.jpg, png, webp supported)
               </p>
 
@@ -597,24 +621,19 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 onChange={handleVideoChange}
               />
 
-              <div
-                className="
-                  mt-[11px]
-                  flex
-                  items-center
-                  gap-[8px]
-                "
-              >
+              <div className="mt-[10px] flex items-center gap-[7px]">
                 <button
                   type="button"
-                  onClick={() => photoInputRef.current?.click()}
+                  onClick={() =>
+                    photoInputRef.current?.click()
+                  }
                   className="
-                    h-[16px]
-                    min-w-[58px]
+                    h-[27px]
+                    min-w-[99px]
                     cursor-pointer
                     rounded-[2px]
                     bg-[#d83c3c]
-                    px-[9px]
+                    px-[8px]
                     text-[12px]
                     font-bold
                     text-white
@@ -625,16 +644,18 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
                 <button
                   type="button"
-                  onClick={() => videoInputRef.current?.click()}
+                  onClick={() =>
+                    videoInputRef.current?.click()
+                  }
                   className="
-                    h-[16px]
-                    min-w-[58px]
+                    h-[27px]
+                    min-w-[94px]
                     cursor-pointer
                     rounded-[2px]
                     border
                     border-[#bdbdbd]
                     bg-white
-                    px-[9px]
+                    px-[8px]
                     text-[12px]
                     font-bold
                     text-[#555]
@@ -645,13 +666,15 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               </div>
             </div>
 
-            {/* RIGHT SIDE */}
-            <div className="flex flex-col">
+            {/* GRID PREVIEW */}
+            <div className="min-w-0 flex-1">
               <div
                 className="
-                  flex
-                  items-start
-                  gap-[12px]
+                  grid
+                  w-full
+                  grid-cols-2
+                  gap-[8px]
+                  sm:grid-cols-4
                 "
               >
                 {/* BOX 1 */}
@@ -659,9 +682,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   className="
                     relative
                     flex
-                    h-[131px]
-                    w-[131px]
-                    shrink-0
+                    h-[98px]
+                    min-w-0
                     flex-col
                     items-center
                     rounded-[4px]
@@ -673,12 +695,12 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   <span
                     className="
                       absolute
-                      left-[8px]
-                      top-[7px]
-                      text-[10px]
+                      left-[6px]
+                      top-[5px]
+                      text-[7px]
                       font-medium
                       leading-none
-                      text-[#000000]
+                      text-[#000]
                     "
                   >
                     3 images
@@ -687,14 +709,14 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   <div
                     className="
                       absolute
-                      top-[28px]
+                      top-[25px]
                       flex
-                      h-[68px]
-                      w-[45px]
+                      h-[35px]
+                      w-[27px]
                       items-center
                       justify-center
                       overflow-hidden
-                      rounded-[3px]
+                      rounded-[2px]
                       bg-[#eeeeee]
                     "
                   >
@@ -715,22 +737,16 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                         ))}
                       </div>
                     ) : (
-                      <FiImage
-                        className="
-                          h-[20px]
-                          w-[20px]
-                          text-[#777]
-                        "
-                      />
+                      <FiImage className="h-[15px] w-[15px] text-[#777]" />
                     )}
                   </div>
 
                   <span
                     className="
                       absolute
-                      bottom-[10px]
+                      bottom-[7px]
                       whitespace-nowrap
-                      text-[12px]
+                      text-[8px]
                       font-medium
                       leading-none
                       text-[#737373]
@@ -745,9 +761,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   className="
                     relative
                     flex
-                    h-[131px]
-                    w-[131px]
-                    shrink-0
+                    h-[98px]
+                    min-w-0
                     flex-col
                     items-center
                     rounded-[4px]
@@ -759,14 +774,14 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   <div
                     className="
                       absolute
-                      top-[35px]
+                      top-[24px]
                       flex
-                      h-[50px]
-                      w-[70px]
+                      h-[27px]
+                      w-[38px]
                       items-center
                       justify-center
                       overflow-hidden
-                      rounded-[3px]
+                      rounded-[2px]
                       bg-[#eeeeee]
                     "
                   >
@@ -777,22 +792,16 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <FiImage
-                        className="
-                          h-[20px]
-                          w-[20px]
-                          text-[#777]
-                        "
-                      />
+                      <FiImage className="h-[15px] w-[15px] text-[#777]" />
                     )}
                   </div>
 
                   <span
                     className="
                       absolute
-                      bottom-[10px]
+                      bottom-[7px]
                       whitespace-nowrap
-                      text-[12px]
+                      text-[8px]
                       font-medium
                       leading-none
                       text-[#737373]
@@ -807,9 +816,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   className="
                     relative
                     flex
-                    h-[131px]
-                    w-[131px]
-                    shrink-0
+                    h-[98px]
+                    min-w-0
                     flex-col
                     items-center
                     rounded-[4px]
@@ -821,31 +829,25 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   <div
                     className="
                       absolute
-                      top-[35px]
+                      top-[24px]
                       flex
-                      h-[50px]
-                      w-[50px]
+                      h-[27px]
+                      w-[27px]
                       items-center
                       justify-center
-                      rounded-[4px]
+                      rounded-[3px]
                       bg-[#eeeeee]
                     "
                   >
-                    <FiImage
-                      className="
-                        h-[22px]
-                        w-[22px]
-                        text-[#777]
-                      "
-                    />
+                    <FiImage className="h-[15px] w-[15px] text-[#777]" />
                   </div>
 
                   <span
                     className="
                       absolute
-                      bottom-[10px]
+                      bottom-[7px]
                       whitespace-nowrap
-                      text-[12px]
+                      text-[8px]
                       font-medium
                       leading-none
                       text-[#737373]
@@ -860,9 +862,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   className="
                     relative
                     flex
-                    h-[131px]
-                    w-[131px]
-                    shrink-0
+                    h-[98px]
+                    min-w-0
                     flex-col
                     items-center
                     rounded-[4px]
@@ -874,31 +875,25 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   <div
                     className="
                       absolute
-                      top-[35px]
+                      top-[24px]
                       flex
-                      h-[50px]
-                      w-[50px]
+                      h-[27px]
+                      w-[27px]
                       items-center
                       justify-center
-                      rounded-[4px]
+                      rounded-[3px]
                       bg-[#eeeeee]
                     "
                   >
-                    <FiImage
-                      className="
-                        h-[22px]
-                        w-[22px]
-                        text-[#777]
-                      "
-                    />
+                    <FiImage className="h-[15px] w-[15px] text-[#777]" />
                   </div>
 
                   <span
                     className="
                       absolute
-                      bottom-[10px]
+                      bottom-[7px]
                       whitespace-nowrap
-                      text-[12px]
+                      text-[8px]
                       font-medium
                       leading-none
                       text-[#737373]
@@ -912,17 +907,14 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               {/* NOTE */}
               <p
                 className="
-                  mt-[18px]
-                  max-w-[560px]
+                  mt-[10px]
                   text-[14px]
                   font-light
-                  leading-[22px]
+                  leading-[24px]
                   text-[#6D6D6D]
                 "
               >
-                <span className="font-medium">
-                  Note :
-                </span>{" "}
+                <span className="font-medium">Note :</span>{" "}
                 Kindly upload the photos according to the mentioned
                 dimensions for the best HD grid viewing experience
                 for the clients.
@@ -931,29 +923,30 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           </div>
         </div>
 
-        {/* =====================================================
-            BOTTOM ACTION BAR
-        ===================================================== */}
+        {/* BOTTOM ACTION BAR */}
         <div
           className="
             flex
             items-center
             justify-end
-            gap-8
+            gap-[26px]
             border-t
             border-[#e6e6e6]
-            px-[38px]
-            py-[16px]
+            px-[18px]
+            py-[12px]
+            sm:px-[38px]
+            sm:py-[12px]
           "
         >
           <button
             type="button"
             className="
               cursor-pointer
-              text-[22.76px]
+              text-[16px]
               font-semibold
               text-[#970000]
               hover:text-[#780000]
+              sm:text-[18px]
             "
           >
             Save Draft
@@ -964,8 +957,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             onClick={handleSave}
             className="
               flex
-              h-[54px]
-              min-w-[236px]
+              h-[45px]
+              min-w-[158px]
               cursor-pointer
               items-center
               justify-center
@@ -973,7 +966,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               rounded-[5px]
               bg-[#303030]
               px-5
-              text-[22.76px]
+              text-[16px]
               font-semibold
               text-[#FFFFFF]
               hover:bg-[#222]

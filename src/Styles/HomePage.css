@@ -1,50 +1,51 @@
-
+/* =========================================================
+   HOME PAGE
+   RESPONSIVE ONLY
+   ========================================================= */
 
 .landing-section {
   width: 100%;
+  max-width: 100%;
   display: flex;
   gap: 3px;
   background-color: #040404;
   padding: 3px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .main-event {
   width: 70%;
-  height: 100%;
+  min-width: 0;
   position: relative;
   overflow: hidden;
   background: #000;
 }
-  .main-event::before {
+
+.main-event::before {
   content: "";
   position: absolute;
-
   bottom: 55px;
   left: 0;
-
   width: 100%;
   height: 1px;
-
   background-color: rgba(111, 107, 107, 0.6);
-
   z-index: 2;
 }
 
 .main-event img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-position: center;
   display: block;
-  object-fit: contain;
-
+  object-fit: cover;
 }
-
 
 .main-content {
   position: absolute;
   left: 35px;
   bottom: 18px;
+  max-width: calc(100% - 50px);
   color: white;
   z-index: 3;
 }
@@ -52,33 +53,37 @@
 .main-content h1 {
   margin: 0;
   color: #f5f5f5;
-  font-size: 90px;
+  font-size: clamp(42px, 5.5vw, 90px);
   font-weight: 700;
-  font:bold;
   line-height: 1.1;
 }
 
 .main-content h2 {
   margin: 6px 0 14px;
   color: #f0f0f0;
-  font-size: 102px;
+  font-size: clamp(34px, 6vw, 102px);
   font-weight: 400;
   font-family: "OliverOblique" !important;
   line-height: 1;
-}
-
-.main-content p span {
-    color:darkgoldenrod;
-    font-size:26px;
 }
 
 .main-content h2 span {
   color: #e00000;
 }
 
+.main-content p {
+  margin: 0;
+  font-size: clamp(11px, 1.5vw, 16px);
+}
+
+.main-content p span {
+  color: darkgoldenrod;
+  font-size: clamp(15px, 1.8vw, 26px);
+}
+
 .side-images {
   width: 30%;
-  height: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -86,8 +91,8 @@
 
 .side-card {
   width: 100%;
-  height: 50%;
-  height: calc(50% - 1.5px);
+  min-width: 0;
+  flex: 1;
   position: relative;
   overflow: hidden;
   background: #000;
@@ -95,64 +100,138 @@
 
 .side-card img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-position: center;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .side-card p {
   position: absolute;
   bottom: 5px;
-  left: 10px;
-  color: white;
-  width:322px;
-  height:24px;
-  font-size: 22px;
-  margin: 0;
   left: 50%;
   transform: translateX(-50%);
+  width: 90%;
+  height: auto;
+  margin: 0;
+  color: white;
+  font-size: clamp(10px, 1.4vw, 22px);
+  line-height: 1.2;
   text-align: center;
-} 
+}
 
-/* laptop */
 
-@media (max-width: 1100px) {
+/* =========================================================
+   BIG DESKTOP
+   ========================================================= */
 
+@media (min-width: 1440px) {
   .landing-section {
-    height: 380px;
+    min-height: 620px;
   }
 
   .main-content {
-    left: 28px;
+    left: 45px;
+    bottom: 24px;
   }
 
   .main-content h1 {
-    font-size: 46px;
+    font-size: 90px;
   }
 
   .main-content h2 {
-    font-size: 36px;
+    font-size: 102px;
   }
 }
 
-/* tablet */
 
-@media (max-width: 768px) {
+/* =========================================================
+   LAPTOP
+   ========================================================= */
 
+@media (min-width: 1101px) and (max-width: 1439px) {
   .landing-section {
-    height: auto;
+    min-height: 500px;
+  }
+
+  .main-content {
+    left: 32px;
+    bottom: 20px;
+  }
+
+  .main-content h1 {
+    font-size: clamp(55px, 6vw, 76px);
+  }
+
+  .main-content h2 {
+    font-size: clamp(48px, 6.5vw, 82px);
+  }
+
+  .main-content p span {
+    font-size: 20px;
+  }
+
+  .side-card p {
+    font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   SMALL LAPTOP
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .landing-section {
+    min-height: 390px;
+  }
+
+  .main-content {
+    left: 25px;
+    bottom: 18px;
+  }
+
+  .main-content h1 {
+    font-size: clamp(40px, 5.5vw, 58px);
+  }
+
+  .main-content h2 {
+    font-size: clamp(34px, 5.8vw, 64px);
+    margin: 4px 0 10px;
+  }
+
+  .main-content p {
+    font-size: 12px;
+  }
+
+  .main-content p span {
+    font-size: 17px;
+  }
+
+  .side-card p {
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 501px) and (max-width: 768px) {
+  .landing-section {
     flex-direction: column;
+    min-height: auto;
   }
 
   .main-event {
     width: 100%;
-    height: 380px;
+    height: 390px;
   }
 
   .side-images {
     width: 100%;
-    height: 250px;
+    height: 245px;
     flex-direction: row;
   }
 
@@ -163,43 +242,65 @@
 
   .main-content {
     left: 25px;
-    bottom: 18px;
+    bottom: 20px;
+    max-width: 92%;
   }
 
   .main-content h1 {
-    font-size: 42px;
+    font-size: clamp(38px, 7vw, 52px);
   }
 
   .main-content h2 {
-    font-size: 32px;
+    font-size: clamp(30px, 6.5vw, 48px);
+    margin: 4px 0 10px;
+  }
+
+  .main-content p {
+    font-size: 12px;
+  }
+
+  .main-content p span {
+    font-size: 17px;
   }
 
   .side-card p {
-    font-size: 12px;
+    width: 90%;
+    font-size: 13px;
   }
 }
 
-/* mobile */
 
-@media (max-width: 500px) {
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
+@media (min-width: 381px) and (max-width: 500px) {
   .landing-section {
-    padding: 5px;
+    flex-direction: column;
+    padding: 4px;
     gap: 3px;
   }
 
   .main-event {
+    width: 100%;
     height: 300px;
   }
 
   .side-images {
-    height: 180px;
-    gap: 3px;
+    width: 100%;
+    height: 185px;
+    flex-direction: row;
+  }
+
+  .side-card {
+    width: 50%;
+    height: 100%;
   }
 
   .main-content {
-    left: 18px;
-    bottom: 15px;
+    left: 16px;
+    bottom: 14px;
+    max-width: 92%;
   }
 
   .main-content h1 {
@@ -207,18 +308,79 @@
   }
 
   .main-content h2 {
-    font-size: 24px;
-    margin: 4px 0 10px;
+    font-size: 25px;
+    margin: 4px 0 9px;
   }
 
   .main-content p {
-    padding-top: 7px;
-    font-size: 11px;
+    padding-top: 5px;
+    font-size: 10px;
+  }
+
+  .main-content p span {
+    font-size: 14px;
   }
 
   .side-card p {
+    width: 90%;
     font-size: 10px;
   }
 }
 
 
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .landing-section {
+    flex-direction: column;
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .main-event {
+    width: 100%;
+    height: 270px;
+  }
+
+  .side-images {
+    width: 100%;
+    height: 170px;
+    flex-direction: row;
+  }
+
+  .side-card {
+    width: 50%;
+    height: 100%;
+  }
+
+  .main-content {
+    left: 13px;
+    bottom: 12px;
+    max-width: 94%;
+  }
+
+  .main-content h1 {
+    font-size: 26px;
+  }
+
+  .main-content h2 {
+    font-size: 22px;
+    margin: 3px 0 8px;
+  }
+
+  .main-content p {
+    padding-top: 4px;
+    font-size: 9px;
+  }
+
+  .main-content p span {
+    font-size: 12px;
+  }
+
+  .side-card p {
+    width: 92%;
+    font-size: 9px;
+  }
+}

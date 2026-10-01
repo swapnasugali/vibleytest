@@ -74,7 +74,10 @@ const ExploreServices = () => {
   const handlePrevious = () => {
     if (sliderRef.current && !isAtStart) {
       const firstCard = sliderRef.current.children[0];
-      const gap = 24;
+
+      if (!firstCard) return;
+
+      const gap = window.innerWidth >= 1024 ? 28 : 24;
 
       sliderRef.current.scrollBy({
         left: -(firstCard.offsetWidth + gap),
@@ -86,7 +89,10 @@ const ExploreServices = () => {
   const handleNext = () => {
     if (sliderRef.current && !isAtEnd) {
       const firstCard = sliderRef.current.children[0];
-      const gap = 24;
+
+      if (!firstCard) return;
+
+      const gap = window.innerWidth >= 1024 ? 28 : 24;
 
       sliderRef.current.scrollBy({
         left: firstCard.offsetWidth + gap,
@@ -96,44 +102,58 @@ const ExploreServices = () => {
   };
 
   return (
-    <section className="w-full py-8 sm:py-10 md:py-12">
-      <div className="mx-auto w-full px-5 sm:px-10 md:px-12">
+    <section className="w-full overflow-hidden py-8 sm:py-10 md:py-12">
+      <div className="mx-auto w-full px-5 sm:px-8 md:px-10 lg:px-12">
 
-        {/* Heading */}
-        <h2 className="mb-8 text-center text-[20px] font-medium text-[#252525] hover:scale-105 hover:text-pink-500 sm:text-[22px] md:mb-9 md:text-[24px]">
+        <h2 className="mb-8 text-center text-[20px] font-medium text-[#252525] transition-transform duration-300 hover:scale-105 hover:text-pink-500 sm:text-[22px] md:mb-9 md:text-[24px]">
           Explore Services by Category
         </h2>
 
-        {/* Categories */}
         <div className="relative flex items-center">
 
-          {/* Left Arrow */}
+          {/* Left */}
           <button
             type="button"
             onClick={handlePrevious}
             disabled={isAtStart}
             aria-label="Previous"
-            className="absolute -left-3 top-[85px] z-30 flex cursor-pointer items-center justify-center text-[#222] disabled:cursor-not-allowed sm:-left-5 md:-left-7"
+            className="
+              absolute
+              -left-2
+              top-1/2
+              z-30
+              flex
+              -translate-y-1/2
+              cursor-pointer
+              items-center
+              justify-center
+              text-[#222]
+              disabled:cursor-not-allowed
+
+              sm:-left-4
+              md:-left-6
+              lg:-left-7
+            "
           >
-            <FaChevronLeft className="text-[22px] font-light" />
+            <FaChevronLeft className="text-[20px] sm:text-[22px]" />
           </button>
 
-          {/* Outer Container */}
-          <div className="w-full overflow-hidden px-1">
+          <div className="w-full min-w-0 overflow-hidden px-1">
 
-            {/* Horizontal Slider */}
             <div
               ref={sliderRef}
               onScroll={handleScroll}
               className="
                 flex
                 flex-nowrap
-                gap-6
+                gap-5
                 overflow-x-auto
                 scroll-smooth
                 pb-4
                 [scrollbar-width:none]
                 [&::-webkit-scrollbar]:hidden
+
+                sm:gap-6
               "
             >
               {categories.map((category, index) => (
@@ -142,77 +162,184 @@ const ExploreServices = () => {
                   key={`${category.name}-${index}`}
                   className="
                     flex
+                    min-w-0
                     w-full
                     shrink-0
                     flex-col
                     items-center
+
                     sm:w-[calc((100%-24px)/2)]
+
                     md:w-[calc((100%-48px)/3)]
+
                     lg:w-[calc((100%-72px)/4)]
+
                     xl:w-[calc((100%-96px)/5)]
                   "
                 >
-
-                  {/* Selected Stage Decor */}
                   {category.active ? (
-                    <div className="flex w-[180px] flex-col items-center">
+                    <div className="flex w-full flex-col items-center">
 
-                      {/* Stage Decor Image */}
-                      <div className="relative mt-2 flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#d1d5db] bg-[#f1f2f4] transition-transform duration-300 hover:scale-105 hover:brightness-110">
+                      <div
+                        className="
+                          relative
+                          mt-2
+                          flex
+                          h-[145px]
+                          w-[145px]
+                          shrink-0
+                          items-center
+                          justify-center
+                          overflow-hidden
+                          rounded-full
+                          border
+                          border-[#d1d5db]
+                          bg-[#f1f2f4]
+                          transition-transform
+                          duration-300
 
+                          sm:h-[160px]
+                          sm:w-[160px]
+
+                          md:h-[170px]
+                          md:w-[170px]
+
+                          lg:h-[180px]
+                          lg:w-[180px]
+
+                          hover:scale-105
+                          hover:brightness-110
+                        "
+                      >
                         <img
                           src={category.image}
                           alt={category.name}
-                          className="relative z-10 h-[126px] w-[126px] object-contain transition-transform duration-300 hover:scale-105 hover:brightness-130"
-                        />
+                          className="
+                            relative
+                            z-10
+                            h-[105px]
+                            w-[105px]
+                            object-contain
+                            transition-transform
+                            duration-300
 
+                            sm:h-[112px]
+                            sm:w-[112px]
+
+                            md:h-[118px]
+                            md:w-[118px]
+
+                            lg:h-[126px]
+                            lg:w-[126px]
+
+                            hover:scale-105
+                          "
+                        />
                       </div>
 
-                      {/* Stage Decor Name */}
-                      <p className="mt-3 whitespace-nowrap text-center text-[24px] font-medium text-[#222] transition-transform duration-300 hover:text-blue-500 hover:brightness-110">
+                      <p className="mt-3 max-w-full truncate text-center text-[17px] font-medium text-[#222] transition-transform duration-300 hover:text-blue-500 sm:text-[20px] md:text-[22px] lg:text-[24px]">
                         {category.name}
                       </p>
 
                     </div>
                   ) : (
                     <>
-                      {/* Normal Category Circle */}
-                      <div className="relative flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#d1d5db] bg-[#f1f2f4] transition-transform duration-300 hover:scale-105 hover:brightness-110">
+                      <div
+                        className="
+                          relative
+                          flex
+                          h-[145px]
+                          w-[145px]
+                          shrink-0
+                          items-center
+                          justify-center
+                          overflow-hidden
+                          rounded-full
+                          border
+                          border-[#d1d5db]
+                          bg-[#f1f2f4]
+                          transition-transform
+                          duration-300
 
+                          sm:h-[160px]
+                          sm:w-[160px]
+
+                          md:h-[170px]
+                          md:w-[170px]
+
+                          lg:h-[180px]
+                          lg:w-[180px]
+
+                          hover:scale-105
+                          hover:brightness-110
+                        "
+                      >
                         <img
                           src={category.image}
                           alt={category.name}
-                          className="relative z-10 h-[126px] w-[126px] object-contain transition-all duration-300 hover:scale-110 hover:brightness-110"
+                          className="
+                            relative
+                            z-10
+                            h-[105px]
+                            w-[105px]
+                            object-contain
+                            transition-all
+                            duration-300
+
+                            sm:h-[112px]
+                            sm:w-[112px]
+
+                            md:h-[118px]
+                            md:w-[118px]
+
+                            lg:h-[126px]
+                            lg:w-[126px]
+
+                            hover:scale-110
+                            hover:brightness-110
+                          "
                         />
 
-                        {/* Yellow Bottom */}
                         {category.yellowBottom && (
-                          <div className="absolute bottom-0 left-0 h-[20px] w-full bg-[#f4b400]" />
+                          <div className="absolute bottom-0 left-0 h-[16px] w-full bg-[#f4b400] sm:h-[18px] lg:h-[20px]" />
                         )}
-
                       </div>
 
-                      {/* Category Name */}
-                      <p className="mt-3 whitespace-nowrap text-center text-[24px] font-medium text-[#222] transition-transform duration-300 hover:text-blue-500 hover:brightness-110">
+                      <p className="mt-3 max-w-full truncate text-center text-[17px] font-medium text-[#222] transition-transform duration-300 hover:text-blue-500 sm:text-[20px] md:text-[22px] lg:text-[24px]">
                         {category.name}
                       </p>
                     </>
                   )}
-
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Right Arrow */}
+          {/* Right */}
           <button
             type="button"
             onClick={handleNext}
             disabled={isAtEnd}
             aria-label="Next"
-            className="absolute -right-3 top-[85px] z-30 flex cursor-pointer items-center justify-center text-[#222] disabled:cursor-not-allowed sm:-right-5 md:-right-7"
+            className="
+              absolute
+              -right-2
+              top-1/2
+              z-30
+              flex
+              -translate-y-1/2
+              cursor-pointer
+              items-center
+              justify-center
+              text-[#222]
+              disabled:cursor-not-allowed
+
+              sm:-right-4
+              md:-right-6
+              lg:-right-7
+            "
           >
-            <FaChevronRight className="text-[22px] font-light" />
+            <FaChevronRight className="text-[20px] sm:text-[22px]" />
           </button>
 
         </div>

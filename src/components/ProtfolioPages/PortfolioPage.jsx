@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { FiUser } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
+
+import logo from "../../assets/logo.png";
+import account from "../../assets/account.jpg";
 
 import PortfolioEmptyState from "./PortfolioEmptyState";
 import PortfolioSectionForm from "./PortfolioSectionForm";
@@ -10,10 +13,17 @@ const PortfolioPage = () => {
   const navigate = useNavigate();
 
   const [sections, setSections] = useState([]);
-
   const [showForm, setShowForm] = useState(false);
-
   const [editingSection, setEditingSection] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  /* =====================================================
+     CLOSE MOBILE MENU
+  ===================================================== */
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   /* =====================================================
      ADD PORTFOLIO
@@ -84,7 +94,7 @@ const PortfolioPage = () => {
   };
 
   /* =====================================================
-     CANCEL FORM
+     CANCEL / BACK TO PORTFOLIO
   ===================================================== */
 
   const handleCancelForm = () => {
@@ -99,104 +109,76 @@ const PortfolioPage = () => {
         fontFamily: "Poppins, sans-serif",
       }}
     >
-
       {/* =================================================
           TOP HEADER
       ================================================= */}
 
-      <header
-        className="
-          h-[90px]
-          w-full
-          border-b
-          border-[#eeeeee]
-          bg-[#fffdf9]
-        "
-      >
+      <header className="relative w-full border-b border-gray-200 bg-[#fffdf9]">
         <div
           className="
-            mx-auto
             flex
-            h-full
+            min-h-[72px]
             w-full
-            max-w-[1200px]
             items-center
             justify-between
-            px-[28px]
+            px-4
+            sm:px-6
+            md:px-8
+            lg:px-10
+            xl:px-12
           "
         >
-
           {/* LOGO */}
 
-          <div className="w-[170px]">
-
-            <div
+          <Link
+            to="/service-providers"
+            onClick={closeMenu}
+            className="flex shrink-0 items-center"
+          >
+            <img
+              src={logo}
+              alt="Vibely"
               className="
-                text-[32px]
-                font-extrabold
-                italic
-                leading-[28px]
-                tracking-[-2px]
-                text-[#b00000]
+                block
+                h-auto
+                w-[75px]
+                object-contain
+                sm:w-[85px]
+                md:w-[90px]
+                lg:w-[100px]
+                xl:w-[110px]
               "
-            >
-              Vibely
-            </div>
+            />
+          </Link>
 
-            <div
-              className="
-                ml-[8px]
-                mt-[1px]
-                text-[10px]
-                font-medium
-                leading-[10px]
-                text-[#333333]
-              "
-            >
-              Vendors
-            </div>
-
-            <div
-              className="
-                ml-[8px]
-                text-[8px]
-                leading-[8px]
-                text-[#555555]
-              "
-            >
-              PORTAL
-            </div>
-
-          </div>
-
-
-          {/* NAVIGATION */}
+          {/* DESKTOP NAVIGATION */}
 
           <nav
             className="
-              flex
-              h-full
+              hidden
               items-center
-              gap-[42px]
+              gap-5
+              md:flex
+              lg:gap-8
+              xl:gap-10
             "
           >
-
             <button
               type="button"
-              onClick={() =>
-                navigate("/service-providers")
-              }
+              onClick={() => navigate("/service-providers")}
               className="
+                whitespace-nowrap
                 border-0
                 bg-transparent
-                text-[14px]
+                text-[12px]
                 font-medium
-                text-[#222222]
+                text-[#222]
+                lg:text-[14px]
+                xl:text-[16px]
               "
             >
               DASHBOARD
             </button>
-
 
             <button
               type="button"
@@ -204,96 +186,218 @@ const PortfolioPage = () => {
                 navigate("/service-providers/profile")
               }
               className="
+                whitespace-nowrap
                 border-0
                 bg-transparent
-                text-[14px]
+                text-[12px]
                 font-medium
-                text-[#222222]
+                text-[#222]
+                lg:text-[14px]
+                xl:text-[16px]
               "
             >
               PROFILE
             </button>
-
 
             {/* ACTIVE PORTFOLIO */}
 
             <button
               type="button"
               className="
+                whitespace-nowrap
                 border-0
                 bg-transparent
-                text-[14px]
+                text-[12px]
                 font-semibold
-                text-[#d32929]
+                text-[#e53935]
+                lg:text-[14px]
+                xl:text-[16px]
               "
             >
               PORTFOLIO
             </button>
 
-
             <button
               type="button"
               className="
+                whitespace-nowrap
                 border-0
                 bg-transparent
-                text-[14px]
+                text-[12px]
                 font-medium
-                text-[#222222]
+                text-[#222]
+                lg:text-[14px]
+                xl:text-[16px]
               "
             >
               SERVICES / PRICING
             </button>
 
-
             <button
               type="button"
               className="
+                whitespace-nowrap
                 border-0
                 bg-transparent
-                text-[14px]
+                text-[12px]
                 font-medium
-                text-[#222222]
+                text-[#222]
+                lg:text-[14px]
+                xl:text-[16px]
               "
             >
               LEADS
             </button>
-
           </nav>
 
+          {/* ACCOUNT + MOBILE MENU */}
 
-          {/* PROFILE ICON */}
+          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+            <Link
+              to="/"
+              className="flex shrink-0 items-center"
+            >
+              <img
+                src={account}
+                alt="Account"
+                className="
+                  block
+                  h-[30px]
+                  w-[30px]
+                  rounded-full
+                  object-cover
+                  sm:h-[34px]
+                  sm:w-[34px]
+                  md:h-[38px]
+                  md:w-[38px]
+                "
+              />
+            </Link>
 
-          <button
-            type="button"
+            {/* MOBILE MENU BUTTON */}
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="
+                flex
+                items-center
+                justify-center
+                text-[23px]
+                text-gray-700
+                md:hidden
+              "
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
+        </div>
+
+        {/* =================================================
+            MOBILE NAVIGATION
+        ================================================= */}
+
+        {menuOpen && (
+          <nav
             className="
-              flex
-              h-[42px]
-              w-[42px]
-              items-center
-              justify-center
-              rounded-full
-              border-[2px]
-              border-[#b7b7b7]
-              bg-transparent
-              text-[#a9a9a9]
+              absolute
+              left-0
+              right-0
+              top-full
+              z-50
+              border-t
+              border-gray-200
+              bg-[#fffdf9]
+              px-5
+              py-4
+              shadow-md
+              md:hidden
             "
           >
-            <FiUser
-              size={25}
-              strokeWidth={1.8}
-            />
-          </button>
+            <div className="flex flex-col gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  navigate("/service-providers");
+                  closeMenu();
+                }}
+                className="
+                  text-left
+                  text-[15px]
+                  font-medium
+                  text-[#222]
+                "
+              >
+                DASHBOARD
+              </button>
 
-        </div>
+              <button
+                type="button"
+                onClick={() => {
+                  navigate("/service-providers/profile");
+                  closeMenu();
+                }}
+                className="
+                  text-left
+                  text-[15px]
+                  font-medium
+                  text-[#222]
+                "
+              >
+                PROFILE
+              </button>
+
+              {/* ACTIVE PORTFOLIO */}
+
+              <button
+                type="button"
+                onClick={closeMenu}
+                className="
+                  text-left
+                  text-[15px]
+                  font-semibold
+                  text-[#e53935]
+                "
+              >
+                PORTFOLIO
+              </button>
+
+              <button
+                type="button"
+                onClick={closeMenu}
+                className="
+                  text-left
+                  text-[15px]
+                  font-medium
+                  text-[#222]
+                "
+              >
+                SERVICES / PRICING
+              </button>
+
+              <button
+                type="button"
+                onClick={closeMenu}
+                className="
+                  text-left
+                  text-[15px]
+                  font-medium
+                  text-[#222]
+                "
+              >
+                LEADS
+              </button>
+            </div>
+          </nav>
+        )}
       </header>
-
 
       {/* =================================================
           PAGE CONTENT
       ================================================= */}
 
       <main className="w-full bg-[#f7f6f6]">
-
         <div
           className="
             mx-auto
@@ -304,73 +408,6 @@ const PortfolioPage = () => {
             pt-[20px]
           "
         >
-
-          {/* PAGE HEADER */}
-
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-            "
-          >
-
-            <div>
-
-              <h1
-                className="
-                  text-[23px]
-                  font-semibold
-                  leading-[30px]
-                  text-[#2d2d2d]
-                "
-              >
-                Manage Portfolio
-              </h1>
-
-              <p
-                className="
-                  mt-[2px]
-                  text-[13px]
-                  leading-[20px]
-                  text-[#999999]
-                "
-              >
-                Create Structured event-based portfolio
-                sections to showcase your best work and
-                attract clients
-              </p>
-
-            </div>
-
-
-            {/* TOP ADD BUTTON */}
-
-            {!showForm && (
-              <button
-                type="button"
-                onClick={handleAddPortfolio}
-                className="
-                  h-[35px]
-                  min-w-[237px]
-                  rounded-[5px]
-                  border-0
-                  bg-[#b60000]
-                  px-[18px]
-                  text-[13px]
-                  font-medium
-                  text-white
-                  transition
-                  hover:bg-[#970000]
-                "
-              >
-                ⊕&nbsp; Add New Profile Section
-              </button>
-            )}
-
-          </div>
-
-
           {/* =================================================
               EMPTY STATE
           ================================================= */}
@@ -381,34 +418,28 @@ const PortfolioPage = () => {
             />
           )}
 
-
           {/* =================================================
               PORTFOLIO FORM
           ================================================= */}
 
           {showForm && (
             <div className="mt-[20px]">
-
               <PortfolioSectionForm
                 initialData={editingSection}
                 onSave={handleSavePortfolio}
                 onCancel={handleCancelForm}
+                onBack={handleCancelForm}
               />
-
             </div>
           )}
-
 
           {/* =================================================
               PORTFOLIO LIST
           ================================================= */}
 
           {!showForm && sections.length > 0 && (
-
             <div className="mt-[20px] space-y-[15px]">
-
               {sections.map((section, index) => (
-
                 <PortfolioCard
                   key={section.id}
                   section={section}
@@ -416,17 +447,11 @@ const PortfolioPage = () => {
                   onDelete={handleDeletePortfolio}
                   showGallery={index === 0}
                 />
-
               ))}
-
             </div>
-
           )}
-
         </div>
-
       </main>
-
     </div>
   );
 };

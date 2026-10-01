@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaCheck } from "react-icons/fa";
 
 import event1 from "../../../assets/event1.png";
@@ -42,37 +42,65 @@ const organizers = [
 
 const MostHappeningEvents = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCards, setVisibleCards] = useState(1);
 
-  const visibleCards = 3;
+  useEffect(() => {
+    const updateVisibleCards = () => {
+      if (window.innerWidth >= 1024) {
+        setVisibleCards(3);
+      } else if (window.innerWidth >= 640) {
+        setVisibleCards(2);
+      } else {
+        setVisibleCards(1);
+      }
+    };
 
-  const maxIndex = organizers.length - visibleCards;
+    updateVisibleCards();
+
+    window.addEventListener("resize", updateVisibleCards);
+
+    return () => {
+      window.removeEventListener("resize", updateVisibleCards);
+    };
+  }, []);
+
+  useEffect(() => {
+    const maxIndex = Math.max(0, organizers.length - visibleCards);
+
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex);
+    }
+  }, [visibleCards, currentIndex]);
+
+  const maxIndex = Math.max(0, organizers.length - visibleCards);
 
   const handleNext = () => {
     if (currentIndex < maxIndex) {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex((prev) => prev + 1);
     }
   };
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      setCurrentIndex((prev) => prev - 1);
     }
   };
 
   return (
-    <section className="w-full bg-[#f7f7f7] px-5 py-8 sm:px-8 md:px-12 md:py-10 lg:px-16">
+    <section className="w-full overflow-hidden bg-[#f7f7f7] px-4 py-8 sm:px-6 sm:py-9 md:px-10 md:py-10 lg:px-16">
       <div className="mx-auto w-full max-w-[1400px]">
 
         {/* Heading + Filter */}
-        <div className="relative mb-7 flex items-center justify-center">
-          <h2 className="text-center text-[19px] w-[578px] h-[44px] font-medium text-[#344054] sm:text-[22px] md:mb-0 md:text-[25px] hover:text-pink-500 hover:scale-105">
+        <div className="relative mb-7 flex min-h-[44px] items-center justify-center">
+
+          <h2 className="px-16 text-center text-[18px] font-medium leading-6 text-[#344054] transition-all duration-300 hover:scale-105 hover:text-pink-500 sm:px-20 sm:text-[22px] md:px-0 md:text-[25px]">
             Most Happening Event Organizers
           </h2>
 
-          {/* Filter By */}
+          {/* Filter */}
           <button
             type="button"
-            className="absolute right-0 flex items-center gap-2 text-[10px] font-medium tracking-wide text-[#222] sm:text-[11px]"
+            className="absolute right-0 flex items-center gap-2 text-[9px] font-medium tracking-wide text-[#222] sm:text-[11px]"
           >
             <span className="flex h-[14px] w-[14px] flex-col items-center justify-center gap-[3px]">
               <span className="block h-[1px] w-[14px] bg-[#222]" />
@@ -84,37 +112,44 @@ const MostHappeningEvents = () => {
           </button>
         </div>
 
-        {/* Cards Slider */}
+        {/* Cards */}
         <div className="relative">
 
           {/* Left Arrow */}
           {currentIndex > 0 && (
             <button
+              type="button"
               onClick={handlePrevious}
               aria-label="Previous"
-              className="absolute -left-3 top-[45%] cursor-pointer z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-left-5 md:-left-7 lg:-left-10"
+              className="absolute -left-1 top-1/2 z-30 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-left-4 md:-left-7 lg:-left-10"
             >
               <FaArrowLeft className="text-[10px]" />
             </button>
           )}
 
-          {/* Slider Container */}
-          <div className="overflow-hidden pt-5 pl-3">
+          {/* Slider */}
+          <div className="overflow-hidden px-3 pt-5 sm:px-2">
             <div
-              className="flex gap-7 transition-transform duration-500 ease-in-out"
+              className="flex gap-4 transition-transform duration-500 ease-in-out sm:gap-6 md:gap-7"
               style={{
-                transform: `translateX(-${currentIndex * 33.33}%)`,
+                transform: `translateX(calc(-${currentIndex} * (100% / ${visibleCards}) - ${currentIndex} * ${visibleCards === 1 ? "16px" : visibleCards === 2 ? "24px" : "28px"}))`,
               }}
             >
               {organizers.map((organizer, index) => (
                 <div
                   key={index}
-                  className="min-w-full sm:min-w-[calc(50%-14px)] lg:min-w-[calc(33.333%-19px)]"
-                >
-                  {/* Image Area */}
-                  <div className="relative aspect-[1.85/1] w-full transition-transform duration-300 hover:scale-105 hover:brightness-130">
+                  className="
+                    min-w-0
+                    flex-[0_0_100%]
 
-                    {/* Main Image */}
+                    sm:flex-[0_0_calc((100%-24px)/2)]
+
+                    lg:flex-[0_0_calc((100%-56px)/3)]
+                  "
+                >
+                  {/* Image */}
+                  <div className="relative aspect-[1.85/1] w-full transition-transform duration-300 hover:scale-[1.02] hover:brightness-130">
+
                     <div className="h-full w-full overflow-hidden">
                       <img
                         src={organizer.image}
@@ -123,8 +158,8 @@ const MostHappeningEvents = () => {
                       />
                     </div>
 
-                    {/* Organizer Logo */}
-                    <div className="absolute -left-3 -top-3 z-40 flex h-[58px] w-[58px] items-center justify-center rounded-[16px] bg-white p-2 shadow-[6px_6px_12px_rgba(255,255,255,0.9)] sm:h-[60px] sm:w-[60px] md:h-[62px] md:w-[62px] hover:scale-105 hover:brightness-110 transition-transform duration-300">
+                    {/* Logo */}
+                    <div className="absolute -left-3 -top-3 z-40 flex h-[52px] w-[52px] items-center justify-center rounded-[14px] bg-white p-2 shadow-[6px_6px_12px_rgba(255,255,255,0.9)] transition-transform duration-300 hover:scale-105 hover:brightness-110 sm:h-[60px] sm:w-[60px] md:h-[62px] md:w-[62px]">
                       <img
                         src={organizer.logo}
                         alt={`${organizer.name} logo`}
@@ -133,12 +168,13 @@ const MostHappeningEvents = () => {
                     </div>
 
                     {/* Event Count */}
-                    <span className="absolute right-0 top-2 z-10 bg-black/65 px-3 py-1 text-[10px] font-medium text-[#f4b400]">
+                    <span className="absolute right-0 top-2 z-10 bg-black/65 px-2 py-1 text-[9px] font-medium text-[#f4b400] sm:px-3 sm:text-[10px]">
                       {organizer.events}
                     </span>
 
-                    {/* Organizer Name Banner */}
-                    <div className="absolute bottom-0 -left-3 z-20 h-[46px] w-[72%] min-w-[200px]">
+                    {/* Name Banner */}
+                    <div className="absolute bottom-0 -left-3 z-20 h-[43px] w-[78%] min-w-0 sm:h-[46px] sm:w-[72%] sm:min-w-[200px]">
+
                       <svg
                         viewBox="0 0 1000 100"
                         preserveAspectRatio="none"
@@ -160,10 +196,9 @@ const MostHappeningEvents = () => {
                         />
                       </svg>
 
-                      <div className="relative z-10 flex h-full items-center gap-2 px-5">
+                      <div className="relative z-10 flex h-full items-center gap-2 px-4 sm:px-5">
 
-                        {/* Star Badge */}
-                        <span className="relative flex h-[20px] w-[20px] shrink-0 items-center justify-center">
+                        <span className="relative flex h-[18px] w-[18px] shrink-0 items-center justify-center sm:h-[20px] sm:w-[20px]">
                           <svg
                             viewBox="0 0 24 24"
                             className="absolute inset-0 h-full w-full"
@@ -192,10 +227,10 @@ const MostHappeningEvents = () => {
                             />
                           </svg>
 
-                          <FaCheck className="relative z-10 text-[8px] text-[#A63A2A]" />
+                          <FaCheck className="relative z-10 text-[7px] text-[#A63A2A]" />
                         </span>
 
-                        <span className="flex h-[40px] w-[166px] items-center whitespace-nowrap text-[14px] font-medium text-white sm:text-[15px]">
+                        <span className="min-w-0 truncate text-[12px] font-medium text-white sm:text-[15px]">
                           {organizer.name}
                         </span>
                       </div>
@@ -203,7 +238,7 @@ const MostHappeningEvents = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="mt-2 font-medium color-[#000000] w-[514px] h-[21px] leading-4 text-black sm:text-[12px] hover:text-blue-500">
+                  <p className="mt-2 h-auto min-h-[21px] w-full truncate text-[11px] font-medium leading-4 text-black transition-colors hover:text-blue-500 sm:text-[12px]">
                     {organizer.description}
                   </p>
                 </div>
@@ -214,9 +249,10 @@ const MostHappeningEvents = () => {
           {/* Right Arrow */}
           {currentIndex < maxIndex && (
             <button
+              type="button"
               onClick={handleNext}
               aria-label="Next"
-              className="absolute -right-3 top-[45%] cursor-pointer z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-right-5 md:-right-7 lg:-right-10"
+              className="absolute -right-1 top-1/2 z-30 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-right-4 md:-right-7 lg:-right-10"
             >
               <FaArrowRight className="text-[10px]" />
             </button>

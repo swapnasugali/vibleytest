@@ -39,7 +39,6 @@ const SuggestMe = () => {
           xl:px-16
         "
       >
-        {/* ================= CONTENT ================= */}
         <div
           className="
             z-10
@@ -51,13 +50,10 @@ const SuggestMe = () => {
             text-center
 
             md:w-[65%]
-
             lg:w-[68%]
-
             xl:w-[70%]
           "
         >
-          {/* Heading */}
           <h3
             className="
               max-w-[300px]
@@ -76,6 +72,7 @@ const SuggestMe = () => {
               lg:text-[20px]
 
               xl:text-[22px]
+
               hover:text-blue-400
             "
           >
@@ -83,7 +80,6 @@ const SuggestMe = () => {
             service for your event.
           </h3>
 
-          {/* Button */}
           <button
             type="button"
             className="
@@ -101,7 +97,11 @@ const SuggestMe = () => {
               uppercase
               text-white
               transition
-              hover:bg-[#850000]
+
+              hover:bg-blue-500
+              hover:text-red-500
+              hover:scale-105
+              hover:brightness-110
 
               sm:w-[155px]
               sm:text-[13px]
@@ -116,16 +116,11 @@ const SuggestMe = () => {
 
               xl:w-[190px]
               xl:text-[16px]
-              hover:bg-blue-500
-              hover:text-red-500
-              hover:scale-105
-              hover:brightness-110
             "
           >
             Suggest Me
           </button>
 
-          {/* Bottom Text */}
           <p
             className="
               mt-4
@@ -134,32 +129,28 @@ const SuggestMe = () => {
               text-[#252525]
 
               sm:text-[11px]
-
               md:text-[12px]
-
               lg:text-[13px]
-
               xl:text-[14px]
+
+              transition-transform
+              duration-300
 
               hover:text-blue-500
               hover:scale-105
               hover:brightness-110
-              transition-transform
-              duration-300
             "
           >
             Attend the Short Survey, and we will suggest you the best!
           </p>
         </div>
 
-        {/* ================= CHARACTER ================= */}
         <div
           className="
             absolute
             bottom-0
             right-0
             hidden
-          
             items-end
             justify-end
 
@@ -170,10 +161,10 @@ const SuggestMe = () => {
             lg:w-[32%]
 
             xl:w-[30%]
+
+            transition-transform
             hover:scale-105
             hover:brightness-110
-            transition-transform
-
           "
         >
           <img
@@ -186,8 +177,6 @@ const SuggestMe = () => {
               max-w-full
               object-contain
               object-bottom
-              hover:scale-105
-              hover:contrast-110
             "
           />
         </div>

@@ -1,78 +1,60 @@
-import React from 'react'
+import React from "react";
 
 function LookingFor() {
   return (
-    <section className="w-full bg-[#f5f4f2] py-8 px-6 hover:brightness-140 sm:px-8 md:px-12 lg:px-16">
-  
-  <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
+    <section className="w-full overflow-hidden bg-[#f5f4f2] px-4 py-8 sm:px-6 md:px-10 lg:px-16">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-5 lg:flex-row lg:items-center">
 
-    {/* Title */}
-    <div className="min-w-[140px] text-[#30343b]">
-      <p className="text-[18px] font-medium leading-6">
-        What Are You
-      </p>
+        <div className="min-w-0 shrink-0 text-[#30343b] lg:w-[150px]">
+          <p className="text-[18px] font-medium leading-6">
+            What Are You
+          </p>
 
-      <p className="text-[18px] font-medium leading-6">
-        Looking For<span className="text-red-800">?</span>
-      </p>
-    </div>
+          <p className="text-[18px] font-medium leading-6">
+            Looking For<span className="text-red-800">?</span>
+          </p>
+        </div>
 
+        <div className="flex min-w-0 flex-1 flex-col gap-4 sm:flex-row">
 
-    {/* Options */}
-    <div className="flex flex-1 flex-col gap-4 md:flex-row ">
+          <div className="relative min-w-0 flex-1 overflow-hidden rounded-md bg-[#a82f2b] px-5 py-4 text-center text-white transition-transform duration-300 hover:scale-105 hover:brightness-110 sm:px-6 md:px-8">
 
-      {/* Service Providers */}
-      <div className="relative flex-1 h-[104px] w-full lg:w-[650px] overflow-hidden rounded-md bg-[#a82f2b] px-8 py-4 text-center text-white hover:scale-105 hover:brightness-110 transition-transform duration-300">
+            <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80" />
 
-        {/* Left dashed line */}
-        <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80"></div>
+            <div className="absolute -top-4 right-8 h-8 w-16 rounded-b-full bg-[#f5f4f2] sm:right-10 sm:w-[72px]" />
 
-        {/* Top small curve effect */}
-        <div className="absolute -top-4 right-12 h-8 w-[72px] rounded-b-full bg-[#f5f4f2]"></div>
+            <div className="absolute -bottom-4 right-8 h-8 w-16 rounded-t-full bg-[#f5f4f2] sm:right-10 sm:w-[72px]" />
 
+            <h3 className="relative z-40 text-lg font-semibold sm:text-xl md:text-[22px]">
+              SERVICE PROVIDERS
+            </h3>
 
-        {/* bottom small curve */}
-        <div className="absolute -bottom-4 right-12 h-8 w-[72px] rounded-t-full bg-[#f5f4f2]"></div>
+            <p className="relative z-40 mt-2 text-[11px] leading-4 sm:text-[12px]">
+              Experts who provide specific event services for your special occasion.
+            </p>
+          </div>
 
-        <h3 className="relative z-40 text-[22px] font-semibold">
-          SERVICE PROVIDERS
-        </h3>
+          <div className="relative min-w-0 flex-1 overflow-hidden rounded-md bg-[#e59a00] px-5 py-4 text-center text-white transition-transform duration-300 hover:scale-105 hover:brightness-110 sm:px-6 md:px-8">
 
-        <p className="relative z-40 mt-2 text-[12px] leading-4 text-white">
-          Experts who provide specific event services for your special occasion.
-        </p>
+            <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80" />
 
+            <div className="absolute -top-4 right-8 h-8 w-16 rounded-b-full bg-[#f5f4f2] sm:right-10 sm:w-[72px]" />
+
+            <div className="absolute -bottom-4 right-8 h-8 w-16 rounded-t-full bg-[#f5f4f2] sm:right-10 sm:w-[72px]" />
+
+            <h3 className="relative z-40 text-lg font-semibold sm:text-xl md:text-[22px]">
+              EVENT ORGANIZERS
+            </h3>
+
+            <p className="relative z-40 mt-2 text-[11px] leading-4 sm:text-[12px]">
+              Experts who plan and manage your complete event from start to finish.
+            </p>
+          </div>
+
+        </div>
       </div>
-
-
-      {/* Event Organizers */}
-      <div className="relative flex-1 h-[104px] w-full lg:w-[650px]overflow-hidden rounded-md bg-[#e59a00] px-8 py-4 text-center text-white hover:scale-105 hover:brightness-110 transition-transform duration-300">
-
-        {/* Left dashed line */}
-        <div className="absolute left-3 top-0 h-full border-l-2 border-dashed border-white/80"></div>
-
-        {/* Top curve */}
-        <div className="absolute -top-4 right-12 h-8 w-[72px] rounded-b-full bg-[#f5f4f2]"></div>
-
-        {/* Bottom curve */}
-        <div className="absolute -bottom-4 right-12 h-8 w-[72px] rounded-t-full bg-[#f5f4f2]"></div>
-
-        <h3 className="relative text-[22px] font-semibold">
-          EVENT ORGANIZERS
-        </h3>
-
-        <p className="relative mt-2 text-[12px] leading-4 text-white">
-          Experts who plan and manage your complete event from start to finish.
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-  )
+    </section>
+  );
 }
 
-export default LookingFor
+export default LookingFor;
