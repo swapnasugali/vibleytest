@@ -18,11 +18,23 @@ import ProfilerPage from "./components/ProfilerPage/ProfilerPage";
 
 /* =========================================================
    PROVIDER PORTFOLIO
-   Separate folder:
-   src/components/PortfolioPages/PortfolioPage.jsx
-========================================================= */
+   ========================================================= */
 
 import ProviderPortfolioPage from "./components/ProtfolioPages/PortfolioPage";
+
+
+/* =========================================================
+   PROVIDER SERVICES / PRICING
+   =========================================================
+   
+   ServicesPricingPage.jsx should be inside:
+
+   src/components/ProtfolioPages/ServicesPricing/
+   ServicesPricingPage.jsx
+
+========================================================= */
+
+import ServicesPricingPage from "./components/ServicesPricing/ServicePricingPage";
 
 
 function AppRoutes() {
@@ -105,17 +117,27 @@ function AppRoutes() {
       {/* =====================================================
           PROVIDER PORTFOLIO
           
-          IMPORTANT:
-          DO NOT WRAP THIS WITH Layout.
-          
-          PortfolioPage.jsx contains the
-          Vendors Portal header itself.
+          PortfolioPage.jsx contains its own header.
       ===================================================== */}
 
       <Route
         path="/service-providers/profile/portfolio"
         element={
           <ProviderPortfolioPage />
+        }
+      />
+
+
+      {/* =====================================================
+          PROVIDER SERVICES / PRICING
+          
+          NEW PAGE
+      ===================================================== */}
+
+      <Route
+        path="/service-providers/services-pricing"
+        element={
+          <ServicesPricingPage />
         }
       />
 

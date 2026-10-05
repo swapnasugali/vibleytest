@@ -5,32 +5,3 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-/* =====================================================
-   MONTE CARLO FONT
-===================================================== */
-
-@font-face {
-  font-family: "MonteCarlo";
-  src: url("../assets/fonts/MonteCarlo-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
-
-.MonteCarlo {
-  font-family: "MonteCarlo", cursive;
-}
-
-/* =====================================================
-   OLIVER OBLIQUE FONT
-===================================================== */
-
-@font-face {
-  font-family: "OliverOblique";
-  src: url("../assets/fonts/OliverOblique.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
-
-.OliverOblique {
-  font-family: "OliverOblique", cursive;
-}

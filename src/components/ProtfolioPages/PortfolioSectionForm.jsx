@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FiArrowLeft,
   FiImage,
@@ -24,13 +24,25 @@ const eventTypes = [
   "Other",
 ];
 
-const PortfolioSectionForm = ({ onBack, onSave }) => {
+const PortfolioSectionForm = ({
+  initialData = null,
+  onBack,
+  onSave,
+}) => {
   const photoInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
+  /* =====================================================
+     FORM STATE
+  ===================================================== */
+
   const [eventTitle, setEventTitle] = useState("");
-  const [serviceType, setServiceType] = useState("General Photography");
-  const [eventType, setEventType] = useState("Corporate Event");
+  const [serviceType, setServiceType] = useState(
+    "General Photography"
+  );
+  const [eventType, setEventType] = useState(
+    "Corporate Event"
+  );
   const [eventDate, setEventDate] = useState("");
   const [aboutEvent, setAboutEvent] = useState("");
   const [featured, setFeatured] = useState(true);
@@ -38,15 +50,77 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
 
-  const handlePhotoChange = (event) => {
-    const selectedFiles = Array.from(event.target.files || []);
+  /* =====================================================
+     LOAD EDIT DATA
+  ===================================================== */
 
-    const remainingSlots = MAX_FILES - photos.length;
+  useEffect(() => {
+    if (!initialData) {
+      setEventTitle("");
+      setServiceType("General Photography");
+      setEventType("Corporate Event");
+      setEventDate("");
+      setAboutEvent("");
+      setFeatured(true);
+      setPhotos([]);
+      setVideos([]);
+
+      return;
+    }
+
+    setEventTitle(initialData.title || "");
+
+    setServiceType(
+      initialData.serviceType ||
+        "General Photography"
+    );
+
+    setEventType(
+      initialData.eventType ||
+        "Corporate Event"
+    );
+
+    setEventDate(
+      initialData.eventDate || ""
+    );
+
+    setAboutEvent(
+      initialData.aboutEvent || ""
+    );
+
+    setFeatured(
+      initialData.featured ?? true
+    );
+
+    setPhotos(
+      Array.isArray(initialData.photos)
+        ? initialData.photos
+        : []
+    );
+
+    setVideos(
+      Array.isArray(initialData.videos)
+        ? initialData.videos
+        : []
+    );
+  }, [initialData]);
+
+  /* =====================================================
+     PHOTO UPLOAD
+  ===================================================== */
+
+  const handlePhotoChange = (event) => {
+    const selectedFiles = Array.from(
+      event.target.files || []
+    );
+
+    const remainingSlots =
+      MAX_FILES - photos.length;
 
     const newPhotos = selectedFiles
       .slice(0, remainingSlots)
       .map((file) => ({
-        id: `${file.name}-${file.lastModified}`,
+        id: `${file.name}-${file.lastModified}-${Date.now()}`,
         file,
         url: URL.createObjectURL(file),
       }));
@@ -59,16 +133,34 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
     event.target.value = "";
   };
 
+  /* =====================================================
+     VIDEO UPLOAD
+  ===================================================== */
+
   const handleVideoChange = (event) => {
-    const selectedFiles = Array.from(event.target.files || []);
+    const selectedFiles = Array.from(
+      event.target.files || []
+    );
+
+    const newVideos = selectedFiles.map(
+      (file) => ({
+        id: `${file.name}-${file.lastModified}-${Date.now()}`,
+        file,
+        url: URL.createObjectURL(file),
+      })
+    );
 
     setVideos((previousVideos) => [
       ...previousVideos,
-      ...selectedFiles,
+      ...newVideos,
     ]);
 
     event.target.value = "";
   };
+
+  /* =====================================================
+     SAVE
+  ===================================================== */
 
   const handleSave = () => {
     if (!eventTitle.trim()) {
@@ -76,27 +168,42 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
       return;
     }
 
-    const newSection = {
-      id: Date.now(),
-      title: eventTitle,
+    const sectionData = {
+      id:
+        initialData?.id ||
+        Date.now(),
+
+      title: eventTitle.trim(),
+
       serviceType,
+
       eventType,
+
       eventDate,
+
       aboutEvent,
+
       featured,
+
       photos,
+
       videos,
     };
 
-    onSave(newSection);
+    onSave(sectionData);
   };
 
   return (
     <section
-      className="w-full"
-      style={{ fontFamily: "Poppins, sans-serif" }}
+      className="w-full min-w-0 overflow-x-hidden"
+      style={{
+        fontFamily: "Poppins, sans-serif",
+      }}
     >
-      {/* PAGE HEADER */}
+      {/* =================================================
+          PAGE HEADER
+      ================================================= */}
+
       <div
         className="
           mx-auto
@@ -104,21 +211,27 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           flex
           w-[calc(100%-24px)]
           max-w-[1100px]
-          items-start
-          justify-between
-          gap-4
-          px-0
+          flex-col
+          gap-[14px]
           sm:w-[calc(100%-32px)]
+          sm:flex-row
+          sm:items-start
+          sm:justify-between
+          sm:gap-4
         "
       >
-        <div className="min-w-0">
+        {/* TITLE */}
+
+        <div className="min-w-0 flex-1">
           <h1
             className="
-              text-[34px]
+              break-words
+              text-[28px]
               font-semibold
               leading-[1.2]
               text-[#292929]
               sm:text-[30px]
+              lg:text-[34px]
             "
           >
             Manage Portfolio
@@ -128,24 +241,30 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             className="
               mt-[4px]
               max-w-[800px]
-              text-[18px]
-              leading-[21px]
+              break-words
+              text-[14px]
+              leading-[20px]
               text-[#9F9F9F]
               sm:text-[15px]
+              lg:text-[18px]
+              lg:leading-[21px]
             "
           >
-            Create Structured event-based portfolio sections to showcase
-            your best work and attract clients
+            Create Structured event-based portfolio
+            sections to showcase your best work and
+            attract clients
           </p>
         </div>
+
+        {/* BACK BUTTON */}
 
         <button
           type="button"
           onClick={onBack}
           className="
             flex
-            h-[57px]
-            min-w-[365px]
+            h-[45px]
+            w-full
             shrink-0
             cursor-pointer
             items-center
@@ -153,19 +272,30 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             gap-[6px]
             rounded-[4px]
             bg-[#a60000]
-            px-[10px]
-            text-[18px]
+            px-[14px]
+            text-[15px]
             font-semibold
             text-white
             hover:bg-[#850000]
+            sm:h-[50px]
+            sm:w-[240px]
+            sm:text-[16px]
+            lg:h-[57px]
+            lg:w-[300px]
+            lg:text-[18px]
+            xl:w-[365px]
           "
         >
-          <FiArrowLeft className="h-[12px] w-[12px]" />
-          Back to Portfolio
+          <FiArrowLeft className="h-[14px] w-[14px] shrink-0" />
+
+          <span>Back to Portfolio</span>
         </button>
       </div>
 
-      {/* MAIN CARD */}
+      {/* =================================================
+          MAIN CARD
+      ================================================= */}
+
       <div
         className="
           mx-auto
@@ -179,26 +309,33 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
         "
       >
         {/* FORM CONTENT */}
+
         <div
           className="
-            px-[18px]
+            px-[14px]
             pb-[18px]
             pt-[18px]
-            sm:px-[38px]
+            sm:px-[28px]
             sm:pb-[20px]
             sm:pt-[20px]
+            lg:px-[38px]
           "
         >
           {/* EVENT INFORMATION */}
+
           <div
             className="
               flex
-              items-center
-              justify-between
-              gap-3
+              flex-col
+              items-start
+              gap-[10px]
               border-b
               border-[#eeeeee]
-              pb-[7px]
+              pb-[8px]
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
+              sm:gap-3
             "
           >
             <h2
@@ -206,7 +343,8 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 text-[21px]
                 font-medium
                 text-[#737373]
-                sm:text-[26px]
+                sm:text-[24px]
+                lg:text-[26px]
               "
             >
               Event Information
@@ -214,7 +352,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
 
             <button
               type="button"
-              onClick={() => setFeatured(!featured)}
+              onClick={() =>
+                setFeatured((previous) => !previous)
+              }
               className="
                 flex
                 h-[34px]
@@ -232,10 +372,11 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             >
               <span
                 className="
-                  text-[20px]
+                  text-[16px]
                   font-medium
                   leading-none
                   text-[#737373]
+                  sm:text-[18px]
                 "
               >
                 Featured
@@ -278,18 +419,22 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           </div>
 
           {/* EVENT TITLE */}
+
           <div className="mt-[14px]">
             <label
               className="
                 mb-[5px]
                 block
-                text-[18px]
+                text-[16px]
                 font-semibold
                 text-[#333]
+                sm:text-[18px]
               "
             >
               Event Title
-              <span className="text-[#d00000]">*</span>
+              <span className="text-[#d00000]">
+                *
+              </span>
             </label>
 
             <input
@@ -300,22 +445,26 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               }
               placeholder="Ex : Universal Media's Grand Launch Event 2026"
               className="
-                h-[31px]
+                h-[36px]
                 w-full
+                min-w-0
                 rounded-[4px]
                 border
                 border-[#c9c9c9]
                 px-[10px]
-                text-[16px]
+                text-[14px]
                 text-[#333]
                 outline-none
                 placeholder:text-[#999]
                 focus:border-[#970000]
+                sm:h-[31px]
+                sm:text-[16px]
               "
             />
           </div>
 
           {/* SERVICE TYPE + EVENT TYPE */}
+
           <div
             className="
               mt-[13px]
@@ -325,18 +474,21 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               sm:grid-cols-2
             "
           >
-            <div>
+            <div className="min-w-0">
               <label
                 className="
                   mb-[5px]
                   block
-                  text-[18px]
+                  text-[16px]
                   font-semibold
                   text-[#333]
+                  sm:text-[18px]
                 "
               >
                 Service Type
-                <span className="text-[#d00000]">*</span>
+                <span className="text-[#d00000]">
+                  *
+                </span>
               </label>
 
               <select
@@ -345,40 +497,49 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   setServiceType(event.target.value)
                 }
                 className="
-                  h-[31px]
+                  h-[36px]
                   w-full
+                  min-w-0
                   cursor-pointer
                   rounded-[4px]
                   border
                   border-[#c9c9c9]
                   bg-white
                   px-[10px]
-                  text-[16px]
+                  text-[14px]
                   text-[#555]
                   outline-none
                   focus:border-[#970000]
+                  sm:h-[31px]
+                  sm:text-[16px]
                 "
               >
                 {serviceTypes.map((service) => (
-                  <option key={service} value={service}>
+                  <option
+                    key={service}
+                    value={service}
+                  >
                     {service}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label
                 className="
                   mb-[5px]
                   block
-                  text-[18px]
+                  text-[16px]
                   font-semibold
                   text-[#333]
+                  sm:text-[18px]
                 "
               >
                 Event Type
-                <span className="text-[#d00000]">*</span>
+                <span className="text-[#d00000]">
+                  *
+                </span>
               </label>
 
               <select
@@ -387,22 +548,28 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   setEventType(event.target.value)
                 }
                 className="
-                  h-[31px]
+                  h-[36px]
                   w-full
+                  min-w-0
                   cursor-pointer
                   rounded-[4px]
                   border
                   border-[#c9c9c9]
                   bg-white
                   px-[10px]
-                  text-[16px]
+                  text-[14px]
                   text-[#555]
                   outline-none
                   focus:border-[#970000]
+                  sm:h-[31px]
+                  sm:text-[16px]
                 "
               >
                 {eventTypes.map((type) => (
-                  <option key={type} value={type}>
+                  <option
+                    key={type}
+                    value={type}
+                  >
                     {type}
                   </option>
                 ))}
@@ -411,14 +578,16 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           </div>
 
           {/* EVENT DATE */}
-          <div className="mt-[13px] max-w-[347px]">
+
+          <div className="mt-[13px] w-full max-w-[347px]">
             <label
               className="
                 mb-[5px]
                 block
-                text-[18px]
+                text-[16px]
                 font-semibold
                 text-[#333]
+                sm:text-[18px]
               "
             >
               Event Date
@@ -431,36 +600,44 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 setEventDate(event.target.value)
               }
               className="
-                h-[31px]
+                h-[36px]
                 w-full
                 rounded-[4px]
                 border
                 border-[#c9c9c9]
                 px-[10px]
-                text-[16px]
+                text-[14px]
                 text-[#555]
                 outline-none
                 focus:border-[#970000]
+                sm:h-[31px]
+                sm:text-[16px]
               "
             />
           </div>
 
           {/* ABOUT EVENT */}
+
           <div className="mt-[13px]">
             <div
               className="
                 mb-[5px]
                 flex
-                items-center
-                justify-between
-                gap-2
+                flex-col
+                items-start
+                gap-[4px]
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+                sm:gap-2
               "
             >
               <label
                 className="
-                  text-[18px]
+                  text-[16px]
                   font-semibold
                   text-[#333]
+                  sm:text-[18px]
                 "
               >
                 About Event
@@ -475,9 +652,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 >
                   (Optional)
                 </span>
-              </label>``
+              </label>
 
-              <span className="shrink-0 text-[13px] text-[#333]">
+              <span className="shrink-0 text-[12px] text-[#333] sm:text-[13px]">
                 {aboutEvent.length} / {MAX_ABOUT_LENGTH} Characters
               </span>
             </div>
@@ -490,41 +667,48 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               }
               placeholder="Ex : Universal media hired us for this auspicious event, we are glad to..."
               className="
-                h-[31px]
-                min-h-[31px]
+                min-h-[55px]
                 w-full
                 resize-y
                 rounded-[4px]
                 border
                 border-[#c9c9c9]
                 px-[10px]
-                py-[5px]
+                py-[7px]
                 text-[13px]
                 text-[#555]
                 outline-none
                 placeholder:text-[#999]
                 focus:border-[#970000]
+                sm:h-[31px]
+                sm:min-h-[31px]
               "
             />
           </div>
 
           {/* MEDIA HEADER */}
+
           <div
             className="
               mt-[18px]
               flex
-              items-center
-              justify-between
+              flex-col
+              items-start
+              gap-[5px]
               border-b
               border-[#eeeeee]
               pb-[7px]
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
             "
           >
             <h2
               className="
-                text-[26px]
+                text-[22px]
                 font-medium
                 text-[#777]
+                sm:text-[26px]
               "
             >
               Media Upload
@@ -542,7 +726,6 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 text-[#2E2E2E]
                 underline
                 underline-offset-2
-                outline-none
               "
             >
               Grid Preview
@@ -550,23 +733,26 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
           </div>
 
           {/* MEDIA AREA */}
+
           <div
             className="
               mt-[12px]
               flex
+              min-w-0
               flex-col
-              items-start
+              items-stretch
               gap-[14px]
               lg:flex-row
+              lg:items-start
             "
           >
             {/* UPLOAD BOX */}
+
             <div
               className="
                 flex
-                h-[292px]
+                min-h-[250px]
                 w-full
-                max-w-[500px]
                 shrink-0
                 flex-col
                 items-center
@@ -575,6 +761,9 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 border
                 border-dashed
                 border-[#777]
+                px-[12px]
+                sm:min-h-[292px]
+                lg:max-w-[500px]
               "
             >
               <div
@@ -590,16 +779,14 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   border-[#eeeeee]
                 "
               >
-                <FiUploadCloud
-                  className="h-[16px] w-[16px] text-[#e11]"
-                />
+                <FiUploadCloud className="h-[16px] w-[16px] text-[#e11]" />
               </div>
 
-              <p className="text-[16px] text-[#6D6D6D]">
+              <p className="text-center text-[14px] text-[#6D6D6D] sm:text-[16px]">
                 Upload photos, clips of the event
               </p>
 
-              <p className="mt-[1px] text-[13px] text-[#6D6D6D]">
+              <p className="mt-[1px] text-center text-[12px] text-[#6D6D6D] sm:text-[13px]">
                 (.jpg, png, webp supported)
               </p>
 
@@ -621,20 +808,21 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 onChange={handleVideoChange}
               />
 
-              <div className="mt-[10px] flex items-center gap-[7px]">
+              <div className="mt-[10px] flex w-full max-w-[210px] items-center gap-[7px]">
                 <button
                   type="button"
                   onClick={() =>
                     photoInputRef.current?.click()
                   }
                   className="
-                    h-[27px]
-                    min-w-[99px]
+                    h-[32px]
+                    min-w-0
+                    flex-1
                     cursor-pointer
                     rounded-[2px]
                     bg-[#d83c3c]
                     px-[8px]
-                    text-[12px]
+                    text-[11px]
                     font-bold
                     text-white
                   "
@@ -648,15 +836,16 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                     videoInputRef.current?.click()
                   }
                   className="
-                    h-[27px]
-                    min-w-[94px]
+                    h-[32px]
+                    min-w-0
+                    flex-1
                     cursor-pointer
                     rounded-[2px]
                     border
                     border-[#bdbdbd]
                     bg-white
                     px-[8px]
-                    text-[12px]
+                    text-[11px]
                     font-bold
                     text-[#555]
                   "
@@ -667,6 +856,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             </div>
 
             {/* GRID PREVIEW */}
+
             <div className="min-w-0 flex-1">
               <div
                 className="
@@ -678,6 +868,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 "
               >
                 {/* BOX 1 */}
+
                 <div
                   className="
                     relative
@@ -703,7 +894,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                       text-[#000]
                     "
                   >
-                    3 images
+                    {photos.length} images
                   </span>
 
                   <div
@@ -722,19 +913,23 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                   >
                     {photos.length > 0 ? (
                       <div className="flex h-full w-full gap-[1px]">
-                        {photos.slice(0, 3).map((photo) => (
-                          <img
-                            key={photo.id}
-                            src={photo.url}
-                            alt=""
-                            className="
-                              h-full
-                              min-w-0
-                              flex-1
-                              object-cover
-                            "
-                          />
-                        ))}
+                        {photos
+                          .slice(0, 3)
+                          .map((photo) => (
+                            <img
+                              key={photo.id}
+                              src={
+                                photo.url
+                              }
+                              alt=""
+                              className="
+                                h-full
+                                min-w-0
+                                flex-1
+                                object-cover
+                              "
+                            />
+                          ))}
                       </div>
                     ) : (
                       <FiImage className="h-[15px] w-[15px] text-[#777]" />
@@ -757,6 +952,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 </div>
 
                 {/* BOX 2 */}
+
                 <div
                   className="
                     relative
@@ -812,6 +1008,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 </div>
 
                 {/* BOX 3 */}
+
                 <div
                   className="
                     relative
@@ -858,6 +1055,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
                 </div>
 
                 {/* BOX 4 */}
+
                 <div
                   className="
                     relative
@@ -905,44 +1103,58 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               </div>
 
               {/* NOTE */}
+
               <p
                 className="
                   mt-[10px]
-                  text-[14px]
+                  text-[12px]
                   font-light
-                  leading-[24px]
+                  leading-[20px]
                   text-[#6D6D6D]
+                  sm:text-[14px]
+                  sm:leading-[24px]
                 "
               >
-                <span className="font-medium">Note :</span>{" "}
-                Kindly upload the photos according to the mentioned
-                dimensions for the best HD grid viewing experience
-                for the clients.
+                <span className="font-medium">
+                  Note :
+                </span>{" "}
+                Kindly upload the photos according
+                to the mentioned dimensions for the
+                best HD grid viewing experience for
+                the clients.
               </p>
             </div>
           </div>
         </div>
 
-        {/* BOTTOM ACTION BAR */}
+        {/* =================================================
+            BOTTOM ACTION BAR
+        ================================================= */}
+
         <div
           className="
             flex
-            items-center
-            justify-end
-            gap-[26px]
+            flex-col
+            items-stretch
+            gap-[12px]
             border-t
             border-[#e6e6e6]
-            px-[18px]
+            px-[14px]
             py-[12px]
-            sm:px-[38px]
-            sm:py-[12px]
+            sm:flex-row
+            sm:items-center
+            sm:justify-end
+            sm:gap-[20px]
+            sm:px-[28px]
+            lg:px-[38px]
           "
         >
           <button
             type="button"
             className="
               cursor-pointer
-              text-[16px]
+              text-center
+              text-[15px]
               font-semibold
               text-[#970000]
               hover:text-[#780000]
@@ -958,7 +1170,7 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
             className="
               flex
               h-[45px]
-              min-w-[158px]
+              w-full
               cursor-pointer
               items-center
               justify-center
@@ -966,10 +1178,12 @@ const PortfolioSectionForm = ({ onBack, onSave }) => {
               rounded-[5px]
               bg-[#303030]
               px-5
-              text-[16px]
+              text-[15px]
               font-semibold
-              text-[#FFFFFF]
+              text-white
               hover:bg-[#222]
+              sm:w-[158px]
+              sm:text-[16px]
             "
           >
             Save Section

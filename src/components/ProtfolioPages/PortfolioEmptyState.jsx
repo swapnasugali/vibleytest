@@ -219,6 +219,7 @@ const PortfolioEmptyState = ({ onAddPortfolio }) => {
             h-[52px]
             w-[363px]
             translate-x-[-50%]
+            cursor-pointer
             items-center
             justify-center
             gap-[7px]
@@ -258,6 +259,7 @@ const PortfolioEmptyState = ({ onAddPortfolio }) => {
             top-[515px]
             left-[50%]
             underline
+            cursor-pointer
             flex
             translate-x-[-50%]
             items-center

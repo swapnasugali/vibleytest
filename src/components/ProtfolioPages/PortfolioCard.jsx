@@ -3,16 +3,134 @@ import React, { useState } from "react";
 import {
   FiEdit,
   FiEye,
-  FiTrash2,
 } from "react-icons/fi";
 
 import {
-  FaEyeSlash,
   FaStar,
   FaCamera,
+  FaTrash,
 } from "react-icons/fa";
 
+import { LuEyeClosed } from "react-icons/lu";
+
 import PortfolioGalleryPreview from "./PortfolioGalleryPreview";
+
+/* WEDDING */
+import photo01 from "../../assets/photo053.jpg";
+import photo02 from "../../assets/photo021.jpg";
+import photo03 from "../../assets/photo03.jpg";
+import photo04 from "../../assets/photo04.jpg";
+
+/* BIRTHDAY */
+import birthday1 from "../../assets/birthday1.png";
+import birthday2 from "../../assets/birthday.png";
+import birthday3 from "../../assets/birthday3.png";
+import birthday4 from "../../assets/birthday4.png";
+
+/* WEDDING VIDEOS */
+import weddingVideo from "../../assets/Videos/wedding-video.mp4";
+import cateringVideo from "../../assets/Videos/events-light-video.mp4";
+
+/* BIRTHDAY VIDEOS */
+import cateringvideo from "../../assets/Videos/catering-video.mp4";
+import corporatelight from "../../assets/Videos/corporate-light-video.mp4";
+
+/* CORPORATE EVENT */
+import corporatePhoto01 from "../../assets/corporategala1.jpg";
+import corporatePhoto02 from "../../assets/corporategala2.jpg";
+import corporatePhoto03 from "../../assets/corporategala3.jpg";
+import corporatePhoto04 from "../../assets/corporategala4.jpg";
+
+import corporateVideo01 from "../../assets/Videos/corporate-light-video.mp4";
+import corporateVideo02 from "../../assets/Videos/events-light-video.mp4";
+
+/* GET TO GATHER */
+import getTogetherPhoto01 from "../../assets/event11.png";
+import getTogetherPhoto02 from "../../assets/light1.jpg";
+import getTogetherPhoto03 from "../../assets/event042.jpg";
+import getTogetherPhoto04 from "../../assets/event44.png";
+
+import getTogetherVideo01 from "../../assets/Videos/catering-video.mp4";
+import getTogetherVideo02 from "../../assets/Videos/wedding-video.mp4";
+
+
+const EVENT_MEDIA = {
+  "corporate event": {
+    photos: [
+      corporatePhoto01,
+      corporatePhoto02,
+      corporatePhoto03,
+      corporatePhoto04,
+    ],
+    videos: [
+      corporateVideo01,
+      corporateVideo02,
+    ],
+  },
+
+  wedding: {
+    photos: [
+      photo01,
+      photo02,
+      photo03,
+      photo04,
+    ],
+    videos: [
+      weddingVideo,
+      cateringVideo,
+    ],
+  },
+
+  birthday: {
+    photos: [
+      birthday1,
+      birthday2,
+      birthday3,
+      birthday4,
+    ],
+    videos: [
+      cateringvideo,
+      corporatelight,
+    ],
+  },
+
+  "get together": {
+    photos: [
+      getTogetherPhoto01,
+      getTogetherPhoto02,
+      getTogetherPhoto03,
+      getTogetherPhoto04,
+    ],
+    videos: [
+      getTogetherVideo01,
+      getTogetherVideo02,
+    ],
+  },
+
+  "get to gather": {
+    photos: [
+      getTogetherPhoto01,
+      getTogetherPhoto02,
+      getTogetherPhoto03,
+      getTogetherPhoto04,
+    ],
+    videos: [
+      getTogetherVideo01,
+      getTogetherVideo02,
+    ],
+  },
+};
+
+
+const normalizeEventType = (value = "") => {
+  return value
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ");
+};
+
 
 const PortfolioCard = ({
   section,
@@ -23,31 +141,84 @@ const PortfolioCard = ({
   const [isVisible, setIsVisible] = useState(showGallery);
 
   const handleEdit = () => {
-    if (onEdit) onEdit(section);
+    if (onEdit) {
+      onEdit(section);
+    }
   };
+
 
   const handleDelete = () => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this portfolio section?"
     );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
-    if (onDelete) onDelete(section.id);
+    if (onDelete) {
+      onDelete(section.id);
+    }
   };
 
-  const photos = Array.isArray(section.photos)
+
+  const eventKey = normalizeEventType(
+    section?.eventType
+  );
+
+
+  const eventMedia =
+    EVENT_MEDIA[eventKey] || {
+      photos: [],
+      videos: [],
+    };
+
+
+  const savedPhotos = Array.isArray(section?.photos)
     ? section.photos
     : [];
 
-  const videos = Array.isArray(section.videos)
+
+  const savedVideos = Array.isArray(section?.videos)
     ? section.videos
     : [];
+
+
+  const photos =
+    savedPhotos.length > 0
+      ? savedPhotos
+      : eventMedia.photos;
+
+
+  const videos =
+    savedVideos.length > 0
+      ? savedVideos
+      : eventMedia.videos;
+
+
+  /* =====================================================
+     DESTINATION WEDDING AT MALDIVES
+     ALWAYS SHOW FEATURED BADGE
+  ===================================================== */
+
+  const isDestinationWedding =
+    section?.title
+      ?.toString()
+      .trim()
+      .toLowerCase() ===
+    "destination wedding at maldives";
+
+
+  const isFeatured =
+    isDestinationWedding ||
+    section?.featured === true;
+
 
   return (
     <article
       className="
         w-full
+        max-w-full
         overflow-hidden
         rounded-[7px]
         bg-white
@@ -64,21 +235,23 @@ const PortfolioCard = ({
       <div
         className="
           flex
+          w-full
+          min-w-0
           items-start
           justify-between
+          gap-[10px]
           px-[27px]
-          pb-[11px]
+          pb-[10px]
           pt-[14px]
         "
       >
 
-        {/* LEFT CONTENT */}
-
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
 
           <div
             className="
               flex
+              min-w-0
               flex-wrap
               items-center
               gap-[7px]
@@ -87,35 +260,44 @@ const PortfolioCard = ({
 
             <h2
               className="
+                min-w-0
+                max-w-full
+                break-words
                 text-[26px]
-                font-medium
+                font-regular
+              
                 leading-[19px]
                 text-[#333333]
               "
             >
-              {section.title}
+              {section?.title ||
+                "Untitled Portfolio"}
             </h2>
 
 
-            {/* FEATURED */}
+            {/* =================================================
+                FEATURED BADGE
+            ================================================= */}
 
-            {section.featured && (
+            {isFeatured && (
               <span
                 className="
                   inline-flex
-                  h-[24px]
+                  h-[37px]
+                  shrink-0
                   items-center
                   gap-[3px]
                   rounded-[3px]
                   bg-[#f5ad00]
-                  px-[7px]
+                  px-[6px]
                   text-[14px]
                   font-semibold
                   leading-none
                   text-white
                 "
               >
-                <FaStar size={18} />
+                <FaStar size={17} />
+
                 Featured
               </span>
             )}
@@ -123,12 +305,16 @@ const PortfolioCard = ({
           </div>
 
 
-          {/* SERVICE + EVENT TYPE */}
+          {/* =================================================
+              SERVICE + EVENT TYPE
+          ================================================= */}
 
           <div
             className="
-              mt-[7px]
+              mt-[6px]
               flex
+              min-w-0
+              flex-wrap
               items-center
               gap-[5px]
             "
@@ -137,31 +323,42 @@ const PortfolioCard = ({
             <span
               className="
                 inline-flex
-                h-[20px]
+                h-[27px]
+                max-w-full
+                shrink-0
                 items-center
+                overflow-hidden
                 rounded-[3px]
                 bg-[#222222]
-                px-[9px]
+                px-[7px]
                 text-[14px]
                 font-medium
                 leading-none
                 text-white
               "
             >
+
               <FaCamera
-                className="mr-[4px] text-white"
+                className="
+                  mr-[4px]
+                  shrink-0
+                "
                 size={17}
               />
 
-              {section.serviceType ||
-                "General Photography"}
+              <span className="truncate">
+                {section?.serviceType ||
+                  "General Photography"}
+              </span>
+
             </span>
 
 
             <span
               className="
-                h-[17px]
+                h-[14px]
                 w-[1px]
+                shrink-0
                 bg-[#777777]
               "
             />
@@ -169,13 +366,15 @@ const PortfolioCard = ({
 
             <span
               className="
+                max-w-full
+                truncate
                 text-[14px]
                 font-medium
                 leading-none
                 text-[#333333]
               "
             >
-              {section.eventType ||
+              {section?.eventType ||
                 "Corporate Event"}
             </span>
 
@@ -184,17 +383,16 @@ const PortfolioCard = ({
         </div>
 
 
-        {/* =================================================
-            ACTION ICONS
-        ================================================= */}
+        {/* =====================================================
+            ACTION BUTTONS
+        ===================================================== */}
 
         <div
           className="
-            ml-[15px]
             flex
             shrink-0
             items-center
-            gap-[20px]
+            gap-[28px]
             pt-[1px]
           "
         >
@@ -207,8 +405,9 @@ const PortfolioCard = ({
             aria-label="Edit portfolio"
             className="
               flex
-              h-[18px]
-              w-[18px]
+              h-[32px]
+              w-[32px]
+              shrink-0
               cursor-pointer
               items-center
               justify-center
@@ -221,7 +420,7 @@ const PortfolioCard = ({
             "
           >
             <FiEdit
-              size={18}
+              size={25}
               strokeWidth={2.2}
             />
           </button>
@@ -235,8 +434,9 @@ const PortfolioCard = ({
             aria-label="Delete portfolio"
             className="
               flex
-              h-[18px]
-              w-[18px]
+              h-[32px]
+              w-[32px]
+              shrink-0
               cursor-pointer
               items-center
               justify-center
@@ -245,12 +445,11 @@ const PortfolioCard = ({
               p-0
               text-[#850000]
               transition
-              hover:text-[#c00000]
+              hover:text-[#a60000]
             "
           >
-            <FiTrash2
-              size={17}
-              strokeWidth={2.2}
+            <FaTrash
+              size={30}
             />
           </button>
 
@@ -271,8 +470,9 @@ const PortfolioCard = ({
             }
             className="
               flex
-              h-[18px]
-              w-[18px]
+              h-[70px]
+              w-[70px]
+              shrink-0
               cursor-pointer
               items-center
               justify-center
@@ -281,17 +481,20 @@ const PortfolioCard = ({
               p-0
               text-[#222222]
               transition
-              hover:text-[#a60000]
+              hover:text-[#111111]
             "
           >
 
             {isVisible ? (
               <FiEye
-                size={18}
-                strokeWidth={2.3}
+                size={30}
+                strokeWidth={2.2}
               />
             ) : (
-              <FaEyeSlash size={18} />
+              <LuEyeClosed
+                size={38}
+                strokeWidth={3}
+              />
             )}
 
           </button>
@@ -308,21 +511,22 @@ const PortfolioCard = ({
       {isVisible && (
         <div
           className="
-            px-[18px]
-            pb-[15px]
+            w-full
+            min-w-0
+            px-[12px]
+            pb-[12px]
           "
         >
-
           <PortfolioGalleryPreview
             photos={photos}
             videos={videos}
           />
-
         </div>
       )}
 
     </article>
   );
 };
+
 
 export default PortfolioCard;

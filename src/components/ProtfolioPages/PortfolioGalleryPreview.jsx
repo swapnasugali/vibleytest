@@ -1,16 +1,280 @@
-import React from "react";
-
+import React, { useRef, useState } from "react";
 import {
-  FiPlay,
   FiImage,
+  FiPlay,
+  FiPause,
 } from "react-icons/fi";
 
+/* =========================================================
+   MEDIA URL
+========================================================= */
+
+const getMediaUrl = (media) => {
+  if (!media) {
+    return "";
+  }
+
+  if (typeof media === "string") {
+    return media;
+  }
+
+  if (media.url) {
+    return media.url;
+  }
+
+  if (media.file instanceof File) {
+    return URL.createObjectURL(
+      media.file
+    );
+  }
+
+  if (media instanceof File) {
+    return URL.createObjectURL(media);
+  }
+
+  return "";
+};
+
+/* =========================================================
+   PHOTO BOX
+========================================================= */
+
+const PhotoBox = ({ photo }) => {
+  const url = getMediaUrl(photo);
+
+  return (
+    <div
+      className="
+        relative
+        h-full
+        w-full
+        overflow-hidden
+        rounded-[6px]
+        bg-[#F4F4F4]
+      "
+    >
+      {url ? (
+        <img
+          src={url}
+          alt="Portfolio"
+          className="
+            absolute
+            inset-0
+            h-full
+            w-full
+            object-cover
+            object-center
+          "
+        />
+      ) : (
+        <div
+          className="
+            flex
+            h-full
+            w-full
+            items-center
+            justify-center
+          "
+        >
+          <FiImage
+            className="
+              text-[28px]
+              text-[#B8B8B8]
+            "
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* =========================================================
+   VIDEO BOX
+========================================================= */
+
+const VideoBox = ({ video }) => {
+  const videoRef = useRef(null);
+
+  const [isPlaying, setIsPlaying] =
+    useState(false);
+
+  const url = getMediaUrl(video);
+
+  const handleToggle = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const videoElement =
+      videoRef.current;
+
+    if (!videoElement || !url) {
+      return;
+    }
+
+    try {
+      if (videoElement.paused) {
+        await videoElement.play();
+      } else {
+        videoElement.pause();
+      }
+    } catch (error) {
+      console.error(
+        "Video play error:",
+        error
+      );
+    }
+  };
+
+  return (
+    <div
+      className="
+        relative
+        h-full
+        w-full
+        overflow-hidden
+        rounded-[6px]
+        bg-black
+      "
+    >
+      {url ? (
+        <video
+          ref={videoRef}
+          src={url}
+          muted
+          playsInline
+          preload="metadata"
+          onPlay={() =>
+            setIsPlaying(true)
+          }
+          onPause={() =>
+            setIsPlaying(false)
+          }
+          onEnded={() =>
+            setIsPlaying(false)
+          }
+          className="
+            absolute
+            inset-0
+            h-full
+            w-full
+            object-cover
+            object-center
+          "
+        />
+      ) : (
+        <div
+          className="
+            flex
+            h-full
+            w-full
+            items-center
+            justify-center
+            bg-[#F4F4F4]
+          "
+        >
+          <FiPlay
+            className="
+              text-[28px]
+              text-[#B8B8B8]
+            "
+          />
+        </div>
+      )}
+
+      {/* PLAY / PAUSE */}
+
+      {url && (
+        <button
+          type="button"
+          onClick={handleToggle}
+          aria-label={
+            isPlaying
+              ? "Pause video"
+              : "Play video"
+          }
+          className="
+            absolute
+            left-1/2
+            top-1/2
+            z-30
+            flex
+            h-[40px]
+            w-[40px]
+            -translate-x-1/2
+            -translate-y-1/2
+            cursor-pointer
+            items-center
+            justify-center
+            rounded-full
+            border-0
+            bg-white/90
+            p-0
+            shadow-sm
+            transition-all
+            duration-200
+            hover:scale-105
+            hover:bg-white
+          "
+        >
+          {isPlaying ? (
+            <FiPause
+              className="
+                h-[16px]
+                w-[16px]
+                text-black
+              "
+            />
+          ) : (
+            <FiPlay
+              className="
+                ml-[2px]
+                h-[16px]
+                w-[16px]
+                text-black
+              "
+            />
+          )}
+        </button>
+      )}
+    </div>
+  );
+};
+
+/* =========================================================
+   EMPTY MEDIA BOX
+========================================================= */
+
+const EmptyMediaBox = () => {
+  return (
+    <div
+      className="
+        flex
+        h-full
+        w-full
+        items-center
+        justify-center
+        rounded-[6px]
+        bg-[#F4F4F4]
+      "
+    >
+      <FiImage
+        className="
+          text-[28px]
+          text-[#B8B8B8]
+        "
+      />
+    </div>
+  );
+};
+
+/* =========================================================
+   PORTFOLIO GALLERY
+========================================================= */
 
 const PortfolioGalleryPreview = ({
   photos = [],
   videos = [],
 }) => {
-
   const safePhotos =
     Array.isArray(photos)
       ? photos
@@ -21,187 +285,218 @@ const PortfolioGalleryPreview = ({
       ? videos
       : [];
 
+  const photo1 = safePhotos[0];
+  const photo2 = safePhotos[1];
+  const photo3 = safePhotos[2];
+  const photo4 = safePhotos[3];
 
-  const getMediaUrl = (media) => {
-
-    if (!media) {
-      return "";
-    }
-
-    if (typeof media === "string") {
-      return media;
-    }
-
-    return media.url || "";
-  };
-
-
-  const allMedia = [
-    ...safePhotos.map(
-      (photo) => ({
-        type: "photo",
-        url: getMediaUrl(photo),
-      })
-    ),
-
-    ...safeVideos.map(
-      (video) => ({
-        type: "video",
-        url: getMediaUrl(video),
-      })
-    ),
-  ];
-
-
-  if (allMedia.length === 0) {
-    return (
-      <div
-        className="
-          flex
-          h-[180px]
-          w-full
-          items-center
-          justify-center
-          rounded-[6px]
-          bg-[#f4f4f4]
-          text-[14px]
-          text-[#888888]
-        "
-      >
-        No media available
-      </div>
-    );
-  }
-
+  const video1 = safeVideos[0];
+  const video2 = safeVideos[1];
 
   return (
-    <div
-      className="
-        grid
-        w-full
-        grid-cols-4
-        gap-[8px]
-      "
-    >
+    <div className="w-full min-w-0">
 
-      {allMedia
-        .slice(0, 6)
-        .map((media, index) => (
+      {/* ===================================================
+          DESKTOP GALLERY
+      =================================================== */}
 
-          <div
-            key={`${media.type}-${index}`}
-            className="
-              relative
-              h-[190px]
-              overflow-hidden
-              rounded-[5px]
-              bg-[#eeeeee]
-            "
-          >
+      <div
+        className="
+          hidden
+          h-[360px]
+          w-full
+          grid-cols-[1fr_1.75fr_1.75fr_1fr_1fr]
+          grid-rows-[1fr_1fr]
+          gap-[4px]
+          overflow-hidden
+          rounded-[6px]
+          md:grid
+        "
+      >
 
-            {/* =================================================
-                IMAGE
-            ================================================= */}
+        {/* PHOTO 1 */}
 
-            {media.type === "photo" &&
-            media.url ? (
+        <div
+          className="
+            col-start-1
+            row-span-2
+            min-h-0
+            h-full
+            w-full
+          "
+        >
+          {photo1 ? (
+            <PhotoBox photo={photo1} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
-              <img
-                src={media.url}
-                alt={`Portfolio ${index + 1}`}
-                className="
-                  h-full
-                  w-full
-                  object-cover
-                "
-              />
+        {/* PHOTO 2 */}
 
-            ) : null}
+        <div
+          className="
+            col-start-2
+            col-span-2
+            row-start-1
+            min-h-0
+            h-full
+            w-full
+          "
+        >
+          {photo2 ? (
+            <PhotoBox photo={photo2} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
+        {/* PHOTO 3 */}
 
-            {/* =================================================
-                VIDEO
-            ================================================= */}
+        <div
+          className="
+            col-start-2
+            row-start-2
+            min-h-0
+            h-full
+            w-full
+          "
+        >
+          {photo3 ? (
+            <PhotoBox photo={photo3} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
-            {media.type === "video" &&
-            media.url ? (
+        {/* PHOTO 4 */}
 
-              <video
-                src={media.url}
-                className="
-                  h-full
-                  w-full
-                  object-cover
-                "
-                muted
-                playsInline
-                controls
-              />
+        <div
+          className="
+            col-start-3
+            row-start-2
+            min-h-0
+            h-full
+            w-full
+          "
+        >
+          {photo4 ? (
+            <PhotoBox photo={photo4} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
-            ) : null}
+        {/* VIDEO 1 */}
 
+        <div
+          className="
+            col-start-4
+            row-span-2
+            min-h-0
+            h-full
+            w-full
+          "
+        >
+          {video1 ? (
+            <VideoBox video={video1} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
-            {/* =================================================
-                EMPTY MEDIA
-            ================================================= */}
+        {/* VIDEO 2 */}
 
-            {!media.url && (
-              <div
-                className="
-                  flex
-                  h-full
-                  w-full
-                  items-center
-                  justify-center
-                  bg-[#f1f1f1]
-                "
-              >
-                <FiImage
-                  size={28}
-                  className="text-[#999999]"
-                />
-              </div>
-            )}
+        <div
+          className="
+            col-start-5
+            row-span-2
+            min-h-0
+            h-full
+            w-full
+          "
+        >
+          {video2 ? (
+            <VideoBox video={video2} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
+      </div>
 
+      {/* ===================================================
+          MOBILE / TABLET GALLERY
+      =================================================== */}
 
-            {/* =================================================
-                VIDEO LABEL
-            ================================================= */}
+      <div
+        className="
+          grid
+          grid-cols-2
+          gap-[4px]
+          md:hidden
+        "
+      >
 
-            {media.type === "video" &&
-              media.url && (
-                <span
-                  className="
-                    absolute
-                    left-[8px]
-                    top-[8px]
-                    flex
-                    items-center
-                    gap-[4px]
-                    rounded-[3px]
-                    bg-black/70
-                    px-[7px]
-                    py-[4px]
-                    text-[11px]
-                    font-medium
-                    text-white
-                  "
-                >
+        {/* PHOTO 1 */}
 
-                  <FiPlay
-                    size={11}
-                    fill="white"
-                  />
+        <div className="h-[190px] w-full">
+          {photo1 ? (
+            <PhotoBox photo={photo1} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
-                  Video
+        {/* PHOTO 2 */}
 
-                </span>
-              )}
+        <div className="h-[190px] w-full">
+          {photo2 ? (
+            <PhotoBox photo={photo2} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
-          </div>
+        {/* PHOTO 3 */}
 
-        ))}
+        <div className="h-[190px] w-full">
+          {photo3 ? (
+            <PhotoBox photo={photo3} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
 
+        {/* PHOTO 4 */}
+
+        <div className="h-[190px] w-full">
+          {photo4 ? (
+            <PhotoBox photo={photo4} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
+
+        {/* VIDEO 1 */}
+
+        <div className="h-[190px] w-full">
+          {video1 ? (
+            <VideoBox video={video1} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
+
+        {/* VIDEO 2 */}
+
+        <div className="h-[190px] w-full">
+          {video2 ? (
+            <VideoBox video={video2} />
+          ) : (
+            <EmptyMediaBox />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
