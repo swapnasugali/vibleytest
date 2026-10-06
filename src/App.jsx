@@ -16,34 +16,26 @@ import ServiceCategoryPage from "./Pages/ServiceCategory1/ServiceCategoryPage";
 import ProviderDashboard from "./components/ProviderDashboard/ProviderDashboard";
 import ProfilerPage from "./components/ProfilerPage/ProfilerPage";
 
-/* =========================================================
-   PROVIDER PORTFOLIO
-   ========================================================= */
-
 import ProviderPortfolioPage from "./components/ProtfolioPages/PortfolioPage";
 
 
 /* =========================================================
-   PROVIDER SERVICES / PRICING
-   =========================================================
-   
-   ServicesPricingPage.jsx should be inside:
-
-   src/components/ProtfolioPages/ServicesPricing/
-   ServicesPricingPage.jsx
-
+   SERVICES / PRICING PAGES
 ========================================================= */
 
-import ServicesPricingPage from "./components/ServicesPricing/ServicePricingPage";
+import ServicePricingPage from "./components/ServicesPricing/ServicePricingPage";
+
+import FixedPackagePage from "./components/ServicesPricing/FixedPackagePage";
+
+import SpecificServicePage from "./components/ServicesPricing/SpecificServicePage";
+
+import AddOnPage from "./components/ServicesPricing/AddOnPage";
 
 
 function AppRoutes() {
+
   const { pathname } = useLocation();
 
-
-  /* =========================================================
-     SCROLL TO TOP WHEN ROUTE CHANGES
-  ========================================================= */
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,22 +45,15 @@ function AppRoutes() {
   return (
     <Routes>
 
-
       {/* =====================================================
-          HOME
+          PUBLIC PAGES
       ===================================================== */}
 
       <Route
         path="/"
-        element={
-          <Layout HomePage={HomePage} />
-        }
+        element={<Layout HomePage={HomePage} />}
       />
 
-
-      {/* =====================================================
-          PUBLIC PORTFOLIO
-      ===================================================== */}
 
       <Route
         path="/portfolio/:type/:id"
@@ -77,10 +62,6 @@ function AppRoutes() {
         }
       />
 
-
-      {/* =====================================================
-          SERVICES
-      ===================================================== */}
 
       <Route
         path="/services/:id"
@@ -91,56 +72,65 @@ function AppRoutes() {
 
 
       {/* =====================================================
-          PROVIDER DASHBOARD
+          SERVICE PROVIDER
       ===================================================== */}
 
       <Route
         path="/service-providers"
-        element={
-          <ProviderDashboard />
-        }
+        element={<ProviderDashboard />}
       />
 
-
-      {/* =====================================================
-          PROVIDER PROFILE
-      ===================================================== */}
 
       <Route
         path="/service-providers/profile"
-        element={
-          <ProfilerPage />
-        }
+        element={<ProfilerPage />}
       />
 
-
-      {/* =====================================================
-          PROVIDER PORTFOLIO
-          
-          PortfolioPage.jsx contains its own header.
-      ===================================================== */}
 
       <Route
         path="/service-providers/profile/portfolio"
-        element={
-          <ProviderPortfolioPage />
-        }
+        element={<ProviderPortfolioPage />}
       />
 
 
       {/* =====================================================
-          PROVIDER SERVICES / PRICING
-          
-          NEW PAGE
+          SERVICES / PRICING MAIN PAGE
       ===================================================== */}
 
       <Route
         path="/service-providers/services-pricing"
-        element={
-          <ServicesPricingPage />
-        }
+        element={<ServicePricingPage />}
       />
 
+
+      {/* =====================================================
+          FIXED PACKAGE PAGE
+      ===================================================== */}
+
+      <Route
+        path="/service-providers/services-pricing/fixed-package"
+        element={<FixedPackagePage />}
+      />
+
+
+      {/* =====================================================
+          SPECIFIC SERVICE PAGE
+      ===================================================== */}
+
+      <Route
+        path="/service-providers/services-pricing/specific-service"
+        element={<SpecificServicePage />}
+      />
+
+
+      {/* =====================================================
+          ADD ONS PAGE
+      ===================================================== */}
+
+      <Route
+        path="/service-providers/services-pricing/add-ons"
+        element={<AddOnPage />}
+      />
 
     </Routes>
   );
@@ -148,6 +138,7 @@ function AppRoutes() {
 
 
 function App() {
+
   return (
     <BrowserRouter>
 
