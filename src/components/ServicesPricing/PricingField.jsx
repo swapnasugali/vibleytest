@@ -7,32 +7,37 @@ const PricingField = ({
   children,
   className = "",
   labelClassName = "",
-  labelSize = "10px",
+  labelSize = "text-[18px]",
 }) => {
   return (
     <div className={className}>
       <label
         className={`
           block
-          font-medium
           leading-[24px]
           text-[#333333]
+          ${labelSize}
           ${labelClassName}
         `}
-        style={{
-          fontSize: labelSize,
-        }}
       >
         {label}
 
         {required && (
-          <span className="text-[#d00000]">
+          <span className="ml-[2px] text-[#d00000]">
             *
           </span>
         )}
 
         {optional && (
-          <span className="ml-[4px] text-[12px] italic text-[#777777]">
+          <span
+            className="
+              ml-[5px]
+              text-[14px]
+              font-normal
+              italic
+              text-[#777777]
+            "
+          >
             (Optional)
           </span>
         )}
@@ -58,12 +63,15 @@ export const inputClassName = `
   border-[#cfcfcf]
   bg-white
   px-[12px]
-  text-[14px]
+  text-[16px]
+  font-normal
   text-[#555555]
   outline-none
-  placeholder:text-[14px]
+  placeholder:text-[15px]
+  placeholder:font-normal
   placeholder:text-[#9e9e9e]
   focus:border-[#c40000]
+  focus:ring-0
 `;
 
 
@@ -79,10 +87,12 @@ export const selectClassName = `
   border-[#cfcfcf]
   bg-white
   px-[12px]
-  text-[14px]
+  text-[16px]
+  font-normal
   text-[#555555]
   outline-none
   focus:border-[#c40000]
+  focus:ring-0
 `;
 
 
@@ -100,13 +110,16 @@ export const textareaClassName = `
   bg-white
   px-[12px]
   py-[10px]
-  text-[14px]
-  leading-[20px]
+  text-[16px]
+  font-normal
+  leading-[22px]
   text-[#555555]
   outline-none
-  placeholder:text-[14px]
+  placeholder:text-[15px]
+  placeholder:font-normal
   placeholder:text-[#9e9e9e]
   focus:border-[#c40000]
+  focus:ring-0
 `;
 
 

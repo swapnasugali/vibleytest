@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   FiPlusCircle,
+  FiEdit2,
   FiTrash2,
   FiChevronDown,
+  FiCheckCircle,
 } from "react-icons/fi";
+
+import { FaCamera } from "react-icons/fa";
 
 import ServicesPricingLayout from "./ServicesPricingLayout";
 
@@ -16,6 +20,27 @@ import PricingField, {
 
 
 const FixedPackagePage = () => {
+  /* =========================================================
+     FORM STATE
+  ========================================================= */
+
+  const [formData, setFormData] = useState({
+    packageName: "",
+    category: "",
+    chargeType: "Amount Per Event",
+    totalPrice: "",
+    description: "",
+    overTimeCharge: "",
+    travelCharges: "Ex : 25 INR Per Km",
+    minimumBookingHours: "",
+    advanceBookingPayment: "",
+    workDeliveryTimeline: "",
+  });
+
+
+  /* =========================================================
+     SERVICES STATE
+  ========================================================= */
 
   const [services, setServices] = useState([
     {
@@ -29,6 +54,137 @@ const FixedPackagePage = () => {
       description: "",
     },
   ]);
+
+
+  /* =========================================================
+     SAVED PACKAGES
+  ========================================================= */
+
+  const [savedPackages, setSavedPackages] = useState([
+    {
+      id: 1,
+      packageName: "Corporate Event Package",
+      category: "Photography",
+      serviceCount: "3 services, Add Ons Applicable",
+    },
+    {
+      id: 2,
+      packageName: "Pre Wedding Shoot Package",
+      category: "Photography",
+      serviceCount: "4 Services, Add Ons Applicable",
+    },
+  ]);
+
+
+  /* =========================================================
+     MESSAGE / VALIDATION
+  ========================================================= */
+
+  const [saveMessage, setSaveMessage] = useState("");
+  const [saveType, setSaveType] = useState("");
+  const [errors, setErrors] = useState({});
+
+
+  /* =========================================================
+     LOAD SAVED DATA
+  ========================================================= */
+
+  useEffect(() => {
+    try {
+      const savedPackageData =
+        localStorage.getItem("fixedPackageData");
+
+      if (savedPackageData) {
+        const parsedData =
+          JSON.parse(savedPackageData);
+
+        if (parsedData.formData) {
+          setFormData(parsedData.formData);
+        }
+
+        if (
+          parsedData.services &&
+          Array.isArray(parsedData.services)
+        ) {
+          setServices(parsedData.services);
+        }
+
+        if (
+          parsedData.savedPackages &&
+          Array.isArray(parsedData.savedPackages)
+        ) {
+          setSavedPackages(
+            parsedData.savedPackages
+          );
+        }
+      }
+    } catch (error) {
+      console.error(
+        "Unable to load fixed package data:",
+        error
+      );
+    }
+  }, []);
+
+
+  /* =========================================================
+     HANDLE INPUT
+  ========================================================= */
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    if (errors[name]) {
+      setErrors((previous) => ({
+        ...previous,
+        [name]: "",
+      }));
+    }
+
+    if (saveMessage) {
+      setSaveMessage("");
+      setSaveType("");
+    }
+  };
+
+
+  /* =========================================================
+     HANDLE SERVICE INPUT
+  ========================================================= */
+
+  const handleServiceChange = (
+    id,
+    field,
+    value
+  ) => {
+    setServices((previous) =>
+      previous.map((service) =>
+        service.id === id
+          ? {
+              ...service,
+              [field]: value,
+            }
+          : service
+      )
+    );
+
+    if (errors[`service-${id}-${field}`]) {
+      setErrors((previous) => ({
+        ...previous,
+        [`service-${id}-${field}`]: "",
+      }));
+    }
+
+    if (saveMessage) {
+      setSaveMessage("");
+      setSaveType("");
+    }
+  };
 
 
   /* =========================================================
@@ -60,11 +216,294 @@ const FixedPackagePage = () => {
   };
 
 
+  /* =========================================================
+     VALIDATION
+  ========================================================= */
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.packageName.trim()) {
+      newErrors.packageName =
+        "Fixed Package Name is required.";
+    }
+
+    if (!formData.category.trim()) {
+      newErrors.category =
+        "Category is required.";
+    }
+
+    if (!formData.totalPrice.trim()) {
+      newErrors.totalPrice =
+        "Total Price is required.";
+    }
+
+    if (
+      !formData.advanceBookingPayment.trim()
+    ) {
+      newErrors.advanceBookingPayment =
+        "Advance Booking Payment is required.";
+    }
+
+    if (services.length < 2) {
+      newErrors.services =
+        "At least 2 services are required.";
+    }
+
+    services.forEach((service) => {
+      if (!service.name.trim()) {
+        newErrors[
+          `service-${service.id}-name`
+        ] = "Service Name is required.";
+      }
+
+      if (!service.description.trim()) {
+        newErrors[
+          `service-${service.id}-description`
+        ] = "Description is required.";
+      }
+    });
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+
+  /* =========================================================
+     SAVE PACKAGE DATA
+  ========================================================= */
+
+  const savePackageData = (
+    status = "draft"
+  ) => {
+    const packageData = {
+      formData,
+      services,
+      savedPackages,
+      status,
+      savedAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem(
+      "fixedPackageData",
+      JSON.stringify(packageData)
+    );
+  };
+
+
+  /* =========================================================
+     SAVE DRAFT
+  ========================================================= */
+
+  const handleSaveDraft = () => {
+    savePackageData("draft");
+
+    setSaveType("success");
+
+    setSaveMessage(
+      "Draft saved successfully."
+    );
+
+    setTimeout(() => {
+      setSaveMessage("");
+    }, 3000);
+  };
+
+
+  /* =========================================================
+     SAVE PACKAGE
+  ========================================================= */
+
+  const handleSavePackage = () => {
+    const isValid = validateForm();
+
+    if (!isValid) {
+      setSaveType("error");
+
+      setSaveMessage(
+        "Please fill all required fields."
+      );
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+
+      return;
+    }
+
+    const newPackage = {
+      id: Date.now(),
+      packageName:
+        formData.packageName.trim(),
+      category:
+        formData.category.trim(),
+      serviceCount: `${services.length} services, Add Ons Applicable`,
+    };
+
+    const updatedPackages = [
+      ...savedPackages,
+      newPackage,
+    ];
+
+    setSavedPackages(updatedPackages);
+
+    const packageData = {
+      formData,
+      services,
+      savedPackages: updatedPackages,
+      status: "saved",
+      savedAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem(
+      "fixedPackageData",
+      JSON.stringify(packageData)
+    );
+
+    setSaveType("success");
+
+    setSaveMessage(
+      "Package saved successfully."
+    );
+
+    /* Clear form */
+
+    setFormData({
+      packageName: "",
+      category: "",
+      chargeType: "Amount Per Event",
+      totalPrice: "",
+      description: "",
+      overTimeCharge: "",
+      travelCharges: "Ex : 25 INR Per Km",
+      minimumBookingHours: "",
+      advanceBookingPayment: "",
+      workDeliveryTimeline: "",
+    });
+
+    setServices([
+      {
+        id: 1,
+        name: "",
+        description: "",
+      },
+      {
+        id: 2,
+        name: "",
+        description: "",
+      },
+    ]);
+
+    setErrors({});
+
+    setTimeout(() => {
+      setSaveMessage("");
+    }, 3000);
+  };
+
+
+  /* =========================================================
+     DELETE PACKAGE
+  ========================================================= */
+
+  const handleDeletePackage = (id) => {
+    const updatedPackages =
+      savedPackages.filter(
+        (pkg) => pkg.id !== id
+      );
+
+    setSavedPackages(updatedPackages);
+
+    try {
+      const existingData =
+        localStorage.getItem(
+          "fixedPackageData"
+        );
+
+      const parsedData = existingData
+        ? JSON.parse(existingData)
+        : {};
+
+      parsedData.savedPackages =
+        updatedPackages;
+
+      localStorage.setItem(
+        "fixedPackageData",
+        JSON.stringify(parsedData)
+      );
+    } catch (error) {
+      console.error(
+        "Unable to delete package:",
+        error
+      );
+    }
+  };
+
+
+  /* =========================================================
+     EDIT PACKAGE
+  ========================================================= */
+
+  const handleEditPackage = (pkg) => {
+    setFormData((previous) => ({
+      ...previous,
+      packageName: pkg.packageName,
+      category: pkg.category,
+    }));
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
+
   return (
     <ServicesPricingLayout
       activeModel="fixed"
       showBackgroundLines={false}
     >
+
+      {/* =====================================================
+          SAVE MESSAGE
+      ===================================================== */}
+
+      {saveMessage && (
+        <div
+          className={`
+            mt-[15px]
+            flex
+            items-center
+            gap-[8px]
+            rounded-[5px]
+            border
+            px-[16px]
+            py-[12px]
+            text-[16px]
+            font-medium
+            ${
+              saveType === "success"
+                ? "border-[#b7dfbd] bg-[#edf9ef] text-[#26733a]"
+                : "border-[#efb0b0] bg-[#fff1f1] text-[#c40000]"
+            }
+          `}
+        >
+          {saveType === "success" && (
+            <FiCheckCircle className="text-[20px]" />
+          )}
+
+          <span>
+            {saveMessage}
+          </span>
+        </div>
+      )}
+
 
       {/* =====================================================
           TOOLBAR
@@ -75,40 +514,111 @@ const FixedPackagePage = () => {
           mt-[18px]
           flex
           flex-col
-          justify-between
           gap-[10px]
           sm:flex-row
           sm:items-center
+          sm:justify-between
         "
       >
 
-        <div className="text-[22px] text-[#555555]">
-          All (01)
+        <div
+          className="
+            flex
+            items-center
+            gap-[10px]
+          "
+        >
+
+          <span
+            className="
+              text-[20px]
+              font-normal
+              text-[#555555]
+            "
+          >
+            All (
+            {String(
+              savedPackages.length
+            ).padStart(2, "0")}
+            )
+          </span>
+
+
+          <button
+            type="button"
+            className="
+              flex
+              h-[45px]
+              w-[121px]
+              cursor-pointer
+              items-center
+              justify-center
+              gap-[5px]
+              rounded-[4px]
+              bg-white
+              px-[9px]
+              text-[16px]
+              font-normal
+              text-[#333333]
+            "
+          >
+            Sort By
+
+            <FiChevronDown className="text-[17px]" />
+          </button>
+
         </div>
 
 
         <button
           type="button"
-          onClick={addService}
+          onClick={() => {
+            setFormData({
+              packageName: "",
+              category: "",
+              chargeType: "Amount Per Event",
+              totalPrice: "",
+              description: "",
+              overTimeCharge: "",
+              travelCharges: "Ex : 25 INR Per Km",
+              minimumBookingHours: "",
+              advanceBookingPayment: "",
+              workDeliveryTimeline: "",
+            });
+
+            setServices([
+              {
+                id: 1,
+                name: "",
+                description: "",
+              },
+              {
+                id: 2,
+                name: "",
+                description: "",
+              },
+            ]);
+
+            setErrors({});
+          }}
           className="
             flex
             h-[52px]
             w-[218px]
+            cursor-pointer
             items-center
             justify-center
             gap-[5px]
-            self-start
-            cursor-pointer
             rounded-[4px]
             bg-[#c40000]
             px-[16px]
             text-[18px]
             font-semibold
             text-white
-            sm:self-auto
           "
         >
-          <FiPlusCircle className="text-[16px]" />
+          <FiPlusCircle className="text-[17px]" />
+
           Add Package
         </button>
 
@@ -116,43 +626,7 @@ const FixedPackagePage = () => {
 
 
       {/* =====================================================
-          SORT
-      ===================================================== */}
-
-      <div
-        className="
-          mt-[-45px]
-          ml-[105px]
-          hidden
-          sm:block
-        "
-      >
-
-        <button
-          type="button"
-          className="
-            flex
-            h-[52px]
-            w-[121px]
-            cursor-pointer
-            items-center
-            gap-[5px]
-            rounded-[4px]
-            bg-white
-            px-[9px]
-            text-[20px]
-            text-[#333333]
-          "
-        >
-          Sort By
-          <FiChevronDown className="text-[20px]" />
-        </button>
-
-      </div>
-
-
-      {/* =====================================================
-          PACKAGE TITLE
+          TITLE
       ===================================================== */}
 
       <div className="mt-[15px]">
@@ -161,10 +635,10 @@ const FixedPackagePage = () => {
           className="
             text-[20px]
             font-medium
-            text-[#737373]
+            text-[#777777]
           "
         >
-          Fixed Package 1
+          Fixed Package - 1
         </p>
 
       </div>
@@ -176,12 +650,11 @@ const FixedPackagePage = () => {
 
       <section
         className="
-          mt-[8px]
+          mt-[7px]
           rounded-[6px]
           bg-white
-          px-[24px]
+          px-[25px]
           py-[20px]
-          shadow-[0_1px_7px_rgba(0,0,0,0.04)]
           sm:px-[30px]
           md:px-[34px]
         "
@@ -191,7 +664,7 @@ const FixedPackagePage = () => {
           className="
             grid
             grid-cols-1
-            gap-x-[18px]
+            gap-x-[20px]
             gap-y-[15px]
             sm:grid-cols-2
           "
@@ -202,14 +675,23 @@ const FixedPackagePage = () => {
           <PricingField
             label="Fixed Package Name"
             required
-            labelSize="18px"
+            labelSize="text-[18px]"
             labelClassName="font-semibold"
           >
             <input
               type="text"
+              name="packageName"
+              value={formData.packageName}
+              onChange={handleChange}
               placeholder="Ex : All in One Trending Pack"
               className={inputClassName}
             />
+
+            {errors.packageName && (
+              <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                {errors.packageName}
+              </p>
+            )}
           </PricingField>
 
 
@@ -218,14 +700,23 @@ const FixedPackagePage = () => {
           <PricingField
             label="Category"
             required
-            labelSize="18px"
+            labelSize="text-[18px]"
             labelClassName="font-semibold"
           >
             <input
               type="text"
-              placeholder="Photography"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              placeholder="Ex : Photography"
               className={inputClassName}
             />
+
+            {errors.category && (
+              <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                {errors.category}
+              </p>
+            )}
           </PricingField>
 
 
@@ -234,19 +725,26 @@ const FixedPackagePage = () => {
           <PricingField
             label="Charge Type"
             required
-            labelSize="18px"
+            labelSize="text-[18px]"
             labelClassName="font-semibold"
           >
-            <select className={selectClassName}>
-
-              <option className="text-[16px] text-[#474747]">
+            <select
+              name="chargeType"
+              value={formData.chargeType}
+              onChange={handleChange}
+              className={selectClassName}
+            >
+              <option>
                 Amount Per Event
               </option>
 
-              <option className="text-[16px] text-[#474747]">
+              <option>
                 Amount Per Hour
               </option>
 
+              <option>
+                Amount Per Item
+              </option>
             </select>
           </PricingField>
 
@@ -256,14 +754,23 @@ const FixedPackagePage = () => {
           <PricingField
             label="Total Price"
             required
-            labelSize="18px"
+            labelSize="text-[18px]"
             labelClassName="font-semibold"
           >
             <input
               type="text"
+              name="totalPrice"
+              value={formData.totalPrice}
+              onChange={handleChange}
               placeholder="12,000/- INR"
               className={inputClassName}
             />
+
+            {errors.totalPrice && (
+              <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                {errors.totalPrice}
+              </p>
+            )}
           </PricingField>
 
 
@@ -271,7 +778,7 @@ const FixedPackagePage = () => {
 
           <PricingField
             label="Description"
-            labelSize="18px"
+            labelSize="text-[18px]"
             labelClassName="font-semibold"
             className="sm:col-span-2"
           >
@@ -279,6 +786,10 @@ const FixedPackagePage = () => {
             <div className="relative">
 
               <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                maxLength={400}
                 placeholder="Ex : this is the best ever package which includes all the services ..."
                 className={textareaClassName}
               />
@@ -287,13 +798,13 @@ const FixedPackagePage = () => {
                 className="
                   absolute
                   right-[8px]
-                  top-[-20px]
-                  text-[16px]
-                  font-medium
+                  top-[-15px]
+                  text-[13px]
+                  font-normal
                   text-[#555555]
                 "
               >
-                0 / 400 Characters
+                {formData.description.length} / 400 Characters
               </span>
 
             </div>
@@ -301,86 +812,107 @@ const FixedPackagePage = () => {
           </PricingField>
 
 
-          {/* OVER TIME CHARGE */}
+          {/* OVER TIME */}
 
           <PricingField
             label="Over Time Charge / Hour"
-            labelSize="18px"
-            labelClassName="font-semibold"
             optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
           >
             <input
               type="text"
-              placeholder="Ex : 1500/- INR per Hour"
+              name="overTimeCharge"
+              value={formData.overTimeCharge}
+              onChange={handleChange}
+              placeholder="Ex : 1500/- INR Per Hour"
               className={inputClassName}
             />
           </PricingField>
 
 
-          {/* TRAVEL CHARGES */}
+          {/* TRAVEL */}
 
           <PricingField
             label="Travel Charges"
-            labelSize="18px"
-            labelClassName="font-semibold"
             optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
           >
-            <select className={selectClassName}>
-
-              <option className="text-[16px] text-[#474747]">
+            <select
+              name="travelCharges"
+              value={formData.travelCharges}
+              onChange={handleChange}
+              className={selectClassName}
+            >
+              <option>
                 Ex : 25 INR Per Km
               </option>
 
-              <option className="text-[16px] text-[#474747]">
+              <option>
                 No Travel Charge
               </option>
-
             </select>
           </PricingField>
 
 
-          {/* MINIMUM BOOKING HOURS */}
+          {/* MINIMUM HOURS */}
 
           <PricingField
             label="Min. Booking Hours"
-            labelSize="18px"
-            labelClassName="font-semibold"
             optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
           >
             <input
               type="text"
+              name="minimumBookingHours"
+              value={formData.minimumBookingHours}
+              onChange={handleChange}
               placeholder="Ex : 4 Hours"
               className={inputClassName}
             />
           </PricingField>
 
 
-          {/* ADVANCE BOOKING PAYMENT */}
+          {/* ADVANCE PAYMENT */}
 
           <PricingField
             label="Advance Booking Payment (%)"
-            labelSize="18px"
-            labelClassName="font-semibold"
             required
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
           >
             <input
               type="text"
+              name="advanceBookingPayment"
+              value={formData.advanceBookingPayment}
+              onChange={handleChange}
               placeholder="Ex : 30%"
               className={inputClassName}
             />
+
+            {errors.advanceBookingPayment && (
+              <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                {errors.advanceBookingPayment}
+              </p>
+            )}
           </PricingField>
 
 
-          {/* WORK DELIVERY TIMELINE */}
+          {/* DELIVERY */}
 
           <PricingField
             label="Work Delivery Timeline"
-            labelSize="18px"
-            labelClassName="font-semibold"
             optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
           >
             <input
               type="text"
+              name="workDeliveryTimeline"
+              value={formData.workDeliveryTimeline}
+              onChange={handleChange}
               placeholder="Ex : Within 3 DAYS of the Event"
               className={inputClassName}
             />
@@ -398,8 +930,11 @@ const FixedPackagePage = () => {
           <div
             className="
               flex
-              items-center
-              justify-between
+              flex-col
+              gap-[10px]
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
             "
           >
 
@@ -449,15 +984,19 @@ const FixedPackagePage = () => {
               "
             >
               <FiPlusCircle className="text-[16px]" />
+
               Add Service
             </button>
 
           </div>
 
 
-          {/* =================================================
-              SERVICE LIST
-          ================================================= */}
+          {errors.services && (
+            <p className="mt-[5px] text-[13px] text-[#c40000]">
+              {errors.services}
+            </p>
+          )}
+
 
           <div
             className="
@@ -468,126 +1007,200 @@ const FixedPackagePage = () => {
             "
           >
 
-            {services.map((service, index) => (
-
-              <div
-                key={service.id}
-                className="
-                  relative
-                  mb-[10px]
-                  grid
-                  grid-cols-1
-                  gap-[10px]
-                  last:mb-0
-                  sm:grid-cols-[25px_1fr_1.5fr]
-                "
-              >
-
-                {/* NUMBER */}
+            {services.map(
+              (service, index) => (
 
                 <div
+                  key={service.id}
                   className="
-                    hidden
-                    pt-[10px]
-                    text-[9px]
-                    font-medium
-                    sm:block
+                    relative
+                    mb-[10px]
+                    grid
+                    grid-cols-1
+                    gap-[10px]
+                    last:mb-0
+                    sm:grid-cols-[25px_1fr_1.5fr]
                   "
                 >
-                  {index + 1}.
-                </div>
 
-
-                {/* SERVICE NAME */}
-
-                <div>
-
-                  <label
-                    className="
-                      block
-                      text-[18px]
-                      font-semibold
-                    "
-                  >
-                    Service Name
-
-                    <span className="text-[#d00000]">
-                      *
-                    </span>
-                  </label>
-
-
-                  <input
-                    type="text"
-                    placeholder={
-                      index === 0
-                        ? "Ex : General Photography"
-                        : "Ex : Candid Photography"
-                    }
-                    className={`
-                      ${inputClassName}
-                      mt-[4px]
-                    `}
-                  />
-
-                </div>
-
-
-                {/* DESCRIPTION */}
-
-                <div>
+                  {/* NUMBER */}
 
                   <div
                     className="
-                      flex
-                      justify-between
+                      hidden
+                      pt-[10px]
+                      text-[9px]
+                      font-medium
+                      sm:block
                     "
                   >
+                    {index + 1}.
+                  </div>
 
-                    <label
+
+                  {/* SERVICE NAME */}
+
+                  <div>
+
+                    <div
                       className="
-                        text-[18px]
-                        font-semibold
+                        flex
+                        items-center
+                        justify-between
                       "
                     >
-                      Description
 
-                      <span className="text-[#d00000]">
-                        *
-                      </span>
-                    </label>
+                      <label
+                        className="
+                          block
+                          text-[18px]
+                          font-semibold
+                        "
+                      >
+                        Service Name
+
+                        <span className="text-[#d00000]">
+                          *
+                        </span>
+                      </label>
 
 
-                    <span
-                      className="
-                        text-[14px]
-                        text-[#737373]
-                      "
-                    >
-                      0 / 200 Characters
-                    </span>
+                      {services.length > 2 && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            removeService(
+                              service.id
+                            )
+                          }
+                          className="
+                            cursor-pointer
+                            text-[#c40000]
+                          "
+                          title="Remove Service"
+                        >
+                          <FiTrash2 className="text-[18px]" />
+                        </button>
+                      )}
+
+                    </div>
+
+
+                    <input
+                      type="text"
+                      value={service.name}
+                      onChange={(event) =>
+                        handleServiceChange(
+                          service.id,
+                          "name",
+                          event.target.value
+                        )
+                      }
+                      placeholder={
+                        index === 0
+                          ? "Ex : General Photography"
+                          : "Ex : Candid Photography"
+                      }
+                      className={`
+                        ${inputClassName}
+                        mt-[4px]
+                      `}
+                    />
+
+
+                    {errors[
+                      `service-${service.id}-name`
+                    ] && (
+                      <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                        {
+                          errors[
+                            `service-${service.id}-name`
+                          ]
+                        }
+                      </p>
+                    )}
 
                   </div>
 
 
-                  <input
-                    type="text"
-                    placeholder={
-                      index === 0
-                        ? "Ex : Stunning All around photography, which covers the event ..."
-                        : "Ex : Candid are Club, We are specialized in taking a toned cand..."
-                    }
-                    className={`
-                      ${inputClassName}
-                      mt-[4px]
-                    `}
-                  />
+                  {/* DESCRIPTION */}
+
+                  <div>
+
+                    <div
+                      className="
+                        flex
+                        justify-between
+                      "
+                    >
+
+                      <label
+                        className="
+                          text-[18px]
+                          font-semibold
+                        "
+                      >
+                        Description
+
+                        <span className="text-[#d00000]">
+                          *
+                        </span>
+                      </label>
+
+
+                      <span
+                        className="
+                          text-[14px]
+                          text-[#737373]
+                        "
+                      >
+                        {service.description.length} / 200 Characters
+                      </span>
+
+                    </div>
+
+
+                    <input
+                      type="text"
+                      maxLength={200}
+                      value={service.description}
+                      onChange={(event) =>
+                        handleServiceChange(
+                          service.id,
+                          "description",
+                          event.target.value
+                        )
+                      }
+                      placeholder={
+                        index === 0
+                          ? "Ex : Stunning All around photography, which covers the event ..."
+                          : "Ex : Candid are Club, We are specialized in taking a toned cand..."
+                      }
+                      className={`
+                        ${inputClassName}
+                        mt-[4px]
+                      `}
+                    />
+
+
+                    {errors[
+                      `service-${service.id}-description`
+                    ] && (
+                      <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                        {
+                          errors[
+                            `service-${service.id}-description`
+                          ]
+                        }
+                      </p>
+                    )}
+
+                  </div>
 
                 </div>
 
-              </div>
-
-            ))}
+              )
+            )}
 
           </div>
 
@@ -596,60 +1209,51 @@ const FixedPackagePage = () => {
 
         {/* =====================================================
             BUTTONS
-            UI ONLY — NO SAVE ACTION
         ===================================================== */}
 
         <div
           className="
-            mt-[20px]
+            mt-[22px]
             flex
             flex-col-reverse
             items-center
             justify-end
-            gap-[10px]
+            gap-[12px]
             sm:flex-row
           "
         >
 
-          {/* SAVE DRAFT
-              No onClick
-              No navigation
-              No API
-              No state change
-          */}
-
           <button
             type="button"
+            onClick={handleSaveDraft}
             className="
               cursor-pointer
-              text-[22px]
+              text-[18px]
               font-semibold
               text-[#c40000]
+              transition
+              hover:text-[#970000]
             "
           >
             Save Draft
           </button>
 
 
-          {/* SAVE PACKAGE
-              No onClick
-              No navigation
-              No API
-              No state change
-          */}
-
           <button
             type="button"
+            onClick={handleSavePackage}
             className="
-              h-[54px]
-              w-[236px]
+              h-[32px]
+              w-[180px]
               cursor-pointer
               rounded-[4px]
               bg-[#333333]
               px-[18px]
-              text-[22px]
+              text-[18px]
               font-semibold
               text-white
+              transition
+              hover:bg-[#222222]
             "
           >
             Save Package
@@ -658,6 +1262,181 @@ const FixedPackagePage = () => {
         </div>
 
       </section>
+
+
+      {/* =====================================================
+          SAVED FIXED PACKAGES
+          SAME STYLE AS SPECIFIC SERVICE
+      ===================================================== */}
+
+      <div
+        className="
+          mt-[12px]
+          space-y-[8px]
+        "
+      >
+
+        {savedPackages.map((pkg) => (
+
+          <div
+            key={pkg.id}
+            className="
+              flex
+              items-center
+              justify-between
+              rounded-[5px]
+              bg-white
+              px-[18px]
+              py-[15px]
+            "
+          >
+
+            {/* LEFT CONTENT */}
+
+            <div>
+
+              <h3
+                className="
+                  text-[18px]
+                  font-semibold
+                  text-[#333333]
+                "
+              >
+                {pkg.packageName}
+              </h3>
+
+
+              {/* CATEGORY + PACKAGE INFO */}
+
+              <div
+                className="
+                  mt-[5px]
+                  flex
+                  items-center
+                  gap-[7px]
+                "
+              >
+
+                {/* BLACK PHOTOGRAPHY BADGE */}
+
+                <div
+                  className="
+                    inline-flex
+                    h-[37px]
+                    w-[142px]
+                    shrink-0
+                    items-center
+                    rounded-[3px]
+                    bg-[#222222]
+                    px-[9px]
+                    text-[14px]
+                    font-medium
+                    leading-none
+                    text-white
+                  "
+                >
+
+                  <FaCamera
+                    className="
+                      mr-[4px]
+                      text-white
+                    "
+                    size={17}
+                  />
+                  <span
+                    className="
+                      text-[14px]
+                      font-semibold
+                    "
+                  >
+
+                  {pkg.category}
+                  </span>
+
+                </div>
+
+
+                {/* SERVICE COUNT */}
+
+                <span
+                  className="
+                    text-[14px]
+                    font-semibold
+                    text-[#111111]
+                  "
+                >
+                  {pkg.serviceCount}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            {/* RIGHT ICONS */}
+
+            <div
+              className="
+                flex
+                items-center
+                gap-[14px]
+              "
+            >
+
+              {/* EDIT */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleEditPackage(pkg)
+                }
+                className="
+                  cursor-pointer
+                  text-[#333333]
+                "
+                title="Edit"
+              >
+                <FiEdit2 className="text-[18px]" />
+              </button>
+
+
+              {/* DELETE */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleDeletePackage(pkg.id)
+                }
+                className="
+                  cursor-pointer
+                  text-[#900000]
+                "
+                title="Delete"
+              >
+                <FiTrash2 className="text-[18px]" />
+              </button>
+
+
+              {/* EXPAND */}
+
+              <button
+                type="button"
+                className="
+                  cursor-pointer
+                  text-[#333333]
+                "
+                title="Expand"
+              >
+                <FiChevronDown className="text-[18px]" />
+              </button>
+
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
 
     </ServicesPricingLayout>
   );

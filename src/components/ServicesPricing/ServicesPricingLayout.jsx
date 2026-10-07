@@ -13,20 +13,17 @@ import { useNavigate, Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import account from "../../assets/account.jpg";
 
-
 const ServicesPricingLayout = ({
   children,
   activeModel = "fixed",
   showBackgroundLines = true,
 }) => {
   const navigate = useNavigate();
-
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
-
 
   /* =========================================================
      PRICING MODEL NAVIGATION
@@ -52,25 +49,12 @@ const ServicesPricingLayout = ({
     }
   };
 
-
   return (
     <div
       className="min-h-screen w-full"
       style={{
         fontFamily: "Poppins, sans-serif",
-
-        /* =====================================================
-           MAIN PAGE BACKGROUND
-           
-           Normal Services Pricing page:
-           vertical lines visible.
-
-           Fixed Package page:
-           vertical lines hidden.
-        ===================================================== */
-
         backgroundColor: "#f6f6f6",
-
         backgroundImage: showBackgroundLines
           ? `
             repeating-linear-gradient(
@@ -82,13 +66,10 @@ const ServicesPricingLayout = ({
             )
           `
           : "none",
-
         backgroundPosition: "49px 0px",
-
         backgroundAttachment: "scroll",
       }}
     >
-
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -97,19 +78,7 @@ const ServicesPricingLayout = ({
         className="w-full border-b border-[#eeeeee]"
         style={{
           minHeight: "95px",
-
           backgroundColor: "#fffcf6",
-
-          /* =================================================
-             HEADER BACKGROUND
-             
-             Normal Services Pricing page:
-             vertical lines visible.
-
-             Fixed Package page:
-             vertical lines hidden.
-          ================================================= */
-
           backgroundImage: showBackgroundLines
             ? `
               repeating-linear-gradient(
@@ -121,11 +90,9 @@ const ServicesPricingLayout = ({
               )
             `
             : "none",
-
           backgroundPosition: "49px 0px",
         }}
       >
-
         <div
           className="
             flex
@@ -137,13 +104,9 @@ const ServicesPricingLayout = ({
             sm:px-[40px]
             md:px-[55px]
             lg:px-[60px]
-            xl:px-[62px]
           "
         >
-
-          {/* =================================================
-              LOGO
-          ================================================= */}
+          {/* LOGO */}
 
           <Link
             to="/service-providers"
@@ -163,10 +126,7 @@ const ServicesPricingLayout = ({
             />
           </Link>
 
-
-          {/* =================================================
-              DESKTOP NAVIGATION
-          ================================================= */}
+          {/* DESKTOP NAVIGATION */}
 
           <nav
             className="
@@ -178,16 +138,9 @@ const ServicesPricingLayout = ({
               xl:gap-[44px]
             "
           >
-
-            {/* =================================================
-                DASHBOARD
-            ================================================= */}
-
             <button
               type="button"
-              onClick={() =>
-                navigate("/service-providers")
-              }
+              onClick={() => navigate("/service-providers")}
               className="
                 cursor-pointer
                 whitespace-nowrap
@@ -197,16 +150,10 @@ const ServicesPricingLayout = ({
                 transition
                 hover:text-[#e00000]
                 lg:text-[15px]
-                xl:text-[22px]
               "
             >
               DASHBOARD
             </button>
-
-
-            {/* =================================================
-                PROFILE
-            ================================================= */}
 
             <button
               type="button"
@@ -222,16 +169,10 @@ const ServicesPricingLayout = ({
                 transition
                 hover:text-[#e00000]
                 lg:text-[15px]
-                xl:text-[22px]
               "
             >
               PROFILE
             </button>
-
-
-            {/* =================================================
-                PORTFOLIO
-            ================================================= */}
 
             <button
               type="button"
@@ -249,16 +190,10 @@ const ServicesPricingLayout = ({
                 transition
                 hover:text-[#e00000]
                 lg:text-[15px]
-                xl:text-[22px]
               "
             >
               PORTFOLIO
             </button>
-
-
-            {/* =================================================
-                SERVICES / PRICING
-            ================================================= */}
 
             <button
               type="button"
@@ -274,16 +209,10 @@ const ServicesPricingLayout = ({
                 font-semibold
                 text-[#e00000]
                 lg:text-[15px]
-                xl:text-[22px]
               "
             >
               SERVICES / PRICING
             </button>
-
-
-            {/* =================================================
-                LEADS
-            ================================================= */}
 
             <button
               type="button"
@@ -296,21 +225,15 @@ const ServicesPricingLayout = ({
                 transition
                 hover:text-[#e00000]
                 lg:text-[15px]
-                xl:text-[22px]
               "
             >
               LEADS
             </button>
-
           </nav>
 
-
-          {/* =================================================
-              ACCOUNT + MOBILE MENU
-          ================================================= */}
+          {/* ACCOUNT + MOBILE BUTTON */}
 
           <div className="flex items-center">
-
             <img
               src={account}
               alt="Account"
@@ -330,7 +253,6 @@ const ServicesPricingLayout = ({
               className="ml-4 md:hidden"
               aria-label="Toggle menu"
             >
-
               {menuOpen ? (
                 <FaTimes
                   className="
@@ -346,17 +268,11 @@ const ServicesPricingLayout = ({
                   "
                 />
               )}
-
             </button>
-
           </div>
-
         </div>
 
-
-        {/* ===================================================
-            MOBILE MENU
-        =================================================== */}
+        {/* MOBILE MENU */}
 
         {menuOpen && (
           <div
@@ -367,18 +283,7 @@ const ServicesPricingLayout = ({
               md:hidden
             "
           >
-
-            <div
-              className="
-                flex
-                flex-col
-                px-5
-                py-3
-              "
-            >
-
-              {/* DASHBOARD */}
-
+            <div className="flex flex-col px-5 py-3">
               <button
                 type="button"
                 onClick={() => {
@@ -396,9 +301,6 @@ const ServicesPricingLayout = ({
                 DASHBOARD
               </button>
 
-
-              {/* PROFILE */}
-
               <button
                 type="button"
                 onClick={() => {
@@ -415,9 +317,6 @@ const ServicesPricingLayout = ({
               >
                 PROFILE
               </button>
-
-
-              {/* PORTFOLIO */}
 
               <button
                 type="button"
@@ -438,9 +337,6 @@ const ServicesPricingLayout = ({
                 PORTFOLIO
               </button>
 
-
-              {/* SERVICES / PRICING */}
-
               <button
                 type="button"
                 onClick={() => {
@@ -453,15 +349,12 @@ const ServicesPricingLayout = ({
                   py-2.5
                   text-left
                   text-[15px]
-                  font-bold
+                  font-semibold
                   text-[#e00000]
                 "
               >
                 SERVICES / PRICING
               </button>
-
-
-              {/* LEADS */}
 
               <button
                 type="button"
@@ -476,17 +369,13 @@ const ServicesPricingLayout = ({
               >
                 LEADS
               </button>
-
             </div>
-
           </div>
         )}
-
       </header>
 
-
       {/* =====================================================
-          MAIN CONTENT
+          MAIN
       ===================================================== */}
 
       <main
@@ -502,13 +391,9 @@ const ServicesPricingLayout = ({
           lg:px-[50px]
         "
       >
-
-        {/* ===================================================
-            PAGE TITLE
-        =================================================== */}
+        {/* PAGE TITLE */}
 
         <div>
-
           <h1
             className="
               text-[32px]
@@ -519,7 +404,6 @@ const ServicesPricingLayout = ({
           >
             Services and Pricing
           </h1>
-
 
           <p
             className="
@@ -534,12 +418,10 @@ const ServicesPricingLayout = ({
             Configure your pricing models, packages, and add-ons
             to streamline your bookings.
           </p>
-
         </div>
 
-
         {/* =====================================================
-            PRICING MODELS CONTAINER
+            PRICING MODELS
         ===================================================== */}
 
         <section
@@ -556,7 +438,6 @@ const ServicesPricingLayout = ({
             backgroundColor: "rgba(246, 246, 246, 0.32)",
           }}
         >
-
           <div
             className="
               px-[18px]
@@ -565,24 +446,69 @@ const ServicesPricingLayout = ({
               sm:py-[20px]
             "
           >
-
             {/* =================================================
-                PRICING MODELS TITLE
+                PRICING MODELS HEADING
             ================================================= */}
 
             <div className="flex items-start">
+              
+              {/* MONEY ICON + L MARK */}
 
-              <FaRegMoneyBillAlt
+              <div
                 className="
-                  mr-[6px]
-                  mt-[2px]
-                  text-[14px]
-                  text-[#e00000]
+                  relative
+                  mr-[8px]
+                  mt-[1px]
+                  h-[28px]
+                  w-[25px]
+                  shrink-0
                 "
-              />
+              >
+                <FaRegMoneyBillAlt
+                  className="
+                    absolute
+                    left-[3px]
+                    top-0
+                    z-10
+                    text-[17px]
+                    text-[#e00000]
+                  "
+                />
+
+                {/* VERTICAL PART OF L */}
+
+                <span
+                  className="
+                    absolute
+                    bottom-[8px]
+                    left-[-2px]
+                    z-20
+                    h-[12px]
+                    w-[2px]
+                    rounded-full
+                    bg-[#e00000]
+                  "
+                />
+
+                {/* HORIZONTAL PART OF L */}
+
+                <span
+                  className="
+                    absolute
+                    bottom-[8px]
+                    left-0
+                    z-20
+                    h-[2px]
+                    w-[20px]
+                    rounded-full
+                    bg-[#e00000]
+                  "
+                />
+              </div>
+
+              {/* HEADING TEXT */}
 
               <div>
-
                 <h2
                   className="
                     text-[26px]
@@ -604,11 +530,8 @@ const ServicesPricingLayout = ({
                 >
                   Choose how you want to structure your charges.
                 </p>
-
               </div>
-
             </div>
-
 
             {/* =================================================
                 PRICING MODEL CARDS
@@ -623,10 +546,7 @@ const ServicesPricingLayout = ({
                 sm:grid-cols-3
               "
             >
-
-              {/* =================================================
-                  FIXED PACKAGES
-              ================================================= */}
+              {/* FIXED PACKAGES */}
 
               <button
                 type="button"
@@ -637,10 +557,10 @@ const ServicesPricingLayout = ({
                   relative
                   min-h-[50px]
                   w-full
+                  cursor-pointer
                   rounded-[6px]
                   border
                   px-[10px]
-                  cursor-pointer
                   py-[7px]
                   text-left
                   transition
@@ -657,7 +577,6 @@ const ServicesPricingLayout = ({
                       : "rgba(255,255,255,0.18)",
                 }}
               >
-
                 <h3
                   className="
                     text-[18px]
@@ -686,7 +605,6 @@ const ServicesPricingLayout = ({
                     top-[8px]
                   "
                 >
-
                   {activeModel === "fixed" ? (
                     <FaCheckCircle
                       className="
@@ -702,15 +620,10 @@ const ServicesPricingLayout = ({
                       "
                     />
                   )}
-
                 </span>
-
               </button>
 
-
-              {/* =================================================
-                  SPECIFIC SERVICE
-              ================================================= */}
+              {/* SPECIFIC SERVICE */}
 
               <button
                 type="button"
@@ -721,11 +634,11 @@ const ServicesPricingLayout = ({
                   relative
                   min-h-[50px]
                   w-full
+                  cursor-pointer
                   rounded-[6px]
                   border
                   px-[10px]
                   py-[7px]
-                  cursor-pointer
                   text-left
                   transition
                   ${
@@ -741,7 +654,6 @@ const ServicesPricingLayout = ({
                       : "rgba(255,255,255,0.18)",
                 }}
               >
-
                 <h3
                   className="
                     text-[18px]
@@ -770,7 +682,6 @@ const ServicesPricingLayout = ({
                     top-[8px]
                   "
                 >
-
                   {activeModel === "service" ? (
                     <FaCheckCircle
                       className="
@@ -786,15 +697,10 @@ const ServicesPricingLayout = ({
                       "
                     />
                   )}
-
                 </span>
-
               </button>
 
-
-              {/* =================================================
-                  ADD ONS
-              ================================================= */}
+              {/* ADD ONS */}
 
               <button
                 type="button"
@@ -805,10 +711,10 @@ const ServicesPricingLayout = ({
                   relative
                   min-h-[50px]
                   w-full
+                  cursor-pointer
                   rounded-[6px]
                   border
                   px-[10px]
-                  cursor-pointer
                   py-[7px]
                   text-left
                   transition
@@ -825,7 +731,6 @@ const ServicesPricingLayout = ({
                       : "rgba(255,255,255,0.18)",
                 }}
               >
-
                 <h3
                   className="
                     text-[18px]
@@ -854,7 +759,6 @@ const ServicesPricingLayout = ({
                     top-[8px]
                   "
                 >
-
                   {activeModel === "addons" ? (
                     <FaCheckCircle
                       className="
@@ -870,29 +774,18 @@ const ServicesPricingLayout = ({
                       "
                     />
                   )}
-
                 </span>
-
               </button>
-
             </div>
-
           </div>
-
         </section>
 
-
-        {/* =====================================================
-            PAGE-SPECIFIC CONTENT
-        ===================================================== */}
+        {/* PAGE CONTENT */}
 
         {children}
-
       </main>
-
     </div>
   );
 };
-
 
 export default ServicesPricingLayout;
