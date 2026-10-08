@@ -19,6 +19,7 @@ const ServicesPricingLayout = ({
   showBackgroundLines = true,
 }) => {
   const navigate = useNavigate();
+
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => {
@@ -55,6 +56,7 @@ const ServicesPricingLayout = ({
       style={{
         fontFamily: "Poppins, sans-serif",
         backgroundColor: "#f6f6f6",
+
         backgroundImage: showBackgroundLines
           ? `
             repeating-linear-gradient(
@@ -66,10 +68,12 @@ const ServicesPricingLayout = ({
             )
           `
           : "none",
+
         backgroundPosition: "49px 0px",
         backgroundAttachment: "scroll",
       }}
     >
+
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -79,6 +83,7 @@ const ServicesPricingLayout = ({
         style={{
           minHeight: "95px",
           backgroundColor: "#fffcf6",
+
           backgroundImage: showBackgroundLines
             ? `
               repeating-linear-gradient(
@@ -90,9 +95,13 @@ const ServicesPricingLayout = ({
               )
             `
             : "none",
+
           backgroundPosition: "49px 0px",
         }}
       >
+
+        {/* HEADER CONTENT */}
+
         <div
           className="
             flex
@@ -106,7 +115,10 @@ const ServicesPricingLayout = ({
             lg:px-[60px]
           "
         >
-          {/* LOGO */}
+
+          {/* =================================================
+              LOGO
+          ================================================= */}
 
           <Link
             to="/service-providers"
@@ -126,7 +138,10 @@ const ServicesPricingLayout = ({
             />
           </Link>
 
-          {/* DESKTOP NAVIGATION */}
+
+          {/* =================================================
+              DESKTOP NAVIGATION
+          ================================================= */}
 
           <nav
             className="
@@ -138,9 +153,14 @@ const ServicesPricingLayout = ({
               xl:gap-[44px]
             "
           >
+
+            {/* DASHBOARD */}
+
             <button
               type="button"
-              onClick={() => navigate("/service-providers")}
+              onClick={() =>
+                navigate("/service-providers")
+              }
               className="
                 cursor-pointer
                 whitespace-nowrap
@@ -155,10 +175,15 @@ const ServicesPricingLayout = ({
               DASHBOARD
             </button>
 
+
+            {/* PROFILE */}
+
             <button
               type="button"
               onClick={() =>
-                navigate("/service-providers/profile")
+                navigate(
+                  "/service-providers/profile"
+                )
               }
               className="
                 cursor-pointer
@@ -173,6 +198,9 @@ const ServicesPricingLayout = ({
             >
               PROFILE
             </button>
+
+
+            {/* PORTFOLIO */}
 
             <button
               type="button"
@@ -195,6 +223,9 @@ const ServicesPricingLayout = ({
               PORTFOLIO
             </button>
 
+
+            {/* SERVICES / PRICING */}
+
             <button
               type="button"
               onClick={() =>
@@ -214,8 +245,15 @@ const ServicesPricingLayout = ({
               SERVICES / PRICING
             </button>
 
-            <button
-              type="button"
+
+            {/* =================================================
+                LEADS
+                THIS IS THE IMPORTANT CHANGE
+            ================================================= */}
+
+            <Link
+              to="/service-providers/leads"
+              onClick={closeMenu}
               className="
                 cursor-pointer
                 whitespace-nowrap
@@ -228,12 +266,17 @@ const ServicesPricingLayout = ({
               "
             >
               LEADS
-            </button>
+            </Link>
+
           </nav>
 
-          {/* ACCOUNT + MOBILE BUTTON */}
+
+          {/* =================================================
+              ACCOUNT + MOBILE BUTTON
+          ================================================= */}
 
           <div className="flex items-center">
+
             <img
               src={account}
               alt="Account"
@@ -245,10 +288,14 @@ const ServicesPricingLayout = ({
               "
             />
 
+            {/* MOBILE MENU BUTTON */}
+
             <button
               type="button"
               onClick={() =>
-                setMenuOpen((prev) => !prev)
+                setMenuOpen(
+                  (previous) => !previous
+                )
               }
               className="ml-4 md:hidden"
               aria-label="Toggle menu"
@@ -269,10 +316,15 @@ const ServicesPricingLayout = ({
                 />
               )}
             </button>
+
           </div>
+
         </div>
 
-        {/* MOBILE MENU */}
+
+        {/* =====================================================
+            MOBILE MENU
+        ===================================================== */}
 
         {menuOpen && (
           <div
@@ -283,11 +335,18 @@ const ServicesPricingLayout = ({
               md:hidden
             "
           >
+
             <div className="flex flex-col px-5 py-3">
+
+              {/* DASHBOARD */}
+
               <button
                 type="button"
                 onClick={() => {
-                  navigate("/service-providers");
+                  navigate(
+                    "/service-providers"
+                  );
+
                   closeMenu();
                 }}
                 className="
@@ -301,10 +360,16 @@ const ServicesPricingLayout = ({
                 DASHBOARD
               </button>
 
+
+              {/* PROFILE */}
+
               <button
                 type="button"
                 onClick={() => {
-                  navigate("/service-providers/profile");
+                  navigate(
+                    "/service-providers/profile"
+                  );
+
                   closeMenu();
                 }}
                 className="
@@ -318,12 +383,16 @@ const ServicesPricingLayout = ({
                 PROFILE
               </button>
 
+
+              {/* PORTFOLIO */}
+
               <button
                 type="button"
                 onClick={() => {
                   navigate(
                     "/service-providers/profile/portfolio"
                   );
+
                   closeMenu();
                 }}
                 className="
@@ -337,12 +406,16 @@ const ServicesPricingLayout = ({
                 PORTFOLIO
               </button>
 
+
+              {/* SERVICES / PRICING */}
+
               <button
                 type="button"
                 onClick={() => {
                   navigate(
                     "/service-providers/services-pricing"
                   );
+
                   closeMenu();
                 }}
                 className="
@@ -356,8 +429,14 @@ const ServicesPricingLayout = ({
                 SERVICES / PRICING
               </button>
 
-              <button
-                type="button"
+
+              {/* =================================================
+                  LEADS
+                  THIS IS THE IMPORTANT CHANGE
+              ================================================= */}
+
+              <Link
+                to="/service-providers/leads"
                 onClick={closeMenu}
                 className="
                   py-2.5
@@ -368,11 +447,15 @@ const ServicesPricingLayout = ({
                 "
               >
                 LEADS
-              </button>
+              </Link>
+
             </div>
+
           </div>
         )}
+
       </header>
+
 
       {/* =====================================================
           MAIN
@@ -391,9 +474,11 @@ const ServicesPricingLayout = ({
           lg:px-[50px]
         "
       >
+
         {/* PAGE TITLE */}
 
         <div>
+
           <h1
             className="
               text-[32px]
@@ -418,7 +503,9 @@ const ServicesPricingLayout = ({
             Configure your pricing models, packages, and add-ons
             to streamline your bookings.
           </p>
+
         </div>
+
 
         {/* =====================================================
             PRICING MODELS
@@ -435,9 +522,11 @@ const ServicesPricingLayout = ({
             shadow-[0_2px_10px_rgba(0,0,0,0.045)]
           "
           style={{
-            backgroundColor: "rgba(246, 246, 246, 0.32)",
+            backgroundColor:
+              "rgba(246, 246, 246, 0.32)",
           }}
         >
+
           <div
             className="
               px-[18px]
@@ -446,12 +535,11 @@ const ServicesPricingLayout = ({
               sm:py-[20px]
             "
           >
-            {/* =================================================
-                PRICING MODELS HEADING
-            ================================================= */}
+
+            {/* PRICING MODELS HEADING */}
 
             <div className="flex items-start">
-              
+
               {/* MONEY ICON + L MARK */}
 
               <div
@@ -464,6 +552,7 @@ const ServicesPricingLayout = ({
                   shrink-0
                 "
               >
+
                 <FaRegMoneyBillAlt
                   className="
                     absolute
@@ -475,7 +564,7 @@ const ServicesPricingLayout = ({
                   "
                 />
 
-                {/* VERTICAL PART OF L */}
+                {/* VERTICAL L */}
 
                 <span
                   className="
@@ -490,7 +579,7 @@ const ServicesPricingLayout = ({
                   "
                 />
 
-                {/* HORIZONTAL PART OF L */}
+                {/* HORIZONTAL L */}
 
                 <span
                   className="
@@ -504,11 +593,14 @@ const ServicesPricingLayout = ({
                     bg-[#e00000]
                   "
                 />
+
               </div>
+
 
               {/* HEADING TEXT */}
 
               <div>
+
                 <h2
                   className="
                     text-[26px]
@@ -530,8 +622,11 @@ const ServicesPricingLayout = ({
                 >
                   Choose how you want to structure your charges.
                 </p>
+
               </div>
+
             </div>
+
 
             {/* =================================================
                 PRICING MODEL CARDS
@@ -546,6 +641,7 @@ const ServicesPricingLayout = ({
                 sm:grid-cols-3
               "
             >
+
               {/* FIXED PACKAGES */}
 
               <button
@@ -577,6 +673,7 @@ const ServicesPricingLayout = ({
                       : "rgba(255,255,255,0.18)",
                 }}
               >
+
                 <h3
                   className="
                     text-[18px]
@@ -621,7 +718,9 @@ const ServicesPricingLayout = ({
                     />
                   )}
                 </span>
+
               </button>
+
 
               {/* SPECIFIC SERVICE */}
 
@@ -654,6 +753,7 @@ const ServicesPricingLayout = ({
                       : "rgba(255,255,255,0.18)",
                 }}
               >
+
                 <h3
                   className="
                     text-[18px]
@@ -698,7 +798,9 @@ const ServicesPricingLayout = ({
                     />
                   )}
                 </span>
+
               </button>
+
 
               {/* ADD ONS */}
 
@@ -731,6 +833,7 @@ const ServicesPricingLayout = ({
                       : "rgba(255,255,255,0.18)",
                 }}
               >
+
                 <h3
                   className="
                     text-[18px]
@@ -775,15 +878,24 @@ const ServicesPricingLayout = ({
                     />
                   )}
                 </span>
+
               </button>
+
             </div>
+
           </div>
+
         </section>
 
-        {/* PAGE CONTENT */}
+
+        {/* =====================================================
+            PAGE CONTENT
+        ===================================================== */}
 
         {children}
+
       </main>
+
     </div>
   );
 };

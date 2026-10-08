@@ -18,24 +18,19 @@ import ProfilerPage from "./components/ProfilerPage/ProfilerPage";
 
 import ProviderPortfolioPage from "./components/ProtfolioPages/PortfolioPage";
 
-
-/* =========================================================
-   SERVICES / PRICING PAGES
-========================================================= */
-
+/* SERVICES / PRICING */
 import ServicePricingPage from "./components/ServicesPricing/ServicePricingPage";
-
 import FixedPackagePage from "./components/ServicesPricing/FixedPackagePage";
-
 import SpecificServicePage from "./components/ServicesPricing/SpecificServicePage";
-
 import AddOnPage from "./components/ServicesPricing/AddOnPage";
+
+/* LEADS */
+import Leads from "./components/Leads/Leads";
 
 
 function AppRoutes() {
 
   const { pathname } = useLocation();
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -45,15 +40,12 @@ function AppRoutes() {
   return (
     <Routes>
 
-      {/* =====================================================
-          PUBLIC PAGES
-      ===================================================== */}
+      {/* PUBLIC */}
 
       <Route
         path="/"
         element={<Layout HomePage={HomePage} />}
       />
-
 
       <Route
         path="/portfolio/:type/:id"
@@ -61,7 +53,6 @@ function AppRoutes() {
           <Layout HomePage={PublicPortfolioPage} />
         }
       />
-
 
       <Route
         path="/services/:id"
@@ -71,21 +62,17 @@ function AppRoutes() {
       />
 
 
-      {/* =====================================================
-          SERVICE PROVIDER
-      ===================================================== */}
+      {/* SERVICE PROVIDER */}
 
       <Route
         path="/service-providers"
         element={<ProviderDashboard />}
       />
 
-
       <Route
         path="/service-providers/profile"
         element={<ProfilerPage />}
       />
-
 
       <Route
         path="/service-providers/profile/portfolio"
@@ -93,43 +80,34 @@ function AppRoutes() {
       />
 
 
-      {/* =====================================================
-          SERVICES / PRICING MAIN PAGE
-      ===================================================== */}
+      {/* SERVICES / PRICING */}
 
       <Route
         path="/service-providers/services-pricing"
         element={<ServicePricingPage />}
       />
 
-
-      {/* =====================================================
-          FIXED PACKAGE PAGE
-      ===================================================== */}
-
       <Route
         path="/service-providers/services-pricing/fixed-package"
         element={<FixedPackagePage />}
       />
-
-
-      {/* =====================================================
-          SPECIFIC SERVICE PAGE
-      ===================================================== */}
 
       <Route
         path="/service-providers/services-pricing/specific-service"
         element={<SpecificServicePage />}
       />
 
-
-      {/* =====================================================
-          ADD ONS PAGE
-      ===================================================== */}
-
       <Route
         path="/service-providers/services-pricing/add-ons"
         element={<AddOnPage />}
+      />
+
+
+      {/* LEADS */}
+
+      <Route
+        path="/service-providers/leads"
+        element={<Leads />}
       />
 
     </Routes>
