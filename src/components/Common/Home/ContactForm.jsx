@@ -1,5 +1,4 @@
 import { useState } from "react";
-import pillars from "../../../assets/pillars.png";
 import "@fontsource/cinzel";
 
 const ContactForm = () => {
@@ -31,13 +30,11 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Contact preference validation
     if (!formData.call && !formData.whatsapp) {
       alert("Please select Call or WhatsApp");
       return;
     }
 
-    // Success
     setSuccessMessage("Form submitted successfully!");
 
     console.log("Form Data:", formData);
@@ -54,16 +51,16 @@ const ContactForm = () => {
           name={name}
           checked={checked}
           onChange={handleChange}
-          className="sr-only"
+          className="
+            h-4
+            w-4
+            cursor-pointer
+            accent-[#d99b1c]
+            focus:outline-none
+            focus:ring-2
+            focus:ring-[#d99b1c]/40
+          "
         />
-
-        <span
-          className={`flex h-4 w-4 items-center justify-center rounded-[2px] border border-[#d99b1c] text-[12px] font-bold text-white ${
-            checked ? "bg-[#d99b1c]" : ""
-          }`}
-        >
-          {checked && "✓"}
-        </span>
       </label>
     );
   };
@@ -73,7 +70,7 @@ const ContactForm = () => {
       <div className="mx-auto w-full max-w-[1400px]">
 
         {/* ================= HEADING ================= */}
-        <h2 className="mb-6 text-center text-[26px] font-medium text-[#252525] hover:text-pink-500 hover:scale-105 sm:text-[30px] md:text-[32px] lg:text-[34px]">
+        <h2 className="mb-6 text-center text-[26px] font-medium text-[#252525] transition-transform duration-300 hover:scale-105 hover:text-pink-500 sm:text-[30px] md:text-[32px] lg:text-[34px]">
           Let us Connect
         </h2>
 
@@ -84,7 +81,7 @@ const ContactForm = () => {
             <div className="relative aspect-[2.15/1] w-full">
 
               <img
-                src={pillars}
+                src="https://res.cloudinary.com/porwmjke/image/upload/v1791787204/pillars.png"
                 alt="Pillar frame"
                 className="pointer-events-none absolute inset-0 h-full w-full object-contain"
               />
@@ -97,7 +94,6 @@ const ContactForm = () => {
                   w-[52%]
                   -translate-x-1/2
                   -translate-y-1/2
-
                   min-[500px]:w-[58%]
                   min-[600px]:w-[54%]
                   md:w-[50%]
@@ -107,212 +103,96 @@ const ContactForm = () => {
               >
 
                 {/* NAME */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] transition-transform duration-300 hover:scale-105">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Your Name :
                   </label>
 
-                  <div>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Enter your name"
-                      required
-                      minLength="2"
-                      className="
-                        h-[18px]
-                        w-[450px]
-                        max-w-full
-                        rounded-[6px]
-                        border
-                        border-[#d99b1c]
-                        bg-transparent
-                        px-3
-                        text-center
-                        text-[9px]
-                        text-white
-                        outline-none
-                        placeholder:text-[#E16158]
-
-                        min-[500px]:h-[22px]
-                        md:h-[26px]
-                        md:text-[10px]
-                        lg:h-[34px]
-                        lg:text-[11px]
-                        xl:h-[38px]
-                      "
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Enter your name"
+                    required
+                    minLength={2}
+                    className="h-[18px] w-[450px] max-w-full rounded-[6px] border border-[#d99b1c] bg-transparent px-3 text-center text-[9px] text-white outline-none placeholder:text-[#E16158] min-[500px]:h-[22px] md:h-[26px] md:text-[10px] lg:h-[34px] lg:text-[11px] xl:h-[38px]"
+                  />
                 </div>
 
                 {/* EMAIL */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] transition-transform duration-300 hover:scale-105">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Email :
                   </label>
 
-                  <div>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Enter your email"
-                      required
-                      className="
-                        h-[18px]
-                        w-[450px]
-                        max-w-full
-                        rounded-[6px]
-                        border
-                        border-[#d99b1c]
-                        bg-transparent
-                        px-3
-                        text-center
-                        text-[9px]
-                        text-white
-                        outline-none
-                        placeholder:text-[#E16158]
-
-                        min-[500px]:h-[22px]
-                        md:h-[26px]
-                        md:text-[10px]
-                        lg:h-[34px]
-                        lg:text-[11px]
-                        xl:h-[38px]
-                      "
-                    />
-                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    required
+                    className="h-[18px] w-[450px] max-w-full rounded-[6px] border border-[#d99b1c] bg-transparent px-3 text-center text-[9px] text-white outline-none placeholder:text-[#E16158] min-[500px]:h-[22px] md:h-[26px] md:text-[10px] lg:h-[34px] lg:text-[11px] xl:h-[38px]"
+                  />
                 </div>
 
                 {/* CONTACT NUMBER */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] transition-transform duration-300 hover:scale-105">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Contact Number :
                   </label>
 
-                  <div>
-                    <input
-                      type="tel"
-                      name="contactNumber"
-                      value={formData.contactNumber}
-                      onChange={handleChange}
-                      placeholder="Enter your contact number"
-                      required
-                      pattern="[3-9][0-9]{9}"
-                      maxLength="10"
-                      inputMode="numeric"
-                      title="Phone number must be exactly 10 digits and start with 3 to 9"
-                      className="
-                        h-[18px]
-                        w-[450px]
-                        max-w-full
-                        rounded-[6px]
-                        border
-                        border-[#d99b1c]
-                        bg-transparent
-                        px-3
-                        text-center
-                        text-[9px]
-                        text-white
-                        outline-none
-                        placeholder:text-[#E16158]
-
-                        min-[500px]:h-[22px]
-                        md:h-[26px]
-                        md:text-[10px]
-                        lg:h-[34px]
-                        lg:text-[11px]
-                        xl:h-[38px]
-                      "
-                    />
-                  </div>
+                  <input
+                    type="tel"
+                    name="contactNumber"
+                    value={formData.contactNumber}
+                    onChange={handleChange}
+                    placeholder="Enter your contact number"
+                    required
+                    pattern="[3-9][0-9]{9}"
+                    maxLength={10}
+                    inputMode="numeric"
+                    title="Phone number must be exactly 10 digits and start with 3 to 9"
+                    className="h-[18px] w-[450px] max-w-full rounded-[6px] border border-[#d99b1c] bg-transparent px-3 text-center text-[9px] text-white outline-none placeholder:text-[#E16158] min-[500px]:h-[22px] md:h-[26px] md:text-[10px] lg:h-[34px] lg:text-[11px] xl:h-[38px]"
+                  />
                 </div>
 
                 {/* EVENT TYPE */}
-                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] hover:scale-105 transition-transform duration-300">
+                <div className="mb-[2.5%] grid grid-cols-[38%_1fr] items-center gap-[3%] transition-transform duration-300 hover:scale-105">
                   <label className="font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Event Type :
                   </label>
 
-                  <div>
-                    <input
-                      type="text"
-                      name="eventType"
-                      value={formData.eventType}
-                      onChange={handleChange}
-                      placeholder="Corporate, Wedding, Birthday, Concert etc."
-                      required
-                      className="
-                        h-[18px]
-                        w-[450px]
-                        max-w-full
-                        rounded-[6px]
-                        border
-                        border-[#d99b1c]
-                        bg-transparent
-                        px-3
-                        text-center
-                        text-[9px]
-                        text-white
-                        outline-none
-                        placeholder:text-[#E16158]
-
-                        min-[500px]:h-[22px]
-                        md:h-[26px]
-                        md:text-[10px]
-                        lg:h-[34px]
-                        lg:text-[11px]
-                        xl:h-[38px]
-                      "
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="eventType"
+                    value={formData.eventType}
+                    onChange={handleChange}
+                    placeholder="Corporate, Wedding, Birthday, Concert etc."
+                    required
+                    className="h-[18px] w-[450px] max-w-full rounded-[6px] border border-[#d99b1c] bg-transparent px-3 text-center text-[9px] text-white outline-none placeholder:text-[#E16158] min-[500px]:h-[22px] md:h-[26px] md:text-[10px] lg:h-[34px] lg:text-[11px] xl:h-[38px]"
+                  />
                 </div>
 
                 {/* NOTES */}
-                <div className="grid grid-cols-[38%_1fr] items-start gap-[3%] hover:scale-105 transition-transform duration-300">
+                <div className="grid grid-cols-[38%_1fr] items-start gap-[3%] transition-transform duration-300 hover:scale-105">
                   <label className="pt-2 font-['Cinzel'] text-right text-[10px] uppercase tracking-wide text-[#FFE9C0] md:text-[11px] lg:text-[12px]">
                     Notes / Query :
                   </label>
 
-                  <div>
-                    <textarea
-                      name="notes"
-                      value={formData.notes}
-                      onChange={handleChange}
-                      placeholder="Brief your query if any..."
-                      required
-                      className="
-                        h-[18px]
-                        w-[450px]
-                        max-w-full
-                        resize-none
-                        rounded-[6px]
-                        border
-                        border-[#d99b1c]
-                        bg-transparent
-                        px-3
-                        py-2
-                        text-[9px]
-                        text-white
-                        outline-none
-                        placeholder:text-[#E16158]
-
-                        min-[500px]:h-[32px]
-                        md:h-[52px]
-                        md:text-[10px]
-                        lg:h-[66px]
-                        lg:text-[11px]
-                        xl:h-[75px]
-                      "
-                    />
-                  </div>
+                  <textarea
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleChange}
+                    placeholder="Brief your query if any..."
+                    required
+                    className="h-[18px] w-[450px] max-w-full resize-none rounded-[6px] border border-[#d99b1c] bg-transparent px-3 py-2 text-[9px] text-white outline-none placeholder:text-[#E16158] min-[500px]:h-[32px] md:h-[52px] md:text-[10px] lg:h-[66px] lg:text-[11px] xl:h-[75px]"
+                  />
                 </div>
 
                 {/* CHECKBOXES */}
-                <div className="mt-[3%] flex justify-center gap-10 text-[10px] text-[#FFE9C0] hover:scale-105 transition-transform duration-300 md:text-[11px] lg:text-[12px]">
+                <div className="mt-[3%] flex justify-center gap-10 text-[10px] text-[#FFE9C0] transition-transform duration-300 hover:scale-105 md:text-[11px] lg:text-[12px]">
                   <CustomCheckbox
                     label="Call"
                     name="call"
@@ -347,7 +227,7 @@ const ContactForm = () => {
                   onChange={handleChange}
                   placeholder="Enter your name"
                   required
-                  minLength="2"
+                  minLength={2}
                   className="h-10 w-full rounded-[5px] border border-[#d99b1c] bg-transparent px-3 text-[11px] text-white outline-none placeholder:text-[#cba19b]"
                 />
               </div>
@@ -383,7 +263,7 @@ const ContactForm = () => {
                   placeholder="Enter your contact number"
                   required
                   pattern="[3-9][0-9]{9}"
-                  maxLength="10"
+                  maxLength={10}
                   inputMode="numeric"
                   title="Phone number must be exactly 10 digits and start with 3 to 9"
                   className="h-10 w-full rounded-[5px] border border-[#d99b1c] bg-transparent px-3 text-[11px] text-white outline-none placeholder:text-[#cba19b]"
@@ -444,38 +324,7 @@ const ContactForm = () => {
           {/* SUBMIT BUTTON */}
           <button
             type="submit"
-            className="
-              mx-auto
-              mt-5
-              flex
-              h-11
-              w-[180px]
-              cursor-pointer
-              items-center
-              justify-center
-              rounded-[7px]
-              bg-[#c98500]
-              px-6
-              text-[16px]
-              font-semibold
-              uppercase
-              text-white
-              transition
-              hover:bg-blue-300
-              hover:text-red-400
-
-              sm:h-12
-              sm:w-[210px]
-              sm:text-[18px]
-
-              md:h-[50px]
-              md:w-[230px]
-              md:text-[20px]
-
-              lg:h-[54px]
-              lg:w-[250px]
-              lg:text-[22px]
-            "
+            className="mx-auto mt-5 flex h-11 w-[180px] cursor-pointer items-center justify-center rounded-[7px] bg-[#c98500] px-6 text-[16px] font-semibold uppercase text-white transition hover:bg-blue-300 hover:text-red-400 sm:h-12 sm:w-[210px] sm:text-[18px] md:h-[50px] md:w-[230px] md:text-[20px] lg:h-[54px] lg:w-[250px] lg:text-[22px]"
           >
             Submit
           </button>

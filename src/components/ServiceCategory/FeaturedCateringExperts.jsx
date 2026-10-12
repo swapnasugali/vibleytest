@@ -2,48 +2,6 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 // =====================================================
-// CATERING IMAGES
-// =====================================================
-
-import catering011 from "../../assets/catering011.png";
-import catering012 from "../../assets/catering012.png";
-import catering013 from "../../assets/catering013.png";
-
-// =====================================================
-// EVENT IMAGES
-// =====================================================
-
-import event011 from "../../assets/event011.jpg";
-import event012 from "../../assets/event012.jpg";
-import event013 from "../../assets/event013.jpg";
-
-// =====================================================
-// STAGE DECOR IMAGES
-// =====================================================
-
-import stage011 from "../../assets/stage011.jpg";
-import stage012 from "../../assets/stage012.jpg";
-import stage013 from "../../assets/stage013.jpg";
-
-// =====================================================
-// PHOTOGRAPHY IMAGES
-// =====================================================
-
-import photo011 from "../../assets/photo011.jpg";
-import photo012 from "../../assets/photo012.jpg";
-import photo013 from "../../assets/photo013.jpg";
-
-// =====================================================
-// DJ IMAGES
-// =====================================================
-
-import dj011 from "../../assets/dj011.jpg";
-import dj012 from "../../assets/dj012.jpg";
-import dj013 from "../../assets/dj013.jpg";
-
-// =====================================================
-// ICONS
-// =====================================================
 
 import {
   FaAngleDoubleRight,
@@ -68,7 +26,7 @@ const featuredServiceData = {
       {
         id: 101,
         category: "WEDDING",
-        image: photo011,
+        image:"https://res.cloudinary.com/porwmjke/image/upload/v1791776705/photo011.jpg",
         label: "WEDDING PHOTOGRAPHY",
         name: "ARTLANE STUDIO",
         location: "Kondapur, Hyderabad",
@@ -78,7 +36,7 @@ const featuredServiceData = {
       {
         id: 102,
         category: "PRE WEDDING",
-        image: photo012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776705/photo012.jpg",
         label: "CANDID MOMENTS",
         name: "PIXEL STORIES",
         location: "Kukatpally, Hyderabad",
@@ -88,7 +46,7 @@ const featuredServiceData = {
       {
         id: 103,
         category: "CANDID",
-        image: photo013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776705/photo013.jpg",
         label: "CREATIVE PHOTOGRAPHY",
         name: "CLICK ART STUDIO",
         location: "Manikonda, Hyderabad",
@@ -109,7 +67,7 @@ const featuredServiceData = {
       {
         id: 201,
         category: "PURE VEG",
-        image: catering011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776557/catering011.png",
         label: "CUSTOMIZED MENU OPTIONS",
         name: "IYYENGAR CATERERS",
         location: "Kondapur, Hyderabad",
@@ -119,7 +77,7 @@ const featuredServiceData = {
       {
         id: 202,
         category: "VEG / NON VEG",
-        image: catering012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776557/catering012.png",
         label: "LIVE COUNTERS AVAILABLE",
         name: "DELITE CATERING",
         location: "Kukatpally, Hyderabad",
@@ -129,7 +87,7 @@ const featuredServiceData = {
       {
         id: 203,
         category: "VEG / NON VEG",
-        image: catering013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776557/catering013.png",
         label: "MULTI CUISINE SPECIALISTS",
         name: "RUCHI CATERING & CO",
         location: "Manikonda, Hyderabad",
@@ -150,7 +108,7 @@ const featuredServiceData = {
       {
         id: 301,
         category: "WEDDING HALL",
-        image: event011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776626/event011.jpg",
         label: "ELEGANT WEDDING VENUES",
         name: "GRAND PALACE",
         location: "Kondapur, Hyderabad",
@@ -160,7 +118,7 @@ const featuredServiceData = {
       {
         id: 302,
         category: "FUNCTION HALL",
-        image: event012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776626/event012.jpg",
         label: "PREMIUM FUNCTION HALL",
         name: "ROYAL EVENTS",
         location: "Kukatpally, Hyderabad",
@@ -170,7 +128,7 @@ const featuredServiceData = {
       {
         id: 303,
         category: "OUTDOOR EVENTS",
-        image: event013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776626/event013.jpg",
         label: "BEAUTIFUL EVENT SPACES",
         name: "GREEN GARDEN EVENTS",
         location: "Manikonda, Hyderabad",
@@ -191,7 +149,7 @@ const featuredServiceData = {
       {
         id: 401,
         category: "WEDDING DECOR",
-        image: stage011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776654/stage011.jpg",
         label: "PREMIUM WEDDING DECOR",
         name: "ROYAL DECORS",
         location: "Kondapur, Hyderabad",
@@ -201,7 +159,7 @@ const featuredServiceData = {
       {
         id: 402,
         category: "FLORAL DECOR",
-        image: stage012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776654/stage012.jpg",
         label: "BEAUTIFUL FLORAL DESIGNS",
         name: "FLOWER EVENTS",
         location: "Kukatpally, Hyderabad",
@@ -211,7 +169,7 @@ const featuredServiceData = {
       {
         id: 403,
         category: "TRADITIONAL",
-        image: stage013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776654/stage013.jpg",
         label: "TRADITIONAL STAGE DECOR",
         name: "MANGALAM DECORS",
         location: "Manikonda, Hyderabad",
@@ -232,7 +190,7 @@ const featuredServiceData = {
       {
         id: 501,
         category: "DJ",
-        image: dj011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776722/dj011.jpg",
         label: "PROFESSIONAL DJ SERVICES",
         name: "DJ BEATS",
         location: "Kondapur, Hyderabad",
@@ -242,7 +200,7 @@ const featuredServiceData = {
       {
         id: 502,
         category: "LIVE MUSIC",
-        image: dj012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776722/dj012.jpg",
         label: "LIVE MUSIC AVAILABLE",
         name: "MUSIC VIBES",
         location: "Kukatpally, Hyderabad",
@@ -252,7 +210,7 @@ const featuredServiceData = {
       {
         id: 503,
         category: "SOUND SYSTEM",
-        image: dj013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791776722/dj013.jpg",
         label: "PREMIUM SOUND SYSTEM",
         name: "BASS EVENTS",
         location: "Manikonda, Hyderabad",

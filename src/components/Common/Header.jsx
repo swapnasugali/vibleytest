@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import "./../../Styles/Header.css";
 import { Link } from "react-router-dom";
 
-import logo from "../../assets/logo.png";
-import account from "../../assets/account.jpg";
-
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 
 function Header() {
@@ -19,7 +16,7 @@ function Header() {
 
       {/* Logo */}
       <Link to="/" className="logo" onClick={closeMenu}>
-        <img src={logo} alt="Vibely" />
+        <img src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"} alt="Vibely" />
       </Link>
 
       {/* Desktop Navigation */}
@@ -55,7 +52,7 @@ function Header() {
 
       {/* Account */}
       <Link to="/" className="account">
-        <img src={account} alt="Account" />
+        <img src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"} alt="Account" />
       </Link>
 
       {/* Hamburger Button - Mobile Only */}

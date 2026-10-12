@@ -3,44 +3,6 @@ import { useParams } from "react-router-dom";
 import { FaPlay, FaTimes } from "react-icons/fa";
 
 // =====================================================
-// PHOTOGRAPHY IMAGES
-// =====================================================
-
-import event11 from "../../assets/event11.png";
-import event22 from "../../assets/event22.png";
-import event33 from "../../assets/event33.png";
-import event44 from "../../assets/event44.png";
-import event55 from "../../assets/event55.png";
-
-// =====================================================
-// CATERING IMAGES
-// =====================================================
-
-import corporategala1 from "../../assets/corporategala1.jpg";
-import corporategala2 from "../../assets/corporategala2.jpg";
-import corporategala3 from "../../assets/corporategala3.jpg";
-import corporategala4 from "../../assets/corporategala4.jpg";
-import corporategala5 from "../../assets/corporategala5.jpg";
-
-// =====================================================
-// LIGHTING IMAGES
-// =====================================================
-
-import corporatelight1 from "../../assets/corporatelight1.jpg";
-import corporatelight2 from "../../assets/corporatelight2.jpg";
-import corporatelight3 from "../../assets/corporatelight3.jpg";
-import corporatelight4 from "../../assets/corporatelight4.jpg";
-import corporatelight5 from "../../assets/corporatelight5.jpg";
-
-// =====================================================
-// VIDEOS
-// =====================================================
-
-import photographyVideo from "../../assets/Videos/corportae-photography-video.mp4";
-import cateringVideo from "../../assets/Videos/corporate-food-video.mp4";
-import lightingVideo from "../../assets/Videos/corporate-light-video.mp4";
-
-// =====================================================
 // PORTFOLIO DATA
 // =====================================================
 
@@ -51,15 +13,15 @@ const portfolioData = {
 
   photography: {
     images: [
-     event11,
-     event22,
-     event33,
-     event44,
-     event55
+     "https://res.cloudinary.com/porwmjke/image/upload/v1791780861/event11.png",
+     "https://res.cloudinary.com/porwmjke/image/upload/v1791546385/event22.png",
+     "https://res.cloudinary.com/porwmjke/image/upload/v1791780861/event33.png",
+     "https://res.cloudinary.com/porwmjke/image/upload/v1791780861/event44.png",
+     "https://res.cloudinary.com/porwmjke/image/upload/v1791780861/event55.png"
 
     ],
 
-    video: photographyVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791781098/corportae-photography-video.mp4",
 
     heading: (
       <>
@@ -82,14 +44,14 @@ const portfolioData = {
 
   catering: {
     images: [
-      corporategala1,
-      corporategala2,
-      corporategala3,
-      corporategala4,
-      corporategala5,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala1.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala2.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala3.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala4.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala5.jpg",
     ],
 
-    video: cateringVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791781076/corporate-food-video.mp4",
 
     heading: (
       <>
@@ -112,14 +74,14 @@ const portfolioData = {
 
   lighting: {
     images: [
-      corporatelight1,
-      corporatelight2,
-      corporatelight3,
-      corporatelight4,
-      corporatelight5,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780984/corporatelight1.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780984/corporatelight2.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780984/corporatelight3.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780984/corporatelight4.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780984/corporatelight5.jpg",
     ],
 
-    video: lightingVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791781085/corporate-light-video.mp4",
 
     heading: (
       <>

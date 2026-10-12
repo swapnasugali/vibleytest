@@ -2,29 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { FaCamera } from "react-icons/fa";
 
-// ================= PHOTOGRAPHY =================
-
-import image1 from "../../assets/image1.png";
-import image2 from "../../assets/image2.png";
-import image3 from "../../assets/image3.png";
-import image4 from "../../assets/image4.png";
-import image5 from "../../assets/image5.png";
-
-// ================= CATERING =================
-
-import catering11 from "../../assets/catering11.jpg";
-import catering22 from "../../assets/catering22.jpg";
-import catering33 from "../../assets/catering33.jpg";
-import catering44 from "../../assets/catering44.jpg";
-import catering55 from "../../assets/catering55.jpg";
-
-// ================= LIGHTING =================
-
-import lighting111 from "../../assets/lighting111.jpg";
-import lighting22 from "../../assets/lighting22.jpg";
-import lighting33 from "../../assets/lighting33.jpg";
-import lighting44 from "../../assets/lighting44.jpg";
-import lighting55 from "../../assets/lighting55.jpg";
 
 // =====================================================
 // PORTFOLIO DATA
@@ -37,11 +14,11 @@ const portfolioData = {
     eventTitle: "United Agro's Grand Launch Event 2026",
 
     images: [
-      image1,
-      image2,
-      image3,
-      image4,
-      image5,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780098/image1.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780098/image2.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780098/image3.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780098/image4.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780098/image5.png",
     ],
 
     alt: [
@@ -64,11 +41,11 @@ const portfolioData = {
     eventTitle: "Grand Wedding Catering 2026",
 
     images: [
-      catering11,
-      catering22,
-      catering33,
-      catering44,
-      catering55,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780157/catering11.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780157/catering22.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780157/catering33.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780157/catering44.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780157/catering55.jpg",
     ],
 
     alt: [
@@ -91,11 +68,11 @@ const portfolioData = {
     eventTitle: "Grand Wedding Lighting 2026",
 
     images: [
-      lighting111,
-      lighting22,
-      lighting33,
-      lighting44,
-      lighting55,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780228/lighting111.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780239/lighting22.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780239/lighting33.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780239/lighting44.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780239/lighting55.jpg",
     ],
 
     alt: [

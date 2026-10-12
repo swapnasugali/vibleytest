@@ -1,12 +1,5 @@
 import React from "react";
 
-import wedding from "../../../assets/wedding.png";
-import corporate from "../../../assets/corporate.png";
-import concert from "../../../assets/concert.png";
-import family from "../../../assets/family.png";
-import birthday from "../../../assets/birthday.png";
-import theme from "../../../assets/theme.png";
-import social from "../../../assets/social.png";
 
 function PlanningFor() {
   return (
@@ -51,7 +44,7 @@ function PlanningFor() {
         <div className="flex min-w-0 flex-col">
 
           <EventCard
-            image={wedding}
+            image={"https://res.cloudinary.com/porwmjke/image/upload/v1791788548/wedding.png"}
             title="Weddings"
             className="aspect-[4/3] sm:aspect-[4/3] md:h-[50%] md:aspect-auto"
           />
@@ -59,7 +52,7 @@ function PlanningFor() {
           <div className="h-[6px] shrink-0 bg-[#ffb400] md:h-[7px]" />
 
           <EventCard
-            image={family}
+            image={"https://res.cloudinary.com/porwmjke/image/upload/v1791788482/family.png"}
             title="Family / Get Togethers"
             className="aspect-[4/3] md:flex-1 md:aspect-auto"
           />
@@ -70,7 +63,7 @@ function PlanningFor() {
         <div className="flex min-w-0 flex-col">
 
           <EventCard
-            image={corporate}
+            image={"https://res.cloudinary.com/porwmjke/image/upload/v1791788463/corporate.png"}
             title="Mice / Corporate Events"
             className="aspect-[16/10] md:h-[60%] md:aspect-auto"
           />
@@ -78,7 +71,7 @@ function PlanningFor() {
           <div className="h-[10px] shrink-0 bg-[#d83b3b] md:h-[18px]" />
 
           <EventCard
-            image={birthday}
+            image={"https://res.cloudinary.com/porwmjke/image/upload/v1791788422/birthday.png"}
             title="Birthdays / Anniversaries"
             className="aspect-[16/9] md:flex-1 md:aspect-auto"
           />
@@ -89,7 +82,7 @@ function PlanningFor() {
         <div className="flex min-w-0 flex-col sm:col-span-2 md:col-span-1">
 
           <EventCard
-            image={concert}
+            image={"https://res.cloudinary.com/porwmjke/image/upload/v1791788442/concert.png"}
             title="Concerts / DJ Nights"
             className="aspect-[16/9] md:h-[42%] md:aspect-auto"
           />
@@ -102,7 +95,7 @@ function PlanningFor() {
               <div className="h-[10px] shrink-0 bg-[#ffb400] md:h-[16px]" />
 
               <EventCard
-                image={theme}
+                image={"https://res.cloudinary.com/porwmjke/image/upload/v1791788530/theme.png"}
                 title={
                   <>
                     Theme <br /> Parties
@@ -120,7 +113,7 @@ function PlanningFor() {
               <div className="h-[10px] shrink-0 md:h-[16px]" />
 
               <EventCard
-                image={social}
+                image={"https://res.cloudinary.com/porwmjke/image/upload/v1791788497/social.png"}
                 title={
                   <>
                     Social <br /> Events

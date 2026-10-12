@@ -10,12 +10,6 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { GiPartyPopper } from "react-icons/gi";
 import { PiSealCheckFill } from "react-icons/pi";
 
-// =====================================================
-// LOCAL ASSETS
-// =====================================================
-
-import profileCover from "../../assets/photography1.png";
-import profileLogo from "../../assets/artlane-logo.png";
 
 const ProfileHero = () => {
   return (
@@ -28,7 +22,7 @@ const ProfileHero = () => {
 
       <div className="relative w-full overflow-hidden bg-[#eeeeee]">
         <img
-          src={profileCover}
+          src={"https://res.cloudinary.com/porwmjke/image/upload/v1791545365/photography1.png"}
           alt="Artlane Studio Cover"
           className="block h-auto w-full object-contain"
         />
@@ -108,7 +102,7 @@ const ProfileHero = () => {
           "
         >
           <img
-            src={profileLogo}
+            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779873/artlane-logo.png"}
             alt="Artlane Studio Logo"
             className="block h-full w-full object-contain"
           />

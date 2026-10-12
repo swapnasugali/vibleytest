@@ -2,16 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 // =====================================================
-// HERO IMAGES
-// =====================================================
-
-import catering0 from "../../assets/catering031.png";
-import photo0 from "../../assets/photo031.jpg";
-import decor0 from "../../assets/event031.jpg";
-import stage0 from "../../assets/stage031.jpg";
-import dj0 from "../../assets/dj031.jpg";
-
-// =====================================================
 // SERVICE DATA
 // =====================================================
 
@@ -23,7 +13,7 @@ export const serviceCategoryData = {
   1: {
     id: 1,
     service: "Photography",
-    heroImage: photo0,
+    heroImage: "https://res.cloudinary.com/porwmjke/image/upload/v1791778056/photo031.jpg",
     offer: "Enjoy Flat 40% OFF",
     subtitle: "On Wedding Photography",
     button: "Grab The Deal",
@@ -36,7 +26,7 @@ export const serviceCategoryData = {
   2: {
     id: 2,
     service: "Catering",
-    heroImage: catering0,
+    heroImage: "https://res.cloudinary.com/porwmjke/image/upload/v1791778041/catering031.png",
     offer: "Enjoy Flat 40% OFF",
     subtitle: "On Multi Cuisine Catering",
     button: "Grab The Deal",
@@ -49,7 +39,7 @@ export const serviceCategoryData = {
   3: {
     id: 3,
     service: "Decor",
-    heroImage: decor0,
+    heroImage: "https://res.cloudinary.com/porwmjke/image/upload/v1791778063/event031.jpg",
     offer: "Enjoy Flat 40% OFF",
     subtitle: "On Beautiful Event Decor",
     button: "Grab The Deal",
@@ -62,7 +52,7 @@ export const serviceCategoryData = {
   4: {
     id: 4,
     service: "Stage",
-    heroImage: stage0,
+    heroImage: "https://res.cloudinary.com/porwmjke/image/upload/v1791778074/stage031.jpg",
     offer: "Enjoy Flat 40% OFF",
     subtitle: "On Premium Stage Decor",
     button: "Grab The Deal",
@@ -75,7 +65,7 @@ export const serviceCategoryData = {
   5: {
     id: 5,
     service: "DJ",
-    heroImage: dj0,
+    heroImage: "https://res.cloudinary.com/porwmjke/image/upload/v1791778088/dj031.jpg",
     offer: "Enjoy Flat 40% OFF",
     subtitle: "On DJ & Sound Services",
     button: "Grab The Deal",

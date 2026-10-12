@@ -15,108 +15,71 @@ import { LuEyeClosed } from "react-icons/lu";
 
 import PortfolioGalleryPreview from "./PortfolioGalleryPreview";
 
-/* WEDDING */
-import photo01 from "../../assets/photo053.jpg";
-import photo02 from "../../assets/photo021.jpg";
-import photo03 from "../../assets/photo03.jpg";
-import photo04 from "../../assets/photo04.jpg";
-
-/* BIRTHDAY */
-import birthday1 from "../../assets/birthday1.png";
-import birthday2 from "../../assets/birthday.png";
-import birthday3 from "../../assets/birthday3.png";
-import birthday4 from "../../assets/birthday4.png";
-
-/* WEDDING VIDEOS */
-import weddingVideo from "../../assets/Videos/wedding-video.mp4";
-import cateringVideo from "../../assets/Videos/events-light-video.mp4";
-
-/* BIRTHDAY VIDEOS */
-import cateringvideo from "../../assets/Videos/catering-video.mp4";
-import corporatelight from "../../assets/Videos/corporate-light-video.mp4";
-
-/* CORPORATE EVENT */
-import corporatePhoto01 from "../../assets/corporategala1.jpg";
-import corporatePhoto02 from "../../assets/corporategala2.jpg";
-import corporatePhoto03 from "../../assets/corporategala3.jpg";
-import corporatePhoto04 from "../../assets/corporategala4.jpg";
-
-import corporateVideo01 from "../../assets/Videos/corporate-light-video.mp4";
-import corporateVideo02 from "../../assets/Videos/events-light-video.mp4";
-
-/* GET TO GATHER */
-import getTogetherPhoto01 from "../../assets/event11.png";
-import getTogetherPhoto02 from "../../assets/light1.jpg";
-import getTogetherPhoto03 from "../../assets/event042.jpg";
-import getTogetherPhoto04 from "../../assets/event44.png";
-
-import getTogetherVideo01 from "../../assets/Videos/catering-video.mp4";
-import getTogetherVideo02 from "../../assets/Videos/wedding-video.mp4";
 
 
 const EVENT_MEDIA = {
   "corporate event": {
     photos: [
-      corporatePhoto01,
-      corporatePhoto02,
-      corporatePhoto03,
-      corporatePhoto04,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala1.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala2.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala3.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780934/corporategala4.jpg",
     ],
     videos: [
-      corporateVideo01,
-      corporateVideo02,
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791781085/corporate-light-video.mp4",
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791783928/events-light-video.mp4",
     ],
   },
 
   wedding: {
     photos: [
-      photo01,
-      photo02,
-      photo03,
-      photo04,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791778383/photo053.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791779160/photo021.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791549208/photo03.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791549234/photo04.jpg",
     ],
     videos: [
-      weddingVideo,
-      cateringVideo,
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791783833/wedding-video.mp4",
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791783565/catering-video.mp4",
     ],
   },
 
   birthday: {
     photos: [
-      birthday1,
-      birthday2,
-      birthday3,
-      birthday4,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783409/birthday1.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783409/birthday2.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783409/birthday3.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783409/birthday4.png",
     ],
     videos: [
-      cateringvideo,
-      corporatelight,
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791783565/catering-video.mp4",
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791781085/corporate-light-video.mp4",
     ],
   },
 
   "get together": {
     photos: [
-      getTogetherPhoto01,
-      getTogetherPhoto02,
-      getTogetherPhoto03,
-      getTogetherPhoto04,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780861/event11.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791781798/light11.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791777473/event042.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780874/event44.png",
     ],
     videos: [
-      getTogetherVideo01,
-      getTogetherVideo02,
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791783565/catering-video.mp4",
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791783833/wedding-video.mp4",
     ],
   },
 
   "get to gather": {
     photos: [
-      getTogetherPhoto01,
-      getTogetherPhoto02,
-      getTogetherPhoto03,
-      getTogetherPhoto04,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791781798/light11.jpg",
+     "https://res.cloudinary.com/porwmjke/image/upload/v1791781798/light11.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791777473/event042.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791780874/event44.png",
     ],
     videos: [
-      getTogetherVideo01,
-      getTogetherVideo02,
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791781085/corporate-light-video.mp4",
+      "https://res.cloudinary.com/porwmjke/video/upload/v1791783833/wedding-video.mp4",
     ],
   },
 };

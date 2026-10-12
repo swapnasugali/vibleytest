@@ -1,5 +1,3 @@
-import character from "../../../assets/character.png";
-
 const SuggestMe = () => {
   return (
     <section
@@ -168,7 +166,7 @@ const SuggestMe = () => {
           "
         >
           <img
-            src={character}
+            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791787685/character.png"}
             alt="Vibely character"
             className="
               h-auto

@@ -13,19 +13,13 @@ import { GiPartyPopper } from "react-icons/gi";
 import { FiArrowUpRight } from "react-icons/fi";
 import { PiSealCheckFill } from "react-icons/pi";
 
-// ================= LOGOS =================
-
-import artlaneLogo from "../../assets/artlane-logo.png";
-import mangalamLogo from "../../assets/mangalam-logo.png";
-import lightiningLogo from "../../assets/lightining-logo.avif";
-
 // ================= PORTFOLIO DATA =================
 
 const portfolioData = {
   photography: {
     name: "ARTLANE STUDIO",
     location: "Kondapur, Hyderabad",
-    logo: artlaneLogo,
+    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791779873/artlane-logo.png",
     rating: "4.9 (22 Reviews)",
     memberSince: "Member since 2018",
     totalEvents: "160+",
@@ -37,7 +31,7 @@ const portfolioData = {
   catering: {
     name: "MANGALAM CATERERS",
     location: "Kukatpally, Hyderabad",
-    logo: mangalamLogo,
+    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791782502/mangalam-logo.png",
     rating: "4.8 (35 Reviews)",
     memberSince: "Member since 2016",
     totalEvents: "250+",
@@ -49,7 +43,7 @@ const portfolioData = {
   lighting: {
     name: "ELITE LIGHTING SERVICES",
     location: "Madhapur, Hyderabad",
-    logo: lightiningLogo,
+    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791782476/lightining-logo.avif",
     rating: "4.7 (28 Reviews)",
     memberSince: "Member since 2019",
     totalEvents: "180+",

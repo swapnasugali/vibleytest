@@ -9,8 +9,6 @@ import {
 } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
-import logo from "../../assets/logo.png";
-import account from "../../assets/account.jpg";
 
 const LeadsHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,7 +41,7 @@ const LeadsHeader = () => {
           className="flex shrink-0 items-center"
         >
           <img
-            src={logo}
+            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
             alt="Vibely"
             className="
               block
@@ -188,7 +186,7 @@ const LeadsHeader = () => {
             className="flex shrink-0 items-center"
           >
             <img
-              src={account}
+              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
               alt="Account"
               className="
                 block

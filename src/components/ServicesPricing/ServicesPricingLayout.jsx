@@ -10,8 +10,6 @@ import {
 
 import { useNavigate, Link } from "react-router-dom";
 
-import logo from "../../assets/logo.png";
-import account from "../../assets/account.jpg";
 
 const ServicesPricingLayout = ({
   children,
@@ -126,7 +124,7 @@ const ServicesPricingLayout = ({
             className="flex items-center"
           >
             <img
-              src={logo}
+              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
               alt="Vibely Vendors"
               className="
                 w-[82px]
@@ -278,7 +276,7 @@ const ServicesPricingLayout = ({
           <div className="flex items-center">
 
             <img
-              src={account}
+              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
               alt="Account"
               className="
                 h-[42px]

@@ -1,62 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-// =====================================================
-// PHOTOGRAPHY
-// =====================================================
-
-import photo01 from "../../assets/photo01.jpg";
-import photo02 from "../../assets/photo02.jpg";
-import photo03 from "../../assets/photo03.jpg";
-import photo04 from "../../assets/photo04.jpg";
-import photo05 from "../../assets/photo05.jpg";
-
-// =====================================================
-// CATERING
-// =====================================================
-
-import catering01 from "../../assets/catering01.png";
-import catering02 from "../../assets/catering02.png";
-import catering03 from "../../assets/catering03.png";
-import catering04 from "../../assets/catering04.png";
-import catering05 from "../../assets/catering05.png";
-
-// =====================================================
-// EVENT
-// =====================================================
-
-import event01 from "../../assets/event01.jpg";
-import event02 from "../../assets/event02.jpg";
-import event03 from "../../assets/event03.jpg";
-import event04 from "../../assets/event04.jpg";
-import event05 from "../../assets/event05.jpg";
-
-// =====================================================
-// STAGE
-// =====================================================
-
-import stage01 from "../../assets/stage01.jpg";
-import stage02 from "../../assets/stage02.jpg";
-import stage03 from "../../assets/stage03.jpg";
-import stage04 from "../../assets/stage04.jpg";
-import stage05 from "../../assets/stage05.jpg";
-
-// =====================================================
-// DJ
-// =====================================================
-
-import dj01 from "../../assets/dj01.jpg";
-import dj02 from "../../assets/dj02.jpg";
-import dj03 from "../../assets/dj03.jpg";
-import dj04 from "../../assets/dj04.jpg";
-import dj05 from "../../assets/dj05.jpg";
 
 // =====================================================
 // MUGGU
 // =====================================================
 
-import mugguTop from "../../assets/muggu-top.png";
-import mugguBottom from "../../assets/muggu-bottom.png";
 
 // =====================================================
 // SERVICE DATA
@@ -73,27 +22,27 @@ const serviceCategoryData = {
     categories: [
       {
         title: "Wedding",
-        image: photo01,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549190/photo01.jpg",
         dot: "bg-yellow-500",
       },
       {
         title: "Pre Wedding",
-        image: photo02,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549200/photo02.jpg",
         dot: "bg-gradient-to-b from-red-500 from-50% to-green-500 to-50%",
       },
       {
         title: "Candid",
-        image: photo03,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549208/photo03.jpg",
         dot: "bg-yellow-500",
       },
       {
         title: "Traditional",
-        image: photo04,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549234/photo04.jpg",
         dot: "bg-yellow-500",
       },
       {
         title: "Events",
-        image: photo05,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549222/photo05.jpg",
         dot: "bg-yellow-500",
       },
     ],
@@ -109,27 +58,27 @@ const serviceCategoryData = {
     categories: [
       {
         title: "Pure Veg",
-        image: catering01,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549355/catering01.png",
         dot: "bg-green-500",
       },
       {
         title: "Veg / Non Veg",
-        image: catering02,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549362/catering02.png",
         dot: "bg-gradient-to-b from-red-500 from-50% to-green-500 to-50%",
       },
       {
         title: "Live Counters",
-        image: catering03,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549362/catering03.png",
         dot: "bg-yellow-500",
       },
       {
         title: "Multi Cuisine",
-        image: catering04,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549362/catering04.png",
         dot: "bg-yellow-500",
       },
       {
         title: "Breakfast Specials",
-        image: catering05,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549362/catering05.png",
         dot: "bg-yellow-500",
       },
     ],
@@ -145,27 +94,27 @@ const serviceCategoryData = {
     categories: [
       {
         title: "Wedding Halls",
-        image: event01,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549483/event01.jpg",
         dot: "bg-red-500",
       },
       {
         title: "Function Halls",
-        image: event02,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549483/event02.jpg",
         dot: "bg-gradient-to-b from-red-500 from-50% to-green-500 to-50%",
       },
       {
         title: "Outdoor Events",
-        image: event03,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549483/event03.jpg",
         dot: "bg-green-500",
       },
       {
         title: "Banquet Halls",
-        image: event04,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549483/event04.jpg",
         dot: "bg-yellow-500",
       },
       {
         title: "Party Events",
-        image: event05,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549483/event05.jpg",
         dot: "bg-red-500",
       },
     ],
@@ -181,27 +130,27 @@ const serviceCategoryData = {
     categories: [
       {
         title: "Wedding Decor",
-        image: stage01,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549610/stage01.jpg",
         dot: "bg-red-500",
       },
       {
         title: "Floral Decor",
-        image: stage02,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549610/stage02.jpg",
         dot: "bg-gradient-to-b from-red-500 from-50% to-green-500 to-50%",
       },
       {
         title: "Traditional",
-        image: stage03,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549610/stage03.jpg",
         dot: "bg-yellow-500",
       },
       {
         title: "Modern Decor",
-        image: stage04,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549610/stage04.jpg",
         dot: "bg-yellow-500",
       },
       {
         title: "Reception Decor",
-        image: stage05,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791549610/stage05.jpg",
         dot: "bg-red-500",
       },
     ],
@@ -217,27 +166,27 @@ const serviceCategoryData = {
     categories: [
       {
         title: "DJ",
-        image: dj01,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791548896/dj01.jpg",
         dot: "bg-red-500",
       },
       {
         title: "Live Music",
-        image: dj02,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791548896/dj02.jpg",
         dot: "bg-gradient-to-b from-red-500 from-50% to-green-500 to-50%",
       },
       {
         title: "Sound System",
-        image: dj03,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791548896/dj03.jpg",
         dot: "bg-green-500",
       },
       {
         title: "Dance Floor",
-        image: dj04,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791548896/dj04.jpg",
         dot: "bg-yellow-500",
       },
       {
         title: "DJ Lighting",
-        image: dj05,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791548896/dj05.jpg",
         dot: "bg-yellow-500",
       },
     ],
@@ -301,7 +250,7 @@ const FindCateringWay = () => {
       ================================================= */}
 
       <img
-        src={mugguTop}
+        src="https://res.cloudinary.com/porwmjke/image/upload/v1791786787/muggu-top_2.png"
         alt=""
         className="
           pointer-events-none
@@ -336,7 +285,7 @@ const FindCateringWay = () => {
       ================================================= */}
 
       <img
-        src={mugguTop}
+        src="https://res.cloudinary.com/porwmjke/image/upload/v1791786787/muggu-top_2.png"
         alt=""
         className="
           pointer-events-none
@@ -566,7 +515,7 @@ const FindCateringWay = () => {
         ================================================= */}
 
         <img
-          src={mugguBottom}
+          src="https://res.cloudinary.com/porwmjke/image/upload/v1791786830/muggu-bottom.png"
           alt=""
           className="
             h-[34px]
@@ -591,7 +540,7 @@ const FindCateringWay = () => {
         ================================================= */}
 
         <img
-          src={mugguBottom}
+          src="https://res.cloudinary.com/porwmjke/image/upload/v1791786830/muggu-bottom.png"
           alt=""
           className="
             h-[34px]
@@ -616,7 +565,7 @@ const FindCateringWay = () => {
         ================================================= */}
 
         <img
-          src={mugguBottom}
+          src="https://res.cloudinary.com/porwmjke/image/upload/v1791786830/muggu-bottom.png"
           alt=""
           className="
             h-[34px]
@@ -636,9 +585,8 @@ const FindCateringWay = () => {
           "
         />
 
-        </div>
-
-        </section>
+      </div>
+    </section>
   );
 };
 

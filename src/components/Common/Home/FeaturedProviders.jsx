@@ -7,16 +7,12 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 
-import provider1 from "../../../assets/provider1.png";
-import provider2 from "../../../assets/provider2.png";
-import provider3 from "../../../assets/provider3.png";
-
 const providers = [
   {
     category: "Photography",
     name: "ARTLANE STUDIO",
     location: "Kondapalli, Hyderabad",
-    image: provider1,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787040/provider1.png",
     offer: "STARTING FROM ₹25,000",
     portfolioPath: "/portfolio/photography/photo001",
   },
@@ -24,7 +20,7 @@ const providers = [
     category: "Catering",
     name: "MANGALAM CATERERS",
     location: "Kukatpally, Hyderabad",
-    image: provider2,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787063/provider2.png",
     offer: "BEST PRICES PER PLATE",
     portfolioPath: "/portfolio/catering/catering001",
   },
@@ -32,7 +28,7 @@ const providers = [
     category: "Lighting",
     name: "ELITE LIGHTING SERVICES",
     location: "Madhapur, Hyderabad",
-    image: provider3,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787098/provider3.png",
     offer: "COMBO WITH DJ SERVICES",
     portfolioPath: "/portfolio/lighting/lighting001",
   },
@@ -40,7 +36,7 @@ const providers = [
     category: "Lighting",
     name: "ELITE LIGHTING SERVICES",
     location: "Madhapur, Hyderabad",
-    image: provider3,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787098/provider3.png",
     offer: "COMBO WITH DJ SERVICES",
     portfolioPath: "/portfolio/lighting/lighting001",
   },
@@ -48,7 +44,7 @@ const providers = [
     category: "Lighting",
     name: "ELITE LIGHTING SERVICES",
     location: "Madhapur, Hyderabad",
-    image: provider3,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787098/provider3.png",
     offer: "COMBO WITH DJ SERVICES",
     portfolioPath: "/portfolio/lighting/lighting001",
   },

@@ -42,42 +42,23 @@ const suggestionData = {
   },
 };
 
-// =====================================================
-// IMAGES
-// =====================================================
-
-// PHOTOGRAPHY
-import photo061 from "../../assets/photo061.avif";
-
-// CATERING
-import catering061 from "../../assets/catering061.png";
-import catering062 from "../../assets/catering062.png";
-
-// EVENT
-import event061 from "../../assets/event061.jpg";
-
-// DECOR
-import stage061 from "../../assets/stage061.jpg";
-
-// DJ
-import dj061 from "../../assets/dj061.jpg";
 
 // =====================================================
 // DYNAMIC IMAGE DATA
 // =====================================================
 
 const suggestionImages = {
-  1: [photo061],
+  1: ["https://res.cloudinary.com/porwmjke/image/upload/v1791777845/photo061.avif"],
 
   // catering061 = chefs
   // catering062 = food
-  2: [catering061, catering062],
+  2: ["https://res.cloudinary.com/porwmjke/image/upload/v1791777858/catering061.png", "https://res.cloudinary.com/porwmjke/image/upload/v1791777873/catering062.png"],
 
-  3: [event061],
+  3: ["https://res.cloudinary.com/porwmjke/image/upload/v1791777892/event061.jpg"],
 
-  4: [stage061],
+  4: ["https://res.cloudinary.com/porwmjke/image/upload/v1791777901/stage061.jpg"],
 
-  5: [dj061],
+  5: ["https://res.cloudinary.com/porwmjke/image/upload/v1791777909/dj061.jpg"],
 };
 
 // =====================================================

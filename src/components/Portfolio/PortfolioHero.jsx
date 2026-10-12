@@ -2,23 +2,19 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import photography from "../../assets/photography1.png";
-import cateringlogo from "../../assets/catering-logo.jpg";
-import lightinglogo from "../../assets/lighting-logo.jpg";
-
 const portfolioData = {
   photography: {
-    image: photography,
+    image:"https://res.cloudinary.com/porwmjke/image/upload/v1791545365/photography1.png",
     alt: "Artlane Studio Photography",
   },
 
   catering: {
-    image: cateringlogo,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791782360/catering-logo.jpg",
     alt: "Mangalam Caterers",
   },
 
   lighting: {
-    image: lightinglogo,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791782326/lighting-logo.jpg",
     alt: "Elite Lighting Services",
   },
 };

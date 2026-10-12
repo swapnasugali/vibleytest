@@ -1,40 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaCheck } from "react-icons/fa";
 
-import event1 from "../../../assets/event1.png";
-import event2 from "../../../assets/event2.png";
-import event3 from "../../../assets/event3.png";
-
-import vibelyLogo from "../../../assets/vibely-logo.png";
-import vajraLogo from "../../../assets/vajra-logo.png";
-import idealLogo from "../../../assets/ideal-logo.png";
 
 const organizers = [
   {
     name: "Vibely Events",
-    image: event1,
-    logo: vibelyLogo,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787995/event1.png",
+    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787977/vibely-logo.png",
     events: "220+ events",
     description: "Popular for Corporate, Wedding Events",
   },
   {
     name: "Vajra Events",
-    image: event2,
-    logo: vajraLogo,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
+    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
     events: "30+ events",
     description: "Popular for Movie, Entertainment Programs",
   },
   {
     name: "Ideal Events",
-    image: event3,
-    logo: idealLogo,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791788032/event3.png",
+    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787940/ideal-logo.png",
     events: "220+ events",
     description: "Popular for Wedding, Birthday, Annual Ceremonies",
   },
   {
     name: "Vajra Events",
-    image: event2,
-    logo: vajraLogo,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
+    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
     events: "30+ events",
     description: "Popular for Movie, Entertainment Programs",
   },

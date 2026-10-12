@@ -2,36 +2,6 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaPlay, FaTimes } from "react-icons/fa";
 
-// ================= PHOTOGRAPHY IMAGES =================
-
-import wedding1 from "../../assets/wedding1.png";
-import wedding2 from "../../assets/wedding2.png";
-import wedding3 from "../../assets/wedding3.png";
-import wedding4 from "../../assets/wedding4.png";
-import wedding5 from "../../assets/wedding5.png";
-
-// ================= CATERING IMAGES =================
-
-import catering2 from "../../assets/catering2.jpg";
-import catering3 from "../../assets/catering3.jpg";
-import catering4 from "../../assets/catering4.jpg";
-import catering5 from "../../assets/catering5.jpg";
-import catering6 from "../../assets/catering6.jpg";
-
-// ================= LIGHTING IMAGES =================
-
-import lighting1 from "../../assets/lightining1.jpg";
-import lighting4 from "../../assets/lighting4.jpg";
-import lighting2 from "../../assets/lightining2.jpg";
-import lighting5 from "../../assets/lighting5.jpg";
-import lighting6 from "../../assets/lighting6.jpg";
-
-// ================= VIDEOS =================
-
-import photographyVideo from "../../assets/Videos/photography-video.mp4";
-import cateringVideo from "../../assets/Videos/catering-video.mp4";
-import lightingVideo from "../../assets/Videos/lighting-video.mp4";
-
 // ================= PORTFOLIO DATA =================
 
 const portfolioData = {
@@ -46,11 +16,11 @@ const portfolioData = {
       "We believe every wedding and auspicious celebration deserves timeless storytelling — preserving emotions, beauty, and unforgettable moments without letting a single memory go uncaptured.",
 
     images: [
-      wedding1,
-      wedding2,
-      wedding3,
-      wedding4,
-      wedding5,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782558/wedding1.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782558/wedding2.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782558/wedding3.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782558/wedding4.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782558/wedding5.png",
     ],
 
     alt: [
@@ -61,7 +31,7 @@ const portfolioData = {
       "Wedding dance",
     ],
 
-    video: photographyVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791783546/photography-video.mp4",
   },
 
   catering: {
@@ -75,11 +45,11 @@ const portfolioData = {
       "From traditional flavours to modern menus, we create memorable dining experiences with fresh ingredients, professional service and attention to every detail.",
 
     images: [
-      catering2,
-      catering3,
-      catering4,
-      catering5,
-      catering6,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782607/catering2.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782607/catering3.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782607/catering4.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782607/catering5.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782607/catering6.jpg",
     ],
 
     alt: [
@@ -90,7 +60,7 @@ const portfolioData = {
       "Catering setup",
     ],
 
-    video: cateringVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791783565/catering-video.mp4",
   },
 
   lighting: {
@@ -104,11 +74,11 @@ const portfolioData = {
       "From decorative lighting to complete event setups, every detail is carefully planned to create the perfect atmosphere and highlight the beauty of every celebration.",
 
     images: [
-      lighting1,
-      lighting4,
-      lighting2,
-      lighting5,
-      lighting6,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782702/lightining1.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782716/lighting4.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782731/lightining2.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782754/lighting5.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791782771/lighting6.jpg",
     ],
 
     alt: [
@@ -119,7 +89,7 @@ const portfolioData = {
       "Event decoration",
     ],
 
-    video: lightingVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791783616/lighting-video.mp4",
   },
 };
 
@@ -241,7 +211,7 @@ const ProviderFeatured = () => {
 
                 sm:text-[45px]
 
-                lg:text-[54px]
+                lg:text-[50px]
               "
             >
               {data.title}

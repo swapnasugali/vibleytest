@@ -1,26 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import photo011 from "../../assets/photo041.jpg";
-import photo012 from "../../assets/photo042.jpg";
-import photo013 from "../../assets/photo043.jpg";
-
-import catering011 from "../../assets/catering041.png";
-import catering012 from "../../assets/catering042.png";
-import catering013 from "../../assets/catering043.png";
-
-import event011 from "../../assets/event041.jpg";
-import event012 from "../../assets/event042.jpg";
-import event013 from "../../assets/event043.jpg";
-
-import stage011 from "../../assets/stage041.jpg";
-import stage012 from "../../assets/stage042.jpg";
-import stage013 from "../../assets/stage043.jpg";
-
-import dj011 from "../../assets/dj041.jpg";
-import dj012 from "../../assets/dj042.jpg";
-import dj013 from "../../assets/dj043.jpg";
-
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -45,7 +25,7 @@ const featuredExpertsData = {
       {
         id: 101,
         category: "WEDDING",
-        image: photo011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777374/photo041.jpg",
         label: "CANDID WEDDING MOMENTS",
         name: "ARTLANE STUDIO",
         location: "Kondapur, Hyderabad",
@@ -57,7 +37,7 @@ const featuredExpertsData = {
       {
         id: 102,
         category: "PRE WEDDING",
-        image: photo012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777374/photo042.jpg",
         label: "BEAUTIFUL PRE WEDDING",
         name: "PIXEL STORIES",
         location: "Kukatpally, Hyderabad",
@@ -69,7 +49,7 @@ const featuredExpertsData = {
       {
         id: 103,
         category: "CANDID",
-        image: photo013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777374/photo043.jpg",
         label: "CREATIVE PHOTOGRAPHY",
         name: "CLICK ART STUDIO",
         location: "Manikonda, Hyderabad",
@@ -93,7 +73,7 @@ const featuredExpertsData = {
       {
         id: 201,
         category: "VEG / NON VEG",
-        image: catering011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777348/catering041.png",
         label: "CUSTOMIZED MENU OPTIONS",
         name: "BABU KHAN CATERERS",
         location: "BHEL, Hyderabad",
@@ -105,7 +85,7 @@ const featuredExpertsData = {
       {
         id: 202,
         category: "VEG / NON VEG",
-        image: catering012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777348/catering042.png",
         label: "TASTE IN EVERY SERVE",
         name: "RAJA BAB CATERING",
         location: "Nizampet, Hyderabad",
@@ -117,7 +97,7 @@ const featuredExpertsData = {
       {
         id: 203,
         category: "VEG / NON VEG",
-        image: catering013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777348/catering043.png",
         label: "SEA FOOD SPECIALISTS",
         name: "SWACHH CATERERS",
         location: "Manikonda, Hyderabad",
@@ -141,7 +121,7 @@ const featuredExpertsData = {
       {
         id: 301,
         category: "WEDDING DECOR",
-        image: event011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777464/event041.jpg",
         label: "ELEGANT EVENT DECOR",
         name: "ROYAL DECORS",
         location: "Kondapur, Hyderabad",
@@ -153,7 +133,7 @@ const featuredExpertsData = {
       {
         id: 302,
         category: "FLORAL DECOR",
-        image: event012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777464/event042.jpg",
         label: "BEAUTIFUL FLORAL DESIGNS",
         name: "FLOWER EVENTS",
         location: "Kukatpally, Hyderabad",
@@ -165,7 +145,7 @@ const featuredExpertsData = {
       {
         id: 303,
         category: "EVENT DECOR",
-        image: event013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777464/event043.jpg",
         label: "PREMIUM EVENT DECOR",
         name: "ELITE DECORS",
         location: "Manikonda, Hyderabad",
@@ -189,7 +169,7 @@ const featuredExpertsData = {
       {
         id: 401,
         category: "WEDDING STAGE",
-        image: stage011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777491/stage041.jpg",
         label: "PREMIUM WEDDING STAGE",
         name: "ROYAL STAGE DECORS",
         location: "Kondapur, Hyderabad",
@@ -201,7 +181,7 @@ const featuredExpertsData = {
       {
         id: 402,
         category: "FLORAL STAGE",
-        image: stage012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777491/stage042.jpg",
         label: "BEAUTIFUL FLORAL STAGE",
         name: "FLOWER STAGE EVENTS",
         location: "Kukatpally, Hyderabad",
@@ -213,7 +193,7 @@ const featuredExpertsData = {
       {
         id: 403,
         category: "TRADITIONAL",
-        image: stage013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777491/stage043.jpg",
         label: "TRADITIONAL STAGE DECOR",
         name: "MANGALAM STAGES",
         location: "Manikonda, Hyderabad",
@@ -237,7 +217,7 @@ const featuredExpertsData = {
       {
         id: 501,
         category: "DJ",
-        image: dj011,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777403/dj041.jpg",
         label: "PROFESSIONAL DJ SERVICES",
         name: "DJ BEATS",
         location: "Kondapur, Hyderabad",
@@ -249,7 +229,7 @@ const featuredExpertsData = {
       {
         id: 502,
         category: "LIVE MUSIC",
-        image: dj012,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777403/dj042.jpg",
         label: "LIVE MUSIC AVAILABLE",
         name: "MUSIC VIBES",
         location: "Kukatpally, Hyderabad",
@@ -261,7 +241,7 @@ const featuredExpertsData = {
       {
         id: 503,
         category: "SOUND SYSTEM",
-        image: dj013,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791777403/dj043.jpg",
         label: "PREMIUM SOUND SYSTEM",
         name: "BASS EVENTS",
         location: "Manikonda, Hyderabad",
@@ -311,19 +291,7 @@ function AuthenticMeatGrill() {
   // ===================================================
 
   const handlePortfolio = (expert) => {
-    /*
-      IMPORTANT:
-
-      Old:
-      /portfolio/${serviceId}/${portfolioId}
-
-      This could open your old portfolio page.
-
-      New:
-      /service-portfolio/${serviceId}/${expert.portfolioId}
-
-      This creates a separate route for these new portfolio cards.
-    */
+   
 
     navigate(
       `/service-portfolio/${serviceId}/${expert.portfolioId}`

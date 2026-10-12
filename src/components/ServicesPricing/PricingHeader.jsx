@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
-import logo from "../../assets/logo.png";
-import account from "../../assets/account.jpg";
-
 const PricingHeader = () => {
   const navigate = useNavigate();
 
@@ -58,7 +55,7 @@ const PricingHeader = () => {
           className="flex items-center"
         >
           <img
-            src={logo}
+            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
             alt="Vibely Vendors"
             className="
               w-[66px]
@@ -139,7 +136,7 @@ const PricingHeader = () => {
         <div className="flex items-center">
 
           <img
-            src={account}
+            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
             alt="Account"
             className="
               h-[34px]

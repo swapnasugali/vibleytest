@@ -9,9 +9,6 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-import logo from "../../assets/logo.png";
-import account from "../../assets/account.jpg";
-
 const ProfileNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -41,7 +38,7 @@ const ProfileNavbar = () => {
           className="flex shrink-0 items-center"
         >
           <img
-            src={logo}
+            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
             alt="Vibely"
             className="
               block
@@ -149,7 +146,7 @@ const ProfileNavbar = () => {
             className="flex shrink-0 items-center"
           >
             <img
-              src={account}
+              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
               alt="Account"
               className="
                 block

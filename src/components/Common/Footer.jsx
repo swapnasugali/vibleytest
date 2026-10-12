@@ -2,7 +2,6 @@ import React from 'react'
 import { FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
-import logo from "../../assets/logo.png"
 import "./../../Styles/Footer.css"
 
 function Footer() {
@@ -12,7 +11,7 @@ function Footer() {
             <div className="footer-about">
 
                 <Link to = "/">
-                <img src = {logo} alt ="Vibely Events"/>
+                <img src = {"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"} alt ="Vibely Events"/>
                 </Link>
 
                 <p>

@@ -2,36 +2,6 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaPlay, FaTimes } from "react-icons/fa";
 
-// ================= PHOTOGRAPHY IMAGES =================
-
-import birthday1 from "../../assets/birthday1.png";
-import birthday2 from "../../assets/birthday2.png";
-import birthday3 from "../../assets/birthday3.png";
-import birthday4 from "../../assets/birthday4.png";
-import birthday5 from "../../assets/birthday5.png";
-
-// ================= CATERING IMAGES =================
-
-import catering111 from "../../assets/catering111.jpg";
-import catering222 from "../../assets/catering222.jpg";
-import catering333 from "../../assets/catering333.jpg";
-import catering444 from "../../assets/catering444.jpg";
-import catering555 from "../../assets/catering555.jpg";
-
-// ================= LIGHTING IMAGES =================
-
-import birthday11 from "../../assets/birthday11.jpg";
-import birthday22 from "../../assets/birthday22.jpg";
-import birthday33 from "../../assets/birthday33.jpg";
-import birthday44 from "../../assets/birthday44.jpg";
-import birthday55 from "../../assets/birthday55.jpg";
-
-// ================= VIDEOS =================
-
-import weddingVideo from "../../assets/Videos/wedding-video.mp4";
-import cateringVideo from "../../assets/Videos/catering-food-video.mp4";
-import lightingVideo from "../../assets/Videos/events-light-video.mp4";
-
 // ======================================================
 // PORTFOLIO DATA
 // ======================================================
@@ -43,14 +13,14 @@ const portfolioData = {
 
   photography: {
     images: [
-      birthday1,
-      birthday2,
-      birthday3,
-      birthday4,
-      birthday5,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783409/birthday1.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783419/birthday2.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783419/birthday3.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783419/birthday4.png",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791520048/birthday5.png",
     ],
 
-    video: weddingVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791783833/wedding-video.mp4",
 
     heading: (
       <>
@@ -75,14 +45,14 @@ const portfolioData = {
 
   catering: {
     images: [
-      catering111,
-      catering222,
-      catering333,
-      catering444,
-      catering555,
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783680/catering111.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783680/catering222.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783680/catering333.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783680/catering444.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791783680/catering555.jpg",
     ],
 
-    video: cateringVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791781043/catering-food-video.mp4",
 
     heading: (
       <>
@@ -107,14 +77,15 @@ const portfolioData = {
 
   lighting: {
     images: [
-      birthday11,
-      birthday22,
-      birthday33,
-      birthday44,
-      birthday55,
+
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791548490/birthday11.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791548490/birthday22.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791548490/birthday33.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791548414/birthday44.jpg",
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791548414/birthday55.jpg",
     ],
 
-    video: lightingVideo,
+    video: "https://res.cloudinary.com/porwmjke/video/upload/v1791783928/events-light-video.mp4",
 
     heading: (
       <>
@@ -164,7 +135,6 @@ const SanviBirthday = () => {
         lg:px-8
       "
     >
-
       {/* =================================================
           MAIN CONTENT
           ================================================= */}
@@ -184,7 +154,6 @@ const SanviBirthday = () => {
           lg:items-stretch
         "
       >
-
         {/* =================================================
             IMAGE 1
             ================================================= */}
@@ -200,7 +169,6 @@ const SanviBirthday = () => {
             lg:row-span-2
           "
         >
-
           <img
             src={data.images[0]}
             alt="Event"
@@ -245,7 +213,6 @@ const SanviBirthday = () => {
           >
             <FaPlay className="ml-[1px] text-[8px]" />
           </button>
-
         </div>
 
         {/* =================================================
@@ -261,7 +228,6 @@ const SanviBirthday = () => {
             lg:row-start-1
           "
         >
-
           <img
             src={data.images[1]}
             alt="Event"
@@ -276,7 +242,6 @@ const SanviBirthday = () => {
               lg:object-cover
             "
           />
-
         </div>
 
         {/* =================================================
@@ -292,7 +257,6 @@ const SanviBirthday = () => {
             lg:row-start-1
           "
         >
-
           <img
             src={data.images[2]}
             alt="Event"
@@ -307,7 +271,6 @@ const SanviBirthday = () => {
               lg:object-cover
             "
           />
-
         </div>
 
         {/* =================================================
@@ -324,7 +287,6 @@ const SanviBirthday = () => {
             lg:row-start-2
           "
         >
-
           <img
             src={data.images[3]}
             alt="Event"
@@ -339,7 +301,6 @@ const SanviBirthday = () => {
               lg:object-cover
             "
           />
-
         </div>
 
         {/* =================================================
@@ -360,7 +321,6 @@ const SanviBirthday = () => {
             lg:pr-2
           "
         >
-
           {/* HEADING */}
 
           <h2
@@ -417,7 +377,6 @@ const SanviBirthday = () => {
           >
             {data.paragraph2}
           </p>
-
         </div>
 
         {/* =================================================
@@ -434,7 +393,6 @@ const SanviBirthday = () => {
             lg:row-span-2
           "
         >
-
           <img
             src={data.images[4]}
             alt="Event"
@@ -449,9 +407,7 @@ const SanviBirthday = () => {
               lg:object-cover
             "
           />
-
         </div>
-
       </div>
 
       {/* =================================================
@@ -459,7 +415,6 @@ const SanviBirthday = () => {
           ================================================= */}
 
       <div className="flex justify-center pt-7">
-
         <button
           type="button"
           className="
@@ -479,7 +434,6 @@ const SanviBirthday = () => {
         >
           {data.buttonText}
         </button>
-
       </div>
 
       {/* =================================================
@@ -500,7 +454,6 @@ const SanviBirthday = () => {
           "
           onClick={() => setShowVideo(false)}
         >
-
           {/* VIDEO CONTAINER */}
 
           <div
@@ -514,7 +467,6 @@ const SanviBirthday = () => {
             "
             onClick={(e) => e.stopPropagation()}
           >
-
             {/* CLOSE BUTTON */}
 
             <button
@@ -558,12 +510,9 @@ const SanviBirthday = () => {
                 object-contain
               "
             />
-
           </div>
-
         </div>
       )}
-
     </section>
   );
 };

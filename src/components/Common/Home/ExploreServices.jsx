@@ -2,49 +2,44 @@ import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import photography from "../../../assets/photography.png";
-import catering from "../../../assets/catering.png";
-import venue from "../../../assets/venue.png";
-import stage from "../../../assets/stage1.png";
-import dj from "../../../assets/dj.png";
 
 const categories = [
   {
     name: "Photography",
-    image: photography,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787471/photography.png",
     path: "/services/1",
   },
   {
     name: "Catering",
-    image: catering,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787492/catering.png",
     path: "/services/2",
   },
   {
     name: "Venue booking",
-    image: venue,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787525/venue.png",
     path: "/services/3",
   },
   {
     name: "Stage Decor",
-    image: stage,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791784132/stage.png",
     path: "/services/4",
     active: true,
   },
   {
     name: "DJ / Sound Sys",
-    image: dj,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787546/dj.png",
     path: "/services/5",
     yellowBottom: true,
   },
   {
     name: "DJ / Sound Sys",
-    image: dj,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787546/dj.png",
     path: "/services/5",
     yellowBottom: true,
   },
   {
     name: "DJ / Sound Sys",
-    image: dj,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787546/dj.png",
     path: "/services/5",
     yellowBottom: true,
   },

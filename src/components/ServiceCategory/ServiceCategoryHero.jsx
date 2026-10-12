@@ -1,11 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import photography from "../../assets/photo0.jpg";
-import catering from "../../assets/catering0.png";
-import venue from "../../assets/venue0.jpg";
-import stage1 from "../../assets/stage0.jpg";
-import dj from "../../assets/dj0.jpg";
 
 // =====================================================
 // SERVICE DATA
@@ -15,7 +10,7 @@ const serviceData = [
   {
     id: 1,
     type: "photography",
-    image: photography,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791786110/photo0.jpg",
     heroText:
       "Capture beautiful and memorable moments with professional photography services.",
     locationText: "Serving Across Telangana & Andhra Pradesh",
@@ -26,7 +21,7 @@ const serviceData = [
   {
     id: 2,
     type: "catering",
-    image: catering,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791786134/catering0.png",
     heroText:
       "Large premium catering banner with elegant buffet and event dining visuals.",
     locationText: "Serving Across Telangana & Andhra Pradesh",
@@ -37,7 +32,7 @@ const serviceData = [
   {
     id: 3,
     type: "venue",
-    image: venue,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791786163/venue0.jpg",
     heroText:
       "Find beautiful and suitable venues for weddings, parties and special events.",
     locationText: "Serving Across Telangana & Andhra Pradesh",
@@ -48,7 +43,7 @@ const serviceData = [
   {
     id: 4,
     type: "stage-decor",
-    image: stage1,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791786191/stage0.jpg",
     heroText:
       "Create a beautiful event atmosphere with elegant and creative stage decorations.",
     locationText: "Serving Across Telangana & Andhra Pradesh",
@@ -59,7 +54,7 @@ const serviceData = [
   {
     id: 5,
     type: "dj-sound",
-    image: dj,
+    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791548754/dj0.jpg",
     heroText:
       "Make your celebration energetic with professional DJ and sound services.",
     locationText: "Serving Across Telangana & Andhra Pradesh",

@@ -4,8 +4,6 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-import logo from "../../assets/logo.png";
-import account from "../../assets/account.jpg";
 
 const ProviderHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,7 +28,7 @@ const ProviderHeader = () => {
           className="flex shrink-0 items-center"
         >
           <img
-            src={logo}
+            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
             alt="Vibely"
             className="
               block
@@ -127,7 +125,7 @@ const ProviderHeader = () => {
             className="flex items-center shrink-0"
           >
             <img
-              src={account}
+              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
               alt="Account"
               className="
                 block

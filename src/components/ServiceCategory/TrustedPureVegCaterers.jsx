@@ -2,46 +2,6 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // =====================================================
-// CATERING IMAGES
-// =====================================================
-
-import catering021 from "../../assets/catering021.png";
-import catering022 from "../../assets/catering022.png";
-import catering023 from "../../assets/catering023.png";
-
-// =====================================================
-// EVENT IMAGES
-// =====================================================
-
-import event021 from "../../assets/event021.jpg";
-import event022 from "../../assets/event022.jpg";
-import event023 from "../../assets/event023.jpg";
-
-// =====================================================
-// STAGE DECOR IMAGES
-// =====================================================
-
-import stage021 from "../../assets/stage021.jpg";
-import stage022 from "../../assets/stage022.jpg";
-import stage023 from "../../assets/stage023.jpg";
-
-// =====================================================
-// PHOTOGRAPHY IMAGES
-// =====================================================
-
-import photo021 from "../../assets/photo021.jpg";
-import photo022 from "../../assets/photo022.jpg";
-import photo023 from "../../assets/photo023.jpg";
-
-// =====================================================
-// DJ IMAGES
-// =====================================================
-
-import dj021 from "../../assets/dj021.jpg";
-import dj022 from "../../assets/dj022.jpg";
-import dj023 from "../../assets/dj023.jpg";
-
-// =====================================================
 // ICONS
 // =====================================================
 
@@ -70,7 +30,7 @@ const trustedServiceData = {
       {
         id: 1,
         category: "PHOTOGRAPHY",
-        image: photo021,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779160/photo021.jpg",
         label: "CANDID & TRADITIONAL PHOTOGRAPHY",
         name: "ARTLANE STUDIO",
         location: "Kondapur, Hyderabad",
@@ -79,7 +39,7 @@ const trustedServiceData = {
       {
         id: 2,
         category: "PRE-WEDDING",
-        image: photo022,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779160/photo022.jpg",
         label: "CREATIVE COUPLE PORTRAITS",
         name: "PIXEL PERFECT STUDIO",
         location: "Madhapur, Hyderabad",
@@ -88,7 +48,7 @@ const trustedServiceData = {
       {
         id: 3,
         category: "EVENT PHOTOGRAPHY",
-        image: photo023,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779160/photo023.jpg",
         label: "PROFESSIONAL EVENT COVERAGE",
         name: "MOMENTS PHOTOGRAPHY",
         location: "Gachibowli, Hyderabad",
@@ -111,7 +71,7 @@ const trustedServiceData = {
       {
         id: 1,
         category: "PURE VEG",
-        image: catering021,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779055/catering021.png",
         label: "CUSTOMIZED MENU OPTIONS",
         name: "IYYENGAR CATERERS",
         location: "HBY, Hyderabad",
@@ -120,7 +80,7 @@ const trustedServiceData = {
       {
         id: 2,
         category: "PURE VEG",
-        image: catering022,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779055/catering022.png",
         label: "MORE THAN 50+ VARIETIES",
         name: "SAMPRADA CATERING",
         location: "Nizampet, Hyderabad",
@@ -129,7 +89,7 @@ const trustedServiceData = {
       {
         id: 3,
         category: "PURE VEG",
-        image: catering023,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779055/catering023.png",
         label: "DIVINE EATING EXPERIENCE",
         name: "SWACHH CATERERS",
         location: "Manikonda, Hyderabad",
@@ -152,7 +112,7 @@ const trustedServiceData = {
       {
         id: 1,
         category: "WEDDING DECOR",
-        image: event021,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779090/event021.jpg",
         label: "ELEGANT WEDDING DECORATIONS",
         name: "ROYAL EVENT DECORS",
         location: "Banjara Hills, Hyderabad",
@@ -161,7 +121,7 @@ const trustedServiceData = {
       {
         id: 2,
         category: "EVENT DECOR",
-        image: event022,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779090/event022.jpg",
         label: "TRADITIONAL & MODERN THEMES",
         name: "DREAM DECORATORS",
         location: "Jubilee Hills, Hyderabad",
@@ -170,7 +130,7 @@ const trustedServiceData = {
       {
         id: 3,
         category: "VENUE DECOR",
-        image: event023,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779090/event023.jpg",
         label: "BEAUTIFUL VENUE SETUPS",
         name: "GRAND EVENTS",
         location: "Hitech City, Hyderabad",
@@ -193,7 +153,7 @@ const trustedServiceData = {
       {
         id: 1,
         category: "STAGE DECOR",
-        image: stage021,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779123/stage021.jpg",
         label: "ROYAL STAGE DESIGNS",
         name: "ROYAL STAGE DECORS",
         location: "Kukatpally, Hyderabad",
@@ -202,7 +162,7 @@ const trustedServiceData = {
       {
         id: 2,
         category: "WEDDING STAGE",
-        image: stage022,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779123/stage022.jpg",
         label: "PREMIUM WEDDING STAGES",
         name: "GRAND STAGE EVENTS",
         location: "Miyapur, Hyderabad",
@@ -211,7 +171,7 @@ const trustedServiceData = {
       {
         id: 3,
         category: "EVENT STAGE",
-        image: stage023,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779123/stage023.jpg",
         label: "CREATIVE STAGE SETUPS",
         name: "DREAM STAGE DECORS",
         location: "Secunderabad, Hyderabad",
@@ -234,7 +194,7 @@ const trustedServiceData = {
       {
         id: 1,
         category: "DJ",
-        image: dj021,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779189/dj021.jpg",
         label: "PROFESSIONAL DJ SERVICES",
         name: "DJ BEATS",
         location: "Madhapur, Hyderabad",
@@ -243,7 +203,7 @@ const trustedServiceData = {
       {
         id: 2,
         category: "DJ & SOUND",
-        image: dj022,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779189/dj022.jpg",
         label: "PREMIUM SOUND SYSTEMS",
         name: "PARTY BEATS",
         location: "Gachibowli, Hyderabad",
@@ -252,7 +212,7 @@ const trustedServiceData = {
       {
         id: 3,
         category: "DJ EVENTS",
-        image: dj023,
+        image: "https://res.cloudinary.com/porwmjke/image/upload/v1791779189/dj023.jpg",
         label: "LIVE DJ & MUSIC",
         name: "RHYTHM EVENTS",
         location: "Hitech City, Hyderabad",

@@ -2,24 +2,6 @@ import React from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
-// ================= PHOTOGRAPHY =================
-
-import provider1 from "../../assets/provider11.png";
-import provider2 from "../../assets/provider22.png";
-import provider3 from "../../assets/provider33.png";
-
-// ================= CATERING =================
-
-import catering21 from "../../assets/catering21.jpg";
-import catering31 from "../../assets/catering31.jpg";
-import catering41 from "../../assets/catering41.jpg";
-
-// ================= LIGHTING =================
-
-import light11 from "../../assets/light11.jpg";
-import light22 from "../../assets/light22.jpg";
-import light33 from "../../assets/light33.jpg";
-
 // ======================================================
 // PROVIDER DATA
 // ======================================================
@@ -27,21 +9,21 @@ import light33 from "../../assets/light33.jpg";
 const providerData = {
   photography: [
     {
-      image: provider1,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781708/provider11.png",
       service: "Photography",
       name: "SHANKARA STUDIOS",
       location: "Hyderabad, Telangana",
       price: "₹15,000",
     },
     {
-      image: provider2,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781708/provider22.png",
       service: "Photography",
       name: "HASTAGE PHOTOGRAPHY",
       location: "Vijayawada, Andhra Pradesh",
       price: "₹12,000",
     },
     {
-      image: provider3,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781708/provider33.png",
       service: "Photography",
       name: "ELITE PHOTO STUDIO",
       location: "Hyderabad, Telangana",
@@ -51,21 +33,21 @@ const providerData = {
 
   catering: [
     {
-      image: catering21,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781756/catering21.jpg",
       service: "Catering",
       name: "MANGALAM CATERING",
       location: "Hyderabad, Telangana",
       price: "₹25,000",
     },
     {
-      image: catering31,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781756/catering31.jpg",
       service: "Catering",
       name: "ANNAPURNA CATERERS",
       location: "Vijayawada, Andhra Pradesh",
       price: "₹20,000",
     },
     {
-      image: catering41,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781756/catering41.jpg",
       service: "Catering",
       name: "SRI SAI CATERING",
       location: "Tirupati, Andhra Pradesh",
@@ -75,21 +57,21 @@ const providerData = {
 
   lighting: [
     {
-      image: light11,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781798/light11.jpg",
       service: "Lighting",
       name: "ELITE LIGHTING",
       location: "Hyderabad, Telangana",
       price: "₹10,000",
     },
     {
-      image: light22,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781798/light22.jpg",
       service: "Lighting",
       name: "BRIGHT EVENTS",
       location: "Vijayawada, Andhra Pradesh",
       price: "₹8,500",
     },
     {
-      image: light33,
+      image: "https://res.cloudinary.com/porwmjke/image/upload/v1791781798/light33.jpg",
       service: "Lighting",
       name: "ROYAL LIGHTING",
       location: "Tirupati, Andhra Pradesh",

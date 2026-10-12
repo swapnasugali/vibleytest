@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 
-import logo from "../../assets/logo.png";
-import account from "../../assets/account.jpg";
 
 import PortfolioList from "./PortfolioList";
 
@@ -66,7 +64,7 @@ const PortfolioPage = () => {
             "
           >
             <img
-              src={logo}
+              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
               alt="Vibely"
               className="
                 block
@@ -270,7 +268,7 @@ const PortfolioPage = () => {
               "
             >
               <img
-                src={account}
+                src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
                 alt="Account"
                 className="
                   block
