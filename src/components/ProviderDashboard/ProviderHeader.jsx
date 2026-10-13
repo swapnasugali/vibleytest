@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
-
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const ProviderHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,7 +13,6 @@ const ProviderHeader = () => {
       className="w-full border-b border-gray-200 bg-[#fffdf9]"
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
-
       {/* ================= HEADER ================= */}
       <div className="flex min-h-[72px] w-full items-center justify-between px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
 
@@ -28,7 +23,7 @@ const ProviderHeader = () => {
           className="flex shrink-0 items-center"
         >
           <img
-            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
+            src="https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"
             alt="Vibely"
             className="
               block
@@ -43,7 +38,6 @@ const ProviderHeader = () => {
           />
         </a>
 
-
         {/* ================= DESKTOP NAVIGATION ================= */}
         <nav className="hidden items-center gap-5 md:flex lg:gap-8 xl:gap-10">
 
@@ -52,8 +46,8 @@ const ProviderHeader = () => {
             className="
               whitespace-nowrap
               text-[12px]
-              font-bold
-              text-[#d00000]
+              font-medium
+              text-[#e53935]
               lg:text-[14px]
               xl:text-[16px]
             "
@@ -66,7 +60,8 @@ const ProviderHeader = () => {
             className="
               whitespace-nowrap
               text-[12px]
-              text-gray-900
+              font-medium
+              text-[#222]
               lg:text-[14px]
               xl:text-[16px]
             "
@@ -79,7 +74,8 @@ const ProviderHeader = () => {
             className="
               whitespace-nowrap
               text-[12px]
-              text-gray-900
+              font-medium
+              text-[#222]
               lg:text-[14px]
               xl:text-[16px]
             "
@@ -92,7 +88,8 @@ const ProviderHeader = () => {
             className="
               whitespace-nowrap
               text-[12px]
-              text-gray-900
+              font-medium
+              text-[#222]
               lg:text-[14px]
               xl:text-[16px]
             "
@@ -105,7 +102,8 @@ const ProviderHeader = () => {
             className="
               whitespace-nowrap
               text-[12px]
-              text-gray-900
+              font-medium
+              text-[#222]
               lg:text-[14px]
               xl:text-[16px]
             "
@@ -115,17 +113,16 @@ const ProviderHeader = () => {
 
         </nav>
 
-
         {/* ================= RIGHT SIDE ================= */}
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">
 
           {/* ACCOUNT IMAGE */}
           <a
             href="/"
-            className="flex items-center shrink-0"
+            className="flex shrink-0 items-center"
           >
             <img
-              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
+              src="https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"
               alt="Account"
               className="
                 block
@@ -161,7 +158,6 @@ const ProviderHeader = () => {
         </div>
       </div>
 
-
       {/* ================= MOBILE MENU ================= */}
       {menuOpen && (
         <nav className="border-t border-gray-200 bg-[#fffdf9] px-5 py-4 md:hidden">
@@ -170,7 +166,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[15px] font-semibold text-[#d00000]"
+              className="text-[15px] font-medium text-[#e53935]"
               onClick={closeMenu}
             >
               DASHBOARD
@@ -178,7 +174,7 @@ const ProviderHeader = () => {
 
             <a
               href="/service-providers/profile"
-              className="text-[15px] font-medium text-gray-900"
+              className="text-[15px] font-medium text-[#222]"
               onClick={closeMenu}
             >
               PROFILE
@@ -186,7 +182,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[15px] font-medium text-gray-900"
+              className="text-[15px] font-medium text-[#222]"
               onClick={closeMenu}
             >
               PORTFOLIO
@@ -194,7 +190,7 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[15px] font-medium text-gray-900"
+              className="text-[15px] font-medium text-[#222]"
               onClick={closeMenu}
             >
               SERVICES / PRICING
@@ -202,17 +198,15 @@ const ProviderHeader = () => {
 
             <a
               href="#"
-              className="text-[15px] font-medium text-gray-900"
+              className="text-[15px] font-medium text-[#222]"
               onClick={closeMenu}
             >
               LEADS
             </a>
 
           </div>
-
         </nav>
       )}
-
     </header>
   );
 };

@@ -680,7 +680,7 @@ const Leads = () => {
           className="
             grid w-full min-w-0 items-start gap-[20px]
             lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.45fr)]
-            lg:gap-[24px]
+            lg:gap-[24.00px]
             xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.45fr)]
             xl:gap-[30px]
             max-lg:grid-cols-1

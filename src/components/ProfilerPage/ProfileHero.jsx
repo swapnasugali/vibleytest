@@ -186,7 +186,7 @@ const ProfileHero = () => {
             {/* RATING */}
 
             <div className="flex items-center gap-[3px]">
-              <FaStar className="text-[8px] text-[#f2b900]" />
+              <FaStar className="text-[15px] text-[#f2b900]" />
 
               <span className="text-[12px] text-[#252525] sm:text-[13px] lg:text-[14px]">
                 4.9
@@ -345,8 +345,8 @@ const ProfileHero = () => {
               <div
                 className="
                   flex
-                  h-[25px]
-                  w-[25px]
+                  h-[35px]
+                  w-[35px]
                   shrink-0
                   items-center
                   justify-center
@@ -354,7 +354,7 @@ const ProfileHero = () => {
                   bg-[#eee5c8]
                 "
               >
-                <GiPartyPopper className="text-[14px] text-[#f1b900]" />
+                <GiPartyPopper className="text-[20px] text-[#f1b900]" />
               </div>
 
               <div className="min-w-0">
@@ -379,8 +379,8 @@ const ProfileHero = () => {
               <div
                 className="
                   flex
-                  h-[25px]
-                  w-[25px]
+                  h-[35px]
+                  w-[35px]
                   shrink-0
                   items-center
                   justify-center
@@ -388,7 +388,7 @@ const ProfileHero = () => {
                   bg-[#eee5c8]
                 "
               >
-                <FaClock className="text-[10px] text-[#f1b900]" />
+                <FaClock className="text-[20px] text-[#f1b900]" />
               </div>
 
               <div className="min-w-0">
@@ -413,8 +413,8 @@ const ProfileHero = () => {
               <div
                 className="
                   flex
-                  h-[25px]
-                  w-[25px]
+                  h-[35px]
+                  w-[35px]
                   shrink-0
                   items-center
                   justify-center
@@ -422,7 +422,7 @@ const ProfileHero = () => {
                   bg-[#eee5c8]
                 "
               >
-                <FaUsers className="text-[10px] text-[#f1b900]" />
+                <FaUsers className="text-[20px] text-[#f1b900]" />
               </div>
 
               <div className="min-w-0">
@@ -447,8 +447,8 @@ const ProfileHero = () => {
               <div
                 className="
                   flex
-                  h-[25px]
-                  w-[25px]
+                  h-[35px]
+                  w-[35px]
                   shrink-0
                   items-center
                   justify-center
@@ -456,7 +456,7 @@ const ProfileHero = () => {
                   bg-[#eee5c8]
                 "
               >
-                <FaThumbsUp className="text-[10px] text-[#f1b900]" />
+                <FaThumbsUp className="text-[20px] text-[#f1b900]" />
               </div>
 
               <div className="min-w-0">

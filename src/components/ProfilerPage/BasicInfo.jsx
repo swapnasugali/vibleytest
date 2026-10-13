@@ -317,10 +317,10 @@ const BasicInfo = () => {
                   justify-center
                   rounded-full
                   border
-                  border-[#555]
+                  border-[#111111]
                   text-[15px]
                   leading-none
-                  text-[#333]
+                  text-[#111111]
                   cursor-pointer
                   hover:bg-[#f3f3f3]
                 "

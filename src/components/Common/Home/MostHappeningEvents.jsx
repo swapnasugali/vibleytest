@@ -1,33 +1,67 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaCheck } from "react-icons/fa";
 
-
 const organizers = [
   {
     name: "Vibely Events",
-    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791787995/event1.png",
-    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787977/vibely-logo.png",
+    image:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787995/event1.png",
+    logo:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787977/vibely-logo.png",
     events: "220+ events",
     description: "Popular for Corporate, Wedding Events",
   },
   {
     name: "Vajra Events",
-    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
-    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
+    image:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
+    logo:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
     events: "30+ events",
     description: "Popular for Movie, Entertainment Programs",
   },
   {
     name: "Ideal Events",
-    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791788032/event3.png",
-    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787940/ideal-logo.png",
+    image:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791788032/event3.png",
+    logo:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787940/ideal-logo.png",
     events: "220+ events",
     description: "Popular for Wedding, Birthday, Annual Ceremonies",
   },
   {
     name: "Vajra Events",
-    image: "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
-    logo: "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
+    image:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
+    logo:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
+    events: "30+ events",
+    description: "Popular for Movie, Entertainment Programs",
+  },
+  {
+    name: "Vajra Events",
+    image:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
+    logo:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
+    events: "30+ events",
+    description: "Popular for Movie, Entertainment Programs",
+  },
+  {
+    name: "Vajra Events",
+    image:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
+    logo:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
+    events: "30+ events",
+    description: "Popular for Movie, Entertainment Programs",
+  },
+  {
+    name: "Vajra Events",
+    image:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791788004/event2.png",
+    logo:
+      "https://res.cloudinary.com/porwmjke/image/upload/v1791787948/vajra-logo.png",
     events: "30+ events",
     description: "Popular for Movie, Entertainment Programs",
   },
@@ -36,6 +70,7 @@ const organizers = [
 const MostHappeningEvents = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCards, setVisibleCards] = useState(1);
+  const [direction, setDirection] = useState("right");
 
   useEffect(() => {
     const updateVisibleCards = () => {
@@ -49,7 +84,6 @@ const MostHappeningEvents = () => {
     };
 
     updateVisibleCards();
-
     window.addEventListener("resize", updateVisibleCards);
 
     return () => {
@@ -57,35 +91,41 @@ const MostHappeningEvents = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const maxIndex = Math.max(0, organizers.length - visibleCards);
-
-    if (currentIndex > maxIndex) {
-      setCurrentIndex(maxIndex);
-    }
-  }, [visibleCards, currentIndex]);
-
   const maxIndex = Math.max(0, organizers.length - visibleCards);
 
-  const handleNext = () => {
-    if (currentIndex < maxIndex) {
-      setCurrentIndex((prev) => prev + 1);
+  useEffect(() => {
+    setCurrentIndex((prev) => Math.min(prev, maxIndex));
+  }, [maxIndex]);
+
+  useEffect(() => {
+    if (currentIndex === 0) {
+      setDirection("right");
+    } else if (currentIndex >= maxIndex) {
+      setDirection("left");
     }
+  }, [currentIndex, maxIndex]);
+
+  const handleNext = () => {
+    if (direction !== "right" || currentIndex >= maxIndex) return;
+
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   };
 
   const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
+    if (direction !== "left" || currentIndex <= 0) return;
+
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
+
+  // Keep card width and gap calculations consistent at each screen size.
+  const gap =
+    visibleCards === 1 ? 16 : visibleCards === 2 ? 24 : 28;
 
   return (
     <section className="w-full overflow-hidden bg-[#f7f7f7] px-4 py-8 sm:px-6 sm:py-9 md:px-10 md:py-10 lg:px-16">
       <div className="mx-auto w-full max-w-[1400px]">
-
         {/* Heading + Filter */}
         <div className="relative mb-7 flex min-h-[44px] items-center justify-center">
-
           <h2 className="px-16 text-center text-[18px] font-medium leading-6 text-[#344054] transition-all duration-300 hover:scale-105 hover:text-pink-500 sm:px-20 sm:text-[22px] md:px-0 md:text-[25px]">
             Most Happening Event Organizers
           </h2>
@@ -100,49 +140,42 @@ const MostHappeningEvents = () => {
               <span className="block h-[1px] w-[9px] bg-[#222]" />
               <span className="block h-[1px] w-[4px] bg-[#222]" />
             </span>
-
             <span>FILTER BY</span>
           </button>
         </div>
 
         {/* Cards */}
         <div className="relative">
-
           {/* Left Arrow */}
-          {currentIndex > 0 && (
-            <button
-              type="button"
-              onClick={handlePrevious}
-              aria-label="Previous"
-              className="absolute -left-1 top-1/2 z-30 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-left-4 md:-left-7 lg:-left-10"
-            >
-              <FaArrowLeft className="text-[10px]" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handlePrevious}
+            disabled={direction !== "left" || currentIndex === 0}
+            aria-label="Previous"
+            className={`absolute -left-1 top-1/2 z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-left-4 md:-left-7 lg:-left-10 ${
+              direction === "left" && currentIndex > 0
+                ? "cursor-pointer opacity-100"
+                : "cursor-not-allowed opacity-40"
+            }`}
+          >
+            <FaArrowLeft className="text-[10px]" />
+          </button>
 
-          {/* Slider */}
+          {/* Slider viewport */}
           <div className="overflow-hidden px-3 pt-5 sm:px-2">
             <div
               className="flex gap-4 transition-transform duration-500 ease-in-out sm:gap-6 md:gap-7"
               style={{
-                transform: `translateX(calc(-${currentIndex} * (100% / ${visibleCards}) - ${currentIndex} * ${visibleCards === 1 ? "16px" : visibleCards === 2 ? "24px" : "28px"}))`,
+                transform: `translateX(calc(-${currentIndex} * ((100% + ${gap}px) / ${visibleCards})))`,
               }}
             >
               {organizers.map((organizer, index) => (
                 <div
-                  key={index}
-                  className="
-                    min-w-0
-                    flex-[0_0_100%]
-
-                    sm:flex-[0_0_calc((100%-24px)/2)]
-
-                    lg:flex-[0_0_calc((100%-56px)/3)]
-                  "
+                  key={`${organizer.name}-${index}`}
+                  className="min-w-0 flex-[0_0_100%] sm:flex-[0_0_calc((100%-24px)/2)] lg:flex-[0_0_calc((100%-56px)/3)]"
                 >
                   {/* Image */}
                   <div className="relative aspect-[1.85/1] w-full transition-transform duration-300 hover:scale-[1.02] hover:brightness-130">
-
                     <div className="h-full w-full overflow-hidden">
                       <img
                         src={organizer.image}
@@ -167,59 +200,28 @@ const MostHappeningEvents = () => {
 
                     {/* Name Banner */}
                     <div className="absolute bottom-0 -left-3 z-20 h-[43px] w-[78%] min-w-0 sm:h-[46px] sm:w-[72%] sm:min-w-[200px]">
-
                       <svg
                         viewBox="0 0 1000 100"
                         preserveAspectRatio="none"
                         className="absolute inset-0 h-full w-full"
                       >
                         <path
-                          d="
-                            M 18 0
-                            H 760
-                            C 800 0 825 8 855 20
-                            L 1000 100
-                            H 18
-                            C 8 100 0 92 0 80
-                            V 20
-                            C 0 8 8 0 18 0
-                            Z
-                          "
+                          d="M 18 0 H 760 C 800 0 825 8 855 20 L 1000 100 H 18 C 8 100 0 92 0 80 V 20 C 0 8 8 0 18 0 Z"
                           fill="#c0321c"
                         />
                       </svg>
 
                       <div className="relative z-10 flex h-full items-center gap-2 px-4 sm:px-5">
-
                         <span className="relative flex h-[18px] w-[18px] shrink-0 items-center justify-center sm:h-[20px] sm:w-[20px]">
                           <svg
                             viewBox="0 0 24 24"
                             className="absolute inset-0 h-full w-full"
                           >
                             <path
-                              d="
-                                M12 1.5
-                                L14.4 7.1
-                                L20.5 5.5
-                                L18.9 11.6
-                                L24 15
-                                L18.2 17.5
-                                L19.5 23.5
-                                L13.8 21.2
-                                L12 24
-                                L10.2 21.2
-                                L4.5 23.5
-                                L5.8 17.5
-                                L0 15
-                                L5.1 11.6
-                                L3.5 5.5
-                                L9.6 7.1
-                                Z
-                              "
+                              d="M12 1.5 L14.4 7.1 L20.5 5.5 L18.9 11.6 L24 15 L18.2 17.5 L19.5 23.5 L13.8 21.2 L12 24 L10.2 21.2 L4.5 23.5 L5.8 17.5 L0 15 L5.1 11.6 L3.5 5.5 L9.6 7.1 Z"
                               fill="#ffbe0c"
                             />
                           </svg>
-
                           <FaCheck className="relative z-10 text-[7px] text-[#A63A2A]" />
                         </span>
 
@@ -240,17 +242,19 @@ const MostHappeningEvents = () => {
           </div>
 
           {/* Right Arrow */}
-          {currentIndex < maxIndex && (
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Next"
-              className="absolute -right-1 top-1/2 z-30 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-right-4 md:-right-7 lg:-right-10"
-            >
-              <FaArrowRight className="text-[10px]" />
-            </button>
-          )}
-
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={direction !== "right" || currentIndex >= maxIndex}
+            aria-label="Next"
+            className={`absolute -right-1 top-1/2 z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-[#f2676d] text-white shadow-sm sm:-right-4 md:-right-7 lg:-right-10 ${
+              direction === "right" && currentIndex < maxIndex
+                ? "cursor-pointer opacity-100"
+                : "cursor-not-allowed opacity-40"
+            }`}
+          >
+            <FaArrowRight className="text-[10px]" />
+          </button>
         </div>
       </div>
     </section>
@@ -258,3 +262,4 @@ const MostHappeningEvents = () => {
 };
 
 export default MostHappeningEvents;
+
