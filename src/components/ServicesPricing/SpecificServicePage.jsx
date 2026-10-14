@@ -24,7 +24,7 @@ const SpecificServicePage = () => {
      FORM STATE
   ===================================================== */
 
-  const emptyFormData = {
+  const [formData, setFormData] = useState({
     serviceMain: "",
     specificServiceName: "",
     chargeType: "Amount Per Event",
@@ -35,10 +35,6 @@ const SpecificServicePage = () => {
     minimumBookingHours: "",
     advanceBookingPayment: "",
     workDeliveryTimeline: "",
-  };
-
-  const [formData, setFormData] = useState({
-    ...emptyFormData,
   });
 
   /* =====================================================
@@ -85,13 +81,7 @@ const SpecificServicePage = () => {
   const [saveMessage, setSaveMessage] = useState("");
   const [saveType, setSaveType] = useState("");
   const [errors, setErrors] = useState({});
-
-  /* =====================================================
-     FORM VISIBILITY
-  ===================================================== */
-
-  const [showMainForm, setShowMainForm] =
-    useState(true);
+  const [editingServiceId, setEditingServiceId] = useState(null);
 
   /* =====================================================
      LOAD LOCAL STORAGE
@@ -100,16 +90,13 @@ const SpecificServicePage = () => {
   useEffect(() => {
     try {
       const savedData =
-        localStorage.getItem(
-          "specificServiceData"
-        );
+        localStorage.getItem("specificServiceData");
 
       if (!savedData) {
         return;
       }
 
-      const parsedData =
-        JSON.parse(savedData);
+      const parsedData = JSON.parse(savedData);
 
       if (parsedData.formData) {
         setFormData(parsedData.formData);
@@ -119,9 +106,7 @@ const SpecificServicePage = () => {
         parsedData.savedServices &&
         Array.isArray(parsedData.savedServices)
       ) {
-        setSavedServices(
-          parsedData.savedServices
-        );
+        setSavedServices(parsedData.savedServices);
       }
     } catch (error) {
       console.error(
@@ -136,8 +121,7 @@ const SpecificServicePage = () => {
   ===================================================== */
 
   const handleChange = (event) => {
-    const { name, value } =
-      event.target;
+    const { name, value } = event.target;
 
     setFormData((previous) => ({
       ...previous,
@@ -165,53 +149,95 @@ const SpecificServicePage = () => {
     const newErrors = {};
 
     if (!formData.serviceMain.trim()) {
-      newErrors.serviceMain =
-        "Service is required.";
+      newErrors.serviceMain = "Service is required.";
+    } else if (formData.serviceMain.trim().length > 60) {
+      newErrors.serviceMain = "Service must be 60 characters or fewer.";
     }
 
-    if (
-      !formData.specificServiceName.trim()
-    ) {
-      newErrors.specificServiceName =
-        "Specific Service Name is required.";
+    if (!formData.specificServiceName.trim()) {
+      newErrors.specificServiceName = "Specific Service Name is required.";
+    } else if (formData.specificServiceName.trim().length > 80) {
+      newErrors.specificServiceName = "Name must be 80 characters or fewer.";
     }
 
-    if (!formData.totalPrice.trim()) {
-      newErrors.totalPrice =
-        "Total Price is required.";
+    if (!formData.chargeType.trim()) {
+      newErrors.chargeType = "Please select a charge type.";
     }
 
-    if (
-      !formData.advanceBookingPayment.trim()
-    ) {
-      newErrors.advanceBookingPayment =
-        "Advance Booking Payment is required.";
+    // Accept values such as 12000, 12,000, 12,000/- INR.
+    const priceText = formData.totalPrice.trim();
+    const priceNumber = Number(priceText.replace(/[^0-9.]/g, ""));
+    if (!priceText) {
+      newErrors.totalPrice = "Total Price is required.";
+    } else if (!/^[0-9,\s./-]+(?:\s*[a-zA-Z]+(?:\s+[a-zA-Z]+)*)?$/.test(priceText) ||
+               !Number.isFinite(priceNumber) || priceNumber <= 0) {
+      newErrors.totalPrice = "Enter a valid price greater than 0 (e.g. 12000 or 12,000 INR).";
+    }
+
+    const advanceText = formData.advanceBookingPayment.trim().replace(/%$/, "").trim();
+    const advanceNumber = Number(advanceText);
+    if (!formData.advanceBookingPayment.trim()) {
+      newErrors.advanceBookingPayment = "Advance Booking Payment is required.";
+    } else if (!/^\d+(?:\.\d+)?%?$/.test(formData.advanceBookingPayment.trim()) ||
+               !Number.isFinite(advanceNumber) || advanceNumber < 1 || advanceNumber > 100) {
+      newErrors.advanceBookingPayment = "Enter a percentage between 1 and 100 (e.g. 30%).";
+    }
+
+    // Optional fields are checked only when a value is entered.
+    if (formData.overTimeCharge.trim()) {
+      const overtimeNumber = Number(formData.overTimeCharge.replace(/[^0-9.]/g, ""));
+      if (!Number.isFinite(overtimeNumber) || overtimeNumber < 0 ||
+          !/\d/.test(formData.overTimeCharge)) {
+        newErrors.overTimeCharge = "Enter a valid overtime charge (e.g. 1500 INR Per Hour).";
+      }
+    }
+
+    if (formData.minimumBookingHours.trim()) {
+      const hoursMatch = formData.minimumBookingHours.match(/\d+(?:\.\d+)?/);
+      const hoursNumber = hoursMatch ? Number(hoursMatch[0]) : NaN;
+      if (!Number.isFinite(hoursNumber) || hoursNumber <= 0) {
+        newErrors.minimumBookingHours = "Booking hours must be greater than 0 (e.g. 4 Hours).";
+      }
+    }
+
+    if (formData.description.length > 400) {
+      newErrors.description = "Description cannot exceed 400 characters.";
+    }
+
+    const duplicate = savedServices.some((service) =>
+      service.id !== editingServiceId &&
+      String(service.serviceMain || "").trim().toLowerCase() === formData.serviceMain.trim().toLowerCase() &&
+      String(service.specificServiceName || "").trim().toLowerCase() === formData.specificServiceName.trim().toLowerCase()
+    );
+
+    if (formData.serviceMain.trim() && formData.specificServiceName.trim() && duplicate) {
+      newErrors.specificServiceName = "This service name already exists under this service category.";
     }
 
     setErrors(newErrors);
-
-    return (
-      Object.keys(newErrors).length === 0
-    );
+    return Object.keys(newErrors).length === 0;
   };
 
   /* =====================================================
      SAVE TO LOCAL STORAGE
   ===================================================== */
 
-  const saveToLocalStorage = (
-    services = savedServices
-  ) => {
-    const data = {
-      formData,
-      savedServices: services,
-      savedAt: new Date().toISOString(),
-    };
+  const saveToLocalStorage = (services = savedServices, draftFormData = formData) => {
+    try {
+      const data = {
+        formData: draftFormData,
+        savedServices: services,
+        savedAt: new Date().toISOString(),
+      };
 
-    localStorage.setItem(
-      "specificServiceData",
-      JSON.stringify(data)
-    );
+      localStorage.setItem("specificServiceData", JSON.stringify(data));
+      return true;
+    } catch (error) {
+      console.error("Unable to save specific service data:", error);
+      setSaveType("error");
+      setSaveMessage("Unable to save data. Your browser storage may be full or unavailable.");
+      return false;
+    }
   };
 
   /* =====================================================
@@ -219,17 +245,49 @@ const SpecificServicePage = () => {
   ===================================================== */
 
   const handleSaveDraft = () => {
-    saveToLocalStorage();
+    const draftErrors = {};
 
-    setSaveType("success");
+    if (formData.totalPrice.trim()) {
+      const price = Number(formData.totalPrice.replace(/[^0-9.]/g, ""));
+      if (!Number.isFinite(price) || price <= 0) {
+        draftErrors.totalPrice = "Enter a valid price greater than 0.";
+      }
+    }
 
-    setSaveMessage(
-      "Draft saved successfully."
-    );
+    if (formData.advanceBookingPayment.trim()) {
+      const value = formData.advanceBookingPayment.trim().replace(/%$/, "").trim();
+      const percentage = Number(value);
+      if (!/^\d+(?:\.\d+)?%?$/.test(formData.advanceBookingPayment.trim()) ||
+          !Number.isFinite(percentage) || percentage < 1 || percentage > 100) {
+        draftErrors.advanceBookingPayment = "Enter a percentage between 1 and 100.";
+      }
+    }
 
-    setTimeout(() => {
-      setSaveMessage("");
-    }, 3000);
+    if (formData.overTimeCharge.trim()) {
+      const overtime = Number(formData.overTimeCharge.replace(/[^0-9.]/g, ""));
+      if (!Number.isFinite(overtime) || overtime < 0 || !/\d/.test(formData.overTimeCharge)) {
+        draftErrors.overTimeCharge = "Enter a valid overtime charge.";
+      }
+    }
+
+    if (formData.minimumBookingHours.trim()) {
+      const match = formData.minimumBookingHours.match(/\d+(?:\.\d+)?/);
+      if (!match || Number(match[0]) <= 0) {
+        draftErrors.minimumBookingHours = "Booking hours must be greater than 0.";
+      }
+    }
+
+    setErrors(draftErrors);
+    if (Object.keys(draftErrors).length > 0) {
+      setSaveType("error");
+      setSaveMessage("Please correct the highlighted fields before saving the draft.");
+      return;
+    }
+
+    if (saveToLocalStorage()) {
+      setSaveType("success");
+      setSaveMessage("Draft saved successfully.");
+    }
   };
 
   /* =====================================================
@@ -237,201 +295,116 @@ const SpecificServicePage = () => {
   ===================================================== */
 
   const handleSaveService = () => {
-    const isValid =
-      validateForm();
+    const isValid = validateForm();
 
     if (!isValid) {
       setSaveType("error");
-
-      setSaveMessage(
-        "Please fill all required fields."
-      );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-
+      setSaveMessage("Please correct the highlighted fields.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
-    const newService = {
-      id: Date.now(),
-
-      serviceMain:
-        formData.serviceMain.trim(),
-
-      specificServiceName:
-        formData.specificServiceName.trim(),
-
-      chargeType:
-        formData.chargeType,
-
-      totalPrice:
-        formData.totalPrice,
-
-      description:
-        formData.description,
-
-      overTimeCharge:
-        formData.overTimeCharge,
-
-      travelCharges:
-        formData.travelCharges,
-
-      minimumBookingHours:
-        formData.minimumBookingHours,
-
-      advanceBookingPayment:
-        formData.advanceBookingPayment,
-
-      workDeliveryTimeline:
-        formData.workDeliveryTimeline,
+    const serviceData = {
+      id: editingServiceId ?? Date.now(),
+      serviceMain: formData.serviceMain.trim(),
+      specificServiceName: formData.specificServiceName.trim(),
+      chargeType: formData.chargeType,
+      totalPrice: formData.totalPrice.trim(),
+      description: formData.description.trim(),
+      overTimeCharge: formData.overTimeCharge.trim(),
+      travelCharges: formData.travelCharges,
+      minimumBookingHours: formData.minimumBookingHours.trim(),
+      advanceBookingPayment: formData.advanceBookingPayment.trim(),
+      workDeliveryTimeline: formData.workDeliveryTimeline.trim(),
     };
 
-    const updatedServices = [
-      ...savedServices,
-      newService,
-    ];
+    const updatedServices = editingServiceId
+      ? savedServices.map((service) =>
+          service.id === editingServiceId ? serviceData : service
+        )
+      : [...savedServices, serviceData];
 
-    setSavedServices(
-      updatedServices
-    );
+    setSavedServices(updatedServices);
 
-    saveToLocalStorage(
-      updatedServices
-    );
+    const emptyForm = {
+      serviceMain: "",
+      specificServiceName: "",
+      chargeType: "Amount Per Event",
+      totalPrice: "",
+      description: "",
+      overTimeCharge: "",
+      travelCharges: "Ex : 25 INR Per Km",
+      minimumBookingHours: "",
+      advanceBookingPayment: "",
+      workDeliveryTimeline: "",
+    };
 
-    setSaveType("success");
-
-    setSaveMessage(
-      "Specific service saved successfully."
-    );
-
-    setFormData({
-      ...emptyFormData,
-    });
-
-    setErrors({});
-
-    setTimeout(() => {
-      setSaveMessage("");
-    }, 3000);
+    if (saveToLocalStorage(updatedServices, emptyForm)) {
+      setSaveType("success");
+      setSaveMessage(editingServiceId ? "Specific service updated successfully." : "Specific service saved successfully.");
+      setFormData(emptyForm);
+      setErrors({});
+      setEditingServiceId(null);
+    } else {
+      // Keep the entered values in the form if localStorage fails.
+      setSavedServices(savedServices);
+    }
   };
 
   /* =====================================================
      DELETE SERVICE
   ===================================================== */
 
-  const handleDeleteService = (
-    id
-  ) => {
+  const handleDeleteService = (id) => {
+    const serviceToDelete = savedServices.find((service) => service.id === id);
+    const confirmed = window.confirm(
+      `Delete "${serviceToDelete?.specificServiceName || "this service"}"?`
+    );
+
+    if (!confirmed) return;
+
     const updatedServices =
       savedServices.filter(
-        (service) =>
-          service.id !== id
+        (service) => service.id !== id
       );
 
-    setSavedServices(
-      updatedServices
-    );
+    setSavedServices(updatedServices);
 
-    saveToLocalStorage(
-      updatedServices
-    );
+    saveToLocalStorage(updatedServices);
   };
 
   /* =====================================================
      EDIT SERVICE
   ===================================================== */
 
-  const handleEditService = (
-    service
-  ) => {
+  const handleEditService = (service) => {
+    setEditingServiceId(service.id);
+    setErrors({});
+    setSaveMessage("");
     setFormData({
       serviceMain:
         service.serviceMain || "",
-
       specificServiceName:
         service.specificServiceName || "",
-
       chargeType:
         service.chargeType ||
         "Amount Per Event",
-
       totalPrice:
         service.totalPrice || "",
-
       description:
         service.description || "",
-
       overTimeCharge:
         service.overTimeCharge || "",
-
       travelCharges:
         service.travelCharges ||
         "Ex : 25 INR Per Km",
-
       minimumBookingHours:
         service.minimumBookingHours || "",
-
       advanceBookingPayment:
         service.advanceBookingPayment || "",
-
       workDeliveryTimeline:
         service.workDeliveryTimeline || "",
     });
-
-    setShowMainForm(true);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  /* =====================================================
-     VIEW SERVICE
-  ===================================================== */
-
-  const handleViewService = (
-    service
-  ) => {
-    setFormData({
-      serviceMain:
-        service.serviceMain || "",
-
-      specificServiceName:
-        service.specificServiceName || "",
-
-      chargeType:
-        service.chargeType ||
-        "Amount Per Event",
-
-      totalPrice:
-        service.totalPrice || "",
-
-      description:
-        service.description || "",
-
-      overTimeCharge:
-        service.overTimeCharge || "",
-
-      travelCharges:
-        service.travelCharges ||
-        "Ex : 25 INR Per Km",
-
-      minimumBookingHours:
-        service.minimumBookingHours || "",
-
-      advanceBookingPayment:
-        service.advanceBookingPayment || "",
-
-      workDeliveryTimeline:
-        service.workDeliveryTimeline || "",
-    });
-
-    setShowMainForm(true);
 
     window.scrollTo({
       top: 0,
@@ -444,65 +417,28 @@ const SpecificServicePage = () => {
   ===================================================== */
 
   const handleAddService = () => {
-    setFormData({
-      ...emptyFormData,
-    });
-
+    setEditingServiceId(null);
     setErrors({});
-
-    setShowMainForm(true);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  /* =====================================================
-     TOP EDIT BUTTON
-  ===================================================== */
-
-  const handleTopEdit = () => {
-    setShowMainForm(true);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  /* =====================================================
-     TOP DELETE BUTTON
-  ===================================================== */
-
-  const handleTopDelete = () => {
-    const shouldDelete =
-      window.confirm(
-        "Are you sure you want to clear this specific service?"
-      );
-
-    if (!shouldDelete) {
-      return;
-    }
-
-    setFormData({
-      ...emptyFormData,
-    });
-
-    setErrors({});
-
     setSaveMessage("");
-    setSaveType("");
-  };
+    setFormData({
+      serviceMain: "",
+      specificServiceName: "",
+      chargeType: "Amount Per Event",
+      totalPrice: "",
+      description: "",
+      overTimeCharge: "",
+      travelCharges: "Ex : 25 INR Per Km",
+      minimumBookingHours: "",
+      advanceBookingPayment: "",
+      workDeliveryTimeline: "",
+    });
 
-  /* =====================================================
-     TOP VIEW / HIDE BUTTON
-  ===================================================== */
+    setErrors({});
 
-  const handleTopView = () => {
-    setShowMainForm(
-      (previous) => !previous
-    );
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   /* =====================================================
@@ -539,14 +475,10 @@ const SpecificServicePage = () => {
           `}
         >
           {saveType === "success" && (
-            <FiCheckCircle
-              className="text-[20px]"
-            />
+            <FiCheckCircle className="text-[20px]" />
           )}
 
-          <span>
-            {saveMessage}
-          </span>
+          <span>{saveMessage}</span>
         </div>
       )}
 
@@ -559,7 +491,7 @@ const SpecificServicePage = () => {
           mt-[18px]
           flex
           flex-col
-          gap-[12px]
+          gap-[10px]
           sm:flex-row
           sm:items-center
           sm:justify-between
@@ -568,15 +500,12 @@ const SpecificServicePage = () => {
         <div
           className="
             flex
-            w-full
             items-center
             gap-[10px]
-            sm:w-auto
           "
         >
           <span
             className="
-              whitespace-nowrap
               text-[20px]
               font-normal
               text-[#555555]
@@ -609,15 +538,9 @@ const SpecificServicePage = () => {
           >
             Sort By
 
-            <FiChevronDown
-              className="text-[17px]"
-            />
+            <FiChevronDown className="text-[17px]" />
           </button>
         </div>
-
-        {/* =================================================
-            ADD SERVICE
-        ================================================= */}
 
         <button
           type="button"
@@ -625,7 +548,7 @@ const SpecificServicePage = () => {
           className="
             flex
             h-[52px]
-            w-full
+            w-[218px]
             cursor-pointer
             items-center
             justify-center
@@ -636,583 +559,356 @@ const SpecificServicePage = () => {
             text-[18px]
             font-semibold
             text-white
-            transition
-            hover:bg-[#a80000]
-            sm:w-[218px]
           "
         >
-          <FiPlusCircle
-            className="text-[17px]"
-          />
+          <FiPlusCircle className="text-[17px]" />
 
           Add Service
         </button>
       </div>
 
       {/* =================================================
-          SPECIFIC SERVICE - 1 WHITE CARD
+          TITLE
+      ================================================= */}
+
+      <div className="mt-[15px]">
+        <p
+          className="
+            text-[20px]
+            font-medium
+            text-[#777777]
+          "
+        >
+          {editingServiceId ? "Edit Specific Service" : "Specific Service - 1"}
+        </p>
+      </div>
+
+      {/* =================================================
+          FORM
       ================================================= */}
 
       <section
         className="
-          mt-[15px]
-          w-full
-          overflow-hidden
+          mt-[7px]
           rounded-[6px]
           bg-white
+          px-[25px]
+          py-[20px]
+          sm:px-[30px]
+          md:px-[34px]
         "
       >
-        {/* =================================================
-            TITLE
-        ================================================= */}
-
         <div
           className="
-            flex
-            min-h-[48px]
-            items-center
-            px-[15px]
-            sm:px-[20px]
-            md:px-[25px]
+            grid
+            grid-cols-1
+            gap-x-[20px]
+            gap-y-[15px]
+            sm:grid-cols-2
           "
         >
-          <p
-            className="
-              text-[18px]
-              font-medium
-              text-[#777777]
-              sm:text-[20px]
-            "
+          {/* SERVICE */}
+
+          <PricingField
+            label="Service"
+            required
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
           >
-            Specific Service - 1
-          </p>
+            <input
+              type="text"
+              name="serviceMain"
+              value={formData.serviceMain}
+              onChange={handleChange}
+              placeholder="Ex : Photography"
+              className={inputClassName}
+            />
+
+            {errors.serviceMain && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">
+                {errors.serviceMain}
+              </p>
+            )}
+          </PricingField>
+
+          {/* SPECIFIC SERVICE */}
+
+          <PricingField
+            label="Specific Service Name"
+            required
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <input
+              type="text"
+              name="specificServiceName"
+              value={
+                formData.specificServiceName
+              }
+              onChange={handleChange}
+              placeholder="Ex : General Photography"
+              className={inputClassName}
+            />
+
+            {errors.specificServiceName && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">
+                {errors.specificServiceName}
+              </p>
+            )}
+          </PricingField>
+
+          {/* CHARGE TYPE */}
+
+          <PricingField
+            label="Charge Type"
+            required
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <select
+              name="chargeType"
+              value={formData.chargeType}
+              onChange={handleChange}
+              className={selectClassName}
+            >
+              <option>
+                Amount Per Event
+              </option>
+
+              <option>
+                Amount Per Hour
+              </option>
+
+              <option>
+                Amount Per Item
+              </option>
+            </select>
+            {errors.chargeType && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">{errors.chargeType}</p>
+            )}
+          </PricingField>
+
+          {/* TOTAL PRICE */}
+
+          <PricingField
+            label="Total Price"
+            required
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <input
+              type="text"
+              name="totalPrice"
+              value={formData.totalPrice}
+              onChange={handleChange}
+              placeholder="12,000/- INR"
+              className={inputClassName}
+            />
+
+            {errors.totalPrice && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">
+                {errors.totalPrice}
+              </p>
+            )}
+          </PricingField>
+
+          {/* DESCRIPTION */}
+
+          <PricingField
+            label="Description"
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+            className="sm:col-span-2"
+          >
+            <div className="relative">
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                maxLength={400}
+                placeholder="Ex : this is the best ever service which includes ..."
+                className={textareaClassName}
+              />
+
+              <span
+                className="
+                  absolute
+                  right-[8px]
+                  top-[-15px]
+                  text-[13px]
+                  text-[#555555]
+                "
+              >
+                {formData.description.length} / 400
+                Characters
+              </span>
+            </div>
+            {errors.description && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">{errors.description}</p>
+            )}
+          </PricingField>
+
+          {/* OVERTIME */}
+
+          <PricingField
+            label="Over Time Charge / Hour"
+            optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <input
+              type="text"
+              name="overTimeCharge"
+              value={formData.overTimeCharge}
+              onChange={handleChange}
+              placeholder="Ex : 1500/- INR Per Hour"
+              className={inputClassName}
+            />
+            {errors.overTimeCharge && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">{errors.overTimeCharge}</p>
+            )}
+          </PricingField>
+
+          {/* TRAVEL */}
+
+          <PricingField
+            label="Travel Charges"
+            optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <select
+              name="travelCharges"
+              value={formData.travelCharges}
+              onChange={handleChange}
+              className={selectClassName}
+            >
+              <option>
+                Ex : 25 INR Per Km
+              </option>
+
+              <option>
+                No Travel Charge
+              </option>
+            </select>
+          </PricingField>
+
+          {/* MINIMUM HOURS */}
+
+          <PricingField
+            label="Min. Booking Hours"
+            optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <input
+              type="text"
+              name="minimumBookingHours"
+              value={
+                formData.minimumBookingHours
+              }
+              onChange={handleChange}
+              placeholder="Ex : 4 Hours"
+              className={inputClassName}
+            />
+            {errors.minimumBookingHours && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">{errors.minimumBookingHours}</p>
+            )}
+          </PricingField>
+
+          {/* ADVANCE PAYMENT */}
+
+          <PricingField
+            label="Advance Booking Payment (%)"
+            required
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <input
+              type="text"
+              name="advanceBookingPayment"
+              value={
+                formData.advanceBookingPayment
+              }
+              onChange={handleChange}
+              placeholder="Ex : 30%"
+              className={inputClassName}
+            />
+
+            {errors.advanceBookingPayment && (
+              <p className="mt-[4px] text-[13px] text-[#c40000]">
+                {errors.advanceBookingPayment}
+              </p>
+            )}
+          </PricingField>
+
+          {/* DELIVERY */}
+
+          <PricingField
+            label="Work Delivery Timeline"
+            optional
+            labelSize="text-[18px]"
+            labelClassName="font-semibold"
+          >
+            <input
+              type="text"
+              name="workDeliveryTimeline"
+              value={
+                formData.workDeliveryTimeline
+              }
+              onChange={handleChange}
+              placeholder="Ex : Within 3 DAYS of the Event"
+              className={inputClassName}
+            />
+          </PricingField>
         </div>
 
         {/* =================================================
-            TOP ACTION ICONS
+            BUTTONS
         ================================================= */}
 
         <div
           className="
+            mt-[22px]
             flex
-            h-[56px]
+            flex-col-reverse
             items-center
             justify-end
-            border-b
-            border-t
-            border-[#e5e5e5]
-            px-[15px]
-            sm:px-[25px]
-            md:px-[30px]
-            lg:px-[34px]
+            gap-[12px]
+            sm:flex-row
           "
         >
-          <div
+          <button
+            type="button"
+            onClick={handleSaveDraft}
             className="
-              flex
-              items-center
-              gap-[22px]
-              sm:gap-[28px]
+              cursor-pointer
+              text-[18px]
+              font-semibold
+              text-[#c40000]
             "
           >
-            {/* EDIT */}
+            Save Draft
+          </button>
 
-            <button
-              type="button"
-              onClick={handleTopEdit}
-              title="Edit"
-              aria-label="Edit specific service"
-              className="
-                flex
-                cursor-pointer
-                items-center
-                justify-center
-                text-[#222222]
-                transition
-                hover:text-[#000000]
-              "
-            >
-              <FiEdit
-                size={22}
-                strokeWidth={2}
-              />
-            </button>
-
-            {/* DELETE */}
-
-            <button
-              type="button"
-              onClick={handleTopDelete}
-              title="Delete"
-              aria-label="Delete specific service"
-              className="
-                flex
-                cursor-pointer
-                items-center
-                justify-center
-                text-[#8b0000]
-                transition
-                hover:text-[#c40000]
-              "
-            >
-              <FaTrash
-                size={17}
-              />
-            </button>
-
-            {/* VIEW */}
-
-            <button
-              type="button"
-              onClick={handleTopView}
-              title={
-                showMainForm
-                  ? "Hide"
-                  : "View"
-              }
-              aria-label={
-                showMainForm
-                  ? "Hide service"
-                  : "View service"
-              }
-              className="
-                flex
-                cursor-pointer
-                items-center
-                justify-center
-                text-[#222222]
-                transition
-                hover:text-[#000000]
-              "
-            >
-              <LuEyeClosed
-                size={21}
-                strokeWidth={2}
-              />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleSaveService}
+            className="
+              h-[32px]
+              w-[180px]
+              cursor-pointer
+              rounded-[4px]
+              bg-[#333333]
+              px-[18px]
+              text-[18px]
+              font-semibold
+              text-white
+            "
+          >
+            {editingServiceId ? "Update Service" : "Save Service"}
+          </button>
         </div>
-
-        {/* =================================================
-            FORM
-        ================================================= */}
-
-        {showMainForm && (
-          <div
-            className="
-              px-[15px]
-              py-[20px]
-              sm:px-[25px]
-              sm:py-[20px]
-              md:px-[30px]
-              lg:px-[34px]
-            "
-          >
-            <div
-              className="
-                grid
-                grid-cols-1
-                gap-x-[20px]
-                gap-y-[15px]
-                md:grid-cols-2
-              "
-            >
-              {/* =================================================
-                  SERVICE
-              ================================================= */}
-
-              <PricingField
-                label="Service"
-                required
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <input
-                  type="text"
-                  name="serviceMain"
-                  value={
-                    formData.serviceMain
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Ex : Photography"
-                  className={inputClassName}
-                />
-
-                {errors.serviceMain && (
-                  <p
-                    className="
-                      mt-[4px]
-                      text-[13px]
-                      text-[#c40000]
-                    "
-                  >
-                    {
-                      errors.serviceMain
-                    }
-                  </p>
-                )}
-              </PricingField>
-
-              {/* =================================================
-                  SPECIFIC SERVICE
-              ================================================= */}
-
-              <PricingField
-                label="Specific Service Name"
-                required
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <input
-                  type="text"
-                  name="specificServiceName"
-                  value={
-                    formData.specificServiceName
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Ex : General Photography"
-                  className={inputClassName}
-                />
-
-                {errors.specificServiceName && (
-                  <p
-                    className="
-                      mt-[4px]
-                      text-[13px]
-                      text-[#c40000]
-                    "
-                  >
-                    {
-                      errors.specificServiceName
-                    }
-                  </p>
-                )}
-              </PricingField>
-
-              {/* =================================================
-                  CHARGE TYPE
-              ================================================= */}
-
-              <PricingField
-                label="Charge Type"
-                required
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <select
-                  name="chargeType"
-                  value={
-                    formData.chargeType
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  className={selectClassName}
-                >
-                  <option>
-                    Amount Per Event
-                  </option>
-
-                  <option>
-                    Amount Per Hour
-                  </option>
-
-                  <option>
-                    Amount Per Item
-                  </option>
-                </select>
-              </PricingField>
-
-              {/* =================================================
-                  TOTAL PRICE
-              ================================================= */}
-
-              <PricingField
-                label="Total Price"
-                required
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <input
-                  type="text"
-                  name="totalPrice"
-                  value={
-                    formData.totalPrice
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="12,000/- INR"
-                  className={inputClassName}
-                />
-
-                {errors.totalPrice && (
-                  <p
-                    className="
-                      mt-[4px]
-                      text-[13px]
-                      text-[#c40000]
-                    "
-                  >
-                    {
-                      errors.totalPrice
-                    }
-                  </p>
-                )}
-              </PricingField>
-
-              {/* =================================================
-                  DESCRIPTION
-              ================================================= */}
-
-              <PricingField
-                label="Description"
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-                className="md:col-span-2"
-              >
-                <div
-                  className="relative"
-                >
-                  <textarea
-                    name="description"
-                    value={
-                      formData.description
-                    }
-                    onChange={
-                      handleChange
-                    }
-                    maxLength={400}
-                    placeholder="Ex : this is the best ever service which includes ..."
-                    className={textareaClassName}
-                  />
-
-                  <span
-                    className="
-                      absolute
-                      right-[8px]
-                      top-[-15px]
-                      whitespace-nowrap
-                      text-[11px]
-                      text-[#555555]
-                      sm:text-[13px]
-                    "
-                  >
-                    {
-                      formData.description
-                        .length
-                    }{" "}
-                    / 400 Characters
-                  </span>
-                </div>
-              </PricingField>
-
-              {/* =================================================
-                  OVER TIME CHARGE
-              ================================================= */}
-
-              <PricingField
-                label="Over Time Charge / Hour"
-                optional
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <input
-                  type="text"
-                  name="overTimeCharge"
-                  value={
-                    formData.overTimeCharge
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Ex : 1500/- INR Per Hour"
-                  className={inputClassName}
-                />
-              </PricingField>
-
-              {/* =================================================
-                  TRAVEL CHARGES
-              ================================================= */}
-
-              <PricingField
-                label="Travel Charges"
-                optional
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <select
-                  name="travelCharges"
-                  value={
-                    formData.travelCharges
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  className={selectClassName}
-                >
-                  <option>
-                    Ex : 25 INR Per Km
-                  </option>
-
-                  <option>
-                    No Travel Charge
-                  </option>
-                </select>
-              </PricingField>
-
-              {/* =================================================
-                  MINIMUM BOOKING HOURS
-              ================================================= */}
-
-              <PricingField
-                label="Min. Booking Hours"
-                optional
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <input
-                  type="text"
-                  name="minimumBookingHours"
-                  value={
-                    formData.minimumBookingHours
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Ex : 4 Hours"
-                  className={inputClassName}
-                />
-              </PricingField>
-
-              {/* =================================================
-                  ADVANCE PAYMENT
-              ================================================= */}
-
-              <PricingField
-                label="Advance Booking Payment (%)"
-                required
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <input
-                  type="text"
-                  name="advanceBookingPayment"
-                  value={
-                    formData.advanceBookingPayment
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Ex : 30%"
-                  className={inputClassName}
-                />
-
-                {errors.advanceBookingPayment && (
-                  <p
-                    className="
-                      mt-[4px]
-                      text-[13px]
-                      text-[#c40000]
-                    "
-                  >
-                    {
-                      errors
-                        .advanceBookingPayment
-                    }
-                  </p>
-                )}
-              </PricingField>
-
-              {/* =================================================
-                  DELIVERY
-              ================================================= */}
-
-              <PricingField
-                label="Work Delivery Timeline"
-                optional
-                labelSize="text-[16px] sm:text-[18px]"
-                labelClassName="font-semibold"
-              >
-                <input
-                  type="text"
-                  name="workDeliveryTimeline"
-                  value={
-                    formData.workDeliveryTimeline
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Ex : Within 3 DAYS of the Event"
-                  className={inputClassName}
-                />
-              </PricingField>
-            </div>
-
-            {/* =================================================
-                BUTTONS
-            ================================================= */}
-
-            <div
-              className="
-                mt-[22px]
-                flex
-                flex-col-reverse
-                items-center
-                justify-end
-                gap-[12px]
-                sm:flex-row
-              "
-            >
-              <button
-                type="button"
-                onClick={
-                  handleSaveDraft
-                }
-                className="
-                  cursor-pointer
-                  text-[17px]
-                  font-semibold
-                  text-[#c40000]
-                  transition
-                  hover:text-[#970000]
-                  sm:text-[18px]
-                "
-              >
-                Save Draft
-              </button>
-
-              <button
-                type="button"
-                onClick={
-                  handleSaveService
-                }
-                className="
-                  h-[40px]
-                  w-full
-                  cursor-pointer
-                  rounded-[4px]
-                  bg-[#333333]
-                  px-[18px]
-                  text-[17px]
-                  font-semibold
-                  text-white
-                  transition
-                  hover:bg-[#222222]
-                  sm:h-[32px]
-                  sm:w-[180px]
-                  sm:text-[18px]
-                "
-              >
-                Save Service
-              </button>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* =====================================================
@@ -1225,226 +921,175 @@ const SpecificServicePage = () => {
           space-y-[8px]
         "
       >
-        {savedServices.map(
-          (service) => (
-            <div
-              key={service.id}
-              className="
-                flex
-                flex-col
-                gap-[12px]
-                rounded-[5px]
-                bg-white
-                px-[15px]
-                py-[15px]
-                sm:flex-row
-                sm:items-center
-                sm:justify-between
-                sm:px-[18px]
-              "
-            >
-              {/* =================================================
-                  LEFT CONTENT
-              ================================================= */}
+        {savedServices.map((service) => (
+          <div
+            key={service.id}
+            className="
+              flex
+              items-center
+              justify-between
+              rounded-[5px]
+              bg-white
+              px-[18px]
+              py-[15px]
+            "
+          >
+            {/* =================================================
+                LEFT CONTENT
+            ================================================= */}
 
-              <div className="min-w-0 flex-1">
-                <h3
-                  className="
-                    truncate
-                    text-[17px]
-                    font-semibold
-                    text-[#333333]
-                    sm:text-[18px]
-                  "
-                >
-                  {
-                    service.specificServiceName
-                  }
-                </h3>
+            <div className="min-w-0">
+              {/* SERVICE TITLE */}
 
-                <div
-                  className="
-                    mt-[6px]
-                    flex
-                    flex-wrap
-                    items-center
-                    gap-[7px]
-                  "
-                >
-                  {/* CAMERA BADGE */}
+              <h3
+                className="
+                  text-[18px]
+                  font-semibold
+                  text-[#333333]
+                "
+              >
+                {service.specificServiceName}
+              </h3>
 
-                  <div
-                    className="
-                      inline-flex
-                      h-[37px]
-                      min-w-0
-                      max-w-full
-                      shrink-0
-                      items-center
-                      rounded-[3px]
-                      bg-[#222222]
-                      px-[9px]
-                      text-[14px]
-                      font-medium
-                      leading-none
-                      text-white
-                    "
-                  >
-                    <FaCamera
-                      className="
-                        mr-[4px]
-                        shrink-0
-                        text-white
-                      "
-                      size={17}
-                    />
-
-                    <span
-                      className="
-                        truncate
-                        text-[14px]
-                        font-semibold
-                      "
-                    >
-                      {
-                        service.serviceMain
-                      }
-                    </span>
-                  </div>
-
-                  {/* SERVICE NAME */}
-
-                  <div
-                    className="
-                      flex
-                      min-w-0
-                      flex-wrap
-                      items-center
-                      gap-[6px]
-                      text-[14px]
-                    "
-                  >
-                    <span
-                      className="
-                        font-semibold
-                        text-[#222222]
-                      "
-                    >
-                      {
-                        service
-                          .specificServiceName
-                      },
-                    </span>
-
-                    <span
-                      className="
-                        font-semibold
-                        text-red-900
-                      "
-                    >
-                      Add Ons Applicable
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* =================================================
-                  RIGHT ACTION ICONS
-              ================================================= */}
+              {/* BADGE + SERVICE DETAILS */}
 
               <div
                 className="
-                  ml-0
+                  mt-[6px]
                   flex
-                  shrink-0
                   items-center
-                  justify-end
-                  gap-[18px]
-                  sm:ml-[15px]
-                  sm:gap-[14px]
+                  gap-[7px]
                 "
               >
-                {/* EDIT */}
+                {/* BLACK CAMERA BADGE */}
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleEditService(
-                      service
-                    )
-                  }
+                <div
+                  className="
+                    inline-flex
+                    h-[37px]
+                    w-[142px]
+                    shrink-0
+                    items-center
+                    rounded-[3px]
+                    bg-[#222222]
+                    px-[9px]
+                    text-[14px]
+                    font-medium
+                    leading-none
+                    text-white
+                  "
+                >
+                  <FaCamera
+                    className="
+                      mr-[4px]
+                      text-white
+                    "
+                    size={17}
+                  />
+
+                  <span
+                    className="
+                      text-[14px]
+                      font-semibold
+                    "
+                  >
+                    {service.serviceMain}
+                  </span>
+                </div>
+
+                {/* SPECIFIC SERVICE NAME */}
+
+                <div
                   className="
                     flex
-                    cursor-pointer
                     items-center
-                    justify-center
-                    text-[#333333]
-                    transition
-                    hover:text-[#000000]
+                    gap-[6px]
+                    text-[14px]
                   "
-                  title="Edit"
-                  aria-label="Edit service"
                 >
-                  <FiEdit
-                    className="text-[18px]"
-                  />
-                </button>
+                  <span
+                    className="
+                      font-semibold
+                      text-[#222222]
+                    "
+                  >
+                    {service.specificServiceName},
+                  </span>
 
-                {/* DELETE */}
+                  {/* RED TEXT */}
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleDeleteService(
-                      service.id
-                    )
-                  }
-                  className="
-                    flex
-                    cursor-pointer
-                    items-center
-                    justify-center
-                    text-[#900000]
-                    transition
-                    hover:text-[#c40000]
-                  "
-                  title="Delete"
-                  aria-label="Delete service"
-                >
-                  <FaTrash
-                    className="text-[16px]"
-                  />
-                </button>
-
-                {/* VIEW */}
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleViewService(
-                      service
-                    )
-                  }
-                  className="
-                    flex
-                    cursor-pointer
-                    items-center
-                    justify-center
-                    text-[#333333]
-                    transition
-                    hover:text-[#000000]
-                  "
-                  title="View"
-                  aria-label="View service"
-                >
-                  <LuEyeClosed
-                    className="text-[18px]"
-                  />
-                </button>
+                  <span
+                    className="
+                      font-semibold
+                      text-red-900
+                    "
+                  >
+                    Add Ons Applicable
+                  </span>
+                </div>
               </div>
             </div>
-          )
-        )}
+
+            {/* =================================================
+                RIGHT ACTIONS
+            ================================================= */}
+
+            <div
+              className="
+                ml-[15px]
+                flex
+                shrink-0
+                items-center
+                gap-[14px]
+              "
+            >
+              {/* EDIT */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleEditService(service)
+                }
+                className="
+                  cursor-pointer
+                  text-[#333333]
+                "
+                title="Edit"
+              >
+                <FiEdit className="text-[18px]" />
+              </button>
+
+              {/* DELETE */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleDeleteService(service.id)
+                }
+                className="
+                  cursor-pointer
+                  text-[#900000]
+                "
+                title="Delete"
+              >
+                <FaTrash className="text-[16px]" />
+              </button>
+
+              {/* VIEW */}
+
+              <button
+                type="button"
+                className="
+                  cursor-pointer
+                  text-[#333333]
+                "
+                title="View"
+              >
+                <LuEyeClosed className="text-[18px]" />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </ServicesPricingLayout>
   );

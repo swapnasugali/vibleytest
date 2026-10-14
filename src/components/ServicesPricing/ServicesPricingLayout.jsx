@@ -1,899 +1,131 @@
-import React, { useState } from "react";
 
+import React from "react";
 import {
-  FaBars,
-  FaTimes,
   FaRegCircle,
   FaCheckCircle,
   FaRegMoneyBillAlt,
 } from "react-icons/fa";
-
-import { useNavigate, Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import PricingHeader from "./PricingHeader";
 
 const ServicesPricingLayout = ({
   children,
   activeModel = "fixed",
-  showBackgroundLines = true,
 }) => {
   const navigate = useNavigate();
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
-  /* =========================================================
-     PRICING MODEL NAVIGATION
-  ========================================================= */
-
   const handlePricingModel = (model) => {
     if (model === "fixed") {
-      navigate(
-        "/service-providers/services-pricing/fixed-package"
-      );
-    }
-
-    if (model === "service") {
-      navigate(
-        "/service-providers/services-pricing/specific-service"
-      );
-    }
-
-    if (model === "addons") {
-      navigate(
-        "/service-providers/services-pricing/add-ons"
-      );
+      navigate("/service-providers/services-pricing/fixed-package");
+    } else if (model === "service") {
+      navigate("/service-providers/services-pricing/specific-service");
+    } else if (model === "addons") {
+      navigate("/service-providers/services-pricing/add-ons");
     }
   };
 
+  const models = [
+    {
+      id: "fixed",
+      title: "Fixed Packages",
+      description: "Set price for bundled services.",
+    },
+    {
+      id: "service",
+      title: "Specific Service-based",
+      description: "Hourly or per-item rates.",
+    },
+    {
+      id: "addons",
+      title: "Add Ons",
+      description: "Offer flexibility to clients.",
+    },
+  ];
+
   return (
-    <div
-      className="min-h-screen w-full"
-      style={{
-        fontFamily: "Poppins, sans-serif",
-        backgroundColor: "#f6f6f6",
-
-        backgroundImage: showBackgroundLines
-          ? `
-            repeating-linear-gradient(
-              90deg,
-              #ebebeb 0px,
-              #ebebeb 75px,
-              #f6f6f6 75px,
-              #f6f6f6 89px
-            )
-          `
-          : "none",
-
-        backgroundPosition: "49px 0px",
-        backgroundAttachment: "scroll",
-      }}
-    >
-
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
-
-      <header
-        className="w-full border-b border-[#eeeeee]"
-        style={{
-          minHeight: "95px",
-          backgroundColor: "#fffcf6",
-
-          backgroundImage: showBackgroundLines
-            ? `
-              repeating-linear-gradient(
-                90deg,
-                #f3f0eb 0px,
-                #f3f0eb 75px,
-                #fffcf6 75px,
-                #fffcf6 89px
-              )
-            `
-            : "none",
-
-          backgroundPosition: "49px 0px",
-        }}
-      >
-
-        {/* HEADER CONTENT */}
-
-        <div
-          className="
-            flex
-            min-h-[95px]
-            w-full
-            items-center
-            justify-between
-            px-[30px]
-            sm:px-[40px]
-            md:px-[55px]
-            lg:px-[60px]
-          "
-        >
-
-          {/* =================================================
-              LOGO
-          ================================================= */}
-
-          <Link
-            to="/service-providers"
-            onClick={closeMenu}
-            className="flex items-center"
-          >
-            <img
-              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
-              alt="Vibely Vendors"
-              className="
-                w-[82px]
-                object-contain
-                sm:w-[85px]
-                md:w-[88px]
-                lg:w-[90px]
-              "
-            />
-          </Link>
-
-
-          {/* =================================================
-              DESKTOP NAVIGATION
-          ================================================= */}
-
-          <nav
-            className="
-              hidden
-              items-center
-              gap-[30px]
-              md:flex
-              lg:gap-[40px]
-              xl:gap-[44px]
-            "
-          >
-
-            {/* DASHBOARD */}
-
-            <button
-              type="button"
-              onClick={() =>
-                navigate("/service-providers")
-              }
-              className="
-                cursor-pointer
-                whitespace-nowrap
-                text-[14px]
-                font-medium
-                text-[#222222]
-                transition
-                hover:text-[#e00000]
-                lg:text-[15px]
-              "
-            >
-              DASHBOARD
-            </button>
-
-
-            {/* PROFILE */}
-
-            <button
-              type="button"
-              onClick={() =>
-                navigate(
-                  "/service-providers/profile"
-                )
-              }
-              className="
-                cursor-pointer
-                whitespace-nowrap
-                text-[14px]
-                font-medium
-                text-[#222222]
-                transition
-                hover:text-[#e00000]
-                lg:text-[15px]
-              "
-            >
-              PROFILE
-            </button>
-
-
-            {/* PORTFOLIO */}
-
-            <button
-              type="button"
-              onClick={() =>
-                navigate(
-                  "/service-providers/profile/portfolio"
-                )
-              }
-              className="
-                cursor-pointer
-                whitespace-nowrap
-                text-[14px]
-                font-medium
-                text-[#222222]
-                transition
-                hover:text-[#e00000]
-                lg:text-[15px]
-              "
-            >
-              PORTFOLIO
-            </button>
-
-
-            {/* SERVICES / PRICING */}
-
-            <button
-              type="button"
-              onClick={() =>
-                navigate(
-                  "/service-providers/services-pricing"
-                )
-              }
-              className="
-                cursor-pointer
-                whitespace-nowrap
-                text-[14px]
-                font-semibold
-                text-[#e00000]
-                lg:text-[15px]
-              "
-            >
-              SERVICES / PRICING
-            </button>
-
-
-            {/* =================================================
-                LEADS
-                THIS IS THE IMPORTANT CHANGE
-            ================================================= */}
-
-            <Link
-              to="/service-providers/leads"
-              onClick={closeMenu}
-              className="
-                cursor-pointer
-                whitespace-nowrap
-                text-[14px]
-                font-medium
-                text-[#222222]
-                transition
-                hover:text-[#e00000]
-                lg:text-[15px]
-              "
-            >
-              LEADS
-            </Link>
-
-          </nav>
-
-
-          {/* =================================================
-              ACCOUNT + MOBILE BUTTON
-          ================================================= */}
-
-          <div className="flex items-center">
-
-            <img
-              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
-              alt="Account"
-              className="
-                h-[42px]
-                w-[42px]
-                rounded-full
-                object-cover
-              "
-            />
-
-            {/* MOBILE MENU BUTTON */}
-
-            <button
-              type="button"
-              onClick={() =>
-                setMenuOpen(
-                  (previous) => !previous
-                )
-              }
-              className="ml-4 md:hidden"
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? (
-                <FaTimes
-                  className="
-                    text-[20px]
-                    text-[#222222]
-                  "
-                />
-              ) : (
-                <FaBars
-                  className="
-                    text-[20px]
-                    text-[#222222]
-                  "
-                />
-              )}
-            </button>
-
-          </div>
-
-        </div>
-
-
-        {/* =====================================================
-            MOBILE MENU
-        ===================================================== */}
-
-        {menuOpen && (
-          <div
-            className="
-              border-t
-              border-gray-200
-              bg-[#fffdf9]
-              md:hidden
-            "
-          >
-
-            <div className="flex flex-col px-5 py-3">
-
-              {/* DASHBOARD */}
-
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(
-                    "/service-providers"
-                  );
-
-                  closeMenu();
-                }}
-                className="
-                  py-2.5
-                  text-left
-                  text-[15px]
-                  font-medium
-                  text-[#222222]
-                "
-              >
-                DASHBOARD
-              </button>
-
-
-              {/* PROFILE */}
-
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(
-                    "/service-providers/profile"
-                  );
-
-                  closeMenu();
-                }}
-                className="
-                  py-2.5
-                  text-left
-                  text-[15px]
-                  font-medium
-                  text-[#222222]
-                "
-              >
-                PROFILE
-              </button>
-
-
-              {/* PORTFOLIO */}
-
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(
-                    "/service-providers/profile/portfolio"
-                  );
-
-                  closeMenu();
-                }}
-                className="
-                  py-2.5
-                  text-left
-                  text-[15px]
-                  font-medium
-                  text-[#222222]
-                "
-              >
-                PORTFOLIO
-              </button>
-
-
-              {/* SERVICES / PRICING */}
-
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(
-                    "/service-providers/services-pricing"
-                  );
-
-                  closeMenu();
-                }}
-                className="
-                  py-2.5
-                  text-left
-                  text-[15px]
-                  font-semibold
-                  text-[#e00000]
-                "
-              >
-                SERVICES / PRICING
-              </button>
-
-
-              {/* =================================================
-                  LEADS
-                  THIS IS THE IMPORTANT CHANGE
-              ================================================= */}
-
-              <Link
-                to="/service-providers/leads"
-                onClick={closeMenu}
-                className="
-                  py-2.5
-                  text-left
-                  text-[15px]
-                  font-medium
-                  text-[#222222]
-                "
-              >
-                LEADS
-              </Link>
-
-            </div>
-
-          </div>
-        )}
-
-      </header>
-
-
-      {/* =====================================================
-          MAIN
-      ===================================================== */}
-
-      <main
-        className="
-          mx-auto
-          w-full
-          max-w-[1040px]
-          px-[20px]
-          pb-[60px]
-          pt-[22px]
-          sm:px-[30px]
-          md:px-[40px]
-          lg:px-[50px]
-        "
-      >
-
+    <div className="min-h-screen w-full bg-[#f5f5f5]">
+      {/* HEADER */}
+      <PricingHeader />
+
+      {/* MAIN CONTENT */}
+      <main className="mx-auto w-full max-w-[978px] px-[20px] pb-[60px] pt-[16px] sm:px-0">
         {/* PAGE TITLE */}
-
         <div>
-
-          <h1
-            className="
-              text-[32px]
-              font-medium
-              leading-[36px]
-              text-[#292929]
-            "
-          >
+          <h1 className="text-[32px] font-medium leading-[30px] text-[#252525]">
             Services and Pricing
           </h1>
 
-          <p
-            className="
-              mt-[1px]
-              text-[13px]
-              leading-[32px]
-              text-[#999999]
-              sm:text-[18px]
-              sm:leading-[28px]
-            "
-          >
-            Configure your pricing models, packages, and add-ons
-            to streamline your bookings.
+          <p className="mt-[1px] text-[18px] leading-[44px] text-[#999999]">
+            Configure your pricing models, packages, and add-ons to streamline your bookings.
           </p>
-
         </div>
 
-
-        {/* =====================================================
-            PRICING MODELS
-        ===================================================== */}
-
-        <section
-          className="
-            mt-[18px]
-            w-full
-            overflow-hidden
-            rounded-[7px]
-            border
-            border-[#e4e1de]
-            shadow-[0_2px_10px_rgba(0,0,0,0.045)]
-          "
-          style={{
-            backgroundColor:
-              "rgba(246, 246, 246, 0.32)",
-          }}
-        >
-
-          <div
-            className="
-              px-[18px]
-              py-[18px]
-              sm:px-[20px]
-              sm:py-[20px]
-            "
-          >
-
-            {/* PRICING MODELS HEADING */}
-
+        {/* PRICING MODELS PANEL */}
+        <section className="mt-[20px] w-full rounded-[9px] border border-[#eeeeee] bg-white shadow-[0_3px_15px_rgba(0,0,0,0.045)]">
+          <div className="px-[20px] py-[26px]">
+            {/* PANEL HEADING */}
             <div className="flex items-start">
+              <div className="relative mr-[8px] mt-[1px] h-[22px] w-[21px] shrink-0">
+                <FaRegMoneyBillAlt className="absolute left-[2px] top-[1px] z-10 text-[16px] text-[#e00000]" />
 
-              {/* MONEY ICON + L MARK */}
+                <span className="absolute bottom-[2px] left-[-1px] z-20 h-[10px] w-[2px] rounded-full bg-[#e00000]" />
 
-              <div
-                className="
-                  relative
-                  mr-[8px]
-                  mt-[1px]
-                  h-[28px]
-                  w-[25px]
-                  shrink-0
-                "
-              >
-
-                <FaRegMoneyBillAlt
-                  className="
-                    absolute
-                    left-[3px]
-                    top-0
-                    z-10
-                    text-[17px]
-                    text-[#e00000]
-                  "
-                />
-
-                {/* VERTICAL L */}
-
-                <span
-                  className="
-                    absolute
-                    bottom-[8px]
-                    left-[-2px]
-                    z-20
-                    h-[12px]
-                    w-[2px]
-                    rounded-full
-                    bg-[#e00000]
-                  "
-                />
-
-                {/* HORIZONTAL L */}
-
-                <span
-                  className="
-                    absolute
-                    bottom-[8px]
-                    left-0
-                    z-20
-                    h-[2px]
-                    w-[20px]
-                    rounded-full
-                    bg-[#e00000]
-                  "
-                />
-
+                <span className="absolute bottom-[2px] left-[1px] z-20 h-[2px] w-[13px] rounded-full bg-[#e00000]" />
               </div>
 
-
-              {/* HEADING TEXT */}
-
               <div>
-
-                <h2
-                  className="
-                    text-[26px]
-                    font-medium
-                    leading-[20px]
-                    text-[#181111]
-                  "
-                >
+                <h2 className="text-[26px] font-medium leading-[22px] text-[#181111]">
                   Pricing Models
                 </h2>
 
-                <p
-                  className="
-                    mt-[1px]
-                    text-[14px]
-                    leading-[35px]
-                    text-[#8A6060]
-                  "
-                >
+                <p className="text-[14px] leading-[30px] text-[#8A6060]">
                   Choose how you want to structure your charges.
                 </p>
-
               </div>
-
             </div>
 
+            {/* PRICING MODEL CARDS */}
+            <div className="mt-[14px] grid grid-cols-1 gap-[14px] sm:grid-cols-3">
+              {models.map((model) => {
+                const isActive = activeModel === model.id;
 
-            {/* =================================================
-                PRICING MODEL CARDS
-            ================================================= */}
+                return (
+                  <button
+                    key={model.id}
+                    type="button"
+                    onClick={() => handlePricingModel(model.id)}
+                    aria-pressed={isActive}
+                    className={`cursor-pointer relative min-h-[56px] w-full rounded-[10px] border px-[11px] py-[9px] text-left transition ${
+                      isActive
+                        ? "border-[#e00000] bg-white"
+                        : "border-[#d5d2cf] bg-white hover:border-[#e00000]"
+                    }`}
+                  >
+                    <h3 className="pr-[20px] text-[18px] font-semibold leading-[17px] text-[#181111]">
+                      {model.title}
+                    </h3>
 
-            <div
-              className="
-                mt-[12px]
-                grid
-                grid-cols-1
-                gap-[10px]
-                sm:grid-cols-3
-              "
-            >
+                    <p className="mt-[1px] text-[14px] leading-[20px] text-[#8A6060]">
+                      {model.description}
+                    </p>
 
-              {/* FIXED PACKAGES */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  handlePricingModel("fixed")
-                }
-                className={`
-                  relative
-                  min-h-[50px]
-                  w-full
-                  cursor-pointer
-                  rounded-[6px]
-                  border
-                  px-[10px]
-                  py-[7px]
-                  text-left
-                  transition
-                  ${
-                    activeModel === "fixed"
-                      ? "border-[#e00000]"
-                      : "border-[#d5d2cf]"
-                  }
-                `}
-                style={{
-                  backgroundColor:
-                    activeModel === "fixed"
-                      ? "rgba(255,255,255,0.28)"
-                      : "rgba(255,255,255,0.18)",
-                }}
-              >
-
-                <h3
-                  className="
-                    text-[18px]
-                    font-semibold
-                    leading-[16px]
-                    text-[#181111]
-                  "
-                >
-                  Fixed Packages
-                </h3>
-
-                <p
-                  className="
-                    text-[14px]
-                    leading-[23px]
-                    text-[#8A6060]
-                  "
-                >
-                  Set price for bundled services.
-                </p>
-
-                <span
-                  className="
-                    absolute
-                    right-[7px]
-                    top-[8px]
-                  "
-                >
-                  {activeModel === "fixed" ? (
-                    <FaCheckCircle
-                      className="
-                        text-[12px]
-                        text-[#e00000]
-                      "
-                    />
-                  ) : (
-                    <FaRegCircle
-                      className="
-                        text-[12px]
-                        text-[#bdb9b5]
-                      "
-                    />
-                  )}
-                </span>
-
-              </button>
-
-
-              {/* SPECIFIC SERVICE */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  handlePricingModel("service")
-                }
-                className={`
-                  relative
-                  min-h-[50px]
-                  w-full
-                  cursor-pointer
-                  rounded-[6px]
-                  border
-                  px-[10px]
-                  py-[7px]
-                  text-left
-                  transition
-                  ${
-                    activeModel === "service"
-                      ? "border-[#e00000]"
-                      : "border-[#d5d2cf]"
-                  }
-                `}
-                style={{
-                  backgroundColor:
-                    activeModel === "service"
-                      ? "rgba(255,255,255,0.28)"
-                      : "rgba(255,255,255,0.18)",
-                }}
-              >
-
-                <h3
-                  className="
-                    text-[18px]
-                    font-semibold
-                    leading-[16px]
-                    text-[#181111]
-                  "
-                >
-                  Specific Service-based
-                </h3>
-
-                <p
-                  className="
-                    text-[14px]
-                    leading-[23px]
-                    text-[#8A6060]
-                  "
-                >
-                  Hourly or per-item rates.
-                </p>
-
-                <span
-                  className="
-                    absolute
-                    right-[7px]
-                    top-[8px]
-                  "
-                >
-                  {activeModel === "service" ? (
-                    <FaCheckCircle
-                      className="
-                        text-[12px]
-                        text-[#e00000]
-                      "
-                    />
-                  ) : (
-                    <FaRegCircle
-                      className="
-                        text-[12px]
-                        text-[#bdb9b5]
-                      "
-                    />
-                  )}
-                </span>
-
-              </button>
-
-
-              {/* ADD ONS */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  handlePricingModel("addons")
-                }
-                className={`
-                  relative
-                  min-h-[50px]
-                  w-full
-                  cursor-pointer
-                  rounded-[6px]
-                  border
-                  px-[10px]
-                  py-[7px]
-                  text-left
-                  transition
-                  ${
-                    activeModel === "addons"
-                      ? "border-[#e00000]"
-                      : "border-[#d5d2cf]"
-                  }
-                `}
-                style={{
-                  backgroundColor:
-                    activeModel === "addons"
-                      ? "rgba(255,255,255,0.28)"
-                      : "rgba(255,255,255,0.18)",
-                }}
-              >
-
-                <h3
-                  className="
-                    text-[18px]
-                    font-semibold
-                    leading-[16px]
-                    text-[#181111]
-                  "
-                >
-                  Add Ons
-                </h3>
-
-                <p
-                  className="
-                    text-[14px]
-                    leading-[33px]
-                    text-[#8A6060]
-                  "
-                >
-                  Additional services that adds value.
-                </p>
-
-                <span
-                  className="
-                    absolute
-                    right-[7px]
-                    top-[8px]
-                  "
-                >
-                  {activeModel === "addons" ? (
-                    <FaCheckCircle
-                      className="
-                        text-[12px]
-                        text-[#e00000]
-                      "
-                    />
-                  ) : (
-                    <FaRegCircle
-                      className="
-                        text-[12px]
-                        text-[#bdb9b5]
-                      "
-                    />
-                  )}
-                </span>
-
-              </button>
-
+                    <span className="absolute right-[10px] top-[11px]">
+                      {isActive ? (
+                        <FaCheckCircle className="text-[14px] text-[#e00000]" />
+                      ) : (
+                        <FaRegCircle className="text-[14px] text-[#d5d2cf]" />
+                      )}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-
           </div>
-
         </section>
 
-
-        {/* =====================================================
-            PAGE CONTENT
-        ===================================================== */}
-
+        {/* PAGE CONTENT */}
         {children}
-
       </main>
-
     </div>
   );
 };
