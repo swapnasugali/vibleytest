@@ -1,3 +1,4 @@
+
 import React from "react";
 
 import ProviderHeader from "./ProviderHeader";
@@ -8,92 +9,36 @@ import DashboardStats from "./DashboardStats";
 import ServicesPricing from "./ServicesPricing";
 import AvailabilityCalendar from "./AvailabilityCalendar";
 
-import ThumbnailBadgeTextOverlay from "./ThumbnailBadgeTextOverlay";
-import LeadStatusOverlay from "./LeadStatusOverlay";
-import AvailabilityCalendarOverlay from "./AvailabilityCalendarOverlay";
-
-import AvailabilityCalendar1 from "./AvailabilityCalendar1";
-import AvailabilityCalendarBottom from "./AvailabilityCalendarBottom";
-
 const ProviderDashboard = () => {
   return (
-    <div className="min-h-screen w-full bg-[#f7f6f6]"
-     style={{ fontFamily: "Poppins, sans-serif" }}>
-
-      {/* HEADER */}
+    <div
+      className="min-h-screen w-full bg-[#f7f6f6]"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
+      {/* 1. HEADER */}
       <ProviderHeader />
 
-      {/* HERO */}
+      {/* 2. DASHBOARD TITLE */}
       <DashboardHero />
 
-      <main className="w-full px-4 py-5 pb-10 sm:px-6 md:px-8 lg:px-10 xl:px-12">
-
-        {/* LEAD ACTIONS + LEAD STATUS */}
-        <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2">
+      <main className="w-full px-[22px] py-5 pb-8">
+        {/* 3. LEADS */}
+        <section className="grid grid-cols-1 gap-[14px] md:grid-cols-2">
           <LeadActions />
           <LeadStatusSummary />
-        </div>
+        </section>
 
-        {/* DASHBOARD STATS */}
-        <div className="mt-5 w-full">
+        {/* 4. DASHBOARD STATISTICS */}
+        <section className="mt-5">
           <DashboardStats />
-        </div>
+        </section>
 
-        {/* SERVICES + AVAILABILITY */}
-        <div className="mt-5 grid w-full grid-cols-1 gap-3 md:grid-cols-2">
+        {/* 5. SERVICES AND AVAILABILITY CALENDAR */}
+        <section className="mt-5 grid grid-cols-1 items-stretch gap-[14px] md:grid-cols-2">
           <ServicesPricing />
           <AvailabilityCalendar />
-        </div>
-
-        {/* ================================================= */}
-        {/* THUMBNAIL + LEAD STATUS + AVAILABILITY CALENDAR */}
-        {/* ================================================= */}
-
-        <div className="mt-5 grid w-full grid-cols-1 gap-5 md:grid-cols-2">
-
-          {/* LEFT SIDE */}
-          <div className="flex w-full flex-col gap-5">
-
-            {/* THUMBNAIL */}
-            <ThumbnailBadgeTextOverlay />
-
-            {/* LEAD STATUS */}
-            <LeadStatusOverlay />
-
-          </div>
-
-
-          {/* RIGHT SIDE */}
-          <div className="flex w-full items-end">
-
-            {/* 
-              Calendar height is controlled from here.
-              75vh is only an example fixed height.
-            */}
-            <div className="h-[75vh] w-full">
-
-              <AvailabilityCalendarOverlay />
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        {/* FOUR CALENDAR STATES */}
-        <div className="mt-5 w-full">
-          <AvailabilityCalendar1 />
-        </div>
-
-
-        {/* MINI CALENDARS */}
-        <div className="mt-5 w-full">
-          <AvailabilityCalendarBottom />
-        </div>
-
+        </section>
       </main>
-
     </div>
   );
 };
