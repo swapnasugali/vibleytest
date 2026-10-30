@@ -18,6 +18,10 @@ const CERTIFICATION_TYPES = [
 const CredibilityForTrustSignals = () => {
   const [isEditing, setIsEditing] = useState(false);
 
+  const [totalEvents, setTotalEvents] = useState("163");
+  const [savedTotalEvents, setSavedTotalEvents] = useState("163");
+  const [totalEventsError, setTotalEventsError] = useState("");
+
   const [certifications, setCertifications] = useState([
     "Cambridge - Study Of Photography Completion",
   ]);
@@ -38,14 +42,26 @@ const CredibilityForTrustSignals = () => {
   // Open edit mode
   const handleEdit = () => {
     if (!isEditing) {
+      setTotalEvents(savedTotalEvents);
       setCertifications([...savedCertifications]);
       setAwards([...savedAwards]);
+
+      setTotalEventsError("");
       setCertificationError("");
       setAwardError("");
       setSuccessMessage("");
     }
 
     setIsEditing(true);
+  };
+
+  // Total events: numbers only
+  const handleTotalEventsChange = (event) => {
+    const value = event.target.value.replace(/\D/g, "");
+
+    setTotalEvents(value);
+    setTotalEventsError("");
+    setSuccessMessage("");
   };
 
   // Validate and add uploaded files
@@ -63,6 +79,7 @@ const CredibilityForTrustSignals = () => {
 
     const errors = [];
     const validFiles = [];
+
     const existingNames = new Set(
       currentFiles.map((name) => name.toLowerCase())
     );
@@ -70,6 +87,7 @@ const CredibilityForTrustSignals = () => {
     selectedFiles.forEach((file) => {
       const extension = file.name.split(".").pop()?.toLowerCase();
 
+      // File type validation
       if (!extension || !allowedTypes.includes(extension)) {
         errors.push(
           `${file.name}: Invalid file type. Allowed: ${allowedTypes.join(", ")}.`
@@ -77,16 +95,19 @@ const CredibilityForTrustSignals = () => {
         return;
       }
 
+      // Empty file validation
       if (file.size === 0) {
         errors.push(`${file.name}: Empty files are not allowed.`);
         return;
       }
 
+      // File size validation
       if (file.size > MAX_FILE_SIZE) {
         errors.push(`${file.name}: File size must not exceed 5 MB.`);
         return;
       }
 
+      // Duplicate file validation
       const normalizedName = file.name.toLowerCase();
 
       if (
@@ -102,6 +123,7 @@ const CredibilityForTrustSignals = () => {
       validFiles.push(file);
     });
 
+    // Maximum 10 files validation
     const remainingSlots = MAX_FILES - currentFiles.length;
 
     if (remainingSlots <= 0) {
@@ -153,6 +175,7 @@ const CredibilityForTrustSignals = () => {
     setCertifications((previousFiles) =>
       previousFiles.filter((_, index) => index !== indexToRemove)
     );
+
     setCertificationError("");
     setSuccessMessage("");
   };
@@ -162,15 +185,28 @@ const CredibilityForTrustSignals = () => {
     setAwards((previousFiles) =>
       previousFiles.filter((_, index) => index !== indexToRemove)
     );
+
     setAwardError("");
     setSuccessMessage("");
   };
 
   // Save changes
   const handleSave = () => {
+    if (totalEvents.trim() === "") {
+      setTotalEventsError("Total Events Handled is required.");
+      return;
+    }
+
+    if (!/^\d+$/.test(totalEvents)) {
+      setTotalEventsError("Please enter numbers only.");
+      return;
+    }
+
+    setSavedTotalEvents(totalEvents);
     setSavedCertifications([...certifications]);
     setSavedAwards([...awards]);
 
+    setTotalEventsError("");
     setCertificationError("");
     setAwardError("");
     setSuccessMessage("Changes saved successfully.");
@@ -179,9 +215,11 @@ const CredibilityForTrustSignals = () => {
 
   // Cancel changes
   const handleCancel = () => {
+    setTotalEvents(savedTotalEvents);
     setCertifications([...savedCertifications]);
     setAwards([...savedAwards]);
 
+    setTotalEventsError("");
     setCertificationError("");
     setAwardError("");
     setSuccessMessage("");
@@ -199,7 +237,6 @@ const CredibilityForTrustSignals = () => {
           CREDIBILITY FOR TRUST SIGNALS
         </h2>
 
-        {/* Pen icon stays visible in both modes */}
         <button
           type="button"
           onClick={handleEdit}
@@ -229,12 +266,31 @@ const CredibilityForTrustSignals = () => {
           </label>
 
           <div className="flex h-[30px] w-full items-center rounded-[4px] border border-[#cfcfcf] px-[10px]">
-            <span className="text-[14px] text-[#6D6D6D]">163</span>
+            {isEditing ? (
+              <input
+                type="text"
+                inputMode="numeric"
+                value={totalEvents}
+                onChange={handleTotalEventsChange}
+                placeholder="Enter total events"
+                className="h-full w-full bg-transparent text-[14px] text-[#6D6D6D] outline-none"
+              />
+            ) : (
+              <span className="text-[14px] text-[#6D6D6D]">
+                {totalEvents}
+              </span>
+            )}
 
-            <span className="ml-[12px] text-[12px] italic text-[#777]">
-              ( Will be auto calculated by leads accepted )
+            <span className="ml-[12px] shrink-0 text-[12px] italic text-[#777]">
+              ( Enter total events handled )
             </span>
           </div>
+
+          {totalEventsError && (
+            <p role="alert" className="mt-1 text-[12px] text-[#b42318]">
+              {totalEventsError}
+            </p>
+          )}
         </div>
 
         {/* CERTIFICATIONS */}
@@ -296,10 +352,12 @@ const CredibilityForTrustSignals = () => {
             <label className="mb-[6px] flex h-[30px] w-fit cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] text-[#6D6D6D]">
               <FiUpload className="text-black" />
               Upload Certification
+
               <input
                 type="file"
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 multiple
+                disabled={certifications.length >= MAX_FILES}
                 onChange={handleCertificationUpload}
                 className="hidden"
               />
@@ -381,10 +439,12 @@ const CredibilityForTrustSignals = () => {
             <label className="mb-[6px] flex h-[30px] w-fit cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] text-[#6D6D6D]">
               <FiUpload className="text-black" />
               Upload Award PDF
+
               <input
                 type="file"
                 accept=".pdf"
                 multiple
+                disabled={awards.length >= MAX_FILES}
                 onChange={handleAwardUpload}
                 className="hidden"
               />

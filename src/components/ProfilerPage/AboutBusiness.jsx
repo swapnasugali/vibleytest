@@ -13,6 +13,19 @@ const AboutBusiness = () => {
 
   const [successMessage, setSuccessMessage] = useState("");
 
+  // Allow only alphabets and spaces
+  const handleTextChange = (value, field) => {
+    const filteredValue = value.replace(/[^\p{L}\s]/gu, "");
+
+    if (field === "shortStatement") {
+      setShortStatement(filteredValue);
+    } else {
+      setBriefDescription(filteredValue);
+    }
+
+    setSuccessMessage("");
+  };
+
   // Open edit mode
   const handleEdit = () => {
     if (!isEditing) {
@@ -83,10 +96,9 @@ const AboutBusiness = () => {
           <input
             type="text"
             value={shortStatement}
-            onChange={(e) => {
-              setShortStatement(e.target.value);
-              setSuccessMessage("");
-            }}
+            onChange={(e) =>
+              handleTextChange(e.target.value, "shortStatement")
+            }
             readOnly={!isEditing}
             placeholder="Ex : Creating unforgettable moments since 2010."
             className={`h-[40px] w-full rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] outline-none placeholder:text-[#474747] ${
@@ -105,10 +117,9 @@ const AboutBusiness = () => {
 
           <textarea
             value={briefDescription}
-            onChange={(e) => {
-              setBriefDescription(e.target.value);
-              setSuccessMessage("");
-            }}
+            onChange={(e) =>
+              handleTextChange(e.target.value, "briefDescription")
+            }
             readOnly={!isEditing}
             placeholder="Write about your business in brief for client overview"
             className={`h-[60px] w-full resize-none rounded-[4px] border border-[#cfcfcf] px-[10px] py-[8px] text-[12px] outline-none placeholder:text-[#474747] ${

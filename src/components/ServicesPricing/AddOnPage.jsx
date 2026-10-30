@@ -1,472 +1,473 @@
-import React, { useState } from "react";
-
-
+import React, { useEffect, useState } from "react";
 
 import {
-
   FiPlusCircle,
-
   FiEdit,
-
   FiChevronDown,
-
   FiUploadCloud,
-
   FiCheckCircle,
-
 } from "react-icons/fi";
-
-
 
 import { FaCamera, FaTrash } from "react-icons/fa";
 
-
-
 import { LuEyeClosed } from "react-icons/lu";
-
-
 
 import ServicesPricingLayout from "./ServicesPricingLayout";
 
-
-
 import PricingField, {
-
   inputClassName,
-
   selectClassName,
-
   textareaClassName,
-
 } from "./PricingField";
 
-
-
 const AddOnPage = () => {
-
   /* =========================================================
-
      EMPTY FORM
-
   ========================================================= */
-
-
 
   const emptyFormData = {
-
     addOnName: "",
-
     category: "",
-
     chargeType: "Amount Per Event",
-
     totalPrice: "",
-
     description: "",
-
     previewImage: null,
-
     applicability: "To all Services & Packages",
-
   };
 
-
-
   /* =========================================================
-
      FORM STATE
-
   ========================================================= */
-
-
 
   const [formData, setFormData] = useState({
-
     ...emptyFormData,
-
   });
 
-
-
   /* =========================================================
-
      SAVED ADD ONS
-
   ========================================================= */
-
-
 
   const [savedAddOns, setSavedAddOns] = useState([
-
     {
-
       id: 1,
-
       addOnName: "Neon Lighting Service",
-
       category: "Photography",
-
       description:
-
         "Lighting, Applicable To All Services and Packages",
-
       chargeType: "Amount Per Event",
-
-      totalPrice: "5,000/- INR",
-
-      applicability:
-
-        "To all Services & Packages",
-
+      totalPrice: "5000",
+      applicability: "To all Services & Packages",
     },
-
-
-
     {
-
       id: 2,
-
       addOnName:
-
         "Cinematic Reel Shots Recording for Social Media Presence",
-
       category: "Videography",
-
       description:
-
         "Cinematic videography, Applicable To Packages",
-
       chargeType: "Amount Per Event",
-
-      totalPrice: "8,000/- INR",
-
-      applicability:
-
-        "Specific Packages",
-
+      totalPrice: "8000",
+      applicability: "Specific Packages",
     },
-
   ]);
 
-
-
   /* =========================================================
-
      MESSAGE / VALIDATION
-
   ========================================================= */
 
+  const [saveMessage, setSaveMessage] = useState("");
 
+  const [saveType, setSaveType] = useState("");
 
-  const [saveMessage, setSaveMessage] =
-
-    useState("");
-
-
-
-  const [saveType, setSaveType] =
-
-    useState("");
-
-
-
-  const [errors, setErrors] =
-
-    useState({});
-
-
+  const [errors, setErrors] = useState({});
 
   /* =========================================================
-
      FORM VISIBILITY
-
   ========================================================= */
 
-
-
-  const [showMainForm, setShowMainForm] =
-
-    useState(true);
-
-
+  const [showMainForm, setShowMainForm] = useState(true);
 
   /* =========================================================
-
-     HANDLE INPUT
-
+     EDIT STATE
   ========================================================= */
 
+  const [editingAddOnId, setEditingAddOnId] = useState(null);
 
+  /* =========================================================
+     LOAD SAVED ADD ONS
+  ========================================================= */
+
+  useEffect(() => {
+    try {
+      const storedAddOns = localStorage.getItem("specificAddOns");
+
+      if (storedAddOns) {
+        const parsedAddOns = JSON.parse(storedAddOns);
+
+        if (Array.isArray(parsedAddOns)) {
+          setSavedAddOns(parsedAddOns);
+        }
+      }
+    } catch (error) {
+      console.error("Unable to load add-ons:", error);
+    }
+  }, []);
+
+  /* =========================================================
+     INPUT VALIDATION HELPERS
+  ========================================================= */
+
+  // Allow alphabets, spaces and hyphens for Add-on Name
+  const allowOnlyAlphabets = (value) => {
+    return value.replace(/[^\p{L}\s-]/gu, "");
+  };
+
+  // Allow alphabets and spaces for Category
+  const allowOnlyCategory = (value) => {
+    return value.replace(/[^\p{L}\s]/gu, "");
+  };
+
+  // Allow numbers and only one decimal point
+  const allowOnlyNumbers = (value) => {
+    let cleanedValue = value.replace(/[^0-9.]/g, "");
+
+    const decimalParts = cleanedValue.split(".");
+
+    if (decimalParts.length > 2) {
+      cleanedValue =
+        decimalParts[0] + "." + decimalParts.slice(1).join("");
+    }
+
+    return cleanedValue;
+  };
+
+  // Allow letters, numbers and basic punctuation in description
+  const allowDescription = (value) => {
+    return value.replace(/[^\p{L}\p{N}\s.,!?'"():;\/&+\-]/gu, "");
+  };
+
+  /* =========================================================
+     HANDLE INPUT
+  ========================================================= */
 
   const handleChange = (event) => {
+    const { name, value } = event.target;
 
-    const { name, value } =
+    let updatedValue = value;
 
-      event.target;
+    if (name === "addOnName") {
+      updatedValue = allowOnlyAlphabets(value);
+    }
 
+    if (name === "category") {
+      updatedValue = allowOnlyCategory(value);
+    }
 
+    if (name === "totalPrice") {
+      updatedValue = allowOnlyNumbers(value);
+    }
+
+    if (name === "description") {
+      updatedValue = allowDescription(value).slice(0, 400);
+    }
 
     setFormData((previous) => ({
-
       ...previous,
-
-      [name]: value,
-
+      [name]: updatedValue,
     }));
-
-
 
     if (errors[name]) {
-
       setErrors((previous) => ({
-
         ...previous,
-
         [name]: "",
-
       }));
-
     }
-
-
 
     if (saveMessage) {
-
       setSaveMessage("");
-
       setSaveType("");
-
     }
-
   };
 
-
-
   /* =========================================================
-
      IMAGE UPLOAD
-
   ========================================================= */
-
-
 
   const handleImageChange = (event) => {
-
-    const file =
-
-      event.target.files?.[0];
-
-
+    const file = event.target.files?.[0];
 
     if (!file) {
-
       return;
-
     }
-
-
 
     const allowedTypes = [
-
       "image/png",
-
       "image/jpeg",
-
       "image/webp",
-
     ];
 
-
-
     if (!allowedTypes.includes(file.type)) {
-
       setSaveType("error");
 
-
-
       setSaveMessage(
-
         "Please upload a PNG, JPG, or WEBP image."
-
       );
 
-
-
+      event.target.value = "";
       return;
-
     }
 
-
-
-    if (
-
-      file.size >
-
-      2 * 1024 * 1024
-
-    ) {
-
+    if (file.size > 2 * 1024 * 1024) {
       setSaveType("error");
 
-
-
       setSaveMessage(
-
         "Image size must be less than 2MB."
-
       );
 
-
-
+      event.target.value = "";
       return;
-
     }
-
-
 
     setFormData((previous) => ({
-
       ...previous,
-
       previewImage: file,
-
     }));
 
-
-
     setSaveMessage("");
-
     setSaveType("");
-
   };
 
-
-
   /* =========================================================
-
      VALIDATION
-
   ========================================================= */
-
-
 
   const validateForm = () => {
     const newErrors = {};
+
     const addOnName = formData.addOnName.trim();
     const category = formData.category.trim();
     const priceText = formData.totalPrice.trim();
-    const priceNumber = Number(priceText.replace(/[^0-9.]/g, ""));
 
+    // Add-on Name
     if (!addOnName) {
       newErrors.addOnName = "Add on Name is required.";
     } else if (addOnName.length > 80) {
-      newErrors.addOnName = "Add on Name must be 80 characters or fewer.";
+      newErrors.addOnName =
+        "Add on Name must be 80 characters or fewer.";
+    } else if (!/^[\p{L}\s-]+$/u.test(addOnName)) {
+      newErrors.addOnName =
+        "Only alphabets, spaces and hyphens are allowed.";
     }
 
+    // Category
     if (!category) {
       newErrors.category = "Category is required.";
     } else if (category.length > 60) {
-      newErrors.category = "Category must be 60 characters or fewer.";
+      newErrors.category =
+        "Category must be 60 characters or fewer.";
+    } else if (!/^[\p{L}\s]+$/u.test(category)) {
+      newErrors.category =
+        "Only alphabets and spaces are allowed.";
     }
 
+    // Charge Type
     if (!formData.chargeType.trim()) {
-      newErrors.chargeType = "Please select a charge type.";
+      newErrors.chargeType =
+        "Please select a charge type.";
     }
 
+    // Total Price
     if (!priceText) {
-      newErrors.totalPrice = "Total Price is required.";
+      newErrors.totalPrice =
+        "Total Price is required.";
     } else if (
-      !/^[0-9,\s./-]+(?:\s*[a-zA-Z]+(?:\s+[a-zA-Z]+)*)?$/.test(priceText) ||
-      !Number.isFinite(priceNumber) ||
-      priceNumber <= 0
+      !/^\d+(\.\d{1,2})?$/.test(priceText) ||
+      !Number.isFinite(Number(priceText)) ||
+      Number(priceText) <= 0
     ) {
-      newErrors.totalPrice = "Enter a valid price greater than 0 (e.g. 12000 or 12,000 INR).";
+      newErrors.totalPrice =
+        "Enter a valid price greater than 0. Example: 12000 or 12000.50.";
     }
 
+    // Description
     if (formData.description.length > 400) {
-      newErrors.description = "Description cannot exceed 400 characters.";
+      newErrors.description =
+        "Description cannot exceed 400 characters.";
     }
 
+    // Applicability
     if (!formData.applicability.trim()) {
-      newErrors.applicability = "Applicability is required.";
+      newErrors.applicability =
+        "Applicability is required.";
     }
 
-    const duplicate = savedAddOns.some((addOn) =>
-      addOn.addOnName?.trim().toLowerCase() === addOnName.toLowerCase() &&
-      addOn.category?.trim().toLowerCase() === category.toLowerCase()
-    );
+    // Duplicate Validation
+    const duplicate = savedAddOns.some((addOn) => {
+      const isSameName =
+        addOn.addOnName?.trim().toLowerCase() ===
+        addOnName.toLowerCase();
+
+      const isSameCategory =
+        addOn.category?.trim().toLowerCase() ===
+        category.toLowerCase();
+
+      const isNotCurrentEditing =
+        addOn.id !== editingAddOnId;
+
+      return (
+        isSameName &&
+        isSameCategory &&
+        isNotCurrentEditing
+      );
+    });
 
     if (addOnName && category && duplicate) {
-      newErrors.addOnName = "An add-on with this name already exists in this category.";
+      newErrors.addOnName =
+        "An add-on with this name already exists in this category.";
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
-  const validateDraftFields = () => {
-    const newErrors = {};
-    const addOnName = formData.addOnName.trim();
-    const category = formData.category.trim();
-    const priceText = formData.totalPrice.trim();
-
-    if (addOnName.length > 80) {
-      newErrors.addOnName = "Add on Name must be 80 characters or fewer.";
-    }
-    if (category.length > 60) {
-      newErrors.category = "Category must be 60 characters or fewer.";
-    }
-    if (priceText) {
-      const priceNumber = Number(priceText.replace(/[^0-9.]/g, ""));
-      if (
-        !/^[0-9,\s./-]+(?:\s*[a-zA-Z]+(?:\s+[a-zA-Z]+)*)?$/.test(priceText) ||
-        !Number.isFinite(priceNumber) ||
-        priceNumber <= 0
-      ) {
-        newErrors.totalPrice = "Enter a valid price greater than 0 (e.g. 12000 or 12,000 INR).";
-      }
-    }
-    if (formData.description.length > 400) {
-      newErrors.description = "Description cannot exceed 400 characters.";
-    }
-
-    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   /* =========================================================
-
-     SAVE DRAFT
-
+     DRAFT VALIDATION
   ========================================================= */
 
+  const validateDraftFields = () => {
+    const newErrors = {};
 
+    const addOnName = formData.addOnName.trim();
+    const category = formData.category.trim();
+    const priceText = formData.totalPrice.trim();
+
+    // Add-on Name
+    if (addOnName.length > 80) {
+      newErrors.addOnName =
+        "Add on Name must be 80 characters or fewer.";
+    } else if (
+      addOnName &&
+      !/^[\p{L}\s-]+$/u.test(addOnName)
+    ) {
+      newErrors.addOnName =
+        "Only alphabets, spaces and hyphens are allowed.";
+    }
+
+    // Category
+    if (category.length > 60) {
+      newErrors.category =
+        "Category must be 60 characters or fewer.";
+    } else if (
+      category &&
+      !/^[\p{L}\s]+$/u.test(category)
+    ) {
+      newErrors.category =
+        "Only alphabets and spaces are allowed.";
+    }
+
+    // Total Price
+    if (
+      priceText &&
+      (
+        !/^\d+(\.\d{1,2})?$/.test(priceText) ||
+        !Number.isFinite(Number(priceText)) ||
+        Number(priceText) <= 0
+      )
+    ) {
+      newErrors.totalPrice =
+        "Enter a valid price greater than 0. Example: 12000 or 12000.50.";
+    }
+
+    // Description
+    if (formData.description.length > 400) {
+      newErrors.description =
+        "Description cannot exceed 400 characters.";
+    }
+
+    // Duplicate validation
+    const duplicate = savedAddOns.some((addOn) => {
+      return (
+        addOn.addOnName?.trim().toLowerCase() ===
+          addOnName.toLowerCase() &&
+        addOn.category?.trim().toLowerCase() ===
+          category.toLowerCase() &&
+        addOn.id !== editingAddOnId
+      );
+    });
+
+    if (addOnName && category && duplicate) {
+      newErrors.addOnName =
+        "An add-on with this name already exists in this category.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  /* =========================================================
+     SAVE TO LOCAL STORAGE
+  ========================================================= */
+
+  const saveAddOnsToStorage = (addOns) => {
+    localStorage.setItem(
+      "specificAddOns",
+      JSON.stringify(addOns)
+    );
+  };
+
+  /* =========================================================
+     SAVE DRAFT
+  ========================================================= */
 
   const handleSaveDraft = () => {
     if (!validateDraftFields()) {
       setSaveType("error");
-      setSaveMessage("Please correct the highlighted fields before saving the draft.");
+
+      setSaveMessage(
+        "Please correct the highlighted fields before saving the draft."
+      );
+
       return;
     }
 
     const draftData = {
       ...formData,
-      previewImage: formData.previewImage ? formData.previewImage.name : null,
+
+      previewImage: formData.previewImage
+        ? formData.previewImage.name
+        : null,
+
       status: "draft",
+
       savedAt: new Date().toISOString(),
     };
 
     try {
-      localStorage.setItem("addOnDraft", JSON.stringify(draftData));
+      localStorage.setItem(
+        "addOnDraft",
+        JSON.stringify(draftData)
+      );
     } catch (error) {
-      console.error("Unable to save add-on draft:", error);
+      console.error(
+        "Unable to save add-on draft:",
+        error
+      );
+
       setSaveType("error");
-      setSaveMessage("Unable to save draft. Your browser storage may be full or unavailable.");
+
+      setSaveMessage(
+        "Unable to save draft. Your browser storage may be full or unavailable."
+      );
+
       return;
     }
 
     setSaveType("success");
+
     setSaveMessage("Draft saved successfully.");
+
     setTimeout(() => {
       setSaveMessage("");
       setSaveType("");
@@ -474,2591 +475,1115 @@ const AddOnPage = () => {
   };
 
   /* =========================================================
-
      SAVE ADD ON
-
   ========================================================= */
 
-
-
   const handleSaveAddOn = () => {
-
-    const isValid =
-
-      validateForm();
-
-
+    const isValid = validateForm();
 
     if (!isValid) {
+      setSaveType("error");
+
+      setSaveMessage(
+        "Please fill all required fields correctly."
+      );
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+
+      return;
+    }
+
+    const addOnId = editingAddOnId || Date.now();
+
+    const newAddOn = {
+      id: addOnId,
+
+      addOnName: formData.addOnName.trim(),
+
+      category: formData.category.trim(),
+
+      description:
+        formData.description.trim() ||
+        `${formData.chargeType}, ${formData.applicability}`,
+
+      chargeType: formData.chargeType,
+
+      totalPrice: formData.totalPrice.trim(),
+
+      applicability: formData.applicability,
+
+      previewImage: formData.previewImage
+        ? formData.previewImage.name
+        : null,
+
+      status: "saved",
+
+      savedAt: new Date().toISOString(),
+    };
+
+    let updatedAddOns;
+
+    if (editingAddOnId) {
+      updatedAddOns = savedAddOns.map((addOn) =>
+        addOn.id === editingAddOnId
+          ? newAddOn
+          : addOn
+      );
+    } else {
+      updatedAddOns = [
+        ...savedAddOns,
+        newAddOn,
+      ];
+    }
+
+    try {
+      saveAddOnsToStorage(updatedAddOns);
+
+      setSavedAddOns(updatedAddOns);
+    } catch (error) {
+      console.error(
+        "Unable to save add-on:",
+        error
+      );
 
       setSaveType("error");
 
-
-
       setSaveMessage(
-
-        "Please fill all required fields."
-
+        "Unable to save add-on. Please try again."
       );
-
-
-
-      window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth",
-
-      });
-
-
 
       return;
-
     }
-
-
-
-    const newAddOn = {
-
-      id: Date.now(),
-
-
-
-      addOnName:
-
-        formData.addOnName.trim(),
-
-
-
-      category:
-
-        formData.category.trim(),
-
-
-
-      description:
-
-        formData.description.trim() ||
-
-        `${formData.chargeType}, ${formData.applicability}`,
-
-
-
-      chargeType:
-
-        formData.chargeType,
-
-
-
-      totalPrice:
-
-        formData.totalPrice,
-
-
-
-      applicability:
-
-        formData.applicability,
-
-    };
-
-
-
-    const updatedAddOns = [
-
-      ...savedAddOns,
-
-      newAddOn,
-
-    ];
-
-
-
-    setSavedAddOns(
-
-      updatedAddOns
-
-    );
-
-
-
-    /* =======================================================
-
-       SAVE TO LOCAL STORAGE
-
-    ======================================================= */
-
-
-
-    const existingAddOns =
-
-      JSON.parse(
-
-        localStorage.getItem(
-
-          "specificAddOns"
-
-        ) || "[]"
-
-      );
-
-
-
-    localStorage.setItem(
-
-      "specificAddOns",
-
-      JSON.stringify([
-
-        ...existingAddOns,
-
-
-
-        {
-
-          ...formData,
-
-
-
-          id: newAddOn.id,
-
-
-
-          previewImage:
-
-            formData.previewImage
-
-              ? formData.previewImage.name
-
-              : null,
-
-
-
-          status: "saved",
-
-
-
-          savedAt:
-
-            new Date().toISOString(),
-
-        },
-
-      ])
-
-    );
-
-
 
     setSaveType("success");
 
-
-
     setSaveMessage(
-
-      "Add On saved successfully."
-
+      editingAddOnId
+        ? "Add On updated successfully."
+        : "Add On saved successfully."
     );
 
-
-
-    /* =======================================================
-
-       RESET FORM
-
-    ======================================================= */
-
-
-
+    // Reset Form
     setFormData({
-
       ...emptyFormData,
-
     });
 
-
+    setEditingAddOnId(null);
 
     setErrors({});
 
-
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
     setTimeout(() => {
-
       setSaveMessage("");
-
+      setSaveType("");
     }, 3000);
-
   };
 
-
-
   /* =========================================================
-
      DELETE ADD ON
-
   ========================================================= */
 
-
-
-  const handleDeleteAddOn = (
-
-    id
-
-  ) => {
-
-    const updatedAddOns =
-
-      savedAddOns.filter(
-
-        (addOn) =>
-
-          addOn.id !== id
-
-      );
-
-
-
-    setSavedAddOns(
-
-      updatedAddOns
-
+  const handleDeleteAddOn = (id) => {
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this Add On?"
     );
-
-
-
-    const existingAddOns =
-
-      JSON.parse(
-
-        localStorage.getItem(
-
-          "specificAddOns"
-
-        ) || "[]"
-
-      );
-
-
-
-    const updatedLocalStorageAddOns =
-
-      existingAddOns.filter(
-
-        (addOn) =>
-
-          addOn.id !== id
-
-      );
-
-
-
-    localStorage.setItem(
-
-      "specificAddOns",
-
-      JSON.stringify(
-
-        updatedLocalStorageAddOns
-
-      )
-
-    );
-
-  };
-
-
-
-  /* =========================================================
-
-     EDIT ADD ON
-
-  ========================================================= */
-
-
-
-  const handleEditAddOn = (
-
-    addOn
-
-  ) => {
-
-    setFormData({
-
-      addOnName:
-
-        addOn.addOnName || "",
-
-
-
-      category:
-
-        addOn.category || "",
-
-
-
-      chargeType:
-
-        addOn.chargeType ||
-
-        "Amount Per Event",
-
-
-
-      totalPrice:
-
-        addOn.totalPrice || "",
-
-
-
-      description:
-
-        addOn.description || "",
-
-
-
-      previewImage: null,
-
-
-
-      applicability:
-
-        addOn.applicability ||
-
-        "To all Services & Packages",
-
-    });
-
-
-
-    setErrors({});
-
-
-
-    setShowMainForm(true);
-
-
-
-    window.scrollTo({
-
-      top: 0,
-
-      behavior: "smooth",
-
-    });
-
-  };
-
-
-
-  /* =========================================================
-
-     VIEW ADD ON
-
-  ========================================================= */
-
-
-
-  const handleViewAddOn = (
-
-    addOn
-
-  ) => {
-
-    setFormData({
-
-      addOnName:
-
-        addOn.addOnName || "",
-
-
-
-      category:
-
-        addOn.category || "",
-
-
-
-      chargeType:
-
-        addOn.chargeType ||
-
-        "Amount Per Event",
-
-
-
-      totalPrice:
-
-        addOn.totalPrice || "",
-
-
-
-      description:
-
-        addOn.description || "",
-
-
-
-      previewImage: null,
-
-
-
-      applicability:
-
-        addOn.applicability ||
-
-        "To all Services & Packages",
-
-    });
-
-
-
-    setErrors({});
-
-
-
-    setShowMainForm(true);
-
-
-
-    window.scrollTo({
-
-      top: 0,
-
-      behavior: "smooth",
-
-    });
-
-  };
-
-
-
-  /* =========================================================
-
-     NEW ADD ON
-
-  ========================================================= */
-
-
-
-  const handleNewAddOn = () => {
-
-    setFormData({
-
-      ...emptyFormData,
-
-    });
-
-
-
-    setErrors({});
-
-
-
-    setSaveMessage("");
-
-    setSaveType("");
-
-
-
-    setShowMainForm(true);
-
-
-
-    window.scrollTo({
-
-      top: 0,
-
-      behavior: "smooth",
-
-    });
-
-  };
-
-
-
-  /* =========================================================
-
-     TOP EDIT
-
-  ========================================================= */
-
-
-
-  const handleTopEdit = () => {
-
-    setShowMainForm(true);
-
-
-
-    window.scrollTo({
-
-      top: 0,
-
-      behavior: "smooth",
-
-    });
-
-  };
-
-
-
-  /* =========================================================
-
-     TOP DELETE
-
-  ========================================================= */
-
-
-
-  const handleTopDelete = () => {
-
-    const shouldDelete =
-
-      window.confirm(
-
-        "Are you sure you want to clear this Add On?"
-
-      );
-
-
 
     if (!shouldDelete) {
-
       return;
-
     }
 
+    const updatedAddOns = savedAddOns.filter(
+      (addOn) => addOn.id !== id
+    );
 
+    try {
+      saveAddOnsToStorage(updatedAddOns);
 
+      setSavedAddOns(updatedAddOns);
+
+      if (editingAddOnId === id) {
+        setEditingAddOnId(null);
+
+        setFormData({
+          ...emptyFormData,
+        });
+      }
+
+      setSaveType("success");
+
+      setSaveMessage("Add On deleted successfully.");
+    } catch (error) {
+      console.error(
+        "Unable to delete add-on:",
+        error
+      );
+
+      setSaveType("error");
+
+      setSaveMessage(
+        "Unable to delete add-on. Please try again."
+      );
+    }
+  };
+
+  /* =========================================================
+     EDIT ADD ON
+  ========================================================= */
+
+  const handleEditAddOn = (addOn) => {
     setFormData({
+      addOnName: addOn.addOnName || "",
 
-      ...emptyFormData,
+      category: addOn.category || "",
 
+      chargeType:
+        addOn.chargeType || "Amount Per Event",
+
+      totalPrice: String(addOn.totalPrice || "").replace(
+        /[^0-9.]/g,
+        ""
+      ),
+
+      description: addOn.description || "",
+
+      previewImage: null,
+
+      applicability:
+        addOn.applicability ||
+        "To all Services & Packages",
     });
 
-
+    setEditingAddOnId(addOn.id);
 
     setErrors({});
 
-
-
     setSaveMessage("");
-
     setSaveType("");
 
+    setShowMainForm(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
-
-
   /* =========================================================
-
-     TOP VIEW / HIDE
-
+     VIEW ADD ON
   ========================================================= */
 
+  const handleViewAddOn = (addOn) => {
+    setFormData({
+      addOnName: addOn.addOnName || "",
 
+      category: addOn.category || "",
 
-  const handleTopView = () => {
+      chargeType:
+        addOn.chargeType || "Amount Per Event",
 
-    setShowMainForm(
+      totalPrice: String(addOn.totalPrice || "").replace(
+        /[^0-9.]/g,
+        ""
+      ),
 
-      (previous) => !previous
+      description: addOn.description || "",
 
+      previewImage: null,
+
+      applicability:
+        addOn.applicability ||
+        "To all Services & Packages",
+    });
+
+    setEditingAddOnId(null);
+
+    setErrors({});
+
+    setShowMainForm(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  /* =========================================================
+     NEW ADD ON
+  ========================================================= */
+
+  const handleNewAddOn = () => {
+    setFormData({
+      ...emptyFormData,
+    });
+
+    setEditingAddOnId(null);
+
+    setErrors({});
+
+    setSaveMessage("");
+    setSaveType("");
+
+    setShowMainForm(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  /* =========================================================
+     TOP EDIT
+  ========================================================= */
+
+  const handleTopEdit = () => {
+    setShowMainForm(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  /* =========================================================
+     TOP DELETE
+  ========================================================= */
+
+  const handleTopDelete = () => {
+    const shouldDelete = window.confirm(
+      "Are you sure you want to clear this Add On?"
     );
 
+    if (!shouldDelete) {
+      return;
+    }
+
+    setFormData({
+      ...emptyFormData,
+    });
+
+    setEditingAddOnId(null);
+
+    setErrors({});
+
+    setSaveMessage("");
+    setSaveType("");
   };
 
-
-
   /* =========================================================
-
-     RENDER
-
+     TOP VIEW / HIDE
   ========================================================= */
 
+  const handleTopView = () => {
+    setShowMainForm((previous) => !previous);
+  };
 
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
-
     <ServicesPricingLayout
-
       activeModel="addons"
-
       showBackgroundLines={false}
-
     >
-
       {/* =====================================================
-
           SAVE MESSAGE
-
       ===================================================== */}
-
-
 
       {saveMessage && (
-
         <div
-
           className={`
-
             mt-[15px]
-
             flex
-
             items-center
-
             gap-[8px]
-
             rounded-[5px]
-
             border
-
             px-[16px]
-
             py-[12px]
-
             text-[16px]
-
             font-medium
-
             ${
-
               saveType === "success"
-
                 ? "border-[#b7dfbd] bg-[#edf9ef] text-[#26733a]"
-
                 : "border-[#efb0b0] bg-[#fff1f1] text-[#c40000]"
-
             }
-
           `}
-
         >
-
           {saveType === "success" && (
-
-            <FiCheckCircle
-
-              className="text-[20px]"
-
-            />
-
+            <FiCheckCircle className="text-[20px]" />
           )}
 
-
-
-          <span>
-
-            {saveMessage}
-
-          </span>
-
+          <span>{saveMessage}</span>
         </div>
-
       )}
 
-
-
       {/* =====================================================
-
           TOOLBAR
-
       ===================================================== */}
-
-
 
       <div
-
         className="
-
           mt-[18px]
-
           flex
-
           flex-col
-
           gap-[10px]
-
           sm:flex-row
-
           sm:items-center
-
           sm:justify-between
-
         "
-
       >
-
         <div
-
           className="
-
             flex
-
             w-full
-
             items-center
-
             gap-[10px]
-
             sm:w-auto
-
           "
-
         >
-
           <span
-
             className="
-
               text-[20px]
-
               font-normal
-
               text-[#555555]
-
             "
-
           >
-
             All (
-
-            {String(
-
-              savedAddOns.length
-
-            ).padStart(2, "0")}
-
+            {String(savedAddOns.length).padStart(2, "0")}
             )
-
           </span>
 
-
-
           <button
-
             type="button"
-
             className="
-
               flex
-
               h-[45px]
-
               w-[121px]
-
               cursor-pointer
-
               items-center
-
               justify-center
-
               gap-[5px]
-
               rounded-[4px]
-
               bg-white
-
               px-[9px]
-
               text-[16px]
-
               font-normal
-
               text-[#333333]
-
             "
-
           >
-
             Sort By
 
-
-
-            <FiChevronDown
-
-              className="text-[17px]"
-
-            />
-
+            <FiChevronDown className="text-[17px]" />
           </button>
-
         </div>
 
-
-
-        {/* =================================================
-
-            NEW ADD ON
-
-        ================================================= */}
-
-
+        {/* NEW ADD ON */}
 
         <button
-
           type="button"
-
-          onClick={
-
-            handleNewAddOn
-
-          }
-
+          onClick={handleNewAddOn}
           className="
-
             flex
-
             h-[52px]
-
             w-full
-
             cursor-pointer
-
             items-center
-
             justify-center
-
             gap-[5px]
-
             rounded-[4px]
-
             bg-[#c40000]
-
             px-[16px]
-
             text-[18px]
-
             font-semibold
-
             text-white
-
             transition
-
             hover:bg-[#a80000]
-
             sm:w-[218px]
-
           "
-
         >
-
-          <FiPlusCircle
-
-            className="text-[17px]"
-
-          />
-
-
+          <FiPlusCircle className="text-[17px]" />
 
           New Add on
-
         </button>
-
       </div>
 
-
-
       {/* =====================================================
-
-          ADD ON - 1 WHITE CARD
-
+          ADD ON CARD
       ===================================================== */}
 
-
-
       <section
-
         className="
-
           mt-[15px]
-
           overflow-hidden
-
           rounded-[6px]
-
           bg-white
-
         "
-
       >
-
-        {/* =================================================
-
-            TITLE
-
-        ================================================= */}
-
-
+        {/* TITLE */}
 
         <div
-
           className="
-
             flex
-
             min-h-[48px]
-
             items-center
-
             px-[12px]
-
             sm:px-[10px]
-
           "
-
         >
-
           <p
-
             className="
-
               text-[20px]
-
               font-medium
-
               text-[#777777]
-
             "
-
           >
-
-            Add On - 1
-
+            {editingAddOnId ? "Edit Add On" : "Add On - 1"}
           </p>
-
         </div>
 
-
-
-        {/* =================================================
-
-            TOP ACTION ICONS
-
-        ================================================= */}
-
-
+        {/* TOP ACTION ICONS */}
 
         <div
-
           className="
-
             flex
-
             h-[56px]
-
             items-center
-
             justify-end
-
             border-b
-
             border-t
-
             border-[#e5e5e5]
-
             px-[16px]
-
             sm:px-[30px]
-
             md:px-[34px]
-
           "
-
         >
-
           <div
-
             className="
-
               flex
-
               items-center
-
               gap-[22px]
-
               sm:gap-[28px]
-
             "
-
           >
-
             {/* EDIT */}
 
-
-
             <button
-
               type="button"
-
-              onClick={
-
-                handleTopEdit
-
-              }
-
+              onClick={handleTopEdit}
               title="Edit"
-
               aria-label="Edit Add On"
-
               className="
-
                 flex
-
                 cursor-pointer
-
                 items-center
-
                 justify-center
-
                 text-[#222222]
-
                 transition
-
                 hover:text-[#000000]
-
               "
-
             >
-
-              <FiEdit
-
-                size={22}
-
-                strokeWidth={2}
-
-              />
-
+              <FiEdit size={22} strokeWidth={2} />
             </button>
-
-
 
             {/* DELETE */}
 
-
-
             <button
-
               type="button"
-
-              onClick={
-
-                handleTopDelete
-
-              }
-
+              onClick={handleTopDelete}
               title="Delete"
-
               aria-label="Delete Add On"
-
               className="
-
                 flex
-
                 cursor-pointer
-
                 items-center
-
                 justify-center
-
                 text-[#8b0000]
-
                 transition
-
                 hover:text-[#c40000]
-
               "
-
             >
-
-              <FaTrash
-
-                size={17}
-
-              />
-
+              <FaTrash size={17} />
             </button>
-
-
 
             {/* VIEW */}
 
-
-
             <button
-
               type="button"
-
-              onClick={
-
-                handleTopView
-
-              }
-
-              title={
-
-                showMainForm
-
-                  ? "Hide"
-
-                  : "View"
-
-              }
-
+              onClick={handleTopView}
+              title={showMainForm ? "Hide" : "View"}
               aria-label={
-
-                showMainForm
-
-                  ? "Hide Add On"
-
-                  : "View Add On"
-
+                showMainForm ? "Hide Add On" : "View Add On"
               }
-
               className="
-
                 flex
-
                 cursor-pointer
-
                 items-center
-
                 justify-center
-
                 text-[#222222]
-
                 transition
-
                 hover:text-[#000000]
-
               "
-
             >
-
-              <LuEyeClosed
-
-                size={21}
-
-                strokeWidth={2}
-
-              />
-
+              <LuEyeClosed size={21} strokeWidth={2} />
             </button>
-
           </div>
-
         </div>
 
-
-
-        {/* =================================================
-
-            ADD ON FORM
-
-        ================================================= */}
-
-
+        {/* ADD ON FORM */}
 
         {showMainForm && (
-
           <div
-
             className="
-
               px-[16px]
-
               py-[20px]
-
               sm:px-[30px]
-
               md:px-[34px]
-
             "
-
           >
-
             <div
-
               className="
-
                 grid
-
                 grid-cols-1
-
                 gap-x-[20px]
-
                 gap-y-[15px]
-
                 sm:grid-cols-2
-
               "
-
             >
-
-              {/* =================================================
-
-                  ADD ON NAME
-
-              ================================================= */}
-
-
+              {/* ADD ON NAME */}
 
               <PricingField
-
                 label="Add on Name"
-
                 required
-
                 labelSize="text-[18px]"
-
                 labelClassName="font-semibold"
-
               >
-
                 <input
-
                   type="text"
-
                   name="addOnName"
-
-                  value={
-
-                    formData.addOnName
-
-                  }
-
-                  onChange={
-
-                    handleChange
-
-                  }
-
+                  value={formData.addOnName}
+                  onChange={handleChange}
+                  maxLength={80}
                   placeholder="Ex : Drone Service - Photos and Video Clips"
-
-                  className={
-
-                    inputClassName
-
-                  }
-
+                  className={inputClassName}
                 />
-
-
 
                 {errors.addOnName && (
-
-                  <p
-
-                    className="
-
-                      mt-[4px]
-
-                      text-[13px]
-
-                      font-normal
-
-                      text-[#c40000]
-
-                    "
-
-                  >
-
-                    {
-
-                      errors.addOnName
-
-                    }
-
+                  <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                    {errors.addOnName}
                   </p>
-
                 )}
-
               </PricingField>
 
-
-
-              {/* =================================================
-
-                  CATEGORY
-
-              ================================================= */}
-
-
+              {/* CATEGORY */}
 
               <PricingField
-
                 label="Category"
-
                 required
-
                 labelSize="text-[18px]"
-
                 labelClassName="font-semibold"
-
               >
-
                 <input
-
                   type="text"
-
                   name="category"
-
-                  value={
-
-                    formData.category
-
-                  }
-
-                  onChange={
-
-                    handleChange
-
-                  }
-
+                  value={formData.category}
+                  onChange={handleChange}
+                  maxLength={60}
                   placeholder="Photography"
-
-                  className={
-
-                    inputClassName
-
-                  }
-
+                  className={inputClassName}
                 />
-
-
 
                 {errors.category && (
-
-                  <p
-
-                    className="
-
-                      mt-[4px]
-
-                      text-[13px]
-
-                      font-normal
-
-                      text-[#c40000]
-
-                    "
-
-                  >
-
-                    {
-
-                      errors.category
-
-                    }
-
+                  <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                    {errors.category}
                   </p>
-
                 )}
-
               </PricingField>
 
-
-
-              {/* =================================================
-
-                  CHARGE TYPE
-
-              ================================================= */}
-
-
+              {/* CHARGE TYPE */}
 
               <PricingField
-
                 label="Charge Type"
-
                 required
-
                 labelSize="text-[18px]"
-
                 labelClassName="font-semibold"
-
               >
-
                 <select
-
                   name="chargeType"
-
-                  value={
-
-                    formData.chargeType
-
-                  }
-
-                  onChange={
-
-                    handleChange
-
-                  }
-
-                  className={
-
-                    selectClassName
-
-                  }
-
+                  value={formData.chargeType}
+                  onChange={handleChange}
+                  className={selectClassName}
                 >
+                  <option>Amount Per Event</option>
 
-                  <option>
+                  <option>Amount Per Hour</option>
 
-                    Amount Per Event
-
-                  </option>
-
-
-
-                  <option>
-
-                    Amount Per Hour
-
-                  </option>
-
-
-
-                  <option>
-
-                    Amount Per Item
-
-                  </option>
-
+                  <option>Amount Per Item</option>
                 </select>
 
+                {errors.chargeType && (
+                  <p className="mt-[4px] text-[13px] text-[#c40000]">
+                    {errors.chargeType}
+                  </p>
+                )}
               </PricingField>
 
-
-
-              {/* =================================================
-
-                  TOTAL PRICE
-
-              ================================================= */}
-
-
+              {/* TOTAL PRICE */}
 
               <PricingField
-
                 label="Total Price"
-
                 required
-
                 labelSize="text-[18px]"
-
                 labelClassName="font-semibold"
-
               >
-
                 <input
-
                   type="text"
-
                   name="totalPrice"
-
-                  value={
-
-                    formData.totalPrice
-
-                  }
-
-                  onChange={
-
-                    handleChange
-
-                  }
-
-                  placeholder="12,000/- INR"
-
-                  className={
-
-                    inputClassName
-
-                  }
-
+                  value={formData.totalPrice}
+                  onChange={handleChange}
+                  placeholder="Ex : 12000"
+                  inputMode="decimal"
+                  className={inputClassName}
                 />
 
-
-
                 {errors.totalPrice && (
-
-                  <p
-
-                    className="
-
-                      mt-[4px]
-
-                      text-[13px]
-
-                      font-normal
-
-                      text-[#c40000]
-
-                    "
-
-                  >
-
-                    {
-
-                      errors.totalPrice
-
-                    }
-
+                  <p className="mt-[4px] text-[13px] font-normal text-[#c40000]">
+                    {errors.totalPrice}
                   </p>
-
                 )}
-
               </PricingField>
 
-
-
-              {/* =================================================
-
-                  DESCRIPTION
-
-              ================================================= */}
-
-
+              {/* DESCRIPTION */}
 
               <PricingField
-
                 label="Description"
-
                 labelSize="text-[18px]"
-
                 labelClassName="font-semibold"
-
                 className="sm:col-span-2"
-
               >
-
-                <div
-
-                  className="relative"
-
-                >
-
+                <div className="relative">
                   <textarea
-
                     name="description"
-
-                    value={
-
-                      formData.description
-
-                    }
-
-                    onChange={
-
-                      handleChange
-
-                    }
-
+                    value={formData.description}
+                    onChange={handleChange}
                     maxLength={400}
-
-                    placeholder="Ex : this is the best ever package which includes all the services ..."
-
-                    className={
-
-                      textareaClassName
-
-                    }
-
+                    placeholder="Ex : This is the best ever package which includes all the services ..."
+                    className={textareaClassName}
                   />
-
-
 
                   <span
-
                     className="
-
                       absolute
-
                       right-[8px]
-
                       top-[-15px]
-
                       text-[13px]
-
                       font-normal
-
                       text-[#555555]
-
                     "
-
                   >
-
-                    {
-
-                      formData.description
-
-                        .length
-
-                    }{" "}
-
-                    / 400 Characters
-
+                    {formData.description.length} / 400 Characters
                   </span>
-
                 </div>
 
+                {errors.description && (
+                  <p className="mt-[4px] text-[13px] text-[#c40000]">
+                    {errors.description}
+                  </p>
+                )}
               </PricingField>
 
-
-
-              {/* =================================================
-
-                  PREVIEW IMAGE
-
-              ================================================= */}
-
-
+              {/* PREVIEW IMAGE */}
 
               <PricingField
-
                 label="Preview Image"
-
                 labelSize="text-[18px]"
-
                 labelClassName="font-semibold"
-
               >
-
                 <label
-
                   className="
-
                     flex
-
                     h-[115px]
-
                     w-full
-
                     cursor-pointer
-
                     flex-col
-
                     items-center
-
                     justify-center
-
                     rounded-[4px]
-
                     border
-
                     border-dashed
-
                     border-[#cfcfcf]
-
                     bg-white
-
                     px-[10px]
-
                     text-center
-
                     transition
-
                     hover:border-[#c40000]
-
                     hover:bg-[#fffafa]
-
                   "
-
                 >
-
                   <FiUploadCloud
-
-                    className="
-
-                      text-[25px]
-
-                      text-[#e00000]
-
-                    "
-
+                    className="text-[25px] text-[#e00000]"
                   />
 
-
-
                   <p
-
                     className="
-
                       mt-[5px]
-
                       max-w-full
-
                       truncate
-
                       text-[14px]
-
                       font-normal
-
                       text-[#555555]
-
                     "
-
                   >
-
                     {formData.previewImage
-
-                      ? formData
-
-                          .previewImage
-
-                          .name
-
+                      ? formData.previewImage.name
                       : "Click to upload, OR drag and drop"}
-
                   </p>
-
-
 
                   <p
-
                     className="
-
                       mt-[2px]
-
                       text-[12px]
-
                       font-normal
-
                       text-[#999999]
-
                     "
-
                   >
-
                     (PNG, JPG, WEBP Max 2MB)
-
                   </p>
-
-
 
                   <input
-
                     type="file"
-
                     accept=".png,.jpg,.jpeg,.webp"
-
-                    onChange={
-
-                      handleImageChange
-
-                    }
-
+                    onChange={handleImageChange}
                     className="hidden"
-
                   />
-
                 </label>
-
               </PricingField>
 
-
-
-              {/* =================================================
-
-                  APPLICABILITY
-
-              ================================================= */}
-
-
+              {/* APPLICABILITY */}
 
               <PricingField
-
                 label="Applicability"
-
                 required
-
                 labelSize="text-[18px]"
-
                 labelClassName="font-semibold"
-
               >
-
                 <select
-
                   name="applicability"
-
-                  value={
-
-                    formData.applicability
-
-                  }
-
-                  onChange={
-
-                    handleChange
-
-                  }
-
-                  className={
-
-                    selectClassName
-
-                  }
-
+                  value={formData.applicability}
+                  onChange={handleChange}
+                  className={selectClassName}
                 >
-
                   <option>
-
                     To all Services & Packages
-
                   </option>
 
-
-
                   <option>
-
                     Specific Services
-
                   </option>
-
-
 
                   <option>
-
                     Specific Packages
-
                   </option>
-
                 </select>
 
-
-
                 {errors.applicability && (
-
-                  <p
-
-                    className="
-
-                      mt-[4px]
-
-                      text-[13px]
-
-                      font-normal
-
-                      text-[#c40000]
-
-                    "
-
-                  >
-
-                    {
-
-                      errors.applicability
-
-                    }
-
+                  <p className="mt-[4px] text-[13px] text-[#c40000]">
+                    {errors.applicability}
                   </p>
-
                 )}
-
               </PricingField>
-
             </div>
 
-
-
-            {/* =================================================
-
-                BUTTONS
-
-            ================================================= */}
-
-
+            {/* BUTTONS */}
 
             <div
-
               className="
-
                 mt-[22px]
-
                 flex
-
                 flex-col-reverse
-
                 items-stretch
-
                 justify-end
-
                 gap-[12px]
-
                 sm:flex-row
-
                 sm:items-center
-
               "
-
             >
-
               <button
-
                 type="button"
-
-                onClick={
-
-                  handleSaveDraft
-
-                }
-
+                onClick={handleSaveDraft}
                 className="
-
                   cursor-pointer
-
                   text-center
-
                   text-[18px]
-
                   font-semibold
-
                   text-[#c40000]
-
                   transition
-
                   hover:text-[#970000]
-
                   sm:w-auto
-
                 "
-
               >
-
                 Save Draft
-
               </button>
-
-
 
               <button
-
                 type="button"
-
-                onClick={
-
-                  handleSaveAddOn
-
-                }
-
+                onClick={handleSaveAddOn}
                 className="
-
                   h-[42px]
-
                   w-full
-
                   cursor-pointer
-
                   rounded-[4px]
-
                   bg-[#333333]
-
                   px-[18px]
-
                   text-[18px]
-
                   font-semibold
-
                   text-white
-
                   transition
-
                   hover:bg-[#222222]
-
                   sm:h-[32px]
-
                   sm:w-[180px]
-
                 "
-
               >
-
-                Save Add On
-
+                {editingAddOnId ? "Update Add On" : "Save Add On"}
               </button>
-
             </div>
-
           </div>
-
         )}
-
       </section>
 
-
-
       {/* =====================================================
-
           SAVED ADD ONS
-
       ===================================================== */}
 
-
-
       <div
-
         className="
-
           mt-[12px]
-
           space-y-[8px]
-
         "
-
       >
+        {savedAddOns.map((addOn) => (
+          <div
+            key={addOn.id}
+            className="
+              flex
+              flex-col
+              gap-[12px]
+              rounded-[5px]
+              bg-white
+              px-[14px]
+              py-[15px]
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
+              sm:px-[18px]
+            "
+          >
+            {/* LEFT CONTENT */}
 
-        {savedAddOns.map(
+            <div className="min-w-0 w-full">
+              <h3
+                className="
+                  break-words
+                  text-[18px]
+                  font-semibold
+                  text-[#333333]
+                "
+              >
+                {addOn.addOnName}
+              </h3>
 
-          (addOn) => (
-
-            <div
-
-              key={addOn.id}
-
-              className="
-
-                flex
-
-                flex-col
-
-                gap-[12px]
-
-                rounded-[5px]
-
-                bg-white
-
-                px-[14px]
-
-                py-[15px]
-
-                sm:flex-row
-
-                sm:items-center
-
-                sm:justify-between
-
-                sm:px-[18px]
-
-              "
-
-            >
-
-              {/* =================================================
-
-                  LEFT CONTENT
-
-              ================================================= */}
-
-
+              {/* CATEGORY + DESCRIPTION */}
 
               <div
-
                 className="
-
+                  mt-[6px]
+                  flex
                   min-w-0
-
-                  w-full
-
+                  flex-col
+                  items-stretch
+                  gap-[7px]
+                  sm:flex-row
+                  sm:items-center
                 "
-
               >
-
-                <h3
-
-                  className="
-
-                    break-words
-
-                    text-[18px]
-
-                    font-semibold
-
-                    text-[#333333]
-
-                  "
-
-                >
-
-                  {
-
-                    addOn.addOnName
-
-                  }
-
-                </h3>
-
-
-
-                {/* =================================================
-
-                    CATEGORY + DESCRIPTION
-
-                ================================================= */}
-
-
+                {/* CAMERA BADGE */}
 
                 <div
-
                   className="
-
-                    mt-[6px]
-
-                    flex
-
-                    min-w-0
-
-                    flex-col
-
-                    items-stretch
-
-                    gap-[7px]
-
-                    sm:flex-row
-
-                    sm:items-center
-
+                    inline-flex
+                    h-[37px]
+                    w-full
+                    shrink-0
+                    items-center
+                    rounded-[3px]
+                    bg-[#222222]
+                    px-[9px]
+                    text-[14px]
+                    font-medium
+                    leading-none
+                    text-white
+                    sm:w-[142px]
                   "
-
                 >
-
-                  {/* CAMERA BADGE */}
-
-
-
-                  <div
-
-                    className="
-
-                      inline-flex
-
-                      h-[37px]
-
-                      w-full
-
-                      shrink-0
-
-                      items-center
-
-                      rounded-[3px]
-
-                      bg-[#222222]
-
-                      px-[9px]
-
-                      text-[14px]
-
-                      font-medium
-
-                      leading-none
-
-                      text-white
-
-                      sm:w-[142px]
-
-                    "
-
-                  >
-
-                    <FaCamera
-
-                      className="
-
-                        mr-[4px]
-
-                        shrink-0
-
-                        text-white
-
-                      "
-
-                      size={17}
-
-                    />
-
-
-
-                    <span
-
-                      className="
-
-                        truncate
-
-                        text-[14px]
-
-                        font-semibold
-
-                      "
-
-                    >
-
-                      {
-
-                        addOn.category
-
-                      }
-
-                    </span>
-
-                  </div>
-
-
-
-                  {/* DESCRIPTION */}
-
-
+                  <FaCamera
+                    className="mr-[4px] shrink-0 text-white"
+                    size={17}
+                  />
 
                   <span
-
                     className="
-
-                      min-w-0
-
-                      break-words
-
+                      truncate
                       text-[14px]
-
-                      font-normal
-
-                      leading-[20px]
-
-                      text-[#777777]
-
+                      font-semibold
                     "
-
                   >
-
-                    {addOn.description.includes(
-
-                      "Applicable To All Services and Packages"
-
-                    ) ? (
-
-                      <>
-
-                        {
-
-                          addOn.description.split(
-
-                            "Applicable To All Services and Packages"
-
-                          )[0]
-
-                        }
-
-
-
-                        <span
-
-                          className="
-
-                            font-semibold
-
-                            text-red-900
-
-                          "
-
-                        >
-
-                          Applicable To All Services and Packages
-
-                        </span>
-
-
-
-                        {
-
-                          addOn.description.split(
-
-                            "Applicable To All Services and Packages"
-
-                          )[1]
-
-                        }
-
-                      </>
-
-                    ) : addOn.description.includes(
-
-                        "Applicable To Packages"
-
-                      ) ? (
-
-                      <>
-
-                        {
-
-                          addOn.description.split(
-
-                            "Applicable To Packages"
-
-                          )[0]
-
-                        }
-
-
-
-                        <span
-
-                          className="
-
-                            font-semibold
-
-                            text-red-900
-
-                          "
-
-                        >
-
-                          Applicable To Packages
-
-                        </span>
-
-
-
-                        {
-
-                          addOn.description.split(
-
-                            "Applicable To Packages"
-
-                          )[1]
-
-                        }
-
-                      </>
-
-                    ) : (
-
-                      addOn.description
-
-                    )}
-
+                    {addOn.category}
                   </span>
-
                 </div>
 
+                {/* DESCRIPTION */}
+
+                <span
+                  className="
+                    min-w-0
+                    break-words
+                    text-[14px]
+                    font-normal
+                    leading-[20px]
+                    text-[#777777]
+                  "
+                >
+                  {addOn.description?.includes(
+                    "Applicable To All Services and Packages"
+                  ) ? (
+                    <>
+                      {addOn.description.split(
+                        "Applicable To All Services and Packages"
+                      )[0]}
+
+                      <span className="font-semibold text-red-900">
+                        Applicable To All Services and Packages
+                      </span>
+
+                      {addOn.description.split(
+                        "Applicable To All Services and Packages"
+                      )[1]}
+                    </>
+                  ) : addOn.description?.includes(
+                      "Applicable To Packages"
+                    ) ? (
+                    <>
+                      {addOn.description.split(
+                        "Applicable To Packages"
+                      )[0]}
+
+                      <span className="font-semibold text-red-900">
+                        Applicable To Packages
+                      </span>
+
+                      {addOn.description.split(
+                        "Applicable To Packages"
+                      )[1]}
+                    </>
+                  ) : (
+                    addOn.description
+                  )}
+                </span>
               </div>
-
-
-
-              {/* =================================================
-
-                  RIGHT ACTION ICONS
-
-              ================================================= */}
-
-
-
-              <div
-
-                className="
-
-                  flex
-
-                  w-full
-
-                  shrink-0
-
-                  items-center
-
-                  justify-end
-
-                  gap-[18px]
-
-                  border-t
-
-                  border-[#eeeeee]
-
-                  pt-[10px]
-
-                  sm:ml-[15px]
-
-                  sm:w-auto
-
-                  sm:justify-start
-
-                  sm:border-t-0
-
-                  sm:pt-0
-
-                "
-
-              >
-
-                {/* EDIT */}
-
-
-
-                <button
-
-                  type="button"
-
-                  onClick={() =>
-
-                    handleEditAddOn(
-
-                      addOn
-
-                    )
-
-                  }
-
-                  className="
-
-                    flex
-
-                    cursor-pointer
-
-                    items-center
-
-                    justify-center
-
-                    text-[#333333]
-
-                    transition
-
-                    hover:text-[#000000]
-
-                  "
-
-                  title="Edit"
-
-                  aria-label="Edit Add On"
-
-                >
-
-                  <FiEdit
-
-                    className="text-[18px]"
-
-                  />
-
-                </button>
-
-
-
-                {/* DELETE */}
-
-
-
-                <button
-
-                  type="button"
-
-                  onClick={() =>
-
-                    handleDeleteAddOn(
-
-                      addOn.id
-
-                    )
-
-                  }
-
-                  className="
-
-                    flex
-
-                    cursor-pointer
-
-                    items-center
-
-                    justify-center
-
-                    text-[#900000]
-
-                    transition
-
-                    hover:text-[#c40000]
-
-                  "
-
-                  title="Delete"
-
-                  aria-label="Delete Add On"
-
-                >
-
-                  <FaTrash
-
-                    className="text-[16px]"
-
-                  />
-
-                </button>
-
-
-
-                {/* VIEW */}
-
-
-
-                <button
-
-                  type="button"
-
-                  onClick={() =>
-
-                    handleViewAddOn(
-
-                      addOn
-
-                    )
-
-                  }
-
-                  className="
-
-                    flex
-
-                    cursor-pointer
-
-                    items-center
-
-                    justify-center
-
-                    text-[#333333]
-
-                    transition
-
-                    hover:text-[#000000]
-
-                  "
-
-                  title="View"
-
-                  aria-label="View Add On"
-
-                >
-
-                  <LuEyeClosed
-
-                    className="text-[18px]"
-
-                  />
-
-                </button>
-
-              </div>
-
             </div>
 
-          )
+            {/* RIGHT ACTION ICONS */}
 
-        )}
+            <div
+              className="
+                flex
+                w-full
+                shrink-0
+                items-center
+                justify-end
+                gap-[18px]
+                border-t
+                border-[#eeeeee]
+                pt-[10px]
+                sm:ml-[15px]
+                sm:w-auto
+                sm:justify-start
+                sm:border-t-0
+                sm:pt-0
+              "
+            >
+              {/* EDIT */}
 
+              <button
+                type="button"
+                onClick={() => handleEditAddOn(addOn)}
+                className="
+                  flex
+                  cursor-pointer
+                  items-center
+                  justify-center
+                  text-[#333333]
+                  transition
+                  hover:text-[#000000]
+                "
+                title="Edit"
+                aria-label="Edit Add On"
+              >
+                <FiEdit className="text-[18px]" />
+              </button>
+
+              {/* DELETE */}
+
+              <button
+                type="button"
+                onClick={() => handleDeleteAddOn(addOn.id)}
+                className="
+                  flex
+                  cursor-pointer
+                  items-center
+                  justify-center
+                  text-[#900000]
+                  transition
+                  hover:text-[#c40000]
+                "
+                title="Delete"
+                aria-label="Delete Add On"
+              >
+                <FaTrash className="text-[16px]" />
+              </button>
+
+              {/* VIEW */}
+
+              <button
+                type="button"
+                onClick={() => handleViewAddOn(addOn)}
+                className="
+                  flex
+                  cursor-pointer
+                  items-center
+                  justify-center
+                  text-[#333333]
+                  transition
+                  hover:text-[#000000]
+                "
+                title="View"
+                aria-label="View Add On"
+              >
+                <LuEyeClosed className="text-[18px]" />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
-
     </ServicesPricingLayout>
-
   );
-
 };
-
-
 
 export default AddOnPage;

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 
@@ -21,8 +22,7 @@ const ServiceArea = () => {
 
   const [errors, setErrors] = useState({});
 
-  const days = [
-    "All Days",
+  const weekdays = [
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -32,6 +32,8 @@ const ServiceArea = () => {
     "Sunday",
   ];
 
+  const days = ["All Days", ...weekdays];
+
   const errorClass = "mt-[4px] text-[12px] text-red-600";
 
   const inputClass =
@@ -39,7 +41,9 @@ const ServiceArea = () => {
 
   // Base location validation
   const handleBaseLocationChange = (event) => {
-    const value = event.target.value;
+    // Allow only alphabets, spaces, commas, dots and hyphens
+    const value = event.target.value.replace(/[^\p{L}\s,.-]/gu, "");
+
     setBaseLocation(value);
 
     let message = "";
@@ -141,23 +145,27 @@ const ServiceArea = () => {
   // Select availability days
   const handleDayChange = (day) => {
     setAvailableDays((prev) => {
+      // Select or deselect all weekdays
       if (day === "All Days") {
+        return prev.includes("All Days") ? [] : ["All Days"];
+      }
+
+      // Convert All Days selection into individual weekdays
+      const selectedDays = prev.includes("All Days")
+        ? [...weekdays]
+        : [...prev];
+
+      // Toggle the selected individual day
+      const updatedDays = selectedDays.includes(day)
+        ? selectedDays.filter((item) => item !== day)
+        : [...selectedDays, day];
+
+      // If all seven days are selected, show All Days
+      if (weekdays.every((weekday) => updatedDays.includes(weekday))) {
         return ["All Days"];
       }
 
-      const selectedDays = prev.filter(
-        (item) => item !== "All Days"
-      );
-
-      if (selectedDays.includes(day)) {
-        return selectedDays.filter((item) => item !== day);
-      }
-
-      const updatedDays = [...selectedDays, day];
-
-      return updatedDays.length === 7
-        ? ["All Days"]
-        : updatedDays;
+      return updatedDays;
     });
 
     setErrors((prev) => ({

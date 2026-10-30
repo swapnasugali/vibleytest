@@ -47,13 +47,31 @@ const ContactPreferences = () => {
     setIsEditing(true);
   };
 
-  // Handle input changes
+  // Handle input changes with field-specific validation
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    let updatedValue = value;
+
+    // Phone numbers: allow only digits and optional + at the beginning
+    if (name === "whatsappPhone" || name === "secondaryPhone") {
+      updatedValue = value.replace(/[^\d+]/g, "");
+
+      // Allow + only at the beginning
+      if (updatedValue.includes("+")) {
+        updatedValue =
+          "+" + updatedValue.replace(/\+/g, "");
+      }
+    }
+
+    // Auto-response: allow only alphabets and spaces
+    if (name === "autoResponse") {
+      updatedValue = value.replace(/[^\p{L}\s]/gu, "");
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: updatedValue,
     }));
 
     setErrors((prev) => ({
@@ -74,12 +92,15 @@ const ContactPreferences = () => {
   const validateForm = () => {
     const newErrors = {};
 
+    // WhatsApp phone validation
     if (!formData.whatsappPhone.trim()) {
       newErrors.whatsappPhone = "WhatsApp phone number is required.";
     } else if (!isValidIndianPhone(formData.whatsappPhone)) {
-      newErrors.whatsappPhone = "Enter a valid 10-digit mobile number.";
+      newErrors.whatsappPhone =
+        "Enter a valid 10-digit mobile number.";
     }
 
+    // Secondary phone validation
     if (formData.secondaryPhone.trim()) {
       if (!isValidIndianPhone(formData.secondaryPhone)) {
         newErrors.secondaryPhone =
@@ -93,18 +114,28 @@ const ContactPreferences = () => {
       }
     }
 
-    if (!formData.email.trim()) {
+    // Email validation
+    const emailValue = formData.email.trim();
+
+    if (!emailValue) {
       newErrors.email = "Contact email is required.";
     } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email.trim())
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        emailValue
+      ) ||
+      emailValue.includes("..") ||
+      emailValue.startsWith(".") ||
+      emailValue.includes("@.")
     ) {
       newErrors.email = "Enter a valid email address.";
     }
 
+    // Contact method validation
     if (!["Call", "Chat", "Email"].includes(formData.contactMethod)) {
       newErrors.contactMethod = "Select a contact method.";
     }
 
+    // Auto-response validation
     if (whatsappDirect && !formData.autoResponse.trim()) {
       newErrors.autoResponse =
         "Auto-response message is required when WhatsApp is enabled.";

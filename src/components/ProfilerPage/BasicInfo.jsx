@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 const BasicInfo = () => {
@@ -21,13 +22,19 @@ const BasicInfo = () => {
     teamSize: "",
   });
 
-  // Handle input changes
+  // Allow only alphabets and spaces
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+    let updatedValue = value;
+
+    if (name === "businessName" || name === "specializedIn") {
+      updatedValue = value.replace(/[^a-zA-Z\s]/g, "");
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: updatedValue,
     }));
 
     setErrors((prev) => ({
@@ -42,7 +49,7 @@ const BasicInfo = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Business name
+    // Business Name
     if (!formData.businessName.trim()) {
       newErrors.businessName = "Business name is required.";
     } else if (formData.businessName.trim().length < 2) {
@@ -51,16 +58,21 @@ const BasicInfo = () => {
     } else if (formData.businessName.trim().length > 100) {
       newErrors.businessName =
         "Business name cannot exceed 100 characters.";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.businessName.trim())) {
+      newErrors.businessName =
+        "Only alphabets and spaces are allowed.";
     }
 
-    // Business type
-    if (!["Company", "Individual", "Partnership"].includes(
-      formData.businessType
-    )) {
+    // Business Type
+    if (
+      !["Company", "Individual", "Partnership"].includes(
+        formData.businessType
+      )
+    ) {
       newErrors.businessType = "Please select a business type.";
     }
 
-    // Service type
+    // Service Type
     if (
       !["Photography", "Catering", "Venue", "Decoration"].includes(
         formData.serviceType
@@ -69,12 +81,15 @@ const BasicInfo = () => {
       newErrors.serviceType = "Please select a service type.";
     }
 
-    // Specialization
+    // Specialized In
     if (!formData.specializedIn.trim()) {
       newErrors.specializedIn = "Specialization is required.";
     } else if (formData.specializedIn.trim().length > 100) {
       newErrors.specializedIn =
         "Specialization cannot exceed 100 characters.";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.specializedIn.trim())) {
+      newErrors.specializedIn =
+        "Only alphabets and spaces are allowed.";
     }
 
     // Experience
@@ -88,7 +103,7 @@ const BasicInfo = () => {
         "Enter a whole number between 0 and 100.";
     }
 
-    // Team size
+    // Team Size
     if (formData.teamSize === "") {
       newErrors.teamSize = "Team size is required.";
     } else if (
@@ -104,7 +119,8 @@ const BasicInfo = () => {
     if (languages.length === 0) {
       newErrors.languages = "Add at least one language.";
     } else if (languages.length > 10) {
-      newErrors.languages = "You can add a maximum of 10 languages.";
+      newErrors.languages =
+        "You can add a maximum of 10 languages.";
     }
 
     setErrors(newErrors);
@@ -127,86 +143,95 @@ const BasicInfo = () => {
       newLanguage: "",
     }));
 
+    setNewLanguage("");
     setShowLanguageInput(true);
   };
 
-  // Save a new language by pressing Enter
+  // Save language
+  const handleSaveLanguage = () => {
+    const language = newLanguage.trim();
+
+    if (!language) {
+      setErrors((prev) => ({
+        ...prev,
+        newLanguage: "Please enter a language.",
+      }));
+      return;
+    }
+
+    if (!/^[a-zA-Z\s-]+$/.test(language)) {
+      setErrors((prev) => ({
+        ...prev,
+        newLanguage: "Use letters, spaces, or hyphens only.",
+      }));
+      return;
+    }
+
+    if (language.length > 30) {
+      setErrors((prev) => ({
+        ...prev,
+        newLanguage: "Language cannot exceed 30 characters.",
+      }));
+      return;
+    }
+
+    const alreadyExists = languages.some(
+      (item) => item.toLowerCase() === language.toLowerCase()
+    );
+
+    if (alreadyExists) {
+      setErrors((prev) => ({
+        ...prev,
+        newLanguage: "This language has already been added.",
+      }));
+      return;
+    }
+
+    if (languages.length >= 10) {
+      setErrors((prev) => ({
+        ...prev,
+        languages: "You can add a maximum of 10 languages.",
+      }));
+      return;
+    }
+
+    setLanguages((prev) => [...prev, language]);
+    setNewLanguage("");
+    setShowLanguageInput(false);
+
+    setErrors((prev) => ({
+      ...prev,
+      newLanguage: "",
+      languages: "",
+    }));
+
+    setSuccessMessage("");
+  };
+
+  // Cancel language input
+  const handleCancelLanguage = () => {
+    setShowLanguageInput(false);
+    setNewLanguage("");
+
+    setErrors((prev) => ({
+      ...prev,
+      newLanguage: "",
+    }));
+  };
+
+  // Enter and Escape keyboard functionality
   const handleLanguageKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-
-      const language = newLanguage.trim();
-
-      if (!language) {
-        setErrors((prev) => ({
-          ...prev,
-          newLanguage: "Please enter a language.",
-        }));
-        return;
-      }
-
-      if (!/^[a-zA-Z\s-]+$/.test(language)) {
-        setErrors((prev) => ({
-          ...prev,
-          newLanguage:
-            "Use letters, spaces, or hyphens only.",
-        }));
-        return;
-      }
-
-      if (language.length > 30) {
-        setErrors((prev) => ({
-          ...prev,
-          newLanguage: "Language cannot exceed 30 characters.",
-        }));
-        return;
-      }
-
-      const alreadyExists = languages.some(
-        (item) => item.toLowerCase() === language.toLowerCase()
-      );
-
-      if (alreadyExists) {
-        setErrors((prev) => ({
-          ...prev,
-          newLanguage: "This language has already been added.",
-        }));
-        return;
-      }
-
-      if (languages.length >= 10) {
-        setErrors((prev) => ({
-          ...prev,
-          languages: "You can add a maximum of 10 languages.",
-        }));
-        return;
-      }
-
-      setLanguages((prev) => [...prev, language]);
-      setNewLanguage("");
-      setShowLanguageInput(false);
-
-      setErrors((prev) => ({
-        ...prev,
-        newLanguage: "",
-        languages: "",
-      }));
-
-      setSuccessMessage("");
+      handleSaveLanguage();
     }
 
     if (event.key === "Escape") {
-      setShowLanguageInput(false);
-      setNewLanguage("");
-
-      setErrors((prev) => ({
-        ...prev,
-        newLanguage: "",
-      }));
+      handleCancelLanguage();
     }
   };
 
-  // Remove a language
+  // Remove language
   const handleRemoveLanguage = (languageToRemove) => {
     setLanguages((prev) =>
       prev.filter((language) => language !== languageToRemove)
@@ -267,7 +292,7 @@ const BasicInfo = () => {
         noValidate
         className="px-[16px] pb-[14px] pt-[9px]"
       >
-        {/* Business Name + Type */}
+        {/* Business Name + Business Type */}
         <div className="grid grid-cols-1 gap-[10px] sm:grid-cols-2">
           <div>
             <label htmlFor="businessName" className={labelClass}>
@@ -361,7 +386,8 @@ const BasicInfo = () => {
             value={formData.specializedIn}
             onChange={handleChange}
             maxLength={100}
-            placeholder="e.g. Weddings, Birthdays"
+            placeholder="e.g. Weddings Birthdays"
+            aria-invalid={Boolean(errors.specializedIn)}
             className={`${inputClass} ${
               errors.specializedIn ? "border-red-500" : ""
             }`}
@@ -425,7 +451,7 @@ const BasicInfo = () => {
           </div>
         </div>
 
-        {/* Languages */}
+        {/* Languages Known */}
         <div className="mt-[9px]">
           <label className={labelClass}>Languages Known *</label>
 
@@ -459,8 +485,10 @@ const BasicInfo = () => {
                 +
               </button>
             )}
+          </div>
 
-            {showLanguageInput && (
+          {showLanguageInput && (
+            <div className="mt-[8px] flex flex-wrap items-center gap-[8px]">
               <input
                 autoFocus
                 type="text"
@@ -479,8 +507,23 @@ const BasicInfo = () => {
                 className="h-[30px] w-[150px] rounded-[4px] border border-[#cfcfcf] px-[8px] text-[12px] outline-none focus:border-[#970000]"
               />
 
-            )}
-          </div>
+              <button
+                type="button"
+                onClick={handleSaveLanguage}
+                className="rounded-[4px] bg-[#970000] px-[12px] py-[6px] text-[12px] text-white hover:bg-[#790000]"
+              >
+                Add
+              </button>
+
+              <button
+                type="button"
+                onClick={handleCancelLanguage}
+                className="rounded-[4px] border border-[#cfcfcf] px-[12px] py-[6px] text-[12px] text-[#555] hover:bg-[#f3f3f3]"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
 
           {errors.newLanguage && (
             <p className={errorClass}>{errors.newLanguage}</p>
@@ -488,12 +531,6 @@ const BasicInfo = () => {
 
           {errors.languages && (
             <p className={errorClass}>{errors.languages}</p>
-          )}
-
-          {showLanguageInput && (
-            <p className="mt-[4px] text-[11px] text-[#777]">
-              Press Enter to add or Escape to cancel.
-            </p>
           )}
         </div>
 

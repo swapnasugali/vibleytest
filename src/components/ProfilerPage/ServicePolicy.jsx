@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 const ServicePolicy = () => {
@@ -10,10 +11,20 @@ const ServicePolicy = () => {
 
   const [bookingInAdvance, setBookingInAdvance] = useState(true);
 
+  // Cancellation Policy Summary
+  const [cancellationPolicy, setCancellationPolicy] = useState("");
+
+  // Allow only alphabets and spaces
+  const handleCancellationPolicyChange = (event) => {
+    const value = event.target.value.replace(/[^\p{L}\s]/gu, "");
+    setCancellationPolicy(value);
+  };
 
   return (
-    <section className="w-full rounded-[4px] bg-white"
-    style={{ fontFamily: "Poppins, sans-serif" }}>
+    <section
+      className="w-full rounded-[4px] bg-white"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
 
       {/* ================================================= */}
       {/* HEADER */}
@@ -43,6 +54,8 @@ const ServicePolicy = () => {
         </label>
 
         <textarea
+          value={cancellationPolicy}
+          onChange={handleCancellationPolicyChange}
           placeholder="Write your Policy, to be displayed for the clients before booking.."
           className="
             h-[150px]

@@ -1,7 +1,8 @@
+
 import React from "react";
 
 /* =========================================================
-   PROFILE ICON
+   1. PROFILE ICON
 ========================================================= */
 const ProfileIcon = () => {
   return (
@@ -12,6 +13,7 @@ const ProfileIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      {/* Head */}
       <circle
         cx="24"
         cy="13"
@@ -20,11 +22,12 @@ const ProfileIcon = () => {
         strokeWidth="2.5"
       />
 
+      {/* Closed rounded body */}
       <path
-        d="M10 38C10 31.9249 15.3726 27 22 27H26C32.6274 27 38 31.9249 38 38"
+        d="M10 37C10 31.477 14.477 27 20 27H28C33.523 27 38 31.477 38 37V38C38 39.105 37.105 40 36 40H12C10.895 40 10 39.105 10 38V37Z"
         stroke="#FFB000"
         strokeWidth="2.5"
-        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -32,77 +35,43 @@ const ProfileIcon = () => {
 
 
 /* =========================================================
-   CONVERSION RATE ICON
-   MAGIC WAND + SPARKLES
+   2. CONVERSION RATE ICON
+   THREE SPARKLES + UPWARD TREND
 ========================================================= */
 const ConversionIcon = () => {
   return (
     <svg
-      width="52"
-      height="52"
-      viewBox="0 0 52 52"
+      width="58"
+      height="58"
+      viewBox="0 0 58 58"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Main wand */}
+      {/* Upward zigzag trend */}
       <path
-        d="M13 40L36 17"
+        d="M8 43L25 26L35 36L53 16"
         stroke="#FFB000"
         strokeWidth="5"
-        strokeLinecap="round"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
       />
 
-      {/* Wand handle/top */}
+      {/* Large top sparkle */}
       <path
-        d="M31 12L41 22"
-        stroke="#FFB000"
-        strokeWidth="5"
-        strokeLinecap="round"
+        d="M25 3L28 11L36 14L28 17L25 25L22 17L14 14L22 11L25 3Z"
+        fill="#FFB000"
       />
 
-      {/* Large sparkle - top left */}
+      {/* Small left sparkle */}
       <path
-        d="M15 7V17"
-        stroke="#FFB000"
-        strokeWidth="2"
-        strokeLinecap="round"
+        d="M10 19L12 25L18 27L12 29L10 35L8 29L2 27L8 25L10 19Z"
+        fill="#FFB000"
       />
 
+      {/* Right sparkle */}
       <path
-        d="M10 12H20"
-        stroke="#FFB000"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-
-      {/* Small sparkle - top */}
-      <path
-        d="M26 5V11"
-        stroke="#FFB000"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-
-      <path
-        d="M23 8H29"
-        stroke="#FFB000"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-
-      {/* Small sparkle - right */}
-      <path
-        d="M40 29V37"
-        stroke="#FFB000"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-
-      <path
-        d="M36 33H44"
-        stroke="#FFB000"
-        strokeWidth="2"
-        strokeLinecap="round"
+        d="M39 8L42 15L49 18L42 21L39 28L36 21L29 18L36 15L39 8Z"
+        fill="#FFB000"
       />
     </svg>
   );
@@ -110,56 +79,34 @@ const ConversionIcon = () => {
 
 
 /* =========================================================
-   THUMBNAIL BADGE ICON
+   3. THUMBNAIL BADGE ICON
+   MONITOR + FOUR DOTS
 ========================================================= */
 const ThumbnailBadgeIcon = () => {
   return (
     <svg
-      width="52"
-      height="52"
-      viewBox="0 0 52 52"
+      width="58"
+      height="58"
+      viewBox="0 0 58 58"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Rectangle */}
+      {/* Monitor rectangle */}
       <rect
-        x="7"
+        x="5"
         y="7"
-        width="38"
-        height="28"
-        rx="3"
+        width="48"
+        height="36"
+        rx="5"
         stroke="#FFB000"
-        strokeWidth="2.5"
+        strokeWidth="4"
       />
 
       {/* Four dots */}
-      <circle
-        cx="11"
-        cy="42"
-        r="2"
-        fill="#FFB000"
-      />
-
-      <circle
-        cx="21"
-        cy="42"
-        r="2"
-        fill="#FFB000"
-      />
-
-      <circle
-        cx="31"
-        cy="42"
-        r="2"
-        fill="#FFB000"
-      />
-
-      <circle
-        cx="41"
-        cy="42"
-        r="2"
-        fill="#FFB000"
-      />
+      <circle cx="11" cy="51" r="2.5" fill="#FFB000" />
+      <circle cx="23" cy="51" r="2.5" fill="#FFB000" />
+      <circle cx="35" cy="51" r="2.5" fill="#FFB000" />
+      <circle cx="47" cy="51" r="2.5" fill="#FFB000" />
     </svg>
   );
 };
@@ -170,68 +117,70 @@ const ThumbnailBadgeIcon = () => {
 ========================================================= */
 const DashboardStats = () => {
   return (
-    <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-     style={{ fontFamily: "Poppins, sans-serif" }}>
+    <div
+      className="grid w-full grid-cols-1 gap-4 bg-[#f7f5f5] px-5 py-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-[32px] xl:px-[50px] xl:py-[24px]"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
 
       {/* =====================================================
           PROFILE COMPLETION
       ===================================================== */}
-      <div className="flex min-h-[118px] w-full items-center rounded-lg bg-white px-4 py-4 sm:px-5">
+      <div className="relative h-[189px] min-w-0 rounded-[9px] bg-white">
 
         {/* ICON */}
-        <div className="flex w-[52px] shrink-0 items-center justify-center">
+        <div className="absolute left-0 top-[40px] flex h-[76px] w-[132px] items-center justify-end pr-[16px]">
           <ProfileIcon />
         </div>
 
         {/* DIVIDER */}
-        <div className="mx-3 h-[58px] shrink-0 border-l border-gray-300" />
+        <div className="absolute left-[132px] top-[40px] h-[76px] border-l border-[#777777]" />
 
         {/* CONTENT */}
-        <div className="flex min-w-0 flex-1 flex-col items-center text-center">
+        <div className="absolute left-[145px] right-[10px] top-[45px] min-w-0">
 
-          <h3 className="whitespace-nowrap text-[16px] font-semibold text-[#760000] sm:text-[16px]">
+          <h3 className="text-[16px] font-semibold leading-[22px] text-[#760000]">
             Profile Completion
           </h3>
 
-          <p className="mt-1 text-[24.27px] font-bold leading-none text-gray-900">
+          <p className="mt-[9px] text-center text-[24.27px] font-bold leading-[30px] text-[#111820]">
             95%
           </p>
-
-          <a
-            href="#"
-            className="mt-5 whitespace-nowrap text-[14px] text-gray-700 font-medium underline sm:text-[14px]"
-          >
-            Complete Profile
-          </a>
-
         </div>
+
+        {/* COMPLETE PROFILE */}
+        <a
+          href="#"
+          onClick={(e) => e.preventDefault()}
+          className="absolute bottom-[13px] left-1/2 -translate-x-1/2 cursor-pointer whitespace-nowrap text-[14px] font-medium text-[#252525] underline"
+        >
+          Complete Profile
+        </a>
       </div>
 
 
       {/* =====================================================
           CONVERSION RATE
       ===================================================== */}
-      <div className="flex min-h-[118px] w-full items-center rounded-lg bg-white px-4 py-4 sm:px-5">
+      <div className="relative h-[189px] min-w-0 rounded-[9px] bg-white">
 
-        {/* EXACT CONVERSION SYMBOL */}
-        <div className="flex w-[52px] shrink-0 items-center justify-center">
+        {/* ICON */}
+        <div className="absolute left-0 top-[40px] flex h-[76px] w-[138px] items-center justify-end pr-[12px]">
           <ConversionIcon />
         </div>
 
         {/* DIVIDER */}
-        <div className="mx-3 h-[58px] shrink-0 border-l border-gray-300" />
+        <div className="absolute left-[138px] top-[40px] h-[76px] border-l border-[#777777]" />
 
         {/* CONTENT */}
-        <div className="flex min-w-0 flex-1 flex-col items-center text-center">
+        <div className="absolute left-[162px] right-[12px] top-[45px] min-w-0">
 
-          <h3 className="whitespace-nowrap text-[16px] font-semibold text-[#760000] sm:text-[16px]">
+          <h3 className="text-[16px] font-semibold leading-[22px] text-[#760000]">
             Conversion Rate
           </h3>
 
-          <p className="mt-2 text-[24.27px] font-bold leading-none text-gray-900">
+          <p className="mt-[9px] text-center text-[24.27px] font-bold leading-[30px] text-[#111820]">
             75%
           </p>
-
         </div>
       </div>
 
@@ -239,51 +188,55 @@ const DashboardStats = () => {
       {/* =====================================================
           THUMBNAIL BADGE TEXT
       ===================================================== */}
-      <div className="flex min-h-[118px] w-full items-center rounded-lg bg-white px-4 py-4 sm:px-5">
+      <div className="relative h-[189px] min-w-0 rounded-[9px] bg-white">
 
         {/* ICON */}
-        <div className="flex w-[52px] shrink-0 items-center justify-center">
+        <div className="absolute left-0 top-[40px] flex h-[76px] w-[121px] items-center justify-end pr-[10px]">
           <ThumbnailBadgeIcon />
         </div>
 
         {/* DIVIDER */}
-        <div className="mx-3 h-[58px] shrink-0 border-l border-gray-300" />
+        <div className="absolute left-[121px] top-[40px] h-[76px] border-l border-[#777777]" />
 
         {/* CONTENT */}
-        <div className="min-w-0 flex-1">
+        <div className="absolute left-[139px] right-[20px] top-[45px] min-w-0">
 
-          <h3 className="whitespace-nowrap text-center text-[16px] font-semibold text-[#760000] sm:text-[16px]">
+          <h3 className="text-center text-[16px] font-semibold leading-[22px] text-[#760000]">
             Thumbnail Badge Text
           </h3>
 
-          <div className="mt-2 w-full rounded-md bg-gray-200 px-2 py-2 text-center text-[12px] text-gray-500 sm:text-[12px]">
+          {/* BADGE VALUE */}
+          <div className="mt-[7px] flex h-[42px] w-full min-w-0 items-center justify-center rounded-[7px] bg-[#e7e7e7] px-1 text-center text-[12px] leading-[16px] text-[#777777]">
             Starting from 12,000
           </div>
-
-          <a
-            href="#"
-            className="mt-5 block text-center text-[14px] text-gray-700 underline font-medium sm:text-[14px]"
-          >
-            Info and Edit
-          </a>
-
         </div>
+
+        {/* INFO AND EDIT */}
+        <a
+          href="#"
+          onClick={(e) => e.preventDefault()}
+          className="absolute bottom-[13px] left-1/2 -translate-x-1/2 cursor-pointer whitespace-nowrap text-[14px] font-medium text-[#252525] underline"
+        >
+          Info and Edit
+        </a>
       </div>
 
 
       {/* =====================================================
-          MIN HIGH VALUE LEAD
+          MIN. HIGH VALUE LEAD
       ===================================================== */}
-      <div className="flex min-h-[118px] w-full flex-col items-center justify-center rounded-lg bg-white px-4 py-4 text-center">
+      <div className="relative h-[189px] min-w-0 rounded-[9px] bg-white">
 
-        <h3 className="whitespace-nowrap text-[16px] font-semibold text-[#760000] sm:text-[16px]">
-          Min. High value Lead
-        </h3>
+        <div className="absolute left-0 right-0 top-[45px] flex min-w-0 flex-col items-center px-2">
 
-        <p className="mt-2 text-[24.27px] font-bold leading-none text-gray-900">
-          50,000
-        </p>
+          <h3 className="w-full text-center text-[16px] font-semibold leading-[22px] text-[#760000]">
+            Min. High value Lead
+          </h3>
 
+          <p className="mt-[9px] text-center text-[24.27px] font-bold leading-[30px] text-[#111820]">
+            50,000
+          </p>
+        </div>
       </div>
 
     </div>
