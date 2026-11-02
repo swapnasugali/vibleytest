@@ -309,6 +309,7 @@ const LeadDetails = ({
   onStatusChange,
   onConnect,
   onReject,
+  setLeads,
 }) => {
   if (!lead) {
     return (
@@ -422,10 +423,41 @@ const LeadDetails = ({
         </div>
 
         {/* NOTES */}
-        <div className="mt-[24px] min-h-[55px]">
-          <h3 className="text-[15px] font-semibold uppercase text-[#181111] sm:text-[17px]">
+        <div className="mt-[24px]">
+          <h3 className="mb-[8px] text-[15px] font-semibold uppercase text-[#181111] sm:text-[17px]">
             Notes
           </h3>
+
+          <textarea
+            value={lead.notes || ""}
+            onChange={(event) => {
+              const updatedNotes = event.target.value;
+
+              setLeads((previousLeads) =>
+                previousLeads.map((item) =>
+                  item.id === lead.id
+                    ? { ...item, notes: updatedNotes }
+                    : item
+                )
+              );
+            }}
+            className="
+              h-[81px]
+              w-full
+              resize-none
+              rounded-[4px]
+              border
+              border-[#999999]
+              bg-white
+              px-[10px]
+              py-[8px]
+              text-[12px]
+              leading-[18px]
+              text-[#333333]
+              outline-none
+              focus:border-[#777777]
+            "
+          />
         </div>
       </div>
 
@@ -714,6 +746,7 @@ const Leads = () => {
               onStatusChange={handleStatusChange}
               onConnect={handleConnect}
               onReject={handleReject}
+              setLeads={setLeads}
             />
           </section>
         </div>

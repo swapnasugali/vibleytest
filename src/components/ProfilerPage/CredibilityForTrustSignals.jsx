@@ -18,7 +18,8 @@ const CERTIFICATION_TYPES = [
 const CredibilityForTrustSignals = () => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const [totalEvents, setTotalEvents] = useState("163");
+  // Total Events Handled
+  const [totalEvents, setTotalEvents] = useState("");
   const [savedTotalEvents, setSavedTotalEvents] = useState("163");
   const [totalEventsError, setTotalEventsError] = useState("");
 
@@ -33,7 +34,8 @@ const CredibilityForTrustSignals = () => {
   const [savedCertifications, setSavedCertifications] =
     useState([...certifications]);
 
-  const [savedAwards, setSavedAwards] = useState([...awards]);
+  const [savedAwards, setSavedAwards] =
+    useState([...awards]);
 
   const [certificationError, setCertificationError] = useState("");
   const [awardError, setAwardError] = useState("");
@@ -42,7 +44,9 @@ const CredibilityForTrustSignals = () => {
   // Open edit mode
   const handleEdit = () => {
     if (!isEditing) {
-      setTotalEvents(savedTotalEvents);
+      // Input empty ga untundi; placeholder 163 kanipisthundi
+      setTotalEvents("");
+
       setCertifications([...savedCertifications]);
       setAwards([...savedAwards]);
 
@@ -73,6 +77,8 @@ const CredibilityForTrustSignals = () => {
     allowedTypes
   ) => {
     const selectedFiles = Array.from(event.target.files || []);
+
+    // Allow selecting the same file again
     event.target.value = "";
 
     if (selectedFiles.length === 0) return;
@@ -150,6 +156,7 @@ const CredibilityForTrustSignals = () => {
     setSuccessMessage("");
   };
 
+  // Certification upload
   const handleCertificationUpload = (event) => {
     validateAndAddFiles(
       event,
@@ -160,6 +167,7 @@ const CredibilityForTrustSignals = () => {
     );
   };
 
+  // Award upload - PDF only
   const handleAwardUpload = (event) => {
     validateAndAddFiles(
       event,
@@ -210,6 +218,7 @@ const CredibilityForTrustSignals = () => {
     setCertificationError("");
     setAwardError("");
     setSuccessMessage("Changes saved successfully.");
+
     setIsEditing(false);
   };
 
@@ -223,6 +232,7 @@ const CredibilityForTrustSignals = () => {
     setCertificationError("");
     setAwardError("");
     setSuccessMessage("");
+
     setIsEditing(false);
   };
 
@@ -272,12 +282,12 @@ const CredibilityForTrustSignals = () => {
                 inputMode="numeric"
                 value={totalEvents}
                 onChange={handleTotalEventsChange}
-                placeholder="Enter total events"
+                placeholder="163"
                 className="h-full w-full bg-transparent text-[14px] text-[#6D6D6D] outline-none"
               />
             ) : (
               <span className="text-[14px] text-[#6D6D6D]">
-                {totalEvents}
+                {savedTotalEvents}
               </span>
             )}
 
@@ -315,7 +325,10 @@ const CredibilityForTrustSignals = () => {
                 className="flex h-[25px] min-w-0 flex-1 items-center gap-[6px] overflow-hidden rounded-[4px] border border-[#cfcfcf] px-[8px] text-[12px] text-[#6D6D6D]"
               >
                 <FaFileAlt className="shrink-0 text-[12px] text-black" />
-                <span className="truncate">{fileName}</span>
+
+                <span className="truncate">
+                  {fileName}
+                </span>
               </div>
 
               {isEditing && (
@@ -333,6 +346,7 @@ const CredibilityForTrustSignals = () => {
               {isEditing && index === certifications.length - 1 && (
                 <label className="flex h-[25px] shrink-0 cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] bg-white px-[10px] text-[12px] text-[#6D6D6D] shadow-sm">
                   <FiUpload className="text-[12px] text-black" />
+
                   Upload Another
 
                   <input
@@ -351,6 +365,7 @@ const CredibilityForTrustSignals = () => {
           {certifications.length === 0 && isEditing && (
             <label className="mb-[6px] flex h-[30px] w-fit cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] text-[#6D6D6D]">
               <FiUpload className="text-black" />
+
               Upload Certification
 
               <input
@@ -402,7 +417,10 @@ const CredibilityForTrustSignals = () => {
                 className="flex h-[25px] min-w-0 flex-1 items-center gap-[6px] overflow-hidden rounded-[4px] border border-[#cfcfcf] px-[8px] text-[12px] text-[#6D6D6D]"
               >
                 <FaFileAlt className="shrink-0 text-[12px] text-black" />
-                <span className="truncate">{fileName}</span>
+
+                <span className="truncate">
+                  {fileName}
+                </span>
               </div>
 
               {isEditing && (
@@ -420,6 +438,7 @@ const CredibilityForTrustSignals = () => {
               {isEditing && index === awards.length - 1 && (
                 <label className="flex h-[25px] shrink-0 cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] bg-white px-[10px] text-[12px] text-[#6D6D6D] shadow-sm">
                   <FiUpload className="text-[12px] text-black" />
+
                   Upload Another
 
                   <input
@@ -438,6 +457,7 @@ const CredibilityForTrustSignals = () => {
           {awards.length === 0 && isEditing && (
             <label className="mb-[6px] flex h-[30px] w-fit cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] text-[#6D6D6D]">
               <FiUpload className="text-black" />
+
               Upload Award PDF
 
               <input

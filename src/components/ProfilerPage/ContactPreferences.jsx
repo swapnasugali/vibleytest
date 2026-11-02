@@ -59,8 +59,21 @@ const ContactPreferences = () => {
 
       // Allow + only at the beginning
       if (updatedValue.includes("+")) {
+        updatedValue = "+" + updatedValue.replace(/\+/g, "");
+      }
+
+      // Limit phone number to 10 digits.
+      // If +91 is present, allow 10 digits after the country code.
+      if (updatedValue.startsWith("+91")) {
         updatedValue =
-          "+" + updatedValue.replace(/\+/g, "");
+          "+91" +
+          updatedValue.slice(3).replace(/\D/g, "").slice(0, 10);
+      } else if (updatedValue.startsWith("+")) {
+        updatedValue =
+          "+" +
+          updatedValue.slice(1).replace(/\D/g, "").slice(0, 10);
+      } else {
+        updatedValue = updatedValue.replace(/\D/g, "").slice(0, 10);
       }
     }
 
@@ -223,7 +236,11 @@ const ContactPreferences = () => {
         <button
           type="button"
           onClick={handleEdit}
-          title={isEditing ? "Editing contact preferences" : "Edit contact preferences"}
+          title={
+            isEditing
+              ? "Editing contact preferences"
+              : "Edit contact preferences"
+          }
           aria-label="Edit contact preferences"
           aria-pressed={isEditing}
           className={`flex h-[24px] w-[24px] items-center justify-center rounded-[3px] border border-transparent transition hover:border-[#e5e5e5] hover:bg-gray-100 ${
