@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   FiArrowLeft,
@@ -24,6 +25,17 @@ const eventTypes = [
   "Other",
 ];
 
+// Get today's date in local YYYY-MM-DD format
+const getTodayDate = () => {
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 const PortfolioSectionForm = ({
   initialData = null,
   onBack,
@@ -43,7 +55,7 @@ const PortfolioSectionForm = ({
   const [eventType, setEventType] = useState(
     "Corporate Event"
   );
-  const [eventDate, setEventDate] = useState("");
+  const [eventDate, setEventDate] = useState(getTodayDate());
   const [aboutEvent, setAboutEvent] = useState("");
   const [featured, setFeatured] = useState(true);
 
@@ -59,7 +71,7 @@ const PortfolioSectionForm = ({
       setEventTitle("");
       setServiceType("General Photography");
       setEventType("Corporate Event");
-      setEventDate("");
+      setEventDate(getTodayDate());
       setAboutEvent("");
       setFeatured(true);
       setPhotos([]);
@@ -81,7 +93,7 @@ const PortfolioSectionForm = ({
     );
 
     setEventDate(
-      initialData.eventDate || ""
+      initialData.eventDate || getTodayDate()
     );
 
     setAboutEvent(
@@ -165,6 +177,14 @@ const PortfolioSectionForm = ({
   const handleSave = () => {
     if (!eventTitle.trim()) {
       alert("Please enter Event Title");
+      return;
+    }
+
+    // Future dates are not allowed
+    if (eventDate > getTodayDate()) {
+      alert(
+        "Future dates are not allowed. Please select today's date or a past date."
+      );
       return;
     }
 
@@ -596,9 +616,14 @@ const PortfolioSectionForm = ({
             <input
               type="date"
               value={eventDate}
-              onChange={(event) =>
-                setEventDate(event.target.value)
-              }
+              max={getTodayDate()}
+              onChange={(event) => {
+                const selectedDate = event.target.value;
+
+                if (selectedDate <= getTodayDate()) {
+                  setEventDate(selectedDate);
+                }
+              }}
               className="
                 h-[36px]
                 w-full
@@ -611,7 +636,6 @@ const PortfolioSectionForm = ({
                 outline-none
                 focus:border-[#970000]
                 sm:h-[31px]
-                sm:text-[16px]
               "
             />
           </div>
@@ -666,10 +690,13 @@ const PortfolioSectionForm = ({
                 setAboutEvent(event.target.value)
               }
               placeholder="Ex : Universal media hired us for this auspicious event, we are glad to..."
+              style={{
+                resize: "none",
+                overflowY: "hidden",
+              }}
               className="
                 min-h-[55px]
                 w-full
-                resize-y
                 rounded-[4px]
                 border
                 border-[#c9c9c9]
@@ -918,9 +945,7 @@ const PortfolioSectionForm = ({
                           .map((photo) => (
                             <img
                               key={photo.id}
-                              src={
-                                photo.url
-                              }
+                              src={photo.url}
                               alt=""
                               className="
                                 h-full

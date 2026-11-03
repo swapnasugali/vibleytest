@@ -87,7 +87,9 @@ const BasicInfo = () => {
     } else if (formData.specializedIn.trim().length > 100) {
       newErrors.specializedIn =
         "Specialization cannot exceed 100 characters.";
-    } else if (!/^[a-zA-Z\s]+$/.test(formData.specializedIn.trim())) {
+    } else if (
+      !/^[a-zA-Z\s]+$/.test(formData.specializedIn.trim())
+    ) {
       newErrors.specializedIn =
         "Only alphabets and spaces are allowed.";
     }
@@ -264,6 +266,7 @@ const BasicInfo = () => {
     };
 
     console.log("Basic Info:", basicInfo);
+
     setSuccessMessage("Basic information validated successfully.");
   };
 
@@ -280,6 +283,31 @@ const BasicInfo = () => {
       className="w-full rounded-[4px] bg-white"
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
+      {/* Remove number input arrows even when focused */}
+      <style>{`
+        input.number-input-no-spinner {
+          appearance: textfield !important;
+          -moz-appearance: textfield !important;
+        }
+
+        input.number-input-no-spinner::-webkit-inner-spin-button,
+        input.number-input-no-spinner::-webkit-outer-spin-button {
+          -webkit-appearance: none !important;
+          appearance: none !important;
+          display: none !important;
+          margin: 0 !important;
+          opacity: 0 !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+
+        input.number-input-no-spinner:focus::-webkit-inner-spin-button,
+        input.number-input-no-spinner:focus::-webkit-outer-spin-button {
+          display: none !important;
+          opacity: 0 !important;
+        }
+      `}</style>
+
       {/* Header */}
       <div className="border-b border-[#e5e5e5] px-[16px] py-[9px]">
         <h2 className="text-[20px] font-semibold text-[#1C1C1C]">
@@ -415,7 +443,8 @@ const BasicInfo = () => {
               value={formData.experience}
               onChange={handleChange}
               placeholder="e.g. 12"
-              className={`${inputClass} ${
+              aria-invalid={Boolean(errors.experience)}
+              className={`number-input-no-spinner ${inputClass} ${
                 errors.experience ? "border-red-500" : ""
               }`}
             />
@@ -440,7 +469,8 @@ const BasicInfo = () => {
               value={formData.teamSize}
               onChange={handleChange}
               placeholder="e.g. 10"
-              className={`${inputClass} ${
+              aria-invalid={Boolean(errors.teamSize)}
+              className={`number-input-no-spinner ${inputClass} ${
                 errors.teamSize ? "border-red-500" : ""
               }`}
             />
@@ -495,6 +525,7 @@ const BasicInfo = () => {
                 value={newLanguage}
                 onChange={(event) => {
                   setNewLanguage(event.target.value);
+
                   setErrors((prev) => ({
                     ...prev,
                     newLanguage: "",

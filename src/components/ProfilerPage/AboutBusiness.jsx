@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { FaPen, FaCheck, FaTimes } from "react-icons/fa";
 
@@ -71,7 +70,7 @@ const AboutBusiness = () => {
           title="Edit business details"
           aria-label="Edit business details"
           aria-pressed={isEditing}
-          className={`flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[2px] border border-[#252525] transition hover:bg-gray-100 ${
+          className={`flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[2px] transition hover:bg-gray-100 ${
             isEditing ? "bg-[#fff8e6]" : "bg-white"
           }`}
         >

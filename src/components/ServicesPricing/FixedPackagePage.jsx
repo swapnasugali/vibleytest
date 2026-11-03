@@ -1027,6 +1027,13 @@ const FixedPackagePage = () => {
                     className={selectClassName}
                   >
                     <option>Ex : 25 INR Per Km</option>
+                    <option>Ex : 50 INR Per Km</option>
+                    <option>Ex : 75 INR Per Km</option>
+                    <option>Ex : 100 INR Per Km</option>
+                    <option>Ex : 125 INR Per Km</option>
+                    <option>Ex : 150 INR Per Km</option>
+                    <option>Ex : 175 INR Per Km</option>
+                    <option>Ex : 200 INR Per Km</option>
                     <option>No Travel Charge</option>
                   </select>
                 </PricingField>
