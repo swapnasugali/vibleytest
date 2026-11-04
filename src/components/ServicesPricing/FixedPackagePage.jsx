@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 
 import {
@@ -20,29 +19,88 @@ import PricingField, {
   textareaClassName,
 } from "./PricingField";
 
-const FixedPackagePage = () => {
+/* =====================================================
+   INITIAL FORM DATA
+===================================================== */
 
+const initialFormData = {
+  packageName: "",
+  category: "",
+  chargeType: "Amount Per Event",
+  totalPrice: "",
+  description: "",
+  overTimeCharge: "",
+  travelChargeType: "No Travel Charge",
+  travelChargeAmount: "",
+  minimumBookingHours: "",
+  advanceBookingPayment: "",
+  workDeliveryTimeline: "",
+};
+
+/* =====================================================
+   TRAVEL CHARGE DATA
+   Supports old travelCharges format too
+===================================================== */
+
+const getTravelChargeData = (data = {}) => {
+  if (data.travelChargeType) {
+    return {
+      travelChargeType: data.travelChargeType,
+      travelChargeAmount: data.travelChargeAmount || "",
+    };
+  }
+
+  const oldValue = String(data.travelCharges || "");
+
+  if (/no travel/i.test(oldValue)) {
+    return {
+      travelChargeType: "No Travel Charge",
+      travelChargeAmount: "",
+    };
+  }
+
+  const match = oldValue.match(/(\d+(?:\.\d+)?)/);
+
+  return match
+    ? {
+        travelChargeType: "Per Km",
+        travelChargeAmount: match[1],
+      }
+    : {
+        travelChargeType: "No Travel Charge",
+        travelChargeAmount: "",
+      };
+};
+
+/* =====================================================
+   FIXED PACKAGE PAGE
+===================================================== */
+
+const FixedPackagePage = () => {
   /* =====================================================
      INPUT RESTRICTION FUNCTIONS
   ===================================================== */
 
-  // Only alphabets and spaces
   const allowOnlyAlphabets = (value) =>
     value.replace(/[^a-zA-Z\s]/g, "");
 
-  // Only numbers and decimal
-  const allowOnlyNumbers = (value) =>
-    value.replace(/[^0-9.]/g, "");
+  const allowOnlyNumbers = (value) => {
+    let cleaned = value.replace(/[^0-9.]/g, "");
+    const parts = cleaned.split(".");
 
-  // Price: numbers, comma, decimal and /-
+    if (parts.length > 2) {
+      cleaned = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    return cleaned;
+  };
+
   const allowPrice = (value) =>
     value.replace(/[^0-9,./-]/g, "");
 
-  // Numbers with percentage
   const allowPercentage = (value) =>
     value.replace(/[^0-9.%]/g, "");
 
-  // Description: alphabets, numbers and basic punctuation
   const allowDescription = (value) =>
     value.replace(/[^a-zA-Z0-9\s.,!?'-]/g, "");
 
@@ -50,18 +108,7 @@ const FixedPackagePage = () => {
      FORM STATE
   ===================================================== */
 
-  const [formData, setFormData] = useState({
-    packageName: "",
-    category: "",
-    chargeType: "Amount Per Event",
-    totalPrice: "",
-    description: "",
-    overTimeCharge: "",
-    travelCharges: "Ex : 25 INR Per Km",
-    minimumBookingHours: "",
-    advanceBookingPayment: "",
-    workDeliveryTimeline: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
 
   /* =====================================================
      SERVICES STATE
@@ -82,12 +129,16 @@ const FixedPackagePage = () => {
       packageName: "Corporate Event Package",
       category: "Photography",
       serviceCount: "3 services, Add Ons Applicable",
+      travelChargeType: "No Travel Charge",
+      travelChargeAmount: "",
     },
     {
       id: 2,
       packageName: "Pre Wedding Shoot Package",
       category: "Photography",
       serviceCount: "4 Services, Add Ons Applicable",
+      travelChargeType: "No Travel Charge",
+      travelChargeAmount: "",
     },
   ]);
 
@@ -100,10 +151,11 @@ const FixedPackagePage = () => {
   const [errors, setErrors] = useState({});
 
   /* =====================================================
-     VIEW / FORM STATE
+     VIEW / EDIT STATE
   ===================================================== */
 
   const [showMainForm, setShowMainForm] = useState(true);
+  const [editingPackageId, setEditingPackageId] = useState(null);
 
   /* =====================================================
      LOAD SAVED DATA
@@ -114,20 +166,29 @@ const FixedPackagePage = () => {
       const savedPackageData =
         localStorage.getItem("fixedPackageData");
 
-      if (savedPackageData) {
-        const parsedData = JSON.parse(savedPackageData);
+      if (!savedPackageData) return;
 
-        if (parsedData.formData) {
-          setFormData(parsedData.formData);
-        }
+      const parsedData = JSON.parse(savedPackageData);
 
-        if (Array.isArray(parsedData.services)) {
-          setServices(parsedData.services);
-        }
+      if (parsedData.formData) {
+        setFormData({
+          ...initialFormData,
+          ...parsedData.formData,
+          ...getTravelChargeData(parsedData.formData),
+        });
+      }
 
-        if (Array.isArray(parsedData.savedPackages)) {
-          setSavedPackages(parsedData.savedPackages);
-        }
+      if (Array.isArray(parsedData.services)) {
+        setServices(parsedData.services);
+      }
+
+      if (Array.isArray(parsedData.savedPackages)) {
+        setSavedPackages(
+          parsedData.savedPackages.map((pkg) => ({
+            ...pkg,
+            ...getTravelChargeData(pkg),
+          }))
+        );
       }
     } catch (error) {
       console.error("Unable to load fixed package data:", error);
@@ -155,6 +216,7 @@ const FixedPackagePage = () => {
 
       case "overTimeCharge":
       case "minimumBookingHours":
+      case "travelChargeAmount":
         updatedValue = allowOnlyNumbers(value);
         break;
 
@@ -174,6 +236,11 @@ const FixedPackagePage = () => {
     setFormData((previous) => ({
       ...previous,
       [name]: updatedValue,
+
+      ...(name === "travelChargeType" &&
+      value === "No Travel Charge"
+        ? { travelChargeAmount: "" }
+        : {}),
     }));
 
     if (errors[name]) {
@@ -255,18 +322,7 @@ const FixedPackagePage = () => {
   ===================================================== */
 
   const resetForm = () => {
-    setFormData({
-      packageName: "",
-      category: "",
-      chargeType: "Amount Per Event",
-      totalPrice: "",
-      description: "",
-      overTimeCharge: "",
-      travelCharges: "Ex : 25 INR Per Km",
-      minimumBookingHours: "",
-      advanceBookingPayment: "",
-      workDeliveryTimeline: "",
-    });
+    setFormData({ ...initialFormData });
 
     setServices([
       { id: 1, name: "", description: "" },
@@ -276,6 +332,7 @@ const FixedPackagePage = () => {
     setErrors({});
     setSaveMessage("");
     setSaveType("");
+    setEditingPackageId(null);
   };
 
   /* =====================================================
@@ -321,7 +378,9 @@ const FixedPackagePage = () => {
     const price = value.trim();
 
     const validFormat =
-      /^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,2})?(?:\/-)?$/.test(price);
+      /^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,2})?(?:\/-)?$/.test(
+        price
+      );
 
     const numericValue = Number(
       price.replace(/,/g, "").replace(/\/-$/, "")
@@ -333,6 +392,14 @@ const FixedPackagePage = () => {
       numericValue > 0
     );
   };
+
+  /* =====================================================
+     TRAVEL CHARGE VALIDATION
+  ===================================================== */
+
+  const isValidTravelAmount = (value) =>
+    /^\d+(\.\d{1,2})?$/.test(value) &&
+    Number(value) > 0;
 
   /* =====================================================
      VALIDATION
@@ -416,6 +483,18 @@ const FixedPackagePage = () => {
       }
     }
 
+    /* TRAVEL CHARGES */
+
+    if (formData.travelChargeType !== "No Travel Charge") {
+      if (
+        !formData.travelChargeAmount.trim() ||
+        !isValidTravelAmount(formData.travelChargeAmount)
+      ) {
+        newErrors.travelChargeAmount =
+          "Enter a valid travel charge amount.";
+      }
+    }
+
     /* MINIMUM BOOKING HOURS */
 
     if (formData.minimumBookingHours.trim()) {
@@ -464,6 +543,7 @@ const FixedPackagePage = () => {
 
     const duplicatePackage = savedPackages.some(
       (pkg) =>
+        pkg.id !== editingPackageId &&
         pkg.packageName?.trim().toLowerCase() ===
           packageName.toLowerCase() &&
         pkg.category?.trim().toLowerCase() ===
@@ -516,6 +596,16 @@ const FixedPackagePage = () => {
       }
     }
 
+    if (formData.travelChargeType !== "No Travel Charge") {
+      if (
+        formData.travelChargeAmount.trim() &&
+        !isValidTravelAmount(formData.travelChargeAmount)
+      ) {
+        draftErrors.travelChargeAmount =
+          "Enter a valid travel charge amount.";
+      }
+    }
+
     if (formData.minimumBookingHours.trim()) {
       const value = formData.minimumBookingHours.trim();
 
@@ -561,14 +651,19 @@ const FixedPackagePage = () => {
   };
 
   /* =====================================================
-     SAVE PACKAGE DATA
+     SAVE PACKAGE DATA TO LOCAL STORAGE
   ===================================================== */
 
-  const savePackageData = (status = "draft") => {
+  const savePackageData = (
+    status = "draft",
+    packages = savedPackages,
+    draft = formData,
+    serviceList = services
+  ) => {
     const packageData = {
-      formData,
-      services,
-      savedPackages,
+      formData: draft,
+      services: serviceList,
+      savedPackages: packages,
       status,
       savedAt: new Date().toISOString(),
     };
@@ -615,7 +710,7 @@ const FixedPackagePage = () => {
   };
 
   /* =====================================================
-     SAVE PACKAGE
+     SAVE OR UPDATE PACKAGE
   ===================================================== */
 
   const handleSavePackage = () => {
@@ -637,7 +732,7 @@ const FixedPackagePage = () => {
     }
 
     const newPackage = {
-      id: Date.now(),
+      id: editingPackageId ?? Date.now(),
 
       packageName: formData.packageName.trim(),
 
@@ -645,31 +740,45 @@ const FixedPackagePage = () => {
 
       serviceCount:
         `${services.length} services, Add Ons Applicable`,
+
+      // Save travel charge data with this package
+      travelChargeType: formData.travelChargeType,
+
+      travelChargeAmount:
+        formData.travelChargeType === "No Travel Charge"
+          ? ""
+          : formData.travelChargeAmount.trim(),
+
+      // Save complete package data for edit
+      formData: { ...formData },
+      services: [...services],
     };
 
-    const updatedPackages = [
-      ...savedPackages,
-      newPackage,
-    ];
-
-    setSavedPackages(updatedPackages);
+    const updatedPackages = editingPackageId
+      ? savedPackages.map((pkg) =>
+          pkg.id === editingPackageId ? newPackage : pkg
+        )
+      : [...savedPackages, newPackage];
 
     try {
-      const packageData = {
-        formData,
-        services,
-        savedPackages: updatedPackages,
-        status: "saved",
-        savedAt: new Date().toISOString(),
-      };
-
-      localStorage.setItem(
-        "fixedPackageData",
-        JSON.stringify(packageData)
+      savePackageData(
+        "saved",
+        updatedPackages,
+        initialFormData,
+        [
+          { id: 1, name: "", description: "" },
+          { id: 2, name: "", description: "" },
+        ]
       );
 
+      setSavedPackages(updatedPackages);
+
       setSaveType("success");
-      setSaveMessage("Package saved successfully.");
+      setSaveMessage(
+        editingPackageId
+          ? "Package updated successfully."
+          : "Package saved successfully."
+      );
 
       resetForm();
     } catch (error) {
@@ -723,18 +832,56 @@ const FixedPackagePage = () => {
   ===================================================== */
 
   const handleEditPackage = (pkg) => {
-    setFormData((previous) => ({
-      ...previous,
-      packageName: pkg.packageName,
-      category: pkg.category,
-    }));
+    setEditingPackageId(pkg.id);
 
+    setFormData({
+      ...initialFormData,
+      ...(pkg.formData || {}),
+      packageName: pkg.packageName || "",
+      category: pkg.category || "",
+      ...getTravelChargeData(pkg.formData || pkg),
+    });
+
+    if (Array.isArray(pkg.services) && pkg.services.length > 0) {
+      setServices(pkg.services);
+    } else {
+      setServices([
+        { id: 1, name: "", description: "" },
+        { id: 2, name: "", description: "" },
+      ]);
+    }
+
+    setErrors({});
+    setSaveMessage("");
+    setSaveType("");
     setShowMainForm(true);
 
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  /* =====================================================
+     TRAVEL CHARGE DISPLAY
+  ===================================================== */
+
+  const travelText = (pkg) => {
+    const data = getTravelChargeData(pkg);
+
+    if (data.travelChargeType === "No Travel Charge") {
+      return "No Travel Charge";
+    }
+
+    if (data.travelChargeType === "Per Km") {
+      return `₹${data.travelChargeAmount} / Km`;
+    }
+
+    if (data.travelChargeType === "Fixed Amount") {
+      return `₹${data.travelChargeAmount} Fixed`;
+    }
+
+    return "No Travel Charge";
   };
 
   /* =====================================================
@@ -808,7 +955,9 @@ const FixedPackagePage = () => {
 
           <div className="flex min-h-[45px] items-center px-[12px] sm:min-h-[48px] sm:px-[10px]">
             <p className="text-[17px] font-medium text-[#777777] sm:text-[20px]">
-              Fixed Package - 1
+              {editingPackageId
+                ? "Edit Fixed Package"
+                : "Fixed Package - 1"}
             </p>
           </div>
 
@@ -1012,7 +1161,9 @@ const FixedPackagePage = () => {
                   )}
                 </PricingField>
 
-                {/* TRAVEL CHARGES */}
+                {/* =================================================
+                    TRAVEL CHARGES - MANUAL INPUT
+                ================================================= */}
 
                 <PricingField
                   label="Travel Charges"
@@ -1020,22 +1171,79 @@ const FixedPackagePage = () => {
                   labelSize="text-[16px] sm:text-[18px]"
                   labelClassName="font-semibold"
                 >
-                  <select
-                    name="travelCharges"
-                    value={formData.travelCharges}
-                    onChange={handleChange}
-                    className={selectClassName}
-                  >
-                    <option>Ex : 25 INR Per Km</option>
-                    <option>Ex : 50 INR Per Km</option>
-                    <option>Ex : 75 INR Per Km</option>
-                    <option>Ex : 100 INR Per Km</option>
-                    <option>Ex : 125 INR Per Km</option>
-                    <option>Ex : 150 INR Per Km</option>
-                    <option>Ex : 175 INR Per Km</option>
-                    <option>Ex : 200 INR Per Km</option>
-                    <option>No Travel Charge</option>
-                  </select>
+                  <div className="flex flex-col gap-[8px]">
+
+                    {/* TRAVEL TYPE */}
+
+                    <select
+                      name="travelChargeType"
+                      value={formData.travelChargeType}
+                      onChange={handleChange}
+                      className={selectClassName}
+                    >
+                      <option value="No Travel Charge">
+                        No Travel Charge
+                      </option>
+
+                      <option value="Per Km">
+                        Per Km
+                      </option>
+
+                      <option value="Fixed Amount">
+                        Fixed Amount
+                      </option>
+                    </select>
+
+                    {/* MANUAL AMOUNT INPUT */}
+
+                    {formData.travelChargeType !==
+                      "No Travel Charge" && (
+                      <div className="relative">
+                        <span className="absolute left-[12px] top-1/2 -translate-y-1/2 text-[15px] text-[#555555]">
+                          ₹
+                        </span>
+
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          name="travelChargeAmount"
+                          value={formData.travelChargeAmount}
+                          onChange={handleChange}
+                          placeholder={
+                            formData.travelChargeType === "Per Km"
+                              ? "Enter amount per km"
+                              : "Enter fixed amount"
+                          }
+                          className={`${inputClassName} pl-[30px]`}
+                        />
+                      </div>
+                    )}
+
+                    {/* HELPER TEXT */}
+
+                    {formData.travelChargeType === "Per Km" && (
+                      <p className="text-[13px] text-[#777777]">
+                        Enter the travel charge manually for each
+                        kilometer.
+                      </p>
+                    )}
+
+                    {formData.travelChargeType === "Fixed Amount" && (
+                      <p className="text-[13px] text-[#777777]">
+                        Enter the fixed travel charge for this
+                        package.
+                      </p>
+                    )}
+
+                    {/* TRAVEL VALIDATION */}
+
+                    {errors.travelChargeAmount && (
+                      <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
+                        {errors.travelChargeAmount}
+                      </p>
+                    )}
+
+                  </div>
                 </PricingField>
 
                 {/* MINIMUM BOOKING HOURS */}
@@ -1170,7 +1378,9 @@ const FixedPackagePage = () => {
                           {services.length > 2 && (
                             <button
                               type="button"
-                              onClick={() => removeService(service.id)}
+                              onClick={() =>
+                                removeService(service.id)
+                              }
                               className="shrink-0 cursor-pointer text-[#c40000]"
                               title="Remove Service"
                             >
@@ -1219,7 +1429,8 @@ const FixedPackagePage = () => {
                           </label>
 
                           <span className="shrink-0 text-[12px] text-[#737373] sm:text-[14px]">
-                            {service.description.length} / 200 Characters
+                            {service.description.length} / 200
+                            Characters
                           </span>
 
                         </div>
@@ -1243,9 +1454,15 @@ const FixedPackagePage = () => {
                           className={`${inputClassName} mt-[4px] w-full`}
                         />
 
-                        {errors[`service-${service.id}-description`] && (
+                        {errors[
+                          `service-${service.id}-description`
+                        ] && (
                           <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                            {errors[`service-${service.id}-description`]}
+                            {
+                              errors[
+                                `service-${service.id}-description`
+                              ]
+                            }
                           </p>
                         )}
 
@@ -1276,7 +1493,7 @@ const FixedPackagePage = () => {
                   onClick={handleSavePackage}
                   className="h-[40px] w-full cursor-pointer rounded-[4px] bg-[#333333] px-[18px] text-[16px] font-semibold text-white transition hover:bg-[#222222] sm:h-[32px] sm:w-[180px] sm:text-[18px]"
                 >
-                  Save Package
+                  {editingPackageId ? "Update Package" : "Save Package"}
                 </button>
 
               </div>
@@ -1311,7 +1528,10 @@ const FixedPackagePage = () => {
 
                   <div className="inline-flex min-h-[35px] w-auto max-w-full shrink-0 items-center rounded-[3px] bg-[#222222] px-[9px] py-[6px] text-[13px] font-medium leading-none text-white sm:h-[37px] sm:w-[142px] sm:py-0 sm:text-[14px]">
 
-                    <FaCamera className="mr-[4px] shrink-0 text-white" size={16} />
+                    <FaCamera
+                      className="mr-[4px] shrink-0 text-white"
+                      size={16}
+                    />
 
                     <span className="truncate text-[13px] font-semibold sm:text-[14px]">
                       {pkg.category}
@@ -1332,6 +1552,12 @@ const FixedPackagePage = () => {
                   </span>
 
                 </div>
+
+                {/* SAVED TRAVEL CHARGE */}
+
+                <p className="mt-[5px] text-[13px] text-[#777777]">
+                  Travel: {travelText(pkg)}
+                </p>
 
               </div>
 
@@ -1365,9 +1591,7 @@ const FixedPackagePage = () => {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    handleEditPackage(pkg);
-                  }}
+                  onClick={() => handleEditPackage(pkg)}
                   className="cursor-pointer text-[#333333] transition hover:text-black"
                   title="View"
                 >

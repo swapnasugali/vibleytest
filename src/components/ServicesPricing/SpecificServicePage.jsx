@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
-
 import {
   FiPlusCircle,
   FiEdit,
   FiChevronDown,
   FiCheckCircle,
 } from "react-icons/fi";
-
 import { FaCamera, FaTrash } from "react-icons/fa";
 import { LuEyeClosed } from "react-icons/lu";
 
 import ServicesPricingLayout from "./ServicesPricingLayout";
-
 import PricingField, {
   inputClassName,
   selectClassName,
   textareaClassName,
 } from "./PricingField";
 
-/* ================= INITIAL FORM DATA ================= */
-
+/* =========================================================
+   INITIAL FORM DATA
+========================================================= */
 const initialFormData = {
   serviceMain: "",
   specificServiceName: "",
@@ -33,9 +31,9 @@ const initialFormData = {
   workDeliveryTimeline: "",
 };
 
-/* ================= TRAVEL DATA HELPER ================= */
-
-// Supports both new and old localStorage travel-charge formats.
+/* =========================================================
+   TRAVEL CHARGE DATA
+========================================================= */
 const getTravelChargeData = (service = {}) => {
   if (service.travelChargeType) {
     return {
@@ -44,72 +42,43 @@ const getTravelChargeData = (service = {}) => {
     };
   }
 
-  const oldTravelCharges = String(service.travelCharges || "");
+  // Support older saved data
+  const oldValue = String(service.travelCharges || "");
 
-  if (oldTravelCharges.toLowerCase().includes("no travel")) {
+  if (/no travel/i.test(oldValue)) {
     return {
       travelChargeType: "No Travel Charge",
       travelChargeAmount: "",
     };
   }
 
-  const amountMatch = oldTravelCharges.match(/(\d+(?:\.\d+)?)/);
+  const match = oldValue.match(/(\d+(?:\.\d+)?)/);
 
-  if (amountMatch) {
-    return {
-      travelChargeType: "Per Km",
-      travelChargeAmount: amountMatch[1],
-    };
-  }
-
-  return {
-    travelChargeType: "No Travel Charge",
-    travelChargeAmount: "",
-  };
+  return match
+    ? {
+        travelChargeType: "Per Km",
+        travelChargeAmount: match[1],
+      }
+    : {
+        travelChargeType: "No Travel Charge",
+        travelChargeAmount: "",
+      };
 };
 
-/* ================= COMPONENT ================= */
-
+/* =========================================================
+   SPECIFIC SERVICE PAGE
+========================================================= */
 const SpecificServicePage = () => {
   const [formData, setFormData] = useState(initialFormData);
-
-  const [savedServices, setSavedServices] = useState([
-    {
-      id: 1,
-      serviceMain: "Photography",
-      specificServiceName: "General Photography",
-      chargeType: "Amount Per Event",
-      totalPrice: "12000",
-      description:
-        "Stunning all around photography, which covers the event.",
-      overTimeCharge: "1500",
-      travelChargeType: "Per Km",
-      travelChargeAmount: "25",
-      minimumBookingHours: "4",
-      workDeliveryTimeline: "Within 3 DAYS of the Event",
-    },
-    {
-      id: 2,
-      serviceMain: "Photography",
-      specificServiceName: "Candid Photography",
-      chargeType: "Amount Per Event",
-      totalPrice: "15000",
-      description:
-        "Professional candid photography for special events.",
-      overTimeCharge: "1500",
-      travelChargeType: "Per Km",
-      travelChargeAmount: "25",
-      minimumBookingHours: "4",
-      workDeliveryTimeline: "Within 3 DAYS of the Event",
-    },
-  ]);
-
+  const [savedServices, setSavedServices] = useState([]);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveType, setSaveType] = useState("");
   const [errors, setErrors] = useState({});
   const [editingServiceId, setEditingServiceId] = useState(null);
 
-  /* ================= INPUT HELPERS ================= */
+  /* =========================================================
+     INPUT VALIDATION HELPERS
+  ========================================================= */
 
   const allowOnlyAlphabets = (value) =>
     value.replace(/[^\p{L}\s]/gu, "");
@@ -128,27 +97,29 @@ const SpecificServicePage = () => {
   const allowDescription = (value) =>
     value.replace(/[^\p{L}0-9\s.,!?'"():/%&+-]/gu, "");
 
-  /* ================= LOAD LOCAL STORAGE ================= */
+  /* =========================================================
+     LOAD DATA FROM LOCAL STORAGE
+  ========================================================= */
 
   useEffect(() => {
     try {
-      const savedData = localStorage.getItem("specificServiceData");
+      const stored = localStorage.getItem("specificServiceData");
 
-      if (!savedData) return;
+      if (!stored) return;
 
-      const parsedData = JSON.parse(savedData);
+      const parsed = JSON.parse(stored);
 
-      if (parsedData.formData) {
+      if (parsed.formData) {
         setFormData({
           ...initialFormData,
-          ...parsedData.formData,
-          ...getTravelChargeData(parsedData.formData),
+          ...parsed.formData,
+          ...getTravelChargeData(parsed.formData),
         });
       }
 
-      if (Array.isArray(parsedData.savedServices)) {
+      if (Array.isArray(parsed.savedServices)) {
         setSavedServices(
-          parsedData.savedServices.map((service) => ({
+          parsed.savedServices.map((service) => ({
             ...service,
             ...getTravelChargeData(service),
           }))
@@ -159,38 +130,41 @@ const SpecificServicePage = () => {
     }
   }, []);
 
-  /* ================= HANDLE CHANGE ================= */
+  /* =========================================================
+     HANDLE INPUT CHANGE
+  ========================================================= */
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    let nextValue = value;
 
-    let updatedValue = value;
-
-    switch (name) {
-      case "serviceMain":
-      case "specificServiceName":
-        updatedValue = allowOnlyAlphabets(value);
-        break;
-
-      case "totalPrice":
-      case "overTimeCharge":
-      case "minimumBookingHours":
-      case "travelChargeAmount":
-        updatedValue = allowOnlyNumbers(value);
-        break;
-
-      case "description":
-      case "workDeliveryTimeline":
-        updatedValue = allowDescription(value);
-        break;
-
-      default:
-        updatedValue = value;
+    if (name === "serviceMain" || name === "specificServiceName") {
+      nextValue = allowOnlyAlphabets(value);
+    } else if (
+      [
+        "totalPrice",
+        "overTimeCharge",
+        "minimumBookingHours",
+        "travelChargeAmount",
+      ].includes(name)
+    ) {
+      nextValue = allowOnlyNumbers(value);
+    } else if (
+      name === "description" ||
+      name === "workDeliveryTimeline"
+    ) {
+      nextValue = allowDescription(value);
     }
 
     setFormData((previous) => ({
       ...previous,
-      [name]: updatedValue,
+      [name]: nextValue,
+
+      // Clear travel amount when No Travel Charge is selected
+      ...(name === "travelChargeType" &&
+      value === "No Travel Charge"
+        ? { travelChargeAmount: "" }
+        : {}),
     }));
 
     setErrors((previous) => ({
@@ -202,79 +176,77 @@ const SpecificServicePage = () => {
     setSaveType("");
   };
 
-  /* ================= VALIDATION ================= */
+  /* =========================================================
+     FORM VALIDATION
+  ========================================================= */
 
   const validateForm = () => {
-    const newErrors = {};
+    const nextErrors = {};
 
     if (!formData.serviceMain.trim()) {
-      newErrors.serviceMain = "Service is required.";
+      nextErrors.serviceMain = "Service is required.";
     }
 
     if (!formData.specificServiceName.trim()) {
-      newErrors.specificServiceName =
+      nextErrors.specificServiceName =
         "Specific Service Name is required.";
     }
 
-    const validChargeTypes = [
-      "Amount Per Event",
-      "Amount Per Hour",
-      "Amount Per Item",
-    ];
-
-    if (!validChargeTypes.includes(formData.chargeType)) {
-      newErrors.chargeType = "Please select a valid charge type.";
+    if (
+      ![
+        "Amount Per Event",
+        "Amount Per Hour",
+        "Amount Per Item",
+      ].includes(formData.chargeType)
+    ) {
+      nextErrors.chargeType = "Please select a valid charge type.";
     }
 
     if (
       !formData.totalPrice.trim() ||
-      !/^\d+(\.\d{1,2})?$/.test(formData.totalPrice.trim()) ||
+      !/^\d+(\.\d{1,2})?$/.test(formData.totalPrice) ||
       Number(formData.totalPrice) <= 0
     ) {
-      newErrors.totalPrice = "Enter a valid total price.";
+      nextErrors.totalPrice = "Enter a valid total price.";
     }
 
     if (formData.description.length > 400) {
-      newErrors.description =
+      nextErrors.description =
         "Description cannot exceed 400 characters.";
     }
 
-    if (formData.overTimeCharge.trim()) {
-      if (
-        !/^\d+(\.\d{1,2})?$/.test(formData.overTimeCharge.trim()) ||
+    if (
+      formData.overTimeCharge.trim() &&
+      (
+        !/^\d+(\.\d{1,2})?$/.test(formData.overTimeCharge) ||
         Number(formData.overTimeCharge) <= 0
-      ) {
-        newErrors.overTimeCharge =
-          "Enter a valid overtime charge.";
-      }
+      )
+    ) {
+      nextErrors.overTimeCharge =
+        "Enter a valid overtime charge.";
     }
 
-    // Travel amount is required only for paid travel options.
+    // Travel amount validation
     if (formData.travelChargeType !== "No Travel Charge") {
-      if (!formData.travelChargeAmount.trim()) {
-        newErrors.travelChargeAmount =
-          "Please enter a travel charge amount.";
-      } else if (
-        !/^\d+(\.\d{1,2})?$/.test(
-          formData.travelChargeAmount.trim()
-        ) ||
+      if (
+        !formData.travelChargeAmount.trim() ||
+        !/^\d+(\.\d{1,2})?$/.test(formData.travelChargeAmount) ||
         Number(formData.travelChargeAmount) <= 0
       ) {
-        newErrors.travelChargeAmount =
+        nextErrors.travelChargeAmount =
           "Enter a valid travel charge amount.";
       }
     }
 
-    if (formData.minimumBookingHours.trim()) {
-      if (
-        !/^\d+(\.\d{1,2})?$/.test(
-          formData.minimumBookingHours.trim()
-        ) ||
+    if (
+      formData.minimumBookingHours.trim() &&
+      (
+        !/^\d+(\.\d{1,2})?$/.test(formData.minimumBookingHours) ||
         Number(formData.minimumBookingHours) <= 0
-      ) {
-        newErrors.minimumBookingHours =
-          "Enter valid booking hours.";
-      }
+      )
+    ) {
+      nextErrors.minimumBookingHours =
+        "Enter valid booking hours.";
     }
 
     if (
@@ -283,10 +255,11 @@ const SpecificServicePage = () => {
         formData.workDeliveryTimeline
       )
     ) {
-      newErrors.workDeliveryTimeline =
-        "Please enter a valid delivery timeline.";
+      nextErrors.workDeliveryTimeline =
+        "Enter a valid delivery timeline.";
     }
 
+    // Duplicate service validation
     const duplicate = savedServices.some(
       (service) =>
         service.id !== editingServiceId &&
@@ -305,89 +278,28 @@ const SpecificServicePage = () => {
       formData.specificServiceName.trim() &&
       duplicate
     ) {
-      newErrors.specificServiceName =
+      nextErrors.specificServiceName =
         "This service name already exists under this service category.";
     }
 
-    setErrors(newErrors);
+    setErrors(nextErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(nextErrors).length === 0;
   };
 
-  /* ================= DRAFT VALIDATION ================= */
-
-  const validateDraft = () => {
-    const draftErrors = {};
-
-    if (formData.totalPrice.trim()) {
-      if (
-        !/^\d+(\.\d{1,2})?$/.test(formData.totalPrice.trim()) ||
-        Number(formData.totalPrice) <= 0
-      ) {
-        draftErrors.totalPrice = "Enter a valid total price.";
-      }
-    }
-
-    if (formData.overTimeCharge.trim()) {
-      if (
-        !/^\d+(\.\d{1,2})?$/.test(
-          formData.overTimeCharge.trim()
-        ) ||
-        Number(formData.overTimeCharge) <= 0
-      ) {
-        draftErrors.overTimeCharge =
-          "Enter a valid overtime charge.";
-      }
-    }
-
-    if (
-      formData.travelChargeType !== "No Travel Charge" &&
-      formData.travelChargeAmount.trim()
-    ) {
-      if (
-        !/^\d+(\.\d{1,2})?$/.test(
-          formData.travelChargeAmount.trim()
-        ) ||
-        Number(formData.travelChargeAmount) <= 0
-      ) {
-        draftErrors.travelChargeAmount =
-          "Enter a valid travel charge amount.";
-      }
-    }
-
-    if (formData.minimumBookingHours.trim()) {
-      if (
-        !/^\d+(\.\d{1,2})?$/.test(
-          formData.minimumBookingHours.trim()
-        ) ||
-        Number(formData.minimumBookingHours) <= 0
-      ) {
-        draftErrors.minimumBookingHours =
-          "Enter valid booking hours.";
-      }
-    }
-
-    if (formData.description.length > 400) {
-      draftErrors.description =
-        "Description cannot exceed 400 characters.";
-    }
-
-    setErrors(draftErrors);
-
-    return Object.keys(draftErrors).length === 0;
-  };
-
-  /* ================= SAVE LOCAL STORAGE ================= */
+  /* =========================================================
+     SAVE DATA TO LOCAL STORAGE
+  ========================================================= */
 
   const saveToLocalStorage = (
     services = savedServices,
-    draftFormData = formData
+    draft = formData
   ) => {
     try {
       localStorage.setItem(
         "specificServiceData",
         JSON.stringify({
-          formData: draftFormData,
+          formData: draft,
           savedServices: services,
           savedAt: new Date().toISOString(),
         })
@@ -406,14 +318,26 @@ const SpecificServicePage = () => {
     }
   };
 
-  /* ================= SAVE DRAFT ================= */
+  /* =========================================================
+     SAVE DRAFT
+  ========================================================= */
 
   const handleSaveDraft = () => {
-    if (!validateDraft()) {
+    if (
+      formData.travelChargeType !== "No Travel Charge" &&
+      formData.travelChargeAmount.trim() &&
+      (
+        !/^\d+(\.\d{1,2})?$/.test(formData.travelChargeAmount) ||
+        Number(formData.travelChargeAmount) <= 0
+      )
+    ) {
+      setErrors({
+        travelChargeAmount: "Enter a valid travel charge amount.",
+      });
+
       setSaveType("error");
-      setSaveMessage(
-        "Please correct the highlighted fields before saving the draft."
-      );
+      setSaveMessage("Please correct the highlighted field.");
+
       return;
     }
 
@@ -423,7 +347,9 @@ const SpecificServicePage = () => {
     }
   };
 
-  /* ================= SAVE SERVICE ================= */
+  /* =========================================================
+     SAVE OR UPDATE SERVICE
+  ========================================================= */
 
   const handleSaveService = () => {
     if (!validateForm()) {
@@ -440,15 +366,17 @@ const SpecificServicePage = () => {
 
     const serviceData = {
       id: editingServiceId ?? Date.now(),
+
       serviceMain: formData.serviceMain.trim(),
       specificServiceName: formData.specificServiceName.trim(),
+
       chargeType: formData.chargeType,
       totalPrice: formData.totalPrice.trim(),
       description: formData.description.trim(),
       overTimeCharge: formData.overTimeCharge.trim(),
 
-      // Save dynamic travel selection and entered amount.
       travelChargeType: formData.travelChargeType,
+
       travelChargeAmount:
         formData.travelChargeType === "No Travel Charge"
           ? ""
@@ -460,19 +388,20 @@ const SpecificServicePage = () => {
 
     const updatedServices = editingServiceId
       ? savedServices.map((service) =>
-          service.id === editingServiceId ? serviceData : service
+          service.id === editingServiceId
+            ? serviceData
+            : service
         )
       : [...savedServices, serviceData];
 
-    const emptyForm = { ...initialFormData };
-
-    if (saveToLocalStorage(updatedServices, emptyForm)) {
+    if (saveToLocalStorage(updatedServices, initialFormData)) {
       setSavedServices(updatedServices);
-      setFormData(emptyForm);
+      setFormData({ ...initialFormData });
       setErrors({});
       setEditingServiceId(null);
 
       setSaveType("success");
+
       setSaveMessage(
         editingServiceId
           ? "Specific service updated successfully."
@@ -481,20 +410,22 @@ const SpecificServicePage = () => {
     }
   };
 
-  /* ================= DELETE SERVICE ================= */
+  /* =========================================================
+     DELETE SERVICE
+  ========================================================= */
 
   const handleDeleteService = (id) => {
-    const serviceToDelete = savedServices.find(
+    const item = savedServices.find(
       (service) => service.id === id
     );
 
-    const confirmed = window.confirm(
-      `Delete "${
-        serviceToDelete?.specificServiceName || "this service"
-      }"?`
-    );
-
-    if (!confirmed) return;
+    if (
+      !window.confirm(
+        `Delete "${item?.specificServiceName || "this service"}"?`
+      )
+    ) {
+      return;
+    }
 
     const updatedServices = savedServices.filter(
       (service) => service.id !== id
@@ -507,22 +438,17 @@ const SpecificServicePage = () => {
     }
   };
 
-  /* ================= EDIT SERVICE ================= */
+  /* =========================================================
+     EDIT SERVICE
+  ========================================================= */
 
   const handleEditService = (service) => {
     setEditingServiceId(service.id);
 
     setFormData({
       ...initialFormData,
-      serviceMain: service.serviceMain || "",
-      specificServiceName: service.specificServiceName || "",
-      chargeType: service.chargeType || "Amount Per Event",
-      totalPrice: service.totalPrice || "",
-      description: service.description || "",
-      overTimeCharge: service.overTimeCharge || "",
+      ...service,
       ...getTravelChargeData(service),
-      minimumBookingHours: service.minimumBookingHours || "",
-      workDeliveryTimeline: service.workDeliveryTimeline || "",
     });
 
     setErrors({});
@@ -535,7 +461,9 @@ const SpecificServicePage = () => {
     });
   };
 
-  /* ================= ADD SERVICE ================= */
+  /* =========================================================
+     ADD NEW SERVICE
+  ========================================================= */
 
   const handleAddService = () => {
     setEditingServiceId(null);
@@ -550,23 +478,27 @@ const SpecificServicePage = () => {
     });
   };
 
-  /* ================= TRAVEL DISPLAY ================= */
+  /* =========================================================
+     TRAVEL CHARGE DISPLAY
+  ========================================================= */
 
-  const getTravelText = (service) => {
-    const travel = getTravelChargeData(service);
+  const travelText = (service) => {
+    const data = getTravelChargeData(service);
 
-    if (travel.travelChargeType === "No Travel Charge") {
+    if (data.travelChargeType === "No Travel Charge") {
       return "No Travel Charge";
     }
 
-    if (travel.travelChargeType === "Per Km") {
-      return `₹${travel.travelChargeAmount} Per Km`;
+    if (data.travelChargeType === "Per Km") {
+      return `₹${data.travelChargeAmount} / Km`;
     }
 
-    return `₹${travel.travelChargeAmount} Fixed Amount`;
+    return `₹${data.travelChargeAmount} Fixed`;
   };
 
-  /* ================= RENDER ================= */
+  /* =========================================================
+     UI
+  ========================================================= */
 
   return (
     <ServicesPricingLayout
@@ -574,7 +506,6 @@ const SpecificServicePage = () => {
       showBackgroundLines={false}
     >
       {/* SAVE MESSAGE */}
-
       {saveMessage && (
         <div
           className={`mt-[15px] flex items-center gap-[8px] rounded-[5px] border px-[16px] py-[12px] text-[16px] font-medium ${
@@ -591,8 +522,7 @@ const SpecificServicePage = () => {
         </div>
       )}
 
-      {/* TOOLBAR */}
-
+      {/* TOP HEADER */}
       <div className="mt-[18px] flex flex-col gap-[10px] sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-[10px]">
           <span className="text-[20px] font-normal text-[#555555]">
@@ -601,7 +531,7 @@ const SpecificServicePage = () => {
 
           <button
             type="button"
-            className="flex h-[45px] w-[121px] cursor-pointer items-center justify-center gap-[5px] rounded-[4px] bg-white px-[9px] text-[16px] text-[#333333]"
+            className="flex h-[45px] w-[121px] items-center justify-center gap-[5px] rounded-[4px] bg-white px-[9px] text-[16px] text-[#333333]"
           >
             Sort By
             <FiChevronDown className="text-[17px]" />
@@ -611,15 +541,14 @@ const SpecificServicePage = () => {
         <button
           type="button"
           onClick={handleAddService}
-          className="flex h-[52px] w-[218px] cursor-pointer items-center justify-center gap-[5px] rounded-[4px] bg-[#c40000] px-[16px] text-[18px] font-semibold text-white"
+          className="flex h-[52px] w-[218px] items-center justify-center gap-[5px] rounded-[4px] bg-[#c40000] px-[16px] text-[18px] font-semibold text-white"
         >
           <FiPlusCircle className="text-[17px]" />
           Add Service
         </button>
       </div>
 
-      {/* TITLE */}
-
+      {/* FORM TITLE */}
       <div className="mt-[15px]">
         <p className="text-[20px] font-medium text-[#777777]">
           {editingServiceId
@@ -628,12 +557,10 @@ const SpecificServicePage = () => {
         </p>
       </div>
 
-      {/* FORM */}
-
+      {/* SERVICE FORM */}
       <section className="mt-[7px] rounded-[6px] bg-white px-[25px] py-[20px] sm:px-[30px] md:px-[34px]">
         <div className="grid grid-cols-1 gap-x-[20px] gap-y-[15px] sm:grid-cols-2">
           {/* SERVICE */}
-
           <PricingField
             label="Service"
             required
@@ -641,7 +568,6 @@ const SpecificServicePage = () => {
             labelClassName="font-semibold"
           >
             <input
-              type="text"
               name="serviceMain"
               value={formData.serviceMain}
               onChange={handleChange}
@@ -657,7 +583,6 @@ const SpecificServicePage = () => {
           </PricingField>
 
           {/* SPECIFIC SERVICE NAME */}
-
           <PricingField
             label="Specific Service Name"
             required
@@ -665,7 +590,6 @@ const SpecificServicePage = () => {
             labelClassName="font-semibold"
           >
             <input
-              type="text"
               name="specificServiceName"
               value={formData.specificServiceName}
               onChange={handleChange}
@@ -681,7 +605,6 @@ const SpecificServicePage = () => {
           </PricingField>
 
           {/* CHARGE TYPE */}
-
           <PricingField
             label="Charge Type"
             required
@@ -694,9 +617,9 @@ const SpecificServicePage = () => {
               onChange={handleChange}
               className={selectClassName}
             >
-              <option value="Amount Per Event">Amount Per Event</option>
-              <option value="Amount Per Hour">Amount Per Hour</option>
-              <option value="Amount Per Item">Amount Per Item</option>
+              <option>Amount Per Event</option>
+              <option>Amount Per Hour</option>
+              <option>Amount Per Item</option>
             </select>
 
             {errors.chargeType && (
@@ -707,7 +630,6 @@ const SpecificServicePage = () => {
           </PricingField>
 
           {/* TOTAL PRICE */}
-
           <PricingField
             label="Total Price"
             required
@@ -715,11 +637,10 @@ const SpecificServicePage = () => {
             labelClassName="font-semibold"
           >
             <input
-              type="text"
               name="totalPrice"
               value={formData.totalPrice}
               onChange={handleChange}
-              placeholder="12,000/- INR"
+              placeholder="12000"
               className={inputClassName}
             />
 
@@ -731,7 +652,6 @@ const SpecificServicePage = () => {
           </PricingField>
 
           {/* DESCRIPTION */}
-
           <PricingField
             label="Description"
             labelSize="text-[18px]"
@@ -744,7 +664,7 @@ const SpecificServicePage = () => {
                 value={formData.description}
                 onChange={handleChange}
                 maxLength={400}
-                placeholder="Ex : this is the best ever service which includes ..."
+                placeholder="Describe the service..."
                 className={textareaClassName}
               />
 
@@ -760,8 +680,7 @@ const SpecificServicePage = () => {
             )}
           </PricingField>
 
-          {/* OVERTIME */}
-
+          {/* OVERTIME CHARGE */}
           <PricingField
             label="Over Time Charge / Hour"
             optional
@@ -769,11 +688,10 @@ const SpecificServicePage = () => {
             labelClassName="font-semibold"
           >
             <input
-              type="text"
               name="overTimeCharge"
               value={formData.overTimeCharge}
               onChange={handleChange}
-              placeholder="Ex : 1500/- INR Per Hour"
+              placeholder="1500"
               className={inputClassName}
             />
 
@@ -784,8 +702,9 @@ const SpecificServicePage = () => {
             )}
           </PricingField>
 
-          {/* DYNAMIC TRAVEL CHARGES */}
-
+          {/* =================================================
+              TRAVEL CHARGES - MANUAL AMOUNT INPUT
+          ================================================= */}
           <PricingField
             label="Travel Charges"
             optional
@@ -793,6 +712,7 @@ const SpecificServicePage = () => {
             labelClassName="font-semibold"
           >
             <div className="flex flex-col gap-[8px]">
+              {/* TRAVEL TYPE */}
               <select
                 name="travelChargeType"
                 value={formData.travelChargeType}
@@ -803,11 +723,16 @@ const SpecificServicePage = () => {
                   No Travel Charge
                 </option>
 
-                <option value="Per Km">Per Km</option>
+                <option value="Per Km">
+                  Per Km
+                </option>
 
-                <option value="Fixed Amount">Fixed Amount</option>
+                <option value="Fixed Amount">
+                  Fixed Amount
+                </option>
               </select>
 
+              {/* MANUAL AMOUNT INPUT */}
               {formData.travelChargeType !== "No Travel Charge" && (
                 <div className="relative">
                   <span className="absolute left-[12px] top-1/2 -translate-y-1/2 text-[15px] text-[#555555]">
@@ -816,31 +741,34 @@ const SpecificServicePage = () => {
 
                   <input
                     type="text"
+                    inputMode="decimal"
                     name="travelChargeAmount"
                     value={formData.travelChargeAmount}
                     onChange={handleChange}
                     placeholder={
                       formData.travelChargeType === "Per Km"
                         ? "Enter amount per km"
-                        : "Enter fixed travel amount"
+                        : "Enter fixed amount"
                     }
                     className={`${inputClassName} pl-[30px]`}
                   />
                 </div>
               )}
 
+              {/* HELPER TEXT */}
               {formData.travelChargeType === "Per Km" && (
                 <p className="text-[13px] text-[#777777]">
-                  Travel charge will be calculated per kilometer.
+                  Enter the travel charge manually for each kilometer.
                 </p>
               )}
 
               {formData.travelChargeType === "Fixed Amount" && (
                 <p className="text-[13px] text-[#777777]">
-                  Enter one fixed travel charge for the service.
+                  Enter the fixed travel charge for the service.
                 </p>
               )}
 
+              {/* TRAVEL VALIDATION */}
               {errors.travelChargeAmount && (
                 <p className="mt-[4px] text-[13px] text-[#c40000]">
                   {errors.travelChargeAmount}
@@ -850,7 +778,6 @@ const SpecificServicePage = () => {
           </PricingField>
 
           {/* MINIMUM BOOKING HOURS */}
-
           <PricingField
             label="Min. Booking Hours"
             optional
@@ -858,11 +785,10 @@ const SpecificServicePage = () => {
             labelClassName="font-semibold"
           >
             <input
-              type="text"
               name="minimumBookingHours"
               value={formData.minimumBookingHours}
               onChange={handleChange}
-              placeholder="Ex : 4 Hours"
+              placeholder="4"
               className={inputClassName}
             />
 
@@ -874,7 +800,6 @@ const SpecificServicePage = () => {
           </PricingField>
 
           {/* WORK DELIVERY TIMELINE */}
-
           <PricingField
             label="Work Delivery Timeline"
             optional
@@ -882,11 +807,10 @@ const SpecificServicePage = () => {
             labelClassName="font-semibold"
           >
             <input
-              type="text"
               name="workDeliveryTimeline"
               value={formData.workDeliveryTimeline}
               onChange={handleChange}
-              placeholder="Ex : Within 3 DAYS of the Event"
+              placeholder="Within 3 days of the event"
               className={inputClassName}
             />
 
@@ -898,13 +822,12 @@ const SpecificServicePage = () => {
           </PricingField>
         </div>
 
-        {/* BUTTONS */}
-
+        {/* FORM BUTTONS */}
         <div className="mt-[22px] flex flex-col-reverse items-center justify-end gap-[12px] sm:flex-row">
           <button
             type="button"
             onClick={handleSaveDraft}
-            className="cursor-pointer text-[18px] font-semibold text-[#c40000]"
+            className="text-[18px] font-semibold text-[#c40000]"
           >
             Save Draft
           </button>
@@ -912,15 +835,16 @@ const SpecificServicePage = () => {
           <button
             type="button"
             onClick={handleSaveService}
-            className="h-[32px] w-[180px] cursor-pointer rounded-[4px] bg-[#333333] px-[18px] text-[18px] font-semibold text-white"
+            className="h-[32px] w-[180px] rounded-[4px] bg-[#333333] px-[18px] text-[18px] font-semibold text-white"
           >
             {editingServiceId ? "Update Service" : "Save Service"}
           </button>
         </div>
       </section>
 
-      {/* SAVED SERVICES */}
-
+      {/* =====================================================
+          SAVED SERVICES
+      ===================================================== */}
       <div className="mt-[12px] space-y-[8px]">
         {savedServices.map((service) => (
           <div
@@ -955,18 +879,18 @@ const SpecificServicePage = () => {
                 </div>
               </div>
 
+              {/* DISPLAY SAVED TRAVEL CHARGE */}
               <p className="mt-[5px] text-[13px] text-[#777777]">
-                Travel: {getTravelText(service)}
+                Travel: {travelText(service)}
               </p>
             </div>
 
-            {/* ACTIONS */}
-
+            {/* ACTION BUTTONS */}
             <div className="ml-[15px] flex shrink-0 items-center gap-[14px]">
               <button
                 type="button"
                 onClick={() => handleEditService(service)}
-                className="cursor-pointer text-[#333333]"
+                className="text-[#333333]"
                 title="Edit"
               >
                 <FiEdit className="text-[18px]" />
@@ -975,7 +899,7 @@ const SpecificServicePage = () => {
               <button
                 type="button"
                 onClick={() => handleDeleteService(service.id)}
-                className="cursor-pointer text-[#900000]"
+                className="text-[#900000]"
                 title="Delete"
               >
                 <FaTrash className="text-[16px]" />
@@ -983,7 +907,7 @@ const SpecificServicePage = () => {
 
               <button
                 type="button"
-                className="cursor-pointer text-[#333333]"
+                className="text-[#333333]"
                 title="View"
               >
                 <LuEyeClosed className="text-[18px]" />
