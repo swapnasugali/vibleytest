@@ -8,7 +8,6 @@ import {
   FaPhoneAlt,
   FaRegUserCircle,
   FaChevronDown,
-  FaCamera,
   FaMoneyBillWave,
 } from "react-icons/fa";
 import {
@@ -397,12 +396,6 @@ const LeadDetails = ({
                 icon={<FaMoneyBillWave />}
                 title="Specific Price Budget"
                 value={lead.budget}
-              />
-
-              <DetailItem
-                icon={<FaCamera />}
-                title="Category"
-                value={lead.category}
               />
             </div>
           </div>
