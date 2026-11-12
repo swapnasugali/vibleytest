@@ -1,19 +1,81 @@
-// ============================================
-// ProfileNavbar.jsx
-// ============================================
 
 import React, { useState } from "react";
 import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const ProfileNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const location = useLocation();
+
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  // All navigation routes
+  const navigationItems = [
+    {
+      name: "DASHBOARD",
+      path: "/service-providers",
+    },
+    {
+      name: "PROFILE",
+      path: "/service-providers/profile",
+    },
+    {
+      name: "PORTFOLIO",
+      path: "/service-providers/profile/portfolio",
+    },
+    {
+      name: "SERVICES / PRICING",
+      path: "/service-providers/services-pricing",
+    },
+    {
+      name: "LEADS",
+      path: "/service-providers/leads",
+    },
+  ];
+
+  // Check active page
+  const isActivePage = (path) => {
+    // Services/Pricing remains active on its sub-pages
+    if (path === "/service-providers/services-pricing") {
+      return location.pathname.startsWith(path);
+    }
+
+    // Other navigation items use exact route matching
+    return location.pathname === path;
+  };
+
+  // Navigation link styles
+  const getDesktopLinkStyle = (path) => {
+    return `
+      whitespace-nowrap
+      text-[12px]
+      font-medium
+      lg:text-[14px]
+      xl:text-[16px]
+      ${
+        isActivePage(path)
+          ? "text-[#e53935]"
+          : "text-[#222]"
+      }
+    `;
+  };
+
+  const getMobileLinkStyle = (path) => {
+    return `
+      text-[15px]
+      font-medium
+      ${
+        isActivePage(path)
+          ? "text-[#e53935]"
+          : "text-[#222]"
+      }
+    `;
   };
 
   return (
@@ -22,15 +84,11 @@ const ProfileNavbar = () => {
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
 
-      {/* ============================================
-          NAVBAR
-          ============================================ */}
+      {/* NAVBAR */}
 
       <div className="flex min-h-[72px] w-full items-center justify-between px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
 
-        {/* ============================================
-            LOGO
-            ============================================ */}
+        {/* LOGO */}
 
         <Link
           to="/service-providers"
@@ -38,7 +96,7 @@ const ProfileNavbar = () => {
           className="flex shrink-0 items-center"
         >
           <img
-            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"}
+            src="https://res.cloudinary.com/porwmjke/image/upload/v1791779698/logo.png"
             alt="Vibely"
             className="
               block
@@ -53,89 +111,24 @@ const ProfileNavbar = () => {
           />
         </Link>
 
-
-        {/* ============================================
-            DESKTOP NAVIGATION
-            ============================================ */}
+        {/* DESKTOP NAVIGATION */}
 
         <nav className="hidden items-center gap-5 md:flex lg:gap-8 xl:gap-10">
 
-          <Link
-            to="/service-providers"
-            className="
-              whitespace-nowrap
-              text-[12px]
-              font-medium
-              text-[#222]
-              lg:text-[14px]
-              xl:text-[16px]
-            "
-          >
-            DASHBOARD
-          </Link>
-
-          <Link
-            to="/service-providers/profile"
-            className="
-              whitespace-nowrap
-              text-[12px]
-              font-medium
-              text-[#e53935]
-              lg:text-[14px]
-              xl:text-[16px]
-            "
-          >
-            PROFILE
-          </Link>
-
-          <Link
-            to="/service-providers/profile/portfolio"
-            className="
-              whitespace-nowrap
-              text-[12px]
-              font-medium
-              text-[#222]
-              lg:text-[14px]
-              xl:text-[16px]
-            "
-          >
-            PORTFOLIO
-          </Link>
-
-          <button
-            type="button"
-            className="
-              whitespace-nowrap
-              text-[12px]
-              font-medium
-              text-[#222]
-              lg:text-[14px]
-              xl:text-[16px]
-            "
-          >
-            SERVICES / PRICING
-          </button>
-
-          <button
-            type="button"
-            className="
-              whitespace-nowrap
-              text-[12px]
-              font-medium
-              text-[#222]
-              lg:text-[14px]
-              xl:text-[16px]
-            "
-          >
-            LEADS
-          </button>
+          {navigationItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={closeMenu}
+              className={getDesktopLinkStyle(item.path)}
+            >
+              {item.name}
+            </Link>
+          ))}
 
         </nav>
 
-
-        {/* ============================================
-            RIGHT SIDE
-            ============================================ */}
+        {/* RIGHT SIDE */}
 
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">
 
@@ -143,10 +136,11 @@ const ProfileNavbar = () => {
 
           <Link
             to="/"
+            onClick={closeMenu}
             className="flex shrink-0 items-center"
           >
             <img
-              src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"}
+              src="https://res.cloudinary.com/porwmjke/image/upload/v1791779703/account.jpg"
               alt="Account"
               className="
                 block
@@ -161,7 +155,6 @@ const ProfileNavbar = () => {
               "
             />
           </Link>
-
 
           {/* MOBILE MENU BUTTON */}
 
@@ -185,10 +178,7 @@ const ProfileNavbar = () => {
 
       </div>
 
-
-      {/* ============================================
-          MOBILE MENU
-          ============================================ */}
+      {/* MOBILE MENU */}
 
       {menuOpen && (
         <nav
@@ -210,71 +200,16 @@ const ProfileNavbar = () => {
 
           <div className="flex flex-col gap-4">
 
-            <Link
-              to="/service-providers"
-              onClick={closeMenu}
-              className="
-                text-[15px]
-                font-medium
-                text-[#222]
-              "
-            >
-              DASHBOARD
-            </Link>
-
-
-            <Link
-              to="/service-providers/profile"
-              onClick={closeMenu}
-              className="
-                text-[15px]
-                font-medium
-                text-[#e53935]
-              "
-            >
-              PROFILE
-            </Link>
-
-
-            <Link
-              to="/service-providers/profile/portfolio"
-              onClick={closeMenu}
-              className="
-                text-[15px]
-                font-medium
-                text-[#222]
-              "
-            >
-              PORTFOLIO
-            </Link>
-
-
-            <button
-              type="button"
-              onClick={closeMenu}
-              className="
-                text-left
-                text-[15px]
-                font-medium
-                text-[#222]
-              "
-            >
-              SERVICES / PRICING
-            </button>
-
-
-            <button
-              type="button"
-              onClick={closeMenu}
-              className="
-                text-left
-                text-[15px]
-                font-medium
-                text-[#222]
-              "
-            >
-              LEADS
-            </button>
+            {navigationItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={closeMenu}
+                className={getMobileLinkStyle(item.path)}
+              >
+                {item.name}
+              </Link>
+            ))}
 
           </div>
 

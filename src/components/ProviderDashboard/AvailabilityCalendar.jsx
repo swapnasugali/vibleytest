@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 
 const STORAGE_KEY = "vibelyCalendarNotes";
+const BLOCKED_DATES_STORAGE_KEY = "vibelyBlockedDates";
 
 const monthNames = [
   "JANUARY", "FEBRUARY", "MARCH", "APRIL",
@@ -168,7 +169,9 @@ const CalendarGrid = ({
   month,
   today,
   notes,
+  blockedDates,
   onDateClick,
+  selectedDateKey = "",
   interactive = false,
   popup = false,
 }) => {
@@ -200,6 +203,7 @@ const CalendarGrid = ({
             const isToday = dateKey === todayKey;
 
             const isMarked = Boolean(notes[dateKey]);
+            const isBlocked = Boolean(blockedDates?.[dateKey]);
 
             const isEvent =
               dateStatus?.type === "event";
@@ -212,6 +216,9 @@ const CalendarGrid = ({
 
             if (day === "") {
               dateStyle = "bg-transparent";
+            } else if (isBlocked) {
+              dateStyle =
+                "bg-[#d00000] font-semibold text-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]";
             } else if (isMarked || isEvent) {
               dateStyle =
                 "bg-[#f5bd00] font-semibold text-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]";
@@ -232,6 +239,7 @@ const CalendarGrid = ({
               rounded-[7px] font-medium transition
               ${dateSize}
               ${dateStyle}
+              ${selectedDateKey && dateKey === selectedDateKey ? "ring-2 ring-[#d99d00] ring-offset-1" : ""}
               ${
                 interactive && day !== ""
                   ? "cursor-pointer hover:ring-2 hover:ring-[#d99d00]"
@@ -299,10 +307,13 @@ const AvailabilityCalendar = () => {
     () => new Date(today.getFullYear(), today.getMonth(), 1)
   );
 
-  // Selected date
+  // Selected date inside the Edit Calendar popup
   const [selectedDate, setSelectedDate] = useState(
     () => new Date(today)
   );
+
+  // Date selected directly from the dashboard calendar
+  const [mainSelectedDate, setMainSelectedDate] = useState(null);
 
   // Saved notes
   const [notes, setNotes] = useState(() => {
@@ -311,6 +322,17 @@ const AvailabilityCalendar = () => {
       return saved ? JSON.parse(saved) : {};
     } catch (error) {
       console.error("Unable to load saved notes:", error);
+      return {};
+    }
+  });
+
+  // Dates blocked by the user from the calendar UI
+  const [blockedDates, setBlockedDates] = useState(() => {
+    try {
+      const saved = localStorage.getItem(BLOCKED_DATES_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch (error) {
+      console.error("Unable to load blocked dates:", error);
       return {};
     }
   });
@@ -330,6 +352,18 @@ const AvailabilityCalendar = () => {
     }
   }, [notes]);
 
+  // Save blocked dates automatically so they remain after refresh
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        BLOCKED_DATES_STORAGE_KEY,
+        JSON.stringify(blockedDates)
+      );
+    } catch (error) {
+      console.error("Unable to save blocked dates:", error);
+    }
+  }, [blockedDates]);
+
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
@@ -343,8 +377,35 @@ const AvailabilityCalendar = () => {
     ? getDateKey(selectedDate)
     : "";
 
+  // Select a date directly from the dashboard calendar
+  const handleMainCalendarDateClick = (day) => {
+    if (!day) return;
+
+    setMainSelectedDate(new Date(currentYear, currentMonth, day));
+  };
+
+  // Block or unblock the date selected on the dashboard calendar
+  const handleToggleMainBlockedDate = () => {
+    if (!mainSelectedDate) return;
+
+    const key = getDateKey(mainSelectedDate);
+
+    setBlockedDates((prev) => {
+      const updatedBlockedDates = { ...prev };
+
+      if (updatedBlockedDates[key]) {
+        delete updatedBlockedDates[key];
+      } else {
+        updatedBlockedDates[key] = true;
+      }
+
+      return updatedBlockedDates;
+    });
+  };
+
   // Previous month
   const handlePreviousMonth = () => {
+    setMainSelectedDate(null);
     setCurrentDate(
       (prev) =>
         new Date(
@@ -359,6 +420,7 @@ const AvailabilityCalendar = () => {
 
   // Next month
   const handleNextMonth = () => {
+    setMainSelectedDate(null);
     setCurrentDate(
       (prev) =>
         new Date(
@@ -483,6 +545,25 @@ const AvailabilityCalendar = () => {
     setNote("");
   };
 
+  // Block or unblock the selected date directly from the UI
+  const handleToggleBlockedDate = () => {
+    if (!selectedDate) return;
+
+    const key = getDateKey(selectedDate);
+
+    setBlockedDates((prev) => {
+      const updatedBlockedDates = { ...prev };
+
+      if (updatedBlockedDates[key]) {
+        delete updatedBlockedDates[key];
+      } else {
+        updatedBlockedDates[key] = true;
+      }
+
+      return updatedBlockedDates;
+    });
+  };
+
   // View all dates
   const handleViewAllDates = () => {
     setShowAllDates((prev) => !prev);
@@ -491,6 +572,10 @@ const AvailabilityCalendar = () => {
   // Status text
   const getStatusLabel = (date) => {
     const key = getDateKey(date);
+
+    if (blockedDates[key]) {
+      return "Blocked";
+    }
 
     if (notes[key]) {
       return notes[key];
@@ -503,8 +588,8 @@ const AvailabilityCalendar = () => {
   const getStatusColor = (date) => {
     const key = getDateKey(date);
 
-    if (notes[key]) {
-      return "text-[#a90000]";
+    if (blockedDates[key] || notes[key]) {
+      return "text-[#d00000]";
     }
 
     const status = getDateStatus(date, today);
@@ -674,7 +759,36 @@ const AvailabilityCalendar = () => {
                 month={currentMonth}
                 today={today}
                 notes={notes}
+                blockedDates={blockedDates}
+                onDateClick={handleMainCalendarDateClick}
+                selectedDateKey={mainSelectedDate ? getDateKey(mainSelectedDate) : ""}
+                interactive={true}
               />
+
+              {/* DIRECT BLOCK / UNBLOCK ACTION */}
+              <div className="mt-[14px] border-t border-[#d5d5d5] pt-[12px]">
+                {mainSelectedDate ? (
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[12px] font-semibold text-[#333]">
+                        {formatDate(mainSelectedDate)}
+                      </p>
+                      <p className={`mt-1 text-[12px] font-semibold ${blockedDates[getDateKey(mainSelectedDate)] ? "text-[#d00000]" : "text-green-600"}`}>
+                        {blockedDates[getDateKey(mainSelectedDate)] ? "Blocked" : "Available"}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleToggleMainBlockedDate}
+                      className={`rounded-[7px] px-[13px] py-[8px] text-[12px] font-semibold text-white transition ${blockedDates[getDateKey(mainSelectedDate)] ? "bg-[#36834a] hover:bg-[#286b39]" : "bg-[#d00000] hover:bg-[#ad0000]"}`}
+                    >
+                      {blockedDates[getDateKey(mainSelectedDate)] ? "Unblock Date" : "Block Date"}
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-center text-[11px] text-[#777]">Select a date to block or unblock it</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -803,6 +917,7 @@ const AvailabilityCalendar = () => {
                     month={modalMonthIndex}
                     today={today}
                     notes={notes}
+                    blockedDates={blockedDates}
                     onDateClick={handleSelectDate}
                     interactive={true}
                     popup={true}
@@ -813,7 +928,7 @@ const AvailabilityCalendar = () => {
                 <div className="mt-[18px] flex min-w-0 items-center justify-between gap-2 border-t border-[#c7c7c7] px-[4px] pt-[18px]">
 
                   <h3 className="shrink-0 text-[15px] font-semibold text-[#999] sm:text-[18px]">
-                    MARK DATE
+                    SELECTED DATE
                   </h3>
 
                   <span className="truncate text-right text-[15px] text-[#999] sm:text-[19px]">
@@ -828,12 +943,36 @@ const AvailabilityCalendar = () => {
                   <FaInfoCircle className="mt-[2px] shrink-0 text-[20px] text-[#f0ae00]" />
 
                   <span className="leading-[1.5]">
-                    mark/note any date by clicking on the date
+                    Select any date on the calendar, then use the button below to block or unblock it.
                   </span>
                 </div>
 
-                {/* NOTE INPUT */}
-                <div className="mt-[14px]">
+                {/* BLOCK / UNBLOCK SELECTED DATE */}
+                <div className="mt-[18px] flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-[14px] font-medium text-[#444] sm:text-[15px]">
+                    {selectedDate && blockedDates[selectedDateKey]
+                      ? "This date is currently blocked"
+                      : "This date is currently available"}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={handleToggleBlockedDate}
+                    disabled={!selectedDate}
+                    className={`min-w-[145px] rounded-[8px] px-[20px] py-[11px] text-[14px] font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50 sm:text-[16px] ${
+                      selectedDate && blockedDates[selectedDateKey]
+                        ? "bg-[#36834a] hover:bg-[#286b39]"
+                        : "bg-[#d00000] hover:bg-[#ad0000]"
+                    }`}
+                  >
+                    {selectedDate && blockedDates[selectedDateKey]
+                      ? "Unblock Date"
+                      : "Block Date"}
+                  </button>
+                </div>
+
+                {/* OPTIONAL NOTE INPUT */}
+                <div className="mt-[18px]">
                   <input
                     type="text"
                     value={note}

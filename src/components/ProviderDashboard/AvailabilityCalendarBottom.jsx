@@ -10,7 +10,7 @@ const AvailabilityCalendarBottom = () => {
 
       <div className="flex items-start gap-[35px]">
 
-        {/* TWO MINI CALENDARS */}
+        {/* TWO MINI CALENDARS */      view all dates}
 
         <div className="flex w-[115px] flex-col items-center gap-[38px]">
 
