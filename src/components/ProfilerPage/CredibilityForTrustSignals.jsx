@@ -15,46 +15,60 @@ const CERTIFICATION_TYPES = [
   "png",
 ];
 
+const initialCertifications = [
+  {
+    name: "Cambridge - Study Of Photography Completion",
+    file: null,
+  },
+];
+
+const initialAwards = [
+  {
+    name: "Best Candid Photography By Dada Saheb Palke.Pdf",
+    file: null,
+  },
+];
+
 const CredibilityForTrustSignals = () => {
   const [isEditing, setIsEditing] = useState(false);
 
-  // Total Events Handled
-  const [totalEvents, setTotalEvents] = useState("");
+  // Total Events
+  const [totalEvents, setTotalEvents] = useState("163");
   const [savedTotalEvents, setSavedTotalEvents] = useState("163");
   const [totalEventsError, setTotalEventsError] = useState("");
 
-  const [certifications, setCertifications] = useState([
-    "Cambridge - Study Of Photography Completion",
-  ]);
+  // Certification files
+  const [certifications, setCertifications] = useState(
+    initialCertifications
+  );
 
-  const [awards, setAwards] = useState([
-    "Best Candid Photography By Dada Saheb Palke.Pdf",
-  ]);
+  const [savedCertifications, setSavedCertifications] = useState(
+    initialCertifications
+  );
 
-  const [savedCertifications, setSavedCertifications] =
-    useState([...certifications]);
+  // Award files
+  const [awards, setAwards] = useState(initialAwards);
 
-  const [savedAwards, setSavedAwards] =
-    useState([...awards]);
+  const [savedAwards, setSavedAwards] = useState(initialAwards);
 
+  // Error and success messages
   const [certificationError, setCertificationError] = useState("");
   const [awardError, setAwardError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   // Open edit mode
   const handleEdit = () => {
-    if (!isEditing) {
-      // Input empty ga untundi; placeholder 163 kanipisthundi
-      setTotalEvents("");
+    if (isEditing) return;
 
-      setCertifications([...savedCertifications]);
-      setAwards([...savedAwards]);
+    setTotalEvents(savedTotalEvents);
 
-      setTotalEventsError("");
-      setCertificationError("");
-      setAwardError("");
-      setSuccessMessage("");
-    }
+    setCertifications([...savedCertifications]);
+    setAwards([...savedAwards]);
+
+    setTotalEventsError("");
+    setCertificationError("");
+    setAwardError("");
+    setSuccessMessage("");
 
     setIsEditing(true);
   };
@@ -87,7 +101,7 @@ const CredibilityForTrustSignals = () => {
     const validFiles = [];
 
     const existingNames = new Set(
-      currentFiles.map((name) => name.toLowerCase())
+      currentFiles.map((item) => item.name.toLowerCase())
     );
 
     selectedFiles.forEach((file) => {
@@ -113,7 +127,7 @@ const CredibilityForTrustSignals = () => {
         return;
       }
 
-      // Duplicate file validation
+      // Duplicate filename validation
       const normalizedName = file.name.toLowerCase();
 
       if (
@@ -126,7 +140,10 @@ const CredibilityForTrustSignals = () => {
         return;
       }
 
-      validFiles.push(file);
+      validFiles.push({
+        name: file.name,
+        file: file,
+      });
     });
 
     // Maximum 10 files validation
@@ -134,6 +151,7 @@ const CredibilityForTrustSignals = () => {
 
     if (remainingSlots <= 0) {
       setError(`Maximum ${MAX_FILES} files allowed.`);
+      setSuccessMessage("");
       return;
     }
 
@@ -148,7 +166,7 @@ const CredibilityForTrustSignals = () => {
     if (filesToAdd.length > 0) {
       setFiles((previousFiles) => [
         ...previousFiles,
-        ...filesToAdd.map((file) => file.name),
+        ...filesToAdd,
       ]);
     }
 
@@ -178,7 +196,7 @@ const CredibilityForTrustSignals = () => {
     );
   };
 
-  // Remove a certification
+  // Remove certification
   const handleRemoveCertification = (indexToRemove) => {
     setCertifications((previousFiles) =>
       previousFiles.filter((_, index) => index !== indexToRemove)
@@ -188,7 +206,7 @@ const CredibilityForTrustSignals = () => {
     setSuccessMessage("");
   };
 
-  // Remove an award
+  // Remove award
   const handleRemoveAward = (indexToRemove) => {
     setAwards((previousFiles) =>
       previousFiles.filter((_, index) => index !== indexToRemove)
@@ -210,21 +228,31 @@ const CredibilityForTrustSignals = () => {
       return;
     }
 
+    const updatedCertifications = [...certifications];
+    const updatedAwards = [...awards];
+
     setSavedTotalEvents(totalEvents);
-    setSavedCertifications([...certifications]);
-    setSavedAwards([...awards]);
+    setSavedCertifications(updatedCertifications);
+    setSavedAwards(updatedAwards);
 
     setTotalEventsError("");
     setCertificationError("");
     setAwardError("");
-    setSuccessMessage("Changes saved successfully.");
+
+    console.log("Credibility Details:", {
+      totalEvents,
+      certifications: updatedCertifications,
+      awards: updatedAwards,
+    });
 
     setIsEditing(false);
+    setSuccessMessage("Changes saved successfully.");
   };
 
   // Cancel changes
   const handleCancel = () => {
     setTotalEvents(savedTotalEvents);
+
     setCertifications([...savedCertifications]);
     setAwards([...savedAwards]);
 
@@ -235,6 +263,41 @@ const CredibilityForTrustSignals = () => {
 
     setIsEditing(false);
   };
+
+  // Reusable upload button
+  const UploadButton = ({
+    accept,
+    onChange,
+    disabled,
+    label,
+  }) => (
+    <label
+      className={`
+        flex h-[25px] w-fit shrink-0 items-center gap-[5px]
+        rounded-[4px] border border-[#cfcfcf]
+        bg-white px-[10px] text-[12px] text-[#6D6D6D]
+        shadow-sm
+        ${
+          isEditing && !disabled
+            ? "cursor-pointer hover:bg-gray-50"
+            : "cursor-not-allowed opacity-50"
+        }
+      `}
+    >
+      <FiUpload className="text-[12px] text-black" />
+
+      {label}
+
+      <input
+        type="file"
+        accept={accept}
+        multiple
+        disabled={!isEditing || disabled}
+        onChange={onChange}
+        className="hidden"
+      />
+    </label>
+  );
 
   return (
     <section
@@ -250,14 +313,17 @@ const CredibilityForTrustSignals = () => {
         <button
           type="button"
           onClick={handleEdit}
+          disabled={isEditing}
           title="Edit credibility details"
           aria-label="Edit credibility details"
           aria-pressed={isEditing}
           className={`flex h-[24px] w-[24px] items-center justify-center rounded-[3px] border border-transparent transition hover:border-[#e5e5e5] hover:bg-gray-100 ${
-            isEditing ? "bg-[#fff8e6]" : "bg-transparent"
+            isEditing
+              ? "cursor-default bg-[#fff8e6]"
+              : "cursor-pointer bg-transparent"
           }`}
         >
-          <FaPen className="cursor-pointer text-[13px] text-[#d99d00]" />
+          <FaPen className="text-[13px] text-[#d99d00]" />
         </button>
 
         {isEditing && (
@@ -269,15 +335,20 @@ const CredibilityForTrustSignals = () => {
 
       {/* CONTENT */}
       <div className="px-[16px] pb-[14px] pt-[10px]">
+
         {/* TOTAL EVENTS HANDLED */}
         <div className="mb-[10px]">
-          <label className="mb-[5px] block text-[18px] font-semibold text-[#252525]">
+          <label
+            htmlFor="totalEvents"
+            className="mb-[5px] block text-[18px] font-semibold text-[#252525]"
+          >
             Total Events Handled
           </label>
 
           <div className="flex h-[30px] w-full items-center rounded-[4px] border border-[#cfcfcf] px-[10px]">
             {isEditing ? (
               <input
+                id="totalEvents"
                 type="text"
                 inputMode="numeric"
                 value={totalEvents}
@@ -315,19 +386,19 @@ const CredibilityForTrustSignals = () => {
             </span>
           </div>
 
-          {certifications.map((fileName, index) => (
+          {certifications.map((item, index) => (
             <div
-              key={`${fileName}-${index}`}
+              key={`${item.name}-${index}`}
               className="mb-[6px] flex items-center gap-[6px]"
             >
               <div
-                title={fileName}
+                title={item.name}
                 className="flex h-[25px] min-w-0 flex-1 items-center gap-[6px] overflow-hidden rounded-[4px] border border-[#cfcfcf] px-[8px] text-[12px] text-[#6D6D6D]"
               >
                 <FaFileAlt className="shrink-0 text-[12px] text-black" />
 
                 <span className="truncate">
-                  {fileName}
+                  {item.name}
                 </span>
               </div>
 
@@ -336,48 +407,29 @@ const CredibilityForTrustSignals = () => {
                   type="button"
                   onClick={() => handleRemoveCertification(index)}
                   className="shrink-0 text-[12px] text-red-600 hover:text-red-800"
-                  aria-label={`Remove ${fileName}`}
+                  aria-label={`Remove ${item.name}`}
                   title="Remove file"
                 >
                   Remove
                 </button>
               )}
-
-              {isEditing && index === certifications.length - 1 && (
-                <label className="flex h-[25px] shrink-0 cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] bg-white px-[10px] text-[12px] text-[#6D6D6D] shadow-sm">
-                  <FiUpload className="text-[12px] text-black" />
-
-                  Upload Another
-
-                  <input
-                    type="file"
-                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                    multiple
-                    disabled={certifications.length >= MAX_FILES}
-                    onChange={handleCertificationUpload}
-                    className="hidden"
-                  />
-                </label>
-              )}
             </div>
           ))}
 
-          {certifications.length === 0 && isEditing && (
-            <label className="mb-[6px] flex h-[30px] w-fit cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] text-[#6D6D6D]">
-              <FiUpload className="text-black" />
+          <div className="mt-[6px] flex flex-wrap items-center justify-between gap-2">
+            <span className="text-[11px] text-[#777]">
+              {certifications.length}/{MAX_FILES} files uploaded
+            </span>
 
-              Upload Certification
-
-              <input
-                type="file"
+            {isEditing && (
+              <UploadButton
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                multiple
-                disabled={certifications.length >= MAX_FILES}
                 onChange={handleCertificationUpload}
-                className="hidden"
+                disabled={certifications.length >= MAX_FILES}
+                label="Upload Another"
               />
-            </label>
-          )}
+            )}
+          </div>
 
           {certifications.length >= MAX_FILES && (
             <p className="mt-1 text-[12px] text-[#b42318]">
@@ -407,19 +459,19 @@ const CredibilityForTrustSignals = () => {
             </span>
           </div>
 
-          {awards.map((fileName, index) => (
+          {awards.map((item, index) => (
             <div
-              key={`${fileName}-${index}`}
+              key={`${item.name}-${index}`}
               className="mb-[6px] flex items-center gap-[6px]"
             >
               <div
-                title={fileName}
+                title={item.name}
                 className="flex h-[25px] min-w-0 flex-1 items-center gap-[6px] overflow-hidden rounded-[4px] border border-[#cfcfcf] px-[8px] text-[12px] text-[#6D6D6D]"
               >
                 <FaFileAlt className="shrink-0 text-[12px] text-black" />
 
                 <span className="truncate">
-                  {fileName}
+                  {item.name}
                 </span>
               </div>
 
@@ -428,48 +480,29 @@ const CredibilityForTrustSignals = () => {
                   type="button"
                   onClick={() => handleRemoveAward(index)}
                   className="shrink-0 text-[12px] text-red-600 hover:text-red-800"
-                  aria-label={`Remove ${fileName}`}
+                  aria-label={`Remove ${item.name}`}
                   title="Remove file"
                 >
                   Remove
                 </button>
               )}
-
-              {isEditing && index === awards.length - 1 && (
-                <label className="flex h-[25px] shrink-0 cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] bg-white px-[10px] text-[12px] text-[#6D6D6D] shadow-sm">
-                  <FiUpload className="text-[12px] text-black" />
-
-                  Upload Another
-
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    multiple
-                    disabled={awards.length >= MAX_FILES}
-                    onChange={handleAwardUpload}
-                    className="hidden"
-                  />
-                </label>
-              )}
             </div>
           ))}
 
-          {awards.length === 0 && isEditing && (
-            <label className="mb-[6px] flex h-[30px] w-fit cursor-pointer items-center gap-[5px] rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] text-[#6D6D6D]">
-              <FiUpload className="text-black" />
+          <div className="mt-[6px] flex flex-wrap items-center justify-between gap-2">
+            <span className="text-[11px] text-[#777]">
+              {awards.length}/{MAX_FILES} files uploaded
+            </span>
 
-              Upload Award PDF
-
-              <input
-                type="file"
+            {isEditing && (
+              <UploadButton
                 accept=".pdf"
-                multiple
-                disabled={awards.length >= MAX_FILES}
                 onChange={handleAwardUpload}
-                className="hidden"
+                disabled={awards.length >= MAX_FILES}
+                label="Upload Award PDF"
               />
-            </label>
-          )}
+            )}
+          </div>
 
           {awards.length >= MAX_FILES && (
             <p className="mt-1 text-[12px] text-[#b42318]">
@@ -505,6 +538,7 @@ const CredibilityForTrustSignals = () => {
           </div>
         )}
 
+        {/* SUCCESS MESSAGE */}
         {successMessage && !isEditing && (
           <p
             role="status"

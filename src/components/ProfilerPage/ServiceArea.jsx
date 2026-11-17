@@ -4,6 +4,7 @@ import { FiPlus } from "react-icons/fi";
 
 const ServiceArea = () => {
   const [baseLocation, setBaseLocation] = useState("");
+
   const [locations, setLocations] = useState([
     "Telangana",
     "Andhra Pradesh",
@@ -21,6 +22,7 @@ const ServiceArea = () => {
   const [showDaysDropdown, setShowDaysDropdown] = useState(false);
 
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
 
   const weekdays = [
     "Monday",
@@ -39,12 +41,17 @@ const ServiceArea = () => {
   const inputClass =
     "h-[30px] w-full rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] outline-none placeholder:text-[#777] focus:border-[#970000]";
 
+  // Clear success message when user edits
+  const clearSuccessMessage = () => {
+    setSuccessMessage("");
+  };
+
   // Base location validation
   const handleBaseLocationChange = (event) => {
-    // Allow only alphabets, spaces, commas, dots and hyphens
     const value = event.target.value.replace(/[^\p{L}\s,.-]/gu, "");
 
     setBaseLocation(value);
+    clearSuccessMessage();
 
     let message = "";
 
@@ -113,6 +120,7 @@ const ServiceArea = () => {
     setLocations((prev) => [...prev, location]);
     setNewLocation("");
     setShowLocationInput(false);
+    clearSuccessMessage();
 
     setErrors((prev) => ({
       ...prev,
@@ -131,37 +139,53 @@ const ServiceArea = () => {
       ...prev,
       locations: "",
     }));
+
+    clearSuccessMessage();
   };
 
-  // Update operation timings without validation
+  // Validate 12-hour time format
+  const isValidTime = (time) => {
+    const timePattern =
+      /^(0?[1-9]|1[0-2]):[0-5]\d\s?(AM|PM)$/i;
+
+    return timePattern.test(time.trim());
+  };
+
+  // Update operation timings
   const handleTimeChange = (field, value) => {
     if (field === "from") {
       setFromTime(value);
     } else {
       setToTime(value);
     }
+
+    clearSuccessMessage();
+
+    setErrors((prev) => ({
+      ...prev,
+      fromTime: "",
+      toTime: "",
+    }));
   };
 
   // Select availability days
   const handleDayChange = (day) => {
     setAvailableDays((prev) => {
-      // Select or deselect all weekdays
       if (day === "All Days") {
         return prev.includes("All Days") ? [] : ["All Days"];
       }
 
-      // Convert All Days selection into individual weekdays
       const selectedDays = prev.includes("All Days")
         ? [...weekdays]
         : [...prev];
 
-      // Toggle the selected individual day
       const updatedDays = selectedDays.includes(day)
         ? selectedDays.filter((item) => item !== day)
         : [...selectedDays, day];
 
-      // If all seven days are selected, show All Days
-      if (weekdays.every((weekday) => updatedDays.includes(weekday))) {
+      if (
+        weekdays.every((weekday) => updatedDays.includes(weekday))
+      ) {
         return ["All Days"];
       }
 
@@ -172,9 +196,22 @@ const ServiceArea = () => {
       ...prev,
       availableDays: "",
     }));
+
+    clearSuccessMessage();
   };
 
-  // Submit: no operation timing validation
+  // Close location input
+  const handleCancelLocation = () => {
+    setShowLocationInput(false);
+    setNewLocation("");
+
+    setErrors((prev) => ({
+      ...prev,
+      newLocation: "",
+    }));
+  };
+
+  // Submit service area details
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -198,18 +235,33 @@ const ServiceArea = () => {
         "Select at least one available day.";
     }
 
+    if (!isValidTime(fromTime)) {
+      nextErrors.fromTime =
+        "Enter a valid time (Example: 10:00am).";
+    }
+
+    if (!isValidTime(toTime)) {
+      nextErrors.toTime =
+        "Enter a valid time (Example: 10:00pm).";
+    }
+
     setErrors(nextErrors);
+    setSuccessMessage("");
 
     if (Object.keys(nextErrors).length === 0) {
-      console.log("Service Area Details:", {
+      const serviceAreaDetails = {
         baseLocation: baseLocation.trim(),
-        serviceableLocations: locations,
+        serviceableLocations: [...locations],
         operationTimings: {
-          from: fromTime,
-          to: toTime,
+          from: fromTime.trim(),
+          to: toTime.trim(),
         },
-        availableDays,
-      });
+        availableDays: [...availableDays],
+      };
+
+      console.log("Service Area Details:", serviceAreaDetails);
+
+      setSuccessMessage("Service area details saved successfully.");
     }
   };
 
@@ -232,11 +284,15 @@ const ServiceArea = () => {
       >
         {/* BASE LOCATION */}
         <div>
-          <label className="mb-[5px] block text-[18px] font-semibold text-[#2E2E2E]">
+          <label
+            htmlFor="baseLocation"
+            className="mb-[5px] block text-[18px] font-semibold text-[#2E2E2E]"
+          >
             Base Area Location
           </label>
 
           <input
+            id="baseLocation"
             type="text"
             value={baseLocation}
             onChange={handleBaseLocationChange}
@@ -301,10 +357,13 @@ const ServiceArea = () => {
                   value={newLocation}
                   onChange={(event) => {
                     setNewLocation(event.target.value);
+
                     setErrors((prev) => ({
                       ...prev,
                       newLocation: "",
                     }));
+
+                    clearSuccessMessage();
                   }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
@@ -313,12 +372,7 @@ const ServiceArea = () => {
                     }
 
                     if (event.key === "Escape") {
-                      setShowLocationInput(false);
-                      setNewLocation("");
-                      setErrors((prev) => ({
-                        ...prev,
-                        newLocation: "",
-                      }));
+                      handleCancelLocation();
                     }
                   }}
                   maxLength={50}
@@ -343,14 +397,7 @@ const ServiceArea = () => {
 
               <button
                 type="button"
-                onClick={() => {
-                  setShowLocationInput(false);
-                  setNewLocation("");
-                  setErrors((prev) => ({
-                    ...prev,
-                    newLocation: "",
-                  }));
-                }}
+                onClick={handleCancelLocation}
                 className="rounded-[4px] border border-[#ccc] px-[10px] py-[7px] text-[12px]"
               >
                 Cancel
@@ -387,6 +434,7 @@ const ServiceArea = () => {
                   handleTimeChange("from", event.target.value)
                 }
                 placeholder="10:00am"
+                aria-label="Opening time"
                 className="h-[30px] w-[85px] rounded-[4px] border border-[#cfcfcf] px-[7px] text-[12px] outline-none focus:border-[#970000]"
               />
 
@@ -401,9 +449,18 @@ const ServiceArea = () => {
                   handleTimeChange("to", event.target.value)
                 }
                 placeholder="10:00pm"
+                aria-label="Closing time"
                 className="h-[30px] w-[85px] rounded-[4px] border border-[#cfcfcf] px-[7px] text-[12px] outline-none focus:border-[#970000]"
               />
             </div>
+
+            {errors.fromTime && (
+              <p className={errorClass}>{errors.fromTime}</p>
+            )}
+
+            {errors.toTime && (
+              <p className={errorClass}>{errors.toTime}</p>
+            )}
           </div>
 
           {/* AVAILABILITY DROPDOWN */}
@@ -418,6 +475,7 @@ const ServiceArea = () => {
                 setShowDaysDropdown((prev) => !prev)
               }
               aria-expanded={showDaysDropdown}
+              aria-label="Select available days"
               className="flex h-[30px] w-full items-center justify-between rounded-[4px] border border-[#cfcfcf] bg-white px-[10px] text-left text-[12px] text-[#777] outline-none"
             >
               <span className="truncate">
@@ -449,6 +507,7 @@ const ServiceArea = () => {
                       onChange={() => handleDayChange(day)}
                       className="accent-[#970000]"
                     />
+
                     {day}
                   </label>
                 ))}
@@ -471,6 +530,15 @@ const ServiceArea = () => {
           >
             Save Service Area
           </button>
+
+          {successMessage && (
+            <p
+              role="status"
+              className="mt-[8px] text-[12px] font-medium text-green-600"
+            >
+              {successMessage}
+            </p>
+          )}
         </div>
       </form>
     </section>

@@ -22,7 +22,7 @@ const BasicInfo = () => {
     teamSize: "",
   });
 
-  // Allow only alphabets and spaces
+  // Common input change handler
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -45,7 +45,7 @@ const BasicInfo = () => {
     setSuccessMessage("");
   };
 
-  // Validate all fields
+  // Validate form
   const validateForm = () => {
     const newErrors = {};
 
@@ -129,7 +129,7 @@ const BasicInfo = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Open language input
+  // Add language
   const handleAddLanguage = () => {
     if (languages.length >= 10) {
       setErrors((prev) => ({
@@ -139,14 +139,14 @@ const BasicInfo = () => {
       return;
     }
 
+    setNewLanguage("");
+    setShowLanguageInput(true);
+
     setErrors((prev) => ({
       ...prev,
       languages: "",
       newLanguage: "",
     }));
-
-    setNewLanguage("");
-    setShowLanguageInput(true);
   };
 
   // Save language
@@ -221,7 +221,7 @@ const BasicInfo = () => {
     }));
   };
 
-  // Enter and Escape keyboard functionality
+  // Enter and Escape keyboard support
   const handleLanguageKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -267,23 +267,27 @@ const BasicInfo = () => {
 
     console.log("Basic Info:", basicInfo);
 
-    setSuccessMessage("Basic information validated successfully.");
+    setSuccessMessage(
+      "Basic information validated successfully."
+    );
   };
 
+  // Common styles
   const labelClass =
-    "mb-[5px] block text-[18px] font-semibold text-[#2E2E2E]";
+    "mb-[6px] block text-[16px] font-semibold text-[#2E2E2E]";
 
   const inputClass =
-    "h-[30px] w-full rounded-[4px] border border-[#cfcfcf] bg-white px-[10px] text-[12px] text-[#555] outline-none focus:border-[#970000]";
+    "h-[38px] w-full rounded-[5px] border border-[#cfcfcf] bg-white px-[11px] text-[13px] text-[#444] outline-none transition-all duration-200 placeholder:text-[#999] focus:border-[#970000] focus:ring-2 focus:ring-[#970000]/10";
 
-  const errorClass = "mt-[4px] text-[12px] text-red-600";
+  const errorClass =
+    "mt-[5px] text-[12px] font-medium text-red-600";
 
   return (
     <section
-      className="w-full rounded-[4px] bg-white"
+      className="w-full overflow-hidden rounded-[5px] border border-[#eeeeee] bg-white shadow-sm"
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
-      {/* Remove number input arrows even when focused */}
+      {/* Number Input Spinner Styling */}
       <style>{`
         input.number-input-no-spinner {
           appearance: textfield !important;
@@ -296,21 +300,28 @@ const BasicInfo = () => {
           appearance: none !important;
           display: none !important;
           margin: 0 !important;
-          opacity: 0 !important;
-          width: 0 !important;
-          height: 0 !important;
         }
 
-        input.number-input-no-spinner:focus::-webkit-inner-spin-button,
-        input.number-input-no-spinner:focus::-webkit-outer-spin-button {
-          display: none !important;
-          opacity: 0 !important;
+        input.number-input-no-spinner:focus {
+          outline: none;
+        }
+
+        input::placeholder {
+          color: #999999;
+        }
+
+        select {
+          cursor: pointer;
+        }
+
+        button {
+          transition: all 0.2s ease-in-out;
         }
       `}</style>
 
       {/* Header */}
-      <div className="border-b border-[#e5e5e5] px-[16px] py-[9px]">
-        <h2 className="text-[20px] font-semibold text-[#1C1C1C]">
+      <div className="flex items-center justify-between border-b border-[#e5e5e5] px-[16px] py-[12px]">
+        <h2 className="text-[19px] font-semibold tracking-wide text-[#1C1C1C]">
           BASIC INFO
         </h2>
       </div>
@@ -318,10 +329,11 @@ const BasicInfo = () => {
       <form
         onSubmit={handleSubmit}
         noValidate
-        className="px-[16px] pb-[14px] pt-[9px]"
+        className="px-[16px] pb-[20px] pt-[16px]"
       >
-        {/* Business Name + Business Type */}
-        <div className="grid grid-cols-1 gap-[10px] sm:grid-cols-2">
+        {/* Business Name and Business Type */}
+        <div className="grid grid-cols-1 gap-[14px] sm:grid-cols-2">
+
           <div>
             <label htmlFor="businessName" className={labelClass}>
               Business Name *
@@ -337,12 +349,14 @@ const BasicInfo = () => {
               placeholder="Artlane Studio"
               aria-invalid={Boolean(errors.businessName)}
               className={`${inputClass} ${
-                errors.businessName ? "border-red-500" : ""
+                errors.businessName ? "border-red-500 focus:border-red-500" : ""
               }`}
             />
 
             {errors.businessName && (
-              <p className={errorClass}>{errors.businessName}</p>
+              <p className={errorClass}>
+                {errors.businessName}
+              </p>
             )}
           </div>
 
@@ -357,7 +371,7 @@ const BasicInfo = () => {
               value={formData.businessType}
               onChange={handleChange}
               aria-invalid={Boolean(errors.businessType)}
-              className={`${inputClass} cursor-pointer ${
+              className={`${inputClass} ${
                 errors.businessType ? "border-red-500" : ""
               }`}
             >
@@ -368,13 +382,15 @@ const BasicInfo = () => {
             </select>
 
             {errors.businessType && (
-              <p className={errorClass}>{errors.businessType}</p>
+              <p className={errorClass}>
+                {errors.businessType}
+              </p>
             )}
           </div>
         </div>
 
         {/* Service Type */}
-        <div className="mt-[9px]">
+        <div className="mt-[14px]">
           <label htmlFor="serviceType" className={labelClass}>
             Service Type *
           </label>
@@ -385,7 +401,7 @@ const BasicInfo = () => {
             value={formData.serviceType}
             onChange={handleChange}
             aria-invalid={Boolean(errors.serviceType)}
-            className={`${inputClass} cursor-pointer ${
+            className={`${inputClass} ${
               errors.serviceType ? "border-red-500" : ""
             }`}
           >
@@ -397,12 +413,14 @@ const BasicInfo = () => {
           </select>
 
           {errors.serviceType && (
-            <p className={errorClass}>{errors.serviceType}</p>
+            <p className={errorClass}>
+              {errors.serviceType}
+            </p>
           )}
         </div>
 
         {/* Specialized In */}
-        <div className="mt-[9px]">
+        <div className="mt-[14px]">
           <label htmlFor="specializedIn" className={labelClass}>
             Specialized in *
           </label>
@@ -422,12 +440,15 @@ const BasicInfo = () => {
           />
 
           {errors.specializedIn && (
-            <p className={errorClass}>{errors.specializedIn}</p>
+            <p className={errorClass}>
+              {errors.specializedIn}
+            </p>
           )}
         </div>
 
-        {/* Experience + Team Size */}
-        <div className="mt-[9px] grid grid-cols-1 gap-[10px] sm:grid-cols-2">
+        {/* Experience and Team Size */}
+        <div className="mt-[14px] grid grid-cols-1 gap-[14px] sm:grid-cols-2">
+
           <div>
             <label htmlFor="experience" className={labelClass}>
               Experience in Years *
@@ -450,7 +471,9 @@ const BasicInfo = () => {
             />
 
             {errors.experience && (
-              <p className={errorClass}>{errors.experience}</p>
+              <p className={errorClass}>
+                {errors.experience}
+              </p>
             )}
           </div>
 
@@ -476,20 +499,32 @@ const BasicInfo = () => {
             />
 
             {errors.teamSize && (
-              <p className={errorClass}>{errors.teamSize}</p>
+              <p className={errorClass}>
+                {errors.teamSize}
+              </p>
             )}
           </div>
         </div>
 
         {/* Languages Known */}
-        <div className="mt-[9px]">
-          <label className={labelClass}>Languages Known *</label>
+        <div className="mt-[16px]">
+          <div className="mb-[8px] flex items-center justify-between">
+            <label className={labelClass}>
+              Languages Known *
+            </label>
 
-          <div className="flex flex-wrap items-center gap-[6px]">
+            <span className="text-[11px] text-[#888]">
+              {languages.length}/10
+            </span>
+          </div>
+
+          {/* Language Chips */}
+          <div className="flex flex-wrap items-center gap-[8px]">
+
             {languages.map((language) => (
               <span
                 key={language}
-                className="inline-flex items-center gap-[7px] rounded-[3px] bg-[#F3F4F6] px-[10px] py-[5px] text-[12px] text-[#4B5563]"
+                className="inline-flex items-center gap-[8px] rounded-[4px] border border-[#e5e5e5] bg-[#F5F5F5] px-[11px] py-[6px] text-[12px] font-medium text-[#444] transition-colors hover:border-[#970000]/40 hover:bg-[#fff5f5]"
               >
                 {language}
 
@@ -498,7 +533,7 @@ const BasicInfo = () => {
                   onClick={() => handleRemoveLanguage(language)}
                   aria-label={`Remove ${language}`}
                   title={`Remove ${language}`}
-                  className="cursor-pointer text-[14px] text-[#777] hover:text-red-600"
+                  className="cursor-pointer text-[15px] font-semibold leading-none text-[#777] hover:text-red-600"
                 >
                   ×
                 </button>
@@ -510,38 +545,50 @@ const BasicInfo = () => {
                 type="button"
                 onClick={handleAddLanguage}
                 aria-label="Add language"
-                className="flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-full border border-[#111] text-[15px] leading-none text-[#111] hover:bg-[#f3f3f3]"
+                title="Add language"
+                className="flex h-[27px] w-[27px] cursor-pointer items-center justify-center rounded-full border border-[#970000] text-[19px] leading-none text-[#970000] hover:bg-[#970000] hover:text-white"
               >
                 +
               </button>
             )}
           </div>
 
+          {/* Add Language Input */}
           {showLanguageInput && (
-            <div className="mt-[8px] flex flex-wrap items-center gap-[8px]">
-              <input
-                autoFocus
-                type="text"
-                value={newLanguage}
-                onChange={(event) => {
-                  setNewLanguage(event.target.value);
+            <div className="mt-[12px] flex flex-wrap items-start gap-[8px]">
 
-                  setErrors((prev) => ({
-                    ...prev,
-                    newLanguage: "",
-                  }));
-                }}
-                onKeyDown={handleLanguageKeyDown}
-                placeholder="Enter language"
-                maxLength={30}
-                aria-label="New language"
-                className="h-[30px] w-[150px] rounded-[4px] border border-[#cfcfcf] px-[8px] text-[12px] outline-none focus:border-[#970000]"
-              />
+              <div>
+                <input
+                  autoFocus
+                  type="text"
+                  value={newLanguage}
+                  onChange={(event) => {
+                    setNewLanguage(event.target.value);
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      newLanguage: "",
+                    }));
+                  }}
+                  onKeyDown={handleLanguageKeyDown}
+                  placeholder="Enter language"
+                  maxLength={30}
+                  aria-label="New language"
+                  aria-invalid={Boolean(errors.newLanguage)}
+                  className="h-[36px] w-[180px] rounded-[5px] border border-[#cfcfcf] px-[10px] text-[12px] outline-none transition-all focus:border-[#970000] focus:ring-2 focus:ring-[#970000]/10"
+                />
+
+                {errors.newLanguage && (
+                  <p className={errorClass}>
+                    {errors.newLanguage}
+                  </p>
+                )}
+              </div>
 
               <button
                 type="button"
                 onClick={handleSaveLanguage}
-                className="rounded-[4px] bg-[#970000] px-[12px] py-[6px] text-[12px] text-white hover:bg-[#790000]"
+                className="rounded-[5px] bg-[#970000] px-[15px] py-[9px] text-[12px] font-medium text-white hover:bg-[#790000]"
               >
                 Add
               </button>
@@ -549,33 +596,36 @@ const BasicInfo = () => {
               <button
                 type="button"
                 onClick={handleCancelLanguage}
-                className="rounded-[4px] border border-[#cfcfcf] px-[12px] py-[6px] text-[12px] text-[#555] hover:bg-[#f3f3f3]"
+                className="rounded-[5px] border border-[#ccc] px-[15px] py-[9px] text-[12px] text-[#555] hover:bg-[#f3f3f3]"
               >
                 Cancel
               </button>
             </div>
           )}
 
-          {errors.newLanguage && (
-            <p className={errorClass}>{errors.newLanguage}</p>
-          )}
-
           {errors.languages && (
-            <p className={errorClass}>{errors.languages}</p>
+            <p className={errorClass}>
+              {errors.languages}
+            </p>
           )}
         </div>
 
-        {/* Submit */}
-        <div className="mt-[18px] flex flex-wrap items-center gap-[12px]">
+        {/* Submit Section */}
+        <div className="mt-[22px] flex flex-wrap items-center gap-[12px] border-t border-[#eeeeee] pt-[15px]">
+
           <button
             type="submit"
-            className="cursor-pointer rounded-[4px] bg-[#970000] px-[20px] py-[9px] text-[13px] font-medium text-white hover:bg-[#790000]"
+            className="cursor-pointer rounded-[5px] bg-[#970000] px-[22px] py-[10px] text-[13px] font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:bg-[#790000] hover:shadow-md active:translate-y-0"
           >
             Save Basic Info
           </button>
 
           {successMessage && (
-            <p role="status" className="text-[12px] text-green-700">
+            <p
+              role="status"
+              className="flex items-center gap-[6px] text-[12px] font-medium text-green-700"
+            >
+              <span>✓</span>
               {successMessage}
             </p>
           )}

@@ -3,11 +3,6 @@ import React, { useState } from "react";
 import { FaPen, FaCheck, FaTimes } from "react-icons/fa";
 
 const ContactPreferences = () => {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const [showPhonePublicly, setShowPhonePublicly] = useState(true);
-  const [whatsappDirect, setWhatsappDirect] = useState(true);
-
   const initialFormData = {
     whatsappPhone: "",
     secondaryPhone: "",
@@ -16,54 +11,59 @@ const ContactPreferences = () => {
     autoResponse: "",
   };
 
-  const [formData, setFormData] = useState(initialFormData);
-
-  const [savedData, setSavedData] = useState({
+  const initialSavedData = {
     ...initialFormData,
     showPhonePublicly: true,
     whatsappDirect: true,
-  });
+  };
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const [showPhonePublicly, setShowPhonePublicly] = useState(true);
+  const [whatsappDirect, setWhatsappDirect] = useState(true);
+
+  const [savedData, setSavedData] = useState(initialSavedData);
 
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
   // Open edit mode
   const handleEdit = () => {
-    if (!isEditing) {
-      setFormData({
-        whatsappPhone: savedData.whatsappPhone,
-        secondaryPhone: savedData.secondaryPhone,
-        email: savedData.email,
-        contactMethod: savedData.contactMethod,
-        autoResponse: savedData.autoResponse,
-      });
+    if (isEditing) return;
 
-      setShowPhonePublicly(savedData.showPhonePublicly);
-      setWhatsappDirect(savedData.whatsappDirect);
-      setErrors({});
-      setSuccessMessage("");
-    }
+    setFormData({
+      whatsappPhone: savedData.whatsappPhone,
+      secondaryPhone: savedData.secondaryPhone,
+      email: savedData.email,
+      contactMethod: savedData.contactMethod,
+      autoResponse: savedData.autoResponse,
+    });
 
+    setShowPhonePublicly(savedData.showPhonePublicly);
+    setWhatsappDirect(savedData.whatsappDirect);
+
+    setErrors({});
+    setSuccessMessage("");
     setIsEditing(true);
   };
 
-  // Handle input changes with field-specific validation
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     let updatedValue = value;
 
-    // Phone numbers: allow only digits and optional + at the beginning
+    // Phone number: only digits and +91
     if (name === "whatsappPhone" || name === "secondaryPhone") {
       updatedValue = value.replace(/[^\d+]/g, "");
 
-      // Allow + only at the beginning
       if (updatedValue.includes("+")) {
-        updatedValue = "+" + updatedValue.replace(/\+/g, "");
+        updatedValue =
+          "+" + updatedValue.replace(/\+/g, "");
       }
 
-      // Limit phone number to 10 digits.
-      // If +91 is present, allow 10 digits after the country code.
       if (updatedValue.startsWith("+91")) {
         updatedValue =
           "+91" +
@@ -77,9 +77,9 @@ const ContactPreferences = () => {
       }
     }
 
-    // Auto-response: allow only alphabets and spaces
+    // Auto-response: allow normal text and punctuation
     if (name === "autoResponse") {
-      updatedValue = value.replace(/[^\p{L}\s]/gu, "");
+      updatedValue = value.slice(0, 500);
     }
 
     setFormData((prev) => ({
@@ -95,7 +95,18 @@ const ContactPreferences = () => {
     setSuccessMessage("");
   };
 
-  // Validate Indian mobile number
+  // Normalize phone numbers for comparison
+  const normalizePhone = (phone) => {
+    let cleaned = phone.replace(/\D/g, "");
+
+    if (cleaned.startsWith("91") && cleaned.length === 12) {
+      cleaned = cleaned.slice(2);
+    }
+
+    return cleaned;
+  };
+
+  // Indian mobile validation
   const isValidIndianPhone = (phone) => {
     const cleanedPhone = phone.replace(/[\s()-]/g, "");
     return /^(?:\+91)?[6-9]\d{9}$/.test(cleanedPhone);
@@ -105,29 +116,30 @@ const ContactPreferences = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    // WhatsApp phone validation
+    // WhatsApp phone
     if (!formData.whatsappPhone.trim()) {
-      newErrors.whatsappPhone = "WhatsApp phone number is required.";
+      newErrors.whatsappPhone =
+        "WhatsApp phone number is required.";
     } else if (!isValidIndianPhone(formData.whatsappPhone)) {
       newErrors.whatsappPhone =
-        "Enter a valid 10-digit mobile number.";
+        "Enter a valid 10-digit Indian mobile number.";
     }
 
-    // Secondary phone validation
+    // Secondary phone
     if (formData.secondaryPhone.trim()) {
       if (!isValidIndianPhone(formData.secondaryPhone)) {
         newErrors.secondaryPhone =
-          "Enter a valid 10-digit mobile number.";
+          "Enter a valid 10-digit Indian mobile number.";
       } else if (
-        formData.secondaryPhone.replace(/[\s()-]/g, "") ===
-        formData.whatsappPhone.replace(/[\s()-]/g, "")
+        normalizePhone(formData.secondaryPhone) ===
+        normalizePhone(formData.whatsappPhone)
       ) {
         newErrors.secondaryPhone =
           "Secondary phone number must be different.";
       }
     }
 
-    // Email validation
+    // Email
     const emailValue = formData.email.trim();
 
     if (!emailValue) {
@@ -143,32 +155,34 @@ const ContactPreferences = () => {
       newErrors.email = "Enter a valid email address.";
     }
 
-    // Contact method validation
+    // Contact method
     if (!["Call", "Chat", "Email"].includes(formData.contactMethod)) {
       newErrors.contactMethod = "Select a contact method.";
     }
 
-    // Auto-response validation
+    // WhatsApp auto-response
     if (whatsappDirect && !formData.autoResponse.trim()) {
       newErrors.autoResponse =
         "Auto-response message is required when WhatsApp is enabled.";
-    } else if (formData.autoResponse.length > 500) {
+    }
+
+    if (formData.autoResponse.length > 500) {
       newErrors.autoResponse =
         "Auto-response message cannot exceed 500 characters.";
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
   // Save changes
   const handleSave = (e) => {
     e.preventDefault();
+
     setSuccessMessage("");
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     const updatedData = {
       ...formData,
@@ -192,6 +206,7 @@ const ContactPreferences = () => {
 
     console.log("Contact Preferences:", updatedData);
 
+    setErrors({});
     setIsEditing(false);
     setSuccessMessage("Contact preferences saved successfully.");
   };
@@ -208,46 +223,55 @@ const ContactPreferences = () => {
 
     setShowPhonePublicly(savedData.showPhonePublicly);
     setWhatsappDirect(savedData.whatsappDirect);
+
     setErrors({});
     setIsEditing(false);
     setSuccessMessage("");
   };
 
   const inputClass =
-    "h-[40px] w-full rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] outline-none focus:border-[#970000]";
+    "h-[40px] w-full rounded-[4px] border border-[#cfcfcf] px-[10px] text-[12px] outline-none focus:border-[#970000] disabled:cursor-default disabled:bg-gray-50";
 
   const labelClass =
     "mb-[5px] block text-[16px] font-semibold text-[#333]";
 
   const errorClass = "mt-[4px] text-[12px] text-red-600";
 
+  // Reusable toggle styles
+  const toggleClass = (enabled) =>
+    `relative h-[18px] w-[28px] shrink-0 rounded-full transition-colors duration-200 ${
+      enabled ? "bg-[#a90000]" : "bg-[#cfcfcf]"
+    } ${
+      isEditing
+        ? "cursor-pointer"
+        : "cursor-default"
+    }`;
+
   return (
     <section
       className="w-full rounded-[4px] bg-white"
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex items-center gap-[8px] border-b border-[#e5e5e5] px-[16px] py-[9px]">
         <h2 className="text-[20px] font-semibold text-[#333]">
           CONTACT PREFERENCES
         </h2>
 
-        {/* Pen icon always visible */}
         <button
           type="button"
           onClick={handleEdit}
-          title={
-            isEditing
-              ? "Editing contact preferences"
-              : "Edit contact preferences"
-          }
+          title="Edit contact preferences"
           aria-label="Edit contact preferences"
           aria-pressed={isEditing}
+          disabled={isEditing}
           className={`flex h-[24px] w-[24px] items-center justify-center rounded-[3px] border border-transparent transition hover:border-[#e5e5e5] hover:bg-gray-100 ${
-            isEditing ? "bg-[#fff8e6]" : "bg-transparent"
+            isEditing
+              ? "cursor-default bg-[#fff8e6]"
+              : "cursor-pointer bg-transparent"
           }`}
         >
-          <FaPen className="cursor-pointer text-[13px] text-[#d99d00]" />
+          <FaPen className="text-[13px] text-[#d99d00]" />
         </button>
 
         {isEditing && (
@@ -262,7 +286,7 @@ const ContactPreferences = () => {
         noValidate
         className="px-[16px] pb-[18px] pt-[12px]"
       >
-        {/* Phone Numbers */}
+        {/* PHONE NUMBERS */}
         <div className="grid grid-cols-1 gap-[10px] sm:grid-cols-2">
           <div>
             <label htmlFor="whatsappPhone" className={labelClass}>
@@ -281,7 +305,7 @@ const ContactPreferences = () => {
               aria-invalid={Boolean(errors.whatsappPhone)}
               className={`${inputClass} ${
                 errors.whatsappPhone ? "border-red-500" : ""
-              } ${!isEditing ? "cursor-default bg-gray-50" : "bg-white"}`}
+              }`}
             />
 
             {errors.whatsappPhone && (
@@ -309,7 +333,7 @@ const ContactPreferences = () => {
               aria-invalid={Boolean(errors.secondaryPhone)}
               className={`${inputClass} ${
                 errors.secondaryPhone ? "border-red-500" : ""
-              } ${!isEditing ? "cursor-default bg-gray-50" : "bg-white"}`}
+              }`}
             />
 
             {errors.secondaryPhone && (
@@ -318,7 +342,7 @@ const ContactPreferences = () => {
           </div>
         </div>
 
-        {/* Contact Email */}
+        {/* CONTACT EMAIL */}
         <div className="mt-[12px]">
           <label htmlFor="email" className={labelClass}>
             Contact Email *
@@ -336,7 +360,7 @@ const ContactPreferences = () => {
             aria-invalid={Boolean(errors.email)}
             className={`${inputClass} ${
               errors.email ? "border-red-500" : ""
-            } ${!isEditing ? "cursor-default bg-gray-50" : "bg-white"}`}
+            }`}
           />
 
           {errors.email && (
@@ -346,7 +370,7 @@ const ContactPreferences = () => {
 
         <div className="my-[14px] border-t border-[#eeeeee]" />
 
-        {/* Primary Contact Method */}
+        {/* PRIMARY CONTACT METHOD */}
         <fieldset>
           <legend className="mb-[8px] text-[16px] font-semibold text-[#333]">
             Primary Contact Method Preference *
@@ -379,7 +403,7 @@ const ContactPreferences = () => {
           )}
         </fieldset>
 
-        {/* Show Phone Publicly */}
+        {/* SHOW PHONE PUBLICLY */}
         <div className="mt-[16px] flex flex-wrap items-center justify-between gap-[10px] sm:justify-start sm:gap-[16px]">
           <span className="text-[16px] font-semibold text-[#333]">
             Show Phone Number Publicly
@@ -391,10 +415,11 @@ const ContactPreferences = () => {
             aria-checked={showPhonePublicly}
             disabled={!isEditing}
             aria-label="Show phone number publicly"
-            onClick={() => setShowPhonePublicly((prev) => !prev)}
-            className={`relative h-[18px] w-[28px] rounded-full transition-colors disabled:cursor-default ${
-              showPhonePublicly ? "bg-[#a90000]" : "bg-[#cfcfcf]"
-            }`}
+            onClick={() => {
+              setShowPhonePublicly((prev) => !prev);
+              setSuccessMessage("");
+            }}
+            className={toggleClass(showPhonePublicly)}
           >
             <span
               className={`absolute top-[3px] h-[12px] w-[12px] rounded-full bg-white transition-all ${
@@ -404,7 +429,7 @@ const ContactPreferences = () => {
           </button>
         </div>
 
-        {/* WhatsApp Direct */}
+        {/* WHATSAPP DIRECT */}
         <div className="mt-[12px] flex flex-wrap items-center justify-between gap-[10px] sm:justify-start sm:gap-[16px]">
           <span className="text-[16px] font-semibold text-[#333]">
             Enable WhatsApp Contact Directly
@@ -418,12 +443,15 @@ const ContactPreferences = () => {
             aria-label="Enable WhatsApp contact directly"
             onClick={() => {
               setWhatsappDirect((prev) => !prev);
-              setErrors((prev) => ({ ...prev, autoResponse: "" }));
+
+              setErrors((prev) => ({
+                ...prev,
+                autoResponse: "",
+              }));
+
               setSuccessMessage("");
             }}
-            className={`relative h-[18px] w-[28px] rounded-full transition-colors disabled:cursor-default ${
-              whatsappDirect ? "bg-[#a90000]" : "bg-[#cfcfcf]"
-            }`}
+            className={toggleClass(whatsappDirect)}
           >
             <span
               className={`absolute top-[3px] h-[12px] w-[12px] rounded-full bg-white transition-all ${
@@ -433,7 +461,7 @@ const ContactPreferences = () => {
           </button>
         </div>
 
-        {/* WhatsApp Auto-response */}
+        {/* AUTO RESPONSE */}
         <div className="mt-[16px]">
           <label
             htmlFor="autoResponse"
@@ -450,13 +478,21 @@ const ContactPreferences = () => {
             name="autoResponse"
             value={formData.autoResponse}
             onChange={handleChange}
-            readOnly={!isEditing}
+            readOnly={!isEditing || !whatsappDirect}
             maxLength={500}
-            placeholder="Write about your business in brief for client overview"
+            placeholder={
+              whatsappDirect
+                ? "Write about your business in brief for client overview"
+                : "Enable WhatsApp contact to edit this message"
+            }
             aria-invalid={Boolean(errors.autoResponse)}
             className={`min-h-[70px] w-full resize-y rounded-[4px] border border-[#cfcfcf] px-[10px] py-[8px] text-[12px] outline-none focus:border-[#970000] ${
               errors.autoResponse ? "border-red-500" : ""
-            } ${!isEditing ? "cursor-default bg-gray-50" : "bg-white"}`}
+            } ${
+              !isEditing || !whatsappDirect
+                ? "cursor-default bg-gray-50"
+                : "bg-white"
+            }`}
           />
 
           <div className="mt-[4px] flex items-start justify-between gap-[8px]">
@@ -472,12 +508,12 @@ const ContactPreferences = () => {
           </div>
         </div>
 
-        {/* Save and Cancel */}
+        {/* SAVE AND CANCEL */}
         {isEditing && (
           <div className="mt-[18px] flex flex-wrap items-center gap-[10px]">
             <button
               type="submit"
-              className="flex items-center gap-[6px] rounded-[4px] bg-[#970000] px-[18px] py-[9px] text-[13px] font-medium text-white hover:bg-[#790000]"
+              className="flex items-center gap-[6px] rounded-[4px] bg-[#970000] px-[18px] py-[9px] text-[13px] font-medium text-white transition hover:bg-[#790000]"
             >
               <FaCheck />
               Save Preferences
@@ -494,8 +530,12 @@ const ContactPreferences = () => {
           </div>
         )}
 
+        {/* SUCCESS MESSAGE */}
         {successMessage && !isEditing && (
-          <p role="status" className="mt-[12px] text-[13px] text-green-700">
+          <p
+            role="status"
+            className="mt-[12px] text-[13px] font-medium text-green-700"
+          >
             {successMessage}
           </p>
         )}
