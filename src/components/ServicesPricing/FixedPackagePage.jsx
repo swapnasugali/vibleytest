@@ -1,27 +1,24 @@
-import React, { useEffect, useState } from "react";
 
+import React, { useEffect, useMemo, useState } from "react";
 import {
   FiPlusCircle,
   FiEdit,
   FiTrash2,
   FiChevronDown,
   FiCheckCircle,
+  FiEye,
+  FiEyeOff,
+  FiArrowLeft,
 } from "react-icons/fi";
-
 import { FaCamera, FaTrash } from "react-icons/fa";
-import { LuEyeClosed } from "react-icons/lu";
-
 import ServicesPricingLayout from "./ServicesPricingLayout";
-
 import PricingField, {
   inputClassName,
   selectClassName,
   textareaClassName,
 } from "./PricingField";
 
-/* =====================================================
-   INITIAL FORM DATA
-===================================================== */
+const STORAGE_KEY = "fixedPackageData";
 
 const initialFormData = {
   packageName: "",
@@ -37,10 +34,10 @@ const initialFormData = {
   workDeliveryTimeline: "",
 };
 
-/* =====================================================
-   TRAVEL CHARGE DATA
-   Supports old travelCharges format too
-===================================================== */
+const initialServices = () => [
+  { id: 1, name: "", description: "" },
+  { id: 2, name: "", description: "" },
+];
 
 const getTravelChargeData = (data = {}) => {
   if (data.travelChargeType) {
@@ -72,15 +69,71 @@ const getTravelChargeData = (data = {}) => {
       };
 };
 
-/* =====================================================
-   FIXED PACKAGE PAGE
-===================================================== */
-
 const FixedPackagePage = () => {
-  /* =====================================================
-     INPUT RESTRICTION FUNCTIONS
-  ===================================================== */
+  const [formData, setFormData] = useState({ ...initialFormData });
+  const [services, setServices] = useState(initialServices());
 
+  const [savedPackages, setSavedPackages] = useState([
+    {
+      id: 1,
+      packageName: "Corporate Event Package",
+      category: "Photography",
+      serviceCount: "3 services, Add Ons Applicable",
+      travelChargeType: "No Travel Charge",
+      travelChargeAmount: "",
+    },
+    {
+      id: 2,
+      packageName: "Pre Wedding Shoot Package",
+      category: "Photography",
+      serviceCount: "4 Services, Add Ons Applicable",
+      travelChargeType: "No Travel Charge",
+      travelChargeAmount: "",
+    },
+  ]);
+
+  const [errors, setErrors] = useState({});
+  const [saveMessage, setSaveMessage] = useState("");
+  const [saveType, setSaveType] = useState("");
+  const [editingPackageId, setEditingPackageId] = useState(null);
+  const [viewOnly, setViewOnly] = useState(false);
+  const [showMainForm, setShowMainForm] = useState(true);
+  const [sortBy, setSortBy] = useState("newest");
+
+  // Load saved information
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return;
+
+      const parsed = JSON.parse(stored);
+
+      if (parsed.formData) {
+        setFormData({
+          ...initialFormData,
+          ...parsed.formData,
+          ...getTravelChargeData(parsed.formData),
+        });
+      }
+
+      if (Array.isArray(parsed.services)) {
+        setServices(parsed.services);
+      }
+
+      if (Array.isArray(parsed.savedPackages)) {
+        setSavedPackages(
+          parsed.savedPackages.map((pkg) => ({
+            ...pkg,
+            ...getTravelChargeData(pkg),
+          }))
+        );
+      }
+    } catch (error) {
+      console.error("Unable to load package data:", error);
+    }
+  }, []);
+
+  // Alphabet and number restrictions
   const allowOnlyAlphabets = (value) =>
     value.replace(/[^a-zA-Z\s]/g, "");
 
@@ -104,104 +157,39 @@ const FixedPackagePage = () => {
   const allowDescription = (value) =>
     value.replace(/[^a-zA-Z0-9\s.,!?'-]/g, "");
 
-  /* =====================================================
-     FORM STATE
-  ===================================================== */
+  const clearMessage = () => {
+    setSaveMessage("");
+    setSaveType("");
+  };
 
-  const [formData, setFormData] = useState(initialFormData);
+  // Sorted package list
+  const sortedPackages = useMemo(() => {
+    const list = [...savedPackages];
 
-  /* =====================================================
-     SERVICES STATE
-  ===================================================== */
+    switch (sortBy) {
+      case "oldest":
+        return list.sort((a, b) => Number(a.id) - Number(b.id));
 
-  const [services, setServices] = useState([
-    { id: 1, name: "", description: "" },
-    { id: 2, name: "", description: "" },
-  ]);
-
-  /* =====================================================
-     SAVED PACKAGES
-  ===================================================== */
-
-  const [savedPackages, setSavedPackages] = useState([
-    {
-      id: 1,
-      packageName: "Corporate Event Package",
-      category: "Photography",
-      serviceCount: "3 services, Add Ons Applicable",
-      travelChargeType: "No Travel Charge",
-      travelChargeAmount: "",
-    },
-    {
-      id: 2,
-      packageName: "Pre Wedding Shoot Package",
-      category: "Photography",
-      serviceCount: "4 Services, Add Ons Applicable",
-      travelChargeType: "No Travel Charge",
-      travelChargeAmount: "",
-    },
-  ]);
-
-  /* =====================================================
-     MESSAGE / VALIDATION
-  ===================================================== */
-
-  const [saveMessage, setSaveMessage] = useState("");
-  const [saveType, setSaveType] = useState("");
-  const [errors, setErrors] = useState({});
-
-  /* =====================================================
-     VIEW / EDIT STATE
-  ===================================================== */
-
-  const [showMainForm, setShowMainForm] = useState(true);
-  const [editingPackageId, setEditingPackageId] = useState(null);
-
-  /* =====================================================
-     LOAD SAVED DATA
-  ===================================================== */
-
-  useEffect(() => {
-    try {
-      const savedPackageData =
-        localStorage.getItem("fixedPackageData");
-
-      if (!savedPackageData) return;
-
-      const parsedData = JSON.parse(savedPackageData);
-
-      if (parsedData.formData) {
-        setFormData({
-          ...initialFormData,
-          ...parsedData.formData,
-          ...getTravelChargeData(parsedData.formData),
-        });
-      }
-
-      if (Array.isArray(parsedData.services)) {
-        setServices(parsedData.services);
-      }
-
-      if (Array.isArray(parsedData.savedPackages)) {
-        setSavedPackages(
-          parsedData.savedPackages.map((pkg) => ({
-            ...pkg,
-            ...getTravelChargeData(pkg),
-          }))
+      case "az":
+        return list.sort((a, b) =>
+          a.packageName.localeCompare(b.packageName)
         );
-      }
-    } catch (error) {
-      console.error("Unable to load fixed package data:", error);
+
+      case "za":
+        return list.sort((a, b) =>
+          b.packageName.localeCompare(a.packageName)
+        );
+
+      default:
+        return list.sort((a, b) => Number(b.id) - Number(a.id));
     }
-  }, []);
+  }, [savedPackages, sortBy]);
 
-  /* =====================================================
-     HANDLE INPUT
-  ===================================================== */
-
+  // Input change
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    if (viewOnly) return;
 
+    const { name, value } = event.target;
     let updatedValue = value;
 
     switch (name) {
@@ -230,13 +218,12 @@ const FixedPackagePage = () => {
         break;
 
       default:
-        updatedValue = value;
+        break;
     }
 
     setFormData((previous) => ({
       ...previous,
       [name]: updatedValue,
-
       ...(name === "travelChargeType" &&
       value === "No Travel Charge"
         ? { travelChargeAmount: "" }
@@ -244,23 +231,16 @@ const FixedPackagePage = () => {
     }));
 
     if (errors[name]) {
-      setErrors((previous) => ({
-        ...previous,
-        [name]: "",
-      }));
+      setErrors((previous) => ({ ...previous, [name]: "" }));
     }
 
-    if (saveMessage) {
-      setSaveMessage("");
-      setSaveType("");
-    }
+    clearMessage();
   };
 
-  /* =====================================================
-     HANDLE SERVICE INPUT
-  ===================================================== */
-
+  // Service input
   const handleServiceChange = (id, field, value) => {
+    if (viewOnly) return;
+
     let updatedValue = value;
 
     if (field === "name") {
@@ -279,101 +259,50 @@ const FixedPackagePage = () => {
       )
     );
 
-    if (errors[`service-${id}-${field}`]) {
-      setErrors((previous) => ({
-        ...previous,
-        [`service-${id}-${field}`]: "",
-      }));
-    }
+    setErrors((previous) => ({
+      ...previous,
+      [`service-${id}-${field}`]: "",
+    }));
 
-    if (saveMessage) {
-      setSaveMessage("");
-      setSaveType("");
-    }
+    clearMessage();
   };
 
-  /* =====================================================
-     ADD SERVICE
-  ===================================================== */
-
   const addService = () => {
+    if (viewOnly) return;
+
     setServices((previous) => [
       ...previous,
-      {
-        id: Date.now(),
-        name: "",
-        description: "",
-      },
+      { id: Date.now(), name: "", description: "" },
     ]);
   };
 
-  /* =====================================================
-     REMOVE SERVICE
-  ===================================================== */
-
   const removeService = (id) => {
+    if (viewOnly) return;
+
+    if (services.length <= 2) {
+      setErrors((previous) => ({
+        ...previous,
+        services: "At least 2 services are required.",
+      }));
+      return;
+    }
+
     setServices((previous) =>
       previous.filter((service) => service.id !== id)
     );
   };
 
-  /* =====================================================
-     RESET FORM
-  ===================================================== */
-
+  // Reset form
   const resetForm = () => {
     setFormData({ ...initialFormData });
-
-    setServices([
-      { id: 1, name: "", description: "" },
-      { id: 2, name: "", description: "" },
-    ]);
-
+    setServices(initialServices());
     setErrors({});
-    setSaveMessage("");
-    setSaveType("");
     setEditingPackageId(null);
+    setViewOnly(false);
+    clearMessage();
   };
 
-  /* =====================================================
-     TOP EDIT BUTTON
-  ===================================================== */
-
-  const handleTopEdit = () => {
-    setShowMainForm(true);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  /* =====================================================
-     TOP DELETE BUTTON
-  ===================================================== */
-
-  const handleTopDelete = () => {
-    const shouldDelete = window.confirm(
-      "Are you sure you want to clear this fixed package?"
-    );
-
-    if (!shouldDelete) return;
-
-    resetForm();
-  };
-
-  /* =====================================================
-     TOP VIEW BUTTON
-  ===================================================== */
-
-  const handleTopView = () => {
-    setShowMainForm((previous) => !previous);
-  };
-
-  /* =====================================================
-     PRICE VALIDATION HELPER
-  ===================================================== */
-
+  // Price validation
   const isValidPrice = (value) => {
     const price = value.trim();
 
@@ -393,123 +322,79 @@ const FixedPackagePage = () => {
     );
   };
 
-  /* =====================================================
-     TRAVEL CHARGE VALIDATION
-  ===================================================== */
-
   const isValidTravelAmount = (value) =>
-    /^\d+(\.\d{1,2})?$/.test(value) &&
-    Number(value) > 0;
+    /^\d+(\.\d{1,2})?$/.test(value) && Number(value) > 0;
 
-  /* =====================================================
-     VALIDATION
-  ===================================================== */
-
+  // Form validation
   const validateForm = () => {
     const newErrors = {};
 
     const packageName = formData.packageName.trim();
     const category = formData.category.trim();
-    const priceText = formData.totalPrice.trim();
-    const advanceText = formData.advanceBookingPayment.trim();
-
-    /* PACKAGE NAME */
+    const price = formData.totalPrice.trim();
+    const advance = formData.advanceBookingPayment.trim();
 
     if (!packageName) {
       newErrors.packageName = "Package Name is required.";
-    } else if (!/^[a-zA-Z\s]+$/.test(packageName)) {
-      newErrors.packageName = "Only alphabets are allowed.";
     } else if (packageName.length > 80) {
       newErrors.packageName = "Maximum 80 characters allowed.";
     }
 
-    /* CATEGORY */
-
     if (!category) {
       newErrors.category = "Category is required.";
-    } else if (!/^[a-zA-Z\s]+$/.test(category)) {
-      newErrors.category = "Only alphabets are allowed.";
     } else if (category.length > 60) {
       newErrors.category = "Maximum 60 characters allowed.";
     }
 
-    /* CHARGE TYPE */
-
-    if (!formData.chargeType.trim()) {
+    if (!formData.chargeType) {
       newErrors.chargeType = "Please select a charge type.";
     }
 
-    /* TOTAL PRICE */
-
-    if (!priceText) {
+    if (!price) {
       newErrors.totalPrice = "Total Price is required.";
-    } else if (!isValidPrice(priceText)) {
-      newErrors.totalPrice =
-        "Enter a valid numeric price greater than 0.";
+    } else if (!isValidPrice(price)) {
+      newErrors.totalPrice = "Enter a valid price greater than 0.";
     }
 
-    /* DESCRIPTION */
-
-    if (formData.description.trim().length > 400) {
-      newErrors.description =
-        "Description must be 400 characters or fewer.";
+    if (formData.description.length > 400) {
+      newErrors.description = "Maximum 400 characters allowed.";
     }
 
-    /* ADVANCE BOOKING PAYMENT */
-
-    if (!advanceText) {
+    if (!advance) {
       newErrors.advanceBookingPayment =
         "Advance Booking Payment is required.";
     } else if (
-      !/^\d+(?:\.\d+)?%?$/.test(advanceText) ||
-      Number(advanceText.replace(/%$/, "")) < 1 ||
-      Number(advanceText.replace(/%$/, "")) > 100
+      !/^\d+(?:\.\d+)?%?$/.test(advance) ||
+      Number(advance.replace("%", "")) < 1 ||
+      Number(advance.replace("%", "")) > 100
     ) {
       newErrors.advanceBookingPayment =
-        "Enter a percentage between 1 and 100 (e.g. 30%).";
+        "Enter a percentage between 1 and 100.";
     }
-
-    /* OVERTIME CHARGE */
 
     if (formData.overTimeCharge.trim()) {
       const value = formData.overTimeCharge.trim();
 
-      if (
-        !/^\d+(\.\d{1,2})?$/.test(value) ||
-        Number(value) < 0
-      ) {
-        newErrors.overTimeCharge =
-          "Enter a valid numeric overtime charge.";
+      if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+        newErrors.overTimeCharge = "Enter a valid overtime charge.";
       }
     }
 
-    /* TRAVEL CHARGES */
-
     if (formData.travelChargeType !== "No Travel Charge") {
-      if (
-        !formData.travelChargeAmount.trim() ||
-        !isValidTravelAmount(formData.travelChargeAmount)
-      ) {
+      if (!isValidTravelAmount(formData.travelChargeAmount.trim())) {
         newErrors.travelChargeAmount =
           "Enter a valid travel charge amount.";
       }
     }
 
-    /* MINIMUM BOOKING HOURS */
-
     if (formData.minimumBookingHours.trim()) {
       const value = formData.minimumBookingHours.trim();
 
-      if (
-        !/^\d+(\.\d+)?$/.test(value) ||
-        Number(value) <= 0
-      ) {
+      if (!/^\d+(\.\d+)?$/.test(value) || Number(value) <= 0) {
         newErrors.minimumBookingHours =
-          "Enter valid booking hours greater than 0.";
+          "Enter booking hours greater than 0.";
       }
     }
-
-    /* SERVICES */
 
     if (services.length < 2) {
       newErrors.services = "At least 2 services are required.";
@@ -522,9 +407,6 @@ const FixedPackagePage = () => {
       if (!name) {
         newErrors[`service-${service.id}-name`] =
           "Service Name is required.";
-      } else if (!/^[a-zA-Z\s]+$/.test(name)) {
-        newErrors[`service-${service.id}-name`] =
-          "Only alphabets are allowed.";
       } else if (name.length > 80) {
         newErrors[`service-${service.id}-name`] =
           "Maximum 80 characters allowed.";
@@ -539,9 +421,7 @@ const FixedPackagePage = () => {
       }
     });
 
-    /* DUPLICATE PACKAGE */
-
-    const duplicatePackage = savedPackages.some(
+    const duplicate = savedPackages.some(
       (pkg) =>
         pkg.id !== editingPackageId &&
         pkg.packageName?.trim().toLowerCase() ===
@@ -550,206 +430,102 @@ const FixedPackagePage = () => {
           category.toLowerCase()
     );
 
-    if (duplicatePackage) {
+    if (duplicate) {
       newErrors.packageName =
         "A package with this name and category already exists.";
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
-  /* =====================================================
-     DRAFT VALIDATION
-  ===================================================== */
-
-  const validateDraftFields = () => {
-    const draftErrors = {};
-
-    if (formData.totalPrice.trim()) {
-      if (!isValidPrice(formData.totalPrice)) {
-        draftErrors.totalPrice =
-          "Enter a valid numeric price.";
-      }
-    }
-
-    if (formData.advanceBookingPayment.trim()) {
-      const value = formData.advanceBookingPayment.trim();
-
-      if (
-        !/^\d+(?:\.\d+)?%?$/.test(value) ||
-        Number(value.replace(/%$/, "")) < 1 ||
-        Number(value.replace(/%$/, "")) > 100
-      ) {
-        draftErrors.advanceBookingPayment =
-          "Enter a percentage between 1 and 100.";
-      }
-    }
-
-    if (formData.overTimeCharge.trim()) {
-      const value = formData.overTimeCharge.trim();
-
-      if (!/^\d+(\.\d{1,2})?$/.test(value)) {
-        draftErrors.overTimeCharge =
-          "Enter a valid numeric overtime charge.";
-      }
-    }
-
-    if (formData.travelChargeType !== "No Travel Charge") {
-      if (
-        formData.travelChargeAmount.trim() &&
-        !isValidTravelAmount(formData.travelChargeAmount)
-      ) {
-        draftErrors.travelChargeAmount =
-          "Enter a valid travel charge amount.";
-      }
-    }
-
-    if (formData.minimumBookingHours.trim()) {
-      const value = formData.minimumBookingHours.trim();
-
-      if (
-        !/^\d+(\.\d+)?$/.test(value) ||
-        Number(value) <= 0
-      ) {
-        draftErrors.minimumBookingHours =
-          "Enter valid booking hours.";
-      }
-    }
-
-    if (formData.packageName.trim().length > 80) {
-      draftErrors.packageName =
-        "Maximum 80 characters allowed.";
-    }
-
-    if (formData.category.trim().length > 60) {
-      draftErrors.category =
-        "Maximum 60 characters allowed.";
-    }
-
-    if (formData.description.trim().length > 400) {
-      draftErrors.description =
-        "Description must be 400 characters or fewer.";
-    }
-
-    services.forEach((service) => {
-      if (service.name.trim().length > 80) {
-        draftErrors[`service-${service.id}-name`] =
-          "Maximum 80 characters allowed.";
-      }
-
-      if (service.description.trim().length > 200) {
-        draftErrors[`service-${service.id}-description`] =
-          "Maximum 200 characters allowed.";
-      }
-    });
-
-    setErrors(draftErrors);
-
-    return Object.keys(draftErrors).length === 0;
-  };
-
-  /* =====================================================
-     SAVE PACKAGE DATA TO LOCAL STORAGE
-  ===================================================== */
-
+  // Save data to localStorage
   const savePackageData = (
-    status = "draft",
+    status,
     packages = savedPackages,
     draft = formData,
     serviceList = services
   ) => {
-    const packageData = {
-      formData: draft,
-      services: serviceList,
-      savedPackages: packages,
-      status,
-      savedAt: new Date().toISOString(),
-    };
-
     localStorage.setItem(
-      "fixedPackageData",
-      JSON.stringify(packageData)
+      STORAGE_KEY,
+      JSON.stringify({
+        formData: draft,
+        services: serviceList,
+        savedPackages: packages,
+        status,
+        savedAt: new Date().toISOString(),
+      })
     );
   };
 
-  /* =====================================================
-     SAVE DRAFT
-  ===================================================== */
-
+  // Save draft
   const handleSaveDraft = () => {
-    if (!validateDraftFields()) {
+    if (viewOnly) return;
+
+    const draftErrors = {};
+
+    if (
+      formData.totalPrice.trim() &&
+      !isValidPrice(formData.totalPrice)
+    ) {
+      draftErrors.totalPrice = "Enter a valid price.";
+    }
+
+    if (
+      formData.description.length > 400
+    ) {
+      draftErrors.description = "Maximum 400 characters allowed.";
+    }
+
+    if (formData.packageName.length > 80) {
+      draftErrors.packageName = "Maximum 80 characters allowed.";
+    }
+
+    if (formData.category.length > 60) {
+      draftErrors.category = "Maximum 60 characters allowed.";
+    }
+
+    setErrors(draftErrors);
+
+    if (Object.keys(draftErrors).length > 0) {
       setSaveType("error");
-
-      setSaveMessage(
-        "Please correct the highlighted fields before saving the draft."
-      );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-
+      setSaveMessage("Please correct the highlighted fields.");
       return;
     }
 
     try {
       savePackageData("draft");
-
       setSaveType("success");
       setSaveMessage("Draft saved successfully.");
     } catch (error) {
-      console.error("Unable to save draft:", error);
-
+      console.error(error);
       setSaveType("error");
-      setSaveMessage(
-        "Unable to save the draft. Please try again."
-      );
+      setSaveMessage("Unable to save draft. Please try again.");
     }
   };
 
-  /* =====================================================
-     SAVE OR UPDATE PACKAGE
-  ===================================================== */
-
+  // Save or update package
   const handleSavePackage = () => {
-    const isValid = validateForm();
+    if (viewOnly) return;
 
-    if (!isValid) {
+    if (!validateForm()) {
       setSaveType("error");
+      setSaveMessage("Please fill all required fields correctly.");
 
-      setSaveMessage(
-        "Please fill all required fields correctly."
-      );
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
     const newPackage = {
       id: editingPackageId ?? Date.now(),
-
       packageName: formData.packageName.trim(),
-
       category: formData.category.trim(),
-
-      serviceCount:
-        `${services.length} services, Add Ons Applicable`,
-
-      // Save travel charge data with this package
+      serviceCount: `${services.length} services, Add Ons Applicable`,
       travelChargeType: formData.travelChargeType,
-
       travelChargeAmount:
         formData.travelChargeType === "No Travel Charge"
           ? ""
           : formData.travelChargeAmount.trim(),
-
-      // Save complete package data for edit
       formData: { ...formData },
       services: [...services],
     };
@@ -764,14 +540,12 @@ const FixedPackagePage = () => {
       savePackageData(
         "saved",
         updatedPackages,
-        initialFormData,
-        [
-          { id: 1, name: "", description: "" },
-          { id: 2, name: "", description: "" },
-        ]
+        { ...initialFormData },
+        initialServices()
       );
 
       setSavedPackages(updatedPackages);
+      resetForm();
 
       setSaveType("success");
       setSaveMessage(
@@ -780,21 +554,15 @@ const FixedPackagePage = () => {
           : "Package saved successfully."
       );
 
-      resetForm();
+      setShowMainForm(true);
     } catch (error) {
-      console.error("Unable to save package:", error);
-
+      console.error(error);
       setSaveType("error");
-      setSaveMessage(
-        "Unable to save the package. Please try again."
-      );
+      setSaveMessage("Unable to save package. Please try again.");
     }
   };
 
-  /* =====================================================
-     DELETE SAVED PACKAGE
-  ===================================================== */
-
+  // Delete saved package
   const handleDeletePackage = (id) => {
     const shouldDelete = window.confirm(
       "Are you sure you want to delete this package?"
@@ -809,30 +577,30 @@ const FixedPackagePage = () => {
     setSavedPackages(updatedPackages);
 
     try {
-      const existingData =
-        localStorage.getItem("fixedPackageData");
-
-      const parsedData = existingData
-        ? JSON.parse(existingData)
-        : {};
-
-      parsedData.savedPackages = updatedPackages;
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const parsed = stored ? JSON.parse(stored) : {};
 
       localStorage.setItem(
-        "fixedPackageData",
-        JSON.stringify(parsedData)
+        STORAGE_KEY,
+        JSON.stringify({
+          ...parsed,
+          savedPackages: updatedPackages,
+        })
       );
+
+      setSaveType("success");
+      setSaveMessage("Package deleted successfully.");
     } catch (error) {
-      console.error("Unable to delete package:", error);
+      console.error(error);
+      setSaveType("error");
+      setSaveMessage("Unable to delete package.");
     }
   };
 
-  /* =====================================================
-     EDIT SAVED PACKAGE
-  ===================================================== */
-
+  // Load package for editing
   const handleEditPackage = (pkg) => {
     setEditingPackageId(pkg.id);
+    setViewOnly(false);
 
     setFormData({
       ...initialFormData,
@@ -842,29 +610,24 @@ const FixedPackagePage = () => {
       ...getTravelChargeData(pkg.formData || pkg),
     });
 
-    if (Array.isArray(pkg.services) && pkg.services.length > 0) {
-      setServices(pkg.services);
-    } else {
-      setServices([
-        { id: 1, name: "", description: "" },
-        { id: 2, name: "", description: "" },
-      ]);
-    }
+    setServices(
+      Array.isArray(pkg.services) && pkg.services.length
+        ? pkg.services
+        : initialServices()
+    );
 
     setErrors({});
-    setSaveMessage("");
-    setSaveType("");
+    clearMessage();
     setShowMainForm(true);
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  /* =====================================================
-     TRAVEL CHARGE DISPLAY
-  ===================================================== */
+  // Load package in read-only view
+  const handleViewPackage = (pkg) => {
+    handleEditPackage(pkg);
+    setViewOnly(true);
+  };
 
   const travelText = (pkg) => {
     const data = getTravelChargeData(pkg);
@@ -877,16 +640,18 @@ const FixedPackagePage = () => {
       return `₹${data.travelChargeAmount} / Km`;
     }
 
-    if (data.travelChargeType === "Fixed Amount") {
-      return `₹${data.travelChargeAmount} Fixed`;
-    }
-
-    return "No Travel Charge";
+    return `₹${data.travelChargeAmount} Fixed`;
   };
 
-  /* =====================================================
-     RENDER
-  ===================================================== */
+  const showError = (name) =>
+    errors[name] ? (
+      <p className="mt-1 text-[12px] text-[#c40000] sm:text-[13px]">
+        {errors[name]}
+      </p>
+    ) : null;
+
+  const fieldLabel =
+    "text-[16px] sm:text-[18px] font-semibold";
 
   return (
     <ServicesPricingLayout
@@ -895,42 +660,46 @@ const FixedPackagePage = () => {
     >
       <div className="mx-auto w-full max-w-[1090px] px-[12px] sm:px-[16px] md:px-[20px] lg:px-0">
 
-        {/* SAVE MESSAGE */}
+        {/* MESSAGE */}
 
         {saveMessage && (
           <div
-            className={`mt-[15px] flex items-center gap-[8px] rounded-[5px] border px-[12px] py-[10px] text-[14px] font-medium sm:px-[16px] sm:py-[12px] sm:text-[16px] ${
+            className={`mt-4 flex items-center gap-2 rounded border px-4 py-3 text-sm sm:text-base ${
               saveType === "success"
                 ? "border-[#b7dfbd] bg-[#edf9ef] text-[#26733a]"
                 : "border-[#efb0b0] bg-[#fff1f1] text-[#c40000]"
             }`}
           >
             {saveType === "success" && (
-              <FiCheckCircle className="shrink-0 text-[19px] sm:text-[20px]" />
+              <FiCheckCircle className="shrink-0 text-xl" />
             )}
-
-            <span>{saveMessage}</span>
+            {saveMessage}
           </div>
         )}
 
         {/* TOOLBAR */}
 
-        <div className="mt-[16px] flex flex-col gap-[12px] sm:mt-[18px] sm:flex-row sm:items-center sm:justify-between lg:gap-[20px]">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-          <div className="flex w-full items-center justify-between gap-[10px] sm:w-auto sm:justify-start">
-
-            <span className="whitespace-nowrap text-[17px] font-normal text-[#555555] sm:text-[20px]">
+          <div className="flex items-center justify-between gap-3 sm:justify-start">
+            <span className="text-[17px] text-[#555] sm:text-xl">
               All ({String(savedPackages.length).padStart(2, "0")})
             </span>
 
-            <button
-              type="button"
-              className="flex h-[42px] w-[105px] shrink-0 cursor-pointer items-center justify-center gap-[4px] rounded-[4px] bg-white px-[7px] text-[14px] font-normal text-[#333333] sm:h-[45px] sm:w-[121px] sm:gap-[5px] sm:px-[9px] sm:text-[16px]"
-            >
-              Sort By
-              <FiChevronDown className="text-[16px] sm:text-[17px]" />
-            </button>
-
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
+                aria-label="Sort packages"
+                className="h-[42px] w-[145px] appearance-none rounded border border-[#ddd] bg-white px-3 pr-8 text-sm text-[#333] outline-none focus:border-[#c40000] sm:h-[45px] sm:text-base"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="az">Name: A to Z</option>
+                <option value="za">Name: Z to A</option>
+              </select>
+              <FiChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
+            </div>
           </div>
 
           <button
@@ -938,676 +707,548 @@ const FixedPackagePage = () => {
             onClick={() => {
               resetForm();
               setShowMainForm(true);
+              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="flex h-[48px] w-full cursor-pointer items-center justify-center gap-[5px] rounded-[4px] bg-[#c40000] px-[14px] text-[16px] font-semibold text-white transition hover:bg-[#a80000] sm:h-[52px] sm:w-[218px] sm:px-[16px] sm:text-[18px]"
+            className="flex h-[48px] w-full items-center justify-center gap-2 rounded bg-[#c40000] px-4 text-base font-semibold text-white transition hover:bg-[#a80000] sm:h-[52px] sm:w-[218px] sm:text-lg"
           >
-            <FiPlusCircle className="text-[16px] sm:text-[17px]" />
+            <FiPlusCircle />
             Add Package
           </button>
-
         </div>
 
-        {/* FIXED PACKAGE */}
+        {/* MAIN PACKAGE FORM */}
 
-        <section className="mt-[12px] overflow-hidden rounded-[6px] bg-white sm:mt-[15px]">
+        {showMainForm && (
+          <section className="mt-4 overflow-hidden rounded-md bg-white">
 
-          {/* PACKAGE TITLE */}
+            <div className="flex min-h-[48px] items-center justify-between px-4">
+              <p className="text-[17px] font-medium text-[#555] sm:text-xl">
+                {viewOnly
+                  ? "View Fixed Package"
+                  : editingPackageId
+                    ? "Edit Fixed Package"
+                    : "Fixed Package"}
+              </p>
 
-          <div className="flex min-h-[45px] items-center px-[12px] sm:min-h-[48px] sm:px-[10px]">
-            <p className="text-[17px] font-medium text-[#777777] sm:text-[20px]">
-              {editingPackageId
-                ? "Edit Fixed Package"
-                : "Fixed Package - 1"}
-            </p>
-          </div>
-
-          {/* TOP ACTION ICONS */}
-
-          <div className="flex h-[52px] items-center justify-end border-b border-t border-[#e5e5e5] px-[15px] sm:h-[56px] sm:px-[25px] md:px-[30px] lg:px-[34px]">
-
-            <div className="flex items-center gap-[20px] sm:gap-[28px]">
-
-              <button
-                type="button"
-                onClick={handleTopEdit}
-                title="Edit"
-                aria-label="Edit package"
-                className="flex cursor-pointer items-center justify-center text-[#222222] transition hover:text-black"
-              >
-                <FiEdit size={20} className="sm:h-[22px] sm:w-[22px]" />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleTopDelete}
-                title="Delete"
-                aria-label="Delete package"
-                className="flex cursor-pointer items-center justify-center text-[#8b0000] transition hover:text-[#c40000]"
-              >
-                <FaTrash size={16} className="sm:h-[17px] sm:w-[17px]" />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleTopView}
-                title={showMainForm ? "Hide" : "View"}
-                aria-label={showMainForm ? "Hide package" : "View package"}
-                className="flex cursor-pointer items-center justify-center text-[#222222] transition hover:text-black"
-              >
-                <LuEyeClosed size={20} className="sm:h-[21px] sm:w-[21px]" />
-              </button>
-
+              {viewOnly && (
+                <span className="rounded bg-[#f2f2f2] px-3 py-1 text-xs text-[#555]">
+                  Read Only
+                </span>
+              )}
             </div>
-          </div>
 
-          {/* PACKAGE FORM */}
+            {/* TOP ACTIONS */}
 
-          {showMainForm && (
-            <div className="px-[14px] py-[16px] sm:px-[20px] sm:py-[20px] md:px-[30px] lg:px-[34px]">
+            <div className="flex h-[54px] items-center justify-between border-y border-[#e5e5e5] px-4 sm:px-8">
 
-              <div className="grid grid-cols-1 gap-x-[16px] gap-y-[14px] sm:grid-cols-2 sm:gap-x-[18px] sm:gap-y-[15px] lg:gap-x-[20px]">
-
-                {/* PACKAGE NAME */}
-
-                <PricingField
-                  label="Fixed Package Name"
-                  required
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
+              {viewOnly ? (
+                <button
+                  type="button"
+                  onClick={() => setViewOnly(false)}
+                  className="flex items-center gap-2 text-sm font-medium text-[#970000] hover:text-[#c40000]"
                 >
-                  <input
-                    type="text"
-                    name="packageName"
-                    value={formData.packageName}
-                    onChange={handleChange}
-                    maxLength={80}
-                    placeholder="Ex : All in One Trending Pack"
-                    className={inputClassName}
-                  />
+                  <FiEdit />
+                  Enable Editing
+                </button>
+              ) : (
+                <span className="text-sm text-[#777]">
+                  Package Details
+                </span>
+              )}
 
-                  {errors.packageName && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.packageName}
-                    </p>
-                  )}
-                </PricingField>
-
-                {/* CATEGORY */}
-
-                <PricingField
-                  label="Category"
-                  required
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
+              <div className="flex items-center gap-5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowMainForm(false);
+                    setViewOnly(false);
+                  }}
+                  title="Hide form"
+                  aria-label="Hide form"
+                  className="text-[#333] hover:text-[#c40000]"
                 >
-                  <input
-                    type="text"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    maxLength={60}
-                    placeholder="Ex : Photography"
-                    className={inputClassName}
-                  />
+                  <FiEyeOff size={21} />
+                </button>
 
-                  {errors.category && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.category}
-                    </p>
-                  )}
-                </PricingField>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (editingPackageId) {
+                      const pkg = savedPackages.find(
+                        (item) => item.id === editingPackageId
+                      );
 
-                {/* CHARGE TYPE */}
-
-                <PricingField
-                  label="Charge Type"
-                  required
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
+                      if (pkg) handleDeletePackage(pkg.id);
+                    } else {
+                      resetForm();
+                    }
+                  }}
+                  title="Clear form or delete current package"
+                  aria-label="Clear or delete package"
+                  className="text-[#900000] hover:text-[#c40000]"
                 >
-                  <select
-                    name="chargeType"
-                    value={formData.chargeType}
-                    onChange={handleChange}
-                    className={selectClassName}
+                  <FaTrash size={17} />
+                </button>
+              </div>
+            </div>
+
+            <div className="px-4 py-5 sm:px-6 md:px-8">
+
+              <fieldset disabled={viewOnly}>
+                <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
+
+                  <PricingField
+                    label="Fixed Package Name"
+                    required
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
                   >
-                    <option>Amount Per Event</option>
-                    <option>Amount Per Hour</option>
-                    <option>Amount Per Item</option>
-                  </select>
-
-                  {errors.chargeType && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.chargeType}
-                    </p>
-                  )}
-                </PricingField>
-
-                {/* TOTAL PRICE */}
-
-                <PricingField
-                  label="Total Price"
-                  required
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
-                >
-                  <input
-                    type="text"
-                    name="totalPrice"
-                    value={formData.totalPrice}
-                    onChange={handleChange}
-                    placeholder="12000"
-                    className={inputClassName}
-                  />
-
-                  {errors.totalPrice && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.totalPrice}
-                    </p>
-                  )}
-                </PricingField>
-
-                {/* DESCRIPTION */}
-
-                <PricingField
-                  label="Description"
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
-                  className="sm:col-span-2"
-                >
-                  <div className="relative">
-                    <textarea
-                      name="description"
-                      value={formData.description}
+                    <input
+                      type="text"
+                      name="packageName"
+                      value={formData.packageName}
                       onChange={handleChange}
-                      maxLength={400}
-                      placeholder="Ex : This is the best ever package which includes all the services..."
-                      className={textareaClassName}
+                      maxLength={80}
+                      placeholder="Ex : All in One Trending Pack"
+                      className={inputClassName}
                     />
+                    {showError("packageName")}
+                  </PricingField>
 
-                    <span className="absolute right-[6px] top-[-14px] text-[11px] text-[#555555] sm:right-[8px] sm:top-[-15px] sm:text-[13px]">
-                      {formData.description.length} / 400 Characters
-                    </span>
-                  </div>
+                  <PricingField
+                    label="Category"
+                    required
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
+                    <input
+                      type="text"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      maxLength={60}
+                      placeholder="Ex : Photography"
+                      className={inputClassName}
+                    />
+                    {showError("category")}
+                  </PricingField>
 
-                  {errors.description && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.description}
-                    </p>
-                  )}
-                </PricingField>
-
-                {/* OVERTIME CHARGE */}
-
-                <PricingField
-                  label="Over Time Charge / Hour"
-                  optional
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
-                >
-                  <input
-                    type="text"
-                    name="overTimeCharge"
-                    value={formData.overTimeCharge}
-                    onChange={handleChange}
-                    placeholder="Ex : 1500"
-                    className={inputClassName}
-                  />
-
-                  {errors.overTimeCharge && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.overTimeCharge}
-                    </p>
-                  )}
-                </PricingField>
-
-                {/* =================================================
-                    TRAVEL CHARGES - MANUAL INPUT
-                ================================================= */}
-
-                <PricingField
-                  label="Travel Charges"
-                  optional
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
-                >
-                  <div className="flex flex-col gap-[8px]">
-
-                    {/* TRAVEL TYPE */}
-
+                  <PricingField
+                    label="Charge Type"
+                    required
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
                     <select
-                      name="travelChargeType"
-                      value={formData.travelChargeType}
+                      name="chargeType"
+                      value={formData.chargeType}
                       onChange={handleChange}
                       className={selectClassName}
                     >
-                      <option value="No Travel Charge">
-                        No Travel Charge
-                      </option>
-
-                      <option value="Per Km">
-                        Per Km
-                      </option>
-
-                      <option value="Fixed Amount">
-                        Fixed Amount
-                      </option>
+                      <option>Amount Per Event</option>
+                      <option>Amount Per Hour</option>
+                      <option>Amount Per Item</option>
                     </select>
+                    {showError("chargeType")}
+                  </PricingField>
 
-                    {/* MANUAL AMOUNT INPUT */}
+                  <PricingField
+                    label="Total Price"
+                    required
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
+                    <input
+                      type="text"
+                      name="totalPrice"
+                      value={formData.totalPrice}
+                      onChange={handleChange}
+                      placeholder="12000"
+                      className={inputClassName}
+                    />
+                    {showError("totalPrice")}
+                  </PricingField>
 
-                    {formData.travelChargeType !==
-                      "No Travel Charge" && (
-                      <div className="relative">
-                        <span className="absolute left-[12px] top-1/2 -translate-y-1/2 text-[15px] text-[#555555]">
-                          ₹
-                        </span>
+                  <PricingField
+                    label="Description"
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                    className="sm:col-span-2"
+                  >
+                    <div className="relative">
+                      <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        maxLength={400}
+                        placeholder="Describe the package and included services..."
+                        className={textareaClassName}
+                      />
+                      <span className="absolute bottom-2 right-3 text-xs text-[#777]">
+                        {formData.description.length} / 400
+                      </span>
+                    </div>
+                    {showError("description")}
+                  </PricingField>
 
-                        <input
-                          type="text"
-                          inputMode="decimal"
-                          name="travelChargeAmount"
-                          value={formData.travelChargeAmount}
-                          onChange={handleChange}
-                          placeholder={
-                            formData.travelChargeType === "Per Km"
-                              ? "Enter amount per km"
-                              : "Enter fixed amount"
-                          }
-                          className={`${inputClassName} pl-[30px]`}
-                        />
-                      </div>
+                  <PricingField
+                    label="Over Time Charge / Hour"
+                    optional
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
+                    <input
+                      type="text"
+                      name="overTimeCharge"
+                      value={formData.overTimeCharge}
+                      onChange={handleChange}
+                      placeholder="Ex : 1500"
+                      className={inputClassName}
+                    />
+                    {showError("overTimeCharge")}
+                  </PricingField>
+
+                  <PricingField
+                    label="Travel Charges"
+                    optional
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
+                    <div className="flex flex-col gap-2">
+                      <select
+                        name="travelChargeType"
+                        value={formData.travelChargeType}
+                        onChange={handleChange}
+                        className={selectClassName}
+                      >
+                        <option value="No Travel Charge">
+                          No Travel Charge
+                        </option>
+                        <option value="Per Km">Per Km</option>
+                        <option value="Fixed Amount">Fixed Amount</option>
+                      </select>
+
+                      {formData.travelChargeType !==
+                        "No Travel Charge" && (
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]">
+                            ₹
+                          </span>
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            name="travelChargeAmount"
+                            value={formData.travelChargeAmount}
+                            onChange={handleChange}
+                            placeholder={
+                              formData.travelChargeType === "Per Km"
+                                ? "Enter amount per km"
+                                : "Enter fixed amount"
+                            }
+                            className={`${inputClassName} pl-8`}
+                          />
+                        </div>
+                      )}
+                      {showError("travelChargeAmount")}
+                    </div>
+                  </PricingField>
+
+                  <PricingField
+                    label="Min. Booking Hours"
+                    optional
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
+                    <input
+                      type="text"
+                      name="minimumBookingHours"
+                      value={formData.minimumBookingHours}
+                      onChange={handleChange}
+                      placeholder="Ex : 4"
+                      className={inputClassName}
+                    />
+                    {showError("minimumBookingHours")}
+                  </PricingField>
+
+                  <PricingField
+                    label="Advance Booking Payment (%)"
+                    required
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
+                    <input
+                      type="text"
+                      name="advanceBookingPayment"
+                      value={formData.advanceBookingPayment}
+                      onChange={handleChange}
+                      placeholder="Ex : 30%"
+                      className={inputClassName}
+                    />
+                    {showError("advanceBookingPayment")}
+                  </PricingField>
+
+                  <PricingField
+                    label="Work Delivery Timeline"
+                    optional
+                    labelSize={fieldLabel}
+                    labelClassName="font-semibold"
+                  >
+                    <input
+                      type="text"
+                      name="workDeliveryTimeline"
+                      value={formData.workDeliveryTimeline}
+                      onChange={handleChange}
+                      placeholder="Ex : Within 3 days of the event"
+                      className={inputClassName}
+                    />
+                  </PricingField>
+                </div>
+
+                {/* SERVICES */}
+
+                <div className="mt-7">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <label className="text-base font-semibold text-[#333] sm:text-lg">
+                      Services Provided
+                      <span className="text-[#c40000]"> *</span>
+                      <span className="ml-1 text-sm italic text-[#777]">
+                        (At least 2 services)
+                      </span>
+                    </label>
+
+                    {!viewOnly && (
+                      <button
+                        type="button"
+                        onClick={addService}
+                        className="flex h-[38px] items-center justify-center gap-2 rounded border border-[#ccc] px-4 text-[#970000] hover:bg-[#fff5f5]"
+                      >
+                        <FiPlusCircle />
+                        Add Service
+                      </button>
                     )}
-
-                    {/* HELPER TEXT */}
-
-                    {formData.travelChargeType === "Per Km" && (
-                      <p className="text-[13px] text-[#777777]">
-                        Enter the travel charge manually for each
-                        kilometer.
-                      </p>
-                    )}
-
-                    {formData.travelChargeType === "Fixed Amount" && (
-                      <p className="text-[13px] text-[#777777]">
-                        Enter the fixed travel charge for this
-                        package.
-                      </p>
-                    )}
-
-                    {/* TRAVEL VALIDATION */}
-
-                    {errors.travelChargeAmount && (
-                      <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                        {errors.travelChargeAmount}
-                      </p>
-                    )}
-
                   </div>
-                </PricingField>
 
-                {/* MINIMUM BOOKING HOURS */}
+                  {showError("services")}
 
-                <PricingField
-                  label="Min. Booking Hours"
-                  optional
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
-                >
-                  <input
-                    type="text"
-                    name="minimumBookingHours"
-                    value={formData.minimumBookingHours}
-                    onChange={handleChange}
-                    placeholder="Ex : 4"
-                    className={inputClassName}
-                  />
+                  <div className="mt-3 space-y-4 bg-[#fffcef] p-3 sm:p-4">
+                    {services.map((service, index) => (
+                      <div
+                        key={service.id}
+                        className="grid grid-cols-1 gap-3 border-b border-[#eee] pb-4 last:border-0 last:pb-0 sm:grid-cols-[25px_1fr] lg:grid-cols-[25px_1fr_1.5fr]"
+                      >
+                        <div className="hidden pt-3 text-sm font-medium sm:block">
+                          {index + 1}.
+                        </div>
 
-                  {errors.minimumBookingHours && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.minimumBookingHours}
-                    </p>
-                  )}
-                </PricingField>
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <label className="text-base font-semibold sm:text-lg">
+                              Service Name
+                              <span className="text-[#c40000]"> *</span>
+                            </label>
 
-                {/* ADVANCE PAYMENT */}
+                            {!viewOnly && services.length > 2 && (
+                              <button
+                                type="button"
+                                onClick={() => removeService(service.id)}
+                                title="Remove service"
+                                className="text-[#c40000]"
+                              >
+                                <FiTrash2 size={18} />
+                              </button>
+                            )}
+                          </div>
 
-                <PricingField
-                  label="Advance Booking Payment (%)"
-                  required
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
-                >
-                  <input
-                    type="text"
-                    name="advanceBookingPayment"
-                    value={formData.advanceBookingPayment}
-                    onChange={handleChange}
-                    placeholder="Ex : 30%"
-                    className={inputClassName}
-                  />
+                          <input
+                            type="text"
+                            value={service.name}
+                            maxLength={80}
+                            onChange={(event) =>
+                              handleServiceChange(
+                                service.id,
+                                "name",
+                                event.target.value
+                              )
+                            }
+                            placeholder="Ex : General Photography"
+                            className={`${inputClassName} mt-1 w-full`}
+                          />
+                          {showError(`service-${service.id}-name`)}
+                        </div>
 
-                  {errors.advanceBookingPayment && (
-                    <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                      {errors.advanceBookingPayment}
-                    </p>
-                  )}
-                </PricingField>
+                        <div>
+                          <div className="flex items-center justify-between gap-2">
+                            <label className="text-base font-semibold sm:text-lg">
+                              Description
+                              <span className="text-[#c40000]"> *</span>
+                            </label>
+                            <span className="text-xs text-[#777]">
+                              {service.description.length}/200
+                            </span>
+                          </div>
 
-                {/* WORK DELIVERY */}
+                          <input
+                            type="text"
+                            value={service.description}
+                            maxLength={200}
+                            onChange={(event) =>
+                              handleServiceChange(
+                                service.id,
+                                "description",
+                                event.target.value
+                              )
+                            }
+                            placeholder="Describe this service..."
+                            className={`${inputClassName} mt-1 w-full`}
+                          />
+                          {showError(
+                            `service-${service.id}-description`
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </fieldset>
 
-                <PricingField
-                  label="Work Delivery Timeline"
-                  optional
-                  labelSize="text-[16px] sm:text-[18px]"
-                  labelClassName="font-semibold"
-                >
-                  <input
-                    type="text"
-                    name="workDeliveryTimeline"
-                    value={formData.workDeliveryTimeline}
-                    onChange={handleChange}
-                    placeholder="Ex : Within 3 DAYS of the Event"
-                    className={inputClassName}
-                  />
-                </PricingField>
+              {/* FORM ACTIONS */}
 
+              <div className="mt-6 flex flex-col-reverse justify-end gap-3 sm:flex-row sm:items-center">
+
+                {viewOnly ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setViewOnly(false);
+                      setShowMainForm(false);
+                    }}
+                    className="flex items-center justify-center gap-2 py-2 text-[#970000] hover:text-[#c40000]"
+                  >
+                    <FiArrowLeft />
+                    Back to Packages
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleSaveDraft}
+                      className="py-2 text-base font-semibold text-[#c40000] hover:text-[#970000] sm:mr-2 sm:text-lg"
+                    >
+                      Save Draft
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSavePackage}
+                      className="h-[42px] rounded bg-[#333] px-6 text-base font-semibold text-white hover:bg-[#222] sm:w-[190px] sm:text-lg"
+                    >
+                      {editingPackageId
+                        ? "Update Package"
+                        : "Save Package"}
+                    </button>
+                  </>
+                )}
               </div>
+            </div>
+          </section>
+        )}
 
-              {/* SERVICES PROVIDED */}
+        {/* SHOW FORM AGAIN */}
 
-              <div className="mt-[18px] sm:mt-[16px]">
+        {!showMainForm && (
+          <button
+            type="button"
+            onClick={() => setShowMainForm(true)}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded bg-white py-4 text-[#970000] shadow-sm hover:bg-[#fff8f8]"
+          >
+            <FiEye size={19} />
+            Show Package Form
+          </button>
+        )}
 
-                <div className="flex flex-col gap-[10px] sm:flex-row sm:items-center sm:justify-between">
+        {/* SAVED PACKAGES */}
 
-                  <label className="text-[16px] font-semibold leading-[22px] text-[#333333] sm:text-[18px]">
-                    Services Provided
+        <div className="mt-4 space-y-3">
+          {sortedPackages.length === 0 ? (
+            <div className="rounded bg-white px-4 py-10 text-center">
+              <p className="text-base font-semibold text-[#555]">
+                No Fixed Packages Added
+              </p>
+              <p className="mt-1 text-sm text-[#888]">
+                Click Add Package to create your first package.
+              </p>
+            </div>
+          ) : (
+            sortedPackages.map((pkg) => (
+              <div
+                key={pkg.id}
+                className="flex flex-col gap-3 rounded-md bg-white px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+              >
+                <div className="min-w-0 flex-1">
+                  <h3 className="break-words text-base font-semibold text-[#333] sm:text-lg">
+                    {pkg.packageName}
+                  </h3>
 
-                    <span className="text-[#d00000]">*</span>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <div className="inline-flex min-h-[34px] items-center gap-2 rounded bg-[#222] px-3 py-2 text-white">
+                      <FaCamera size={15} />
+                      <span className="text-sm font-semibold">
+                        {pkg.category}
+                      </span>
+                    </div>
 
-                    <span className="ml-[3px] text-[13px] italic text-[#737373] sm:ml-[4px] sm:text-[15px]">
-                      (at least 2 services makes the package)
+                    <span className="text-sm font-semibold text-[#333]">
+                      {pkg.serviceCount?.split(
+                        "Add Ons Applicable"
+                      )[0]}
+                      <span className="text-red-900">
+                        Add Ons Applicable
+                      </span>
                     </span>
-                  </label>
+                  </div>
+
+                  <p className="mt-2 text-sm text-[#777]">
+                    Travel: {travelText(pkg)}
+                  </p>
+                </div>
+
+                <div className="flex shrink-0 items-center justify-end gap-5 border-t border-[#eee] pt-3 sm:border-0 sm:pt-0">
 
                   <button
                     type="button"
-                    onClick={addService}
-                    className="flex h-[37px] w-full cursor-pointer items-center justify-center gap-[4px] rounded-[3px] border border-[#cfcfcf] px-[8px] text-[16px] font-medium text-[#970000] transition hover:bg-[#fff5f5] sm:w-[167px] sm:justify-start sm:text-[18px]"
+                    onClick={() => handleViewPackage(pkg)}
+                    title="View package"
+                    aria-label="View package"
+                    className="text-[#333] transition hover:text-[#970000]"
                   >
-                    <FiPlusCircle className="text-[16px]" />
-                    Add Service
+                    <FiEye size={19} />
                   </button>
 
+                  <button
+                    type="button"
+                    onClick={() => handleEditPackage(pkg)}
+                    title="Edit package"
+                    aria-label="Edit package"
+                    className="text-[#333] transition hover:text-[#970000]"
+                  >
+                    <FiEdit size={19} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeletePackage(pkg.id)}
+                    title="Delete package"
+                    aria-label="Delete package"
+                    className="text-[#900000] transition hover:text-[#c40000]"
+                  >
+                    <FaTrash size={17} />
+                  </button>
                 </div>
-
-                {errors.services && (
-                  <p className="mt-[5px] text-[12px] text-[#c40000] sm:text-[13px]">
-                    {errors.services}
-                  </p>
-                )}
-
-                {/* SERVICES LIST */}
-
-                <div className="mt-[7px] bg-[#fffcef] px-[8px] py-[10px] sm:px-[12px]">
-
-                  {services.map((service, index) => (
-
-                    <div
-                      key={service.id}
-                      className="relative mb-[14px] grid grid-cols-1 gap-[10px] last:mb-0 sm:grid-cols-[25px_1fr] lg:grid-cols-[25px_1fr_1.5fr]"
-                    >
-
-                      {/* NUMBER */}
-
-                      <div className="hidden pt-[10px] text-[9px] font-medium sm:block">
-                        {index + 1}.
-                      </div>
-
-                      {/* SERVICE NAME */}
-
-                      <div>
-
-                        <div className="flex items-center justify-between gap-[8px]">
-
-                          <label className="block text-[16px] font-semibold leading-[21px] sm:text-[18px]">
-                            Service Name
-                            <span className="text-[#d00000]">*</span>
-                          </label>
-
-                          {services.length > 2 && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeService(service.id)
-                              }
-                              className="shrink-0 cursor-pointer text-[#c40000]"
-                              title="Remove Service"
-                            >
-                              <FiTrash2 className="text-[18px]" />
-                            </button>
-                          )}
-
-                        </div>
-
-                        <input
-                          type="text"
-                          value={service.name}
-                          maxLength={80}
-                          onChange={(event) =>
-                            handleServiceChange(
-                              service.id,
-                              "name",
-                              event.target.value
-                            )
-                          }
-                          placeholder={
-                            index === 0
-                              ? "Ex : General Photography"
-                              : "Ex : Candid Photography"
-                          }
-                          className={`${inputClassName} mt-[4px] w-full`}
-                        />
-
-                        {errors[`service-${service.id}-name`] && (
-                          <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                            {errors[`service-${service.id}-name`]}
-                          </p>
-                        )}
-
-                      </div>
-
-                      {/* SERVICE DESCRIPTION */}
-
-                      <div>
-
-                        <div className="flex items-start justify-between gap-[8px]">
-
-                          <label className="text-[16px] font-semibold leading-[21px] sm:text-[18px]">
-                            Description
-                            <span className="text-[#d00000]">*</span>
-                          </label>
-
-                          <span className="shrink-0 text-[12px] text-[#737373] sm:text-[14px]">
-                            {service.description.length} / 200
-                            Characters
-                          </span>
-
-                        </div>
-
-                        <input
-                          type="text"
-                          maxLength={200}
-                          value={service.description}
-                          onChange={(event) =>
-                            handleServiceChange(
-                              service.id,
-                              "description",
-                              event.target.value
-                            )
-                          }
-                          placeholder={
-                            index === 0
-                              ? "Ex : Stunning all around photography, which covers the event..."
-                              : "Ex : Candid photography services..."
-                          }
-                          className={`${inputClassName} mt-[4px] w-full`}
-                        />
-
-                        {errors[
-                          `service-${service.id}-description`
-                        ] && (
-                          <p className="mt-[4px] text-[12px] text-[#c40000] sm:text-[13px]">
-                            {
-                              errors[
-                                `service-${service.id}-description`
-                              ]
-                            }
-                          </p>
-                        )}
-
-                      </div>
-
-                    </div>
-
-                  ))}
-
-                </div>
-
               </div>
-
-              {/* BUTTONS */}
-
-              <div className="mt-[22px] flex flex-col-reverse items-stretch justify-end gap-[10px] sm:flex-row sm:items-center sm:gap-[12px]">
-
-                <button
-                  type="button"
-                  onClick={handleSaveDraft}
-                  className="w-full cursor-pointer py-[8px] text-[16px] font-semibold text-[#c40000] transition hover:text-[#970000] sm:w-auto sm:py-0 sm:text-[18px]"
-                >
-                  Save Draft
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleSavePackage}
-                  className="h-[40px] w-full cursor-pointer rounded-[4px] bg-[#333333] px-[18px] text-[16px] font-semibold text-white transition hover:bg-[#222222] sm:h-[32px] sm:w-[180px] sm:text-[18px]"
-                >
-                  {editingPackageId ? "Update Package" : "Save Package"}
-                </button>
-
-              </div>
-
-            </div>
+            ))
           )}
-
-        </section>
-
-        {/* SAVED FIXED PACKAGES */}
-
-        <div className="mt-[10px] space-y-[8px] sm:mt-[12px]">
-
-          {savedPackages.map((pkg) => (
-
-            <div
-              key={pkg.id}
-              className="flex flex-col gap-[12px] rounded-[5px] bg-white px-[12px] py-[13px] sm:flex-row sm:items-center sm:justify-between sm:gap-[15px] sm:px-[18px] sm:py-[15px]"
-            >
-
-              {/* LEFT CONTENT */}
-
-              <div className="min-w-0 flex-1">
-
-                <h3 className="break-words text-[16px] font-semibold text-[#333333] sm:text-[18px]">
-                  {pkg.packageName}
-                </h3>
-
-                <div className="mt-[7px] flex flex-wrap items-center gap-[7px]">
-
-                  {/* CATEGORY BADGE */}
-
-                  <div className="inline-flex min-h-[35px] w-auto max-w-full shrink-0 items-center rounded-[3px] bg-[#222222] px-[9px] py-[6px] text-[13px] font-medium leading-none text-white sm:h-[37px] sm:w-[142px] sm:py-0 sm:text-[14px]">
-
-                    <FaCamera
-                      className="mr-[4px] shrink-0 text-white"
-                      size={16}
-                    />
-
-                    <span className="truncate text-[13px] font-semibold sm:text-[14px]">
-                      {pkg.category}
-                    </span>
-
-                  </div>
-
-                  {/* SERVICE COUNT */}
-
-                  <span className="break-words text-[13px] font-semibold leading-[19px] text-[#111111] sm:text-[14px]">
-
-                    {pkg.serviceCount.split("Add Ons Applicable")[0]}
-
-                    <span className="font-semibold text-red-900">
-                      Add Ons Applicable
-                    </span>
-
-                  </span>
-
-                </div>
-
-                {/* SAVED TRAVEL CHARGE */}
-
-                <p className="mt-[5px] text-[13px] text-[#777777]">
-                  Travel: {travelText(pkg)}
-                </p>
-
-              </div>
-
-              {/* RIGHT ACTION ICONS */}
-
-              <div className="flex shrink-0 items-center justify-end gap-[18px] border-t border-[#eeeeee] pt-[9px] sm:gap-[14px] sm:border-t-0 sm:pt-0">
-
-                {/* EDIT */}
-
-                <button
-                  type="button"
-                  onClick={() => handleEditPackage(pkg)}
-                  className="cursor-pointer text-[#333333] transition hover:text-black"
-                  title="Edit"
-                >
-                  <FiEdit className="text-[18px]" />
-                </button>
-
-                {/* DELETE */}
-
-                <button
-                  type="button"
-                  onClick={() => handleDeletePackage(pkg.id)}
-                  className="cursor-pointer text-[#900000] transition hover:text-[#c40000]"
-                  title="Delete"
-                >
-                  <FaTrash className="text-[16px]" />
-                </button>
-
-                {/* VIEW */}
-
-                <button
-                  type="button"
-                  onClick={() => handleEditPackage(pkg)}
-                  className="cursor-pointer text-[#333333] transition hover:text-black"
-                  title="View"
-                >
-                  <LuEyeClosed className="text-[18px]" />
-                </button>
-
-              </div>
-
-            </div>
-
-          ))}
-
         </div>
-
       </div>
-
     </ServicesPricingLayout>
   );
 };

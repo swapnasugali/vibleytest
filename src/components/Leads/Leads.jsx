@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   FaSearch,
   FaRegCalendar,
@@ -117,6 +117,30 @@ const INITIAL_LEADS = [
       "We are looking for a DJ for our upcoming event. Please share your package details and availability.",
   },
 ];
+
+// ======================================================
+// LOCAL STORAGE
+// ======================================================
+
+const STORAGE_KEY = "vibely_leads_data";
+
+const getInitialLeads = () => {
+  try {
+    const savedLeads = localStorage.getItem(STORAGE_KEY);
+
+    if (savedLeads) {
+      const parsedLeads = JSON.parse(savedLeads);
+
+      if (Array.isArray(parsedLeads)) {
+        return parsedLeads;
+      }
+    }
+  } catch (error) {
+    console.error("Unable to load leads:", error);
+  }
+
+  return INITIAL_LEADS;
+};
 
 // ======================================================
 // TABS AND STATUS STYLES
@@ -303,7 +327,6 @@ const DetailItem = ({ icon, title, value }) => (
 
 const LeadDetails = ({
   lead,
-  selectedStatus,
   onStatusChange,
   onConnect,
   onReject,
@@ -433,6 +456,7 @@ const LeadDetails = ({
                 )
               );
             }}
+            placeholder="Add your notes here..."
             className="
               h-[81px]
               w-full
@@ -474,7 +498,7 @@ const LeadDetails = ({
 
           <div className="relative">
             <select
-              value={selectedStatus}
+              value={lead.status}
               onChange={onStatusChange}
               className="
                 h-[36px] w-[90px] appearance-none cursor-pointer
@@ -523,17 +547,19 @@ const LeadDetails = ({
 // ======================================================
 
 const Leads = () => {
-  const [leads, setLeads] = useState(INITIAL_LEADS);
+  const [leads, setLeads] = useState(getInitialLeads);
   const [activeTab, setActiveTab] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLeadId, setSelectedLeadId] = useState(1);
 
-  const selectedLead =
-    leads.find((lead) => lead.id === selectedLeadId) || leads[0];
-
-  const [selectedStatus, setSelectedStatus] = useState(
-    selectedLead?.status || "New"
-  );
+  // SAVE LEADS TO LOCAL STORAGE
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
+    } catch (error) {
+      console.error("Unable to save leads:", error);
+    }
+  }, [leads]);
 
   // TAB COUNTS
   const tabCounts = useMemo(
@@ -558,35 +584,63 @@ const Leads = () => {
 
       const services = lead.services || [];
       const serviceText = services
-        .map((item) => `${item.service} ${item.category}`)
+        .map(
+          (item) =>
+            `${item.service || ""} ${item.category || ""} ${
+              item.serviceType || ""
+            }`
+        )
         .join(" ");
 
+      const searchableText = [
+        lead.name,
+        lead.email,
+        lead.phone,
+        lead.eventType,
+        lead.date,
+        lead.eventDate,
+        lead.eventTime,
+        lead.location,
+        lead.guests,
+        lead.budget,
+        lead.category,
+        lead.service,
+        lead.serviceType,
+        lead.status,
+        lead.message,
+        serviceText,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
       const matchesSearch =
-        !search ||
-        lead.name.toLowerCase().includes(search) ||
-        lead.eventType.toLowerCase().includes(search) ||
-        lead.category.toLowerCase().includes(search) ||
-        lead.service.toLowerCase().includes(search) ||
-        serviceText.toLowerCase().includes(search);
+        !search || searchableText.includes(search);
 
       return matchesTab && matchesSearch;
     });
   }, [leads, activeTab, searchTerm]);
 
+  // SELECTED LEAD
+  const selectedLead =
+    filteredLeads.find((lead) => lead.id === selectedLeadId) ||
+    filteredLeads[0] ||
+    null;
+
   // SELECT LEAD
   const handleSelectLead = (lead) => {
     setSelectedLeadId(lead.id);
-    setSelectedStatus(lead.status);
   };
 
   // CHANGE STATUS
   const handleStatusChange = (event) => {
+    if (!selectedLead) return;
+
     const newStatus = event.target.value;
-    setSelectedStatus(newStatus);
 
     setLeads((previousLeads) =>
       previousLeads.map((lead) =>
-        lead.id === selectedLeadId
+        lead.id === selectedLead.id
           ? { ...lead, status: newStatus }
           : lead
       )
@@ -595,16 +649,33 @@ const Leads = () => {
 
   // CONNECT
   const handleConnect = () => {
-    if (selectedLead) {
-      alert(`Connecting with ${selectedLead.name}`);
-    }
+    if (!selectedLead) return;
+
+    const subject = `Enquiry Regarding ${selectedLead.eventType}`;
+    const body = `Hello ${selectedLead.name},
+
+Thank you for contacting us regarding your ${selectedLead.eventType}.
+
+We would like to discuss your requirements and share the available packages.
+
+Regards`;
+
+    const mailtoLink = `mailto:${selectedLead.email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+
+    window.location.href = mailtoLink;
   };
 
   // REJECT
   const handleReject = () => {
     if (!selectedLead) return;
 
-    setSelectedStatus("Rejected");
+    const confirmReject = window.confirm(
+      `Are you sure you want to reject the lead from ${selectedLead.name}?`
+    );
+
+    if (!confirmReject) return;
 
     setLeads((previousLeads) =>
       previousLeads.map((lead) =>
@@ -722,7 +793,7 @@ const Leads = () => {
                   <LeadCard
                     key={lead.id}
                     lead={lead}
-                    selected={selectedLeadId === lead.id}
+                    selected={selectedLead?.id === lead.id}
                     onClick={() => handleSelectLead(lead)}
                   />
                 ))}
@@ -734,7 +805,6 @@ const Leads = () => {
           <section className="min-w-0">
             <LeadDetails
               lead={selectedLead}
-              selectedStatus={selectedStatus}
               onStatusChange={handleStatusChange}
               onConnect={handleConnect}
               onReject={handleReject}

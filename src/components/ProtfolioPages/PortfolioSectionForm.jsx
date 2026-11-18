@@ -4,10 +4,15 @@ import {
   FiArrowLeft,
   FiImage,
   FiUploadCloud,
+  FiTrash2,
+  FiVideo,
+  FiEye,
+  FiEyeOff,
 } from "react-icons/fi";
 
 const MAX_ABOUT_LENGTH = 400;
 const MAX_FILES = 4;
+const DRAFT_KEY = "portfolioSectionDraft";
 
 const serviceTypes = [
   "General Photography",
@@ -25,7 +30,6 @@ const eventTypes = [
   "Other",
 ];
 
-// Get today's date in local YYYY-MM-DD format
 const getTodayDate = () => {
   const today = new Date();
 
@@ -43,10 +47,7 @@ const PortfolioSectionForm = ({
 }) => {
   const photoInputRef = useRef(null);
   const videoInputRef = useRef(null);
-
-  /* =====================================================
-     FORM STATE
-  ===================================================== */
+  const createdUrlsRef = useRef([]);
 
   const [eventTitle, setEventTitle] = useState("");
   const [serviceType, setServiceType] = useState(
@@ -62,80 +63,125 @@ const PortfolioSectionForm = ({
   const [photos, setPhotos] = useState([]);
   const [videos, setVideos] = useState([]);
 
-  /* =====================================================
-     LOAD EDIT DATA
-  ===================================================== */
+  const [showGridPreview, setShowGridPreview] = useState(true);
 
+  // Load existing data while editing, or restore a saved draft.
   useEffect(() => {
-    if (!initialData) {
-      setEventTitle("");
-      setServiceType("General Photography");
-      setEventType("Corporate Event");
-      setEventDate(getTodayDate());
-      setAboutEvent("");
-      setFeatured(true);
-      setPhotos([]);
-      setVideos([]);
+    if (initialData) {
+      setEventTitle(initialData.title || "");
+      setServiceType(
+        initialData.serviceType || "General Photography"
+      );
+      setEventType(
+        initialData.eventType || "Corporate Event"
+      );
+      setEventDate(initialData.eventDate || getTodayDate());
+      setAboutEvent(initialData.aboutEvent || "");
+      setFeatured(initialData.featured ?? true);
+
+      setPhotos(
+        Array.isArray(initialData.photos)
+          ? initialData.photos
+          : []
+      );
+
+      setVideos(
+        Array.isArray(initialData.videos)
+          ? initialData.videos
+          : []
+      );
 
       return;
     }
 
-    setEventTitle(initialData.title || "");
+    // Restore text fields from the last saved draft.
+    try {
+      const savedDraft = localStorage.getItem(DRAFT_KEY);
 
-    setServiceType(
-      initialData.serviceType ||
-        "General Photography"
-    );
+      if (savedDraft) {
+        const draft = JSON.parse(savedDraft);
 
-    setEventType(
-      initialData.eventType ||
-        "Corporate Event"
-    );
-
-    setEventDate(
-      initialData.eventDate || getTodayDate()
-    );
-
-    setAboutEvent(
-      initialData.aboutEvent || ""
-    );
-
-    setFeatured(
-      initialData.featured ?? true
-    );
-
-    setPhotos(
-      Array.isArray(initialData.photos)
-        ? initialData.photos
-        : []
-    );
-
-    setVideos(
-      Array.isArray(initialData.videos)
-        ? initialData.videos
-        : []
-    );
+        setEventTitle(draft.eventTitle || "");
+        setServiceType(
+          draft.serviceType || "General Photography"
+        );
+        setEventType(draft.eventType || "Corporate Event");
+        setEventDate(draft.eventDate || getTodayDate());
+        setAboutEvent(draft.aboutEvent || "");
+        setFeatured(draft.featured ?? true);
+      } else {
+        setEventTitle("");
+        setServiceType("General Photography");
+        setEventType("Corporate Event");
+        setEventDate(getTodayDate());
+        setAboutEvent("");
+        setFeatured(true);
+        setPhotos([]);
+        setVideos([]);
+      }
+    } catch (error) {
+      console.error("Unable to restore portfolio draft:", error);
+    }
   }, [initialData]);
 
-  /* =====================================================
-     PHOTO UPLOAD
-  ===================================================== */
+  // Revoke only the temporary URLs created by this component.
+  useEffect(() => {
+    return () => {
+      createdUrlsRef.current.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
 
+      createdUrlsRef.current = [];
+    };
+  }, []);
+
+  const createMediaItem = (file) => {
+    const url = URL.createObjectURL(file);
+
+    createdUrlsRef.current.push(url);
+
+    return {
+      id: `${file.name}-${file.lastModified}-${Math.random()
+        .toString(36)
+        .slice(2)}`,
+      file,
+      url,
+      name: file.name,
+    };
+  };
+
+  // PHOTO UPLOAD
   const handlePhotoChange = (event) => {
-    const selectedFiles = Array.from(
-      event.target.files || []
-    );
+    const selectedFiles = Array.from(event.target.files || []);
+    const remainingSlots = MAX_FILES - photos.length;
 
-    const remainingSlots =
-      MAX_FILES - photos.length;
+    if (remainingSlots <= 0) {
+      alert("You can upload a maximum of 4 photos.");
+      event.target.value = "";
+      return;
+    }
 
-    const newPhotos = selectedFiles
-      .slice(0, remainingSlots)
-      .map((file) => ({
-        id: `${file.name}-${file.lastModified}-${Date.now()}`,
-        file,
-        url: URL.createObjectURL(file),
-      }));
+    const validFiles = selectedFiles.filter((file) => {
+      const validType = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+      ].includes(file.type);
+
+      if (!validType) {
+        alert(`${file.name} is not supported. Upload JPG, PNG or WEBP files.`);
+      }
+
+      return validType;
+    });
+
+    const filesToAdd = validFiles.slice(0, remainingSlots);
+
+    if (validFiles.length > remainingSlots) {
+      alert(`You can upload only ${remainingSlots} more photo(s).`);
+    }
+
+    const newPhotos = filesToAdd.map(createMediaItem);
 
     setPhotos((previousPhotos) => [
       ...previousPhotos,
@@ -145,22 +191,21 @@ const PortfolioSectionForm = ({
     event.target.value = "";
   };
 
-  /* =====================================================
-     VIDEO UPLOAD
-  ===================================================== */
-
+  // VIDEO UPLOAD
   const handleVideoChange = (event) => {
-    const selectedFiles = Array.from(
-      event.target.files || []
-    );
+    const selectedFiles = Array.from(event.target.files || []);
 
-    const newVideos = selectedFiles.map(
-      (file) => ({
-        id: `${file.name}-${file.lastModified}-${Date.now()}`,
-        file,
-        url: URL.createObjectURL(file),
-      })
-    );
+    const validFiles = selectedFiles.filter((file) => {
+      const validType = file.type.startsWith("video/");
+
+      if (!validType) {
+        alert(`${file.name} is not a supported video file.`);
+      }
+
+      return validType;
+    });
+
+    const newVideos = validFiles.map(createMediaItem);
 
     setVideos((previousVideos) => [
       ...previousVideos,
@@ -170,426 +215,222 @@ const PortfolioSectionForm = ({
     event.target.value = "";
   };
 
-  /* =====================================================
-     SAVE
-  ===================================================== */
+  // REMOVE PHOTO
+  const handleRemovePhoto = (photoId) => {
+    setPhotos((previousPhotos) => {
+      const photoToRemove = previousPhotos.find(
+        (photo) => photo.id === photoId
+      );
 
+      if (photoToRemove?.url) {
+        URL.revokeObjectURL(photoToRemove.url);
+
+        createdUrlsRef.current = createdUrlsRef.current.filter(
+          (url) => url !== photoToRemove.url
+        );
+      }
+
+      return previousPhotos.filter(
+        (photo) => photo.id !== photoId
+      );
+    });
+  };
+
+  // REMOVE VIDEO
+  const handleRemoveVideo = (videoId) => {
+    setVideos((previousVideos) => {
+      const videoToRemove = previousVideos.find(
+        (video) => video.id === videoId
+      );
+
+      if (videoToRemove?.url) {
+        URL.revokeObjectURL(videoToRemove.url);
+
+        createdUrlsRef.current = createdUrlsRef.current.filter(
+          (url) => url !== videoToRemove.url
+        );
+      }
+
+      return previousVideos.filter(
+        (video) => video.id !== videoId
+      );
+    });
+  };
+
+  // SAVE DRAFT
+  const handleSaveDraft = () => {
+    const draftData = {
+      eventTitle,
+      serviceType,
+      eventType,
+      eventDate,
+      aboutEvent,
+      featured,
+    };
+
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify(draftData)
+      );
+
+      alert("Draft saved successfully.");
+    } catch (error) {
+      console.error("Unable to save draft:", error);
+      alert("Unable to save draft. Please try again.");
+    }
+  };
+
+  // SAVE SECTION
   const handleSave = () => {
     if (!eventTitle.trim()) {
-      alert("Please enter Event Title");
+      alert("Please enter Event Title.");
       return;
     }
 
-    // Future dates are not allowed
+    if (!eventDate) {
+      alert("Please select Event Date.");
+      return;
+    }
+
     if (eventDate > getTodayDate()) {
       alert(
-        "Future dates are not allowed. Please select today's date or a past date."
+        "Future dates are not allowed. Please select today or a past date."
       );
       return;
     }
 
+    if (typeof onSave !== "function") {
+      alert("Save function is not connected. Please check the parent component.");
+      return;
+    }
+
     const sectionData = {
-      id:
-        initialData?.id ||
-        Date.now(),
-
+      id: initialData?.id || Date.now(),
       title: eventTitle.trim(),
-
       serviceType,
-
       eventType,
-
       eventDate,
-
-      aboutEvent,
-
+      aboutEvent: aboutEvent.trim(),
       featured,
-
       photos,
-
       videos,
     };
 
     onSave(sectionData);
+
+    // Clear the draft after successful save callback.
+    localStorage.removeItem(DRAFT_KEY);
   };
 
   return (
     <section
       className="w-full min-w-0 overflow-x-hidden"
-      style={{
-        fontFamily: "Poppins, sans-serif",
-      }}
+      style={{ fontFamily: "Poppins, sans-serif" }}
     >
-      {/* =================================================
-          PAGE HEADER
-      ================================================= */}
-
-      <div
-        className="
-          mx-auto
-          mb-[20px]
-          flex
-          w-[calc(100%-24px)]
-          max-w-[1100px]
-          flex-col
-          gap-[14px]
-          sm:w-[calc(100%-32px)]
-          sm:flex-row
-          sm:items-start
-          sm:justify-between
-          sm:gap-4
-        "
-      >
-        {/* TITLE */}
-
+      {/* PAGE HEADER */}
+      <div className="mx-auto mb-5 flex w-[calc(100%-24px)] max-w-[1100px] flex-col gap-4 sm:w-[calc(100%-32px)] sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <h1
-            className="
-              break-words
-              text-[28px]
-              font-semibold
-              leading-[1.2]
-              text-[#292929]
-              sm:text-[30px]
-              lg:text-[34px]
-            "
-          >
+          <h1 className="break-words text-[28px] font-semibold leading-tight text-[#292929] sm:text-[30px] lg:text-[34px]">
             Manage Portfolio
           </h1>
 
-          <p
-            className="
-              mt-[4px]
-              max-w-[800px]
-              break-words
-              text-[14px]
-              leading-[20px]
-              text-[#9F9F9F]
-              sm:text-[15px]
-              lg:text-[18px]
-              lg:leading-[21px]
-            "
-          >
-            Create Structured event-based portfolio
-            sections to showcase your best work and
-            attract clients
+          <p className="mt-1 max-w-[800px] break-words text-[14px] leading-5 text-[#9F9F9F] sm:text-[15px] lg:text-[18px]">
+            Create structured event-based portfolio sections to showcase your best work and attract clients
           </p>
         </div>
-
-        {/* BACK BUTTON */}
 
         <button
           type="button"
           onClick={onBack}
-          className="
-            flex
-            h-[45px]
-            w-full
-            shrink-0
-            cursor-pointer
-            items-center
-            justify-center
-            gap-[6px]
-            rounded-[4px]
-            bg-[#a60000]
-            px-[14px]
-            text-[15px]
-            font-semibold
-            text-white
-            hover:bg-[#850000]
-            sm:h-[50px]
-            sm:w-[240px]
-            sm:text-[16px]
-            lg:h-[57px]
-            lg:w-[300px]
-            lg:text-[18px]
-            xl:w-[365px]
-          "
+          className="flex h-[45px] w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded bg-[#a60000] px-4 text-[15px] font-semibold text-white hover:bg-[#850000] sm:h-[50px] sm:w-[220px] lg:h-[57px] lg:w-[260px]"
         >
-          <FiArrowLeft className="h-[14px] w-[14px] shrink-0" />
-
-          <span>Back to Portfolio</span>
+          <FiArrowLeft />
+          Back to Portfolio
         </button>
       </div>
 
-      {/* =================================================
-          MAIN CARD
-      ================================================= */}
+      {/* MAIN CARD */}
+      <div className="mx-auto w-[calc(100%-24px)] max-w-[1100px] overflow-hidden rounded-[7px] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.06)] sm:w-[calc(100%-32px)]">
+        <div className="px-[14px] pb-5 pt-5 sm:px-7 lg:px-[38px]">
 
-      <div
-        className="
-          mx-auto
-          w-[calc(100%-24px)]
-          max-w-[1100px]
-          overflow-hidden
-          rounded-[7px]
-          bg-white
-          shadow-[0_1px_4px_rgba(0,0,0,0.03)]
-          sm:w-[calc(100%-32px)]
-        "
-      >
-        {/* FORM CONTENT */}
-
-        <div
-          className="
-            px-[14px]
-            pb-[18px]
-            pt-[18px]
-            sm:px-[28px]
-            sm:pb-[20px]
-            sm:pt-[20px]
-            lg:px-[38px]
-          "
-        >
           {/* EVENT INFORMATION */}
-
-          <div
-            className="
-              flex
-              flex-col
-              items-start
-              gap-[10px]
-              border-b
-              border-[#eeeeee]
-              pb-[8px]
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
-              sm:gap-3
-            "
-          >
-            <h2
-              className="
-                text-[21px]
-                font-medium
-                text-[#737373]
-                sm:text-[24px]
-                lg:text-[26px]
-              "
-            >
+          <div className="flex flex-col gap-3 border-b border-[#eeeeee] pb-3 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-[21px] font-medium text-[#737373] sm:text-[24px] lg:text-[26px]">
               Event Information
             </h2>
 
             <button
               type="button"
-              onClick={() =>
-                setFeatured((previous) => !previous)
-              }
-              className="
-                flex
-                h-[34px]
-                w-[151px]
-                shrink-0
-                cursor-pointer
-                items-center
-                justify-between
-                rounded-[4px]
-                border
-                border-[#000000]
-                bg-white
-                px-[10px]
-              "
+              onClick={() => setFeatured((previous) => !previous)}
+              aria-pressed={featured}
+              className="flex h-[36px] w-[151px] cursor-pointer items-center justify-between rounded border border-[#999] bg-white px-2.5"
             >
-              <span
-                className="
-                  text-[16px]
-                  font-medium
-                  leading-none
-                  text-[#737373]
-                  sm:text-[18px]
-                "
-              >
+              <span className="text-[16px] font-medium text-[#737373]">
                 Featured
               </span>
 
               <span
-                className={`
-                  relative
-                  h-[18px]
-                  w-[31px]
-                  shrink-0
-                  rounded-full
-                  transition
-                  ${
-                    featured
-                      ? "bg-[#ffb000]"
-                      : "bg-[#c8c8c8]"
-                  }
-                `}
+                className={`relative h-[18px] w-[31px] rounded-full transition ${
+                  featured ? "bg-[#ffb000]" : "bg-[#c8c8c8]"
+                }`}
               >
                 <span
-                  className={`
-                    absolute
-                    top-[2px]
-                    h-[14px]
-                    w-[14px]
-                    rounded-full
-                    bg-white
-                    shadow-[0_1px_3px_rgba(0,0,0,0.25)]
-                    transition-all
-                    ${
-                      featured
-                        ? "right-[2px]"
-                        : "left-[2px]"
-                    }
-                  `}
+                  className={`absolute top-[2px] h-[14px] w-[14px] rounded-full bg-white shadow transition-all ${
+                    featured ? "right-[2px]" : "left-[2px]"
+                  }`}
                 />
               </span>
             </button>
           </div>
 
           {/* EVENT TITLE */}
-
-          <div className="mt-[14px]">
-            <label
-              className="
-                mb-[5px]
-                block
-                text-[16px]
-                font-semibold
-                text-[#333]
-                sm:text-[18px]
-              "
-            >
-              Event Title
-              <span className="text-[#d00000]">
-                *
-              </span>
+          <div className="mt-4">
+            <label className="mb-1 block text-[16px] font-semibold text-[#333] sm:text-[18px]">
+              Event Title <span className="text-[#d00000]">*</span>
             </label>
 
             <input
               type="text"
               value={eventTitle}
-              onChange={(event) =>
-                setEventTitle(event.target.value)
-              }
-              placeholder="Ex : Universal Media's Grand Launch Event 2026"
-              className="
-                h-[36px]
-                w-full
-                min-w-0
-                rounded-[4px]
-                border
-                border-[#c9c9c9]
-                px-[10px]
-                text-[14px]
-                text-[#333]
-                outline-none
-                placeholder:text-[#999]
-                focus:border-[#970000]
-                sm:h-[31px]
-                sm:text-[16px]
-              "
+              onChange={(event) => setEventTitle(event.target.value)}
+              placeholder="Ex: Universal Media's Grand Launch Event 2026"
+              className="h-[40px] w-full rounded border border-[#c9c9c9] px-3 text-[14px] text-[#333] outline-none placeholder:text-[#999] focus:border-[#970000] sm:text-[16px]"
             />
           </div>
 
-          {/* SERVICE TYPE + EVENT TYPE */}
-
-          <div
-            className="
-              mt-[13px]
-              grid
-              grid-cols-1
-              gap-[12px]
-              sm:grid-cols-2
-            "
-          >
-            <div className="min-w-0">
-              <label
-                className="
-                  mb-[5px]
-                  block
-                  text-[16px]
-                  font-semibold
-                  text-[#333]
-                  sm:text-[18px]
-                "
-              >
-                Service Type
-                <span className="text-[#d00000]">
-                  *
-                </span>
+          {/* SERVICE TYPE AND EVENT TYPE */}
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-[16px] font-semibold text-[#333] sm:text-[18px]">
+                Service Type <span className="text-[#d00000]">*</span>
               </label>
 
               <select
                 value={serviceType}
-                onChange={(event) =>
-                  setServiceType(event.target.value)
-                }
-                className="
-                  h-[36px]
-                  w-full
-                  min-w-0
-                  cursor-pointer
-                  rounded-[4px]
-                  border
-                  border-[#c9c9c9]
-                  bg-white
-                  px-[10px]
-                  text-[14px]
-                  text-[#555]
-                  outline-none
-                  focus:border-[#970000]
-                  sm:h-[31px]
-                  sm:text-[16px]
-                "
+                onChange={(event) => setServiceType(event.target.value)}
+                className="h-[40px] w-full cursor-pointer rounded border border-[#c9c9c9] bg-white px-3 text-[14px] text-[#555] outline-none focus:border-[#970000] sm:text-[16px]"
               >
                 {serviceTypes.map((service) => (
-                  <option
-                    key={service}
-                    value={service}
-                  >
+                  <option key={service} value={service}>
                     {service}
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="min-w-0">
-              <label
-                className="
-                  mb-[5px]
-                  block
-                  text-[16px]
-                  font-semibold
-                  text-[#333]
-                  sm:text-[18px]
-                "
-              >
-                Event Type
-                <span className="text-[#d00000]">
-                  *
-                </span>
+            <div>
+              <label className="mb-1 block text-[16px] font-semibold text-[#333] sm:text-[18px]">
+                Event Type <span className="text-[#d00000]">*</span>
               </label>
 
               <select
                 value={eventType}
-                onChange={(event) =>
-                  setEventType(event.target.value)
-                }
-                className="
-                  h-[36px]
-                  w-full
-                  min-w-0
-                  cursor-pointer
-                  rounded-[4px]
-                  border
-                  border-[#c9c9c9]
-                  bg-white
-                  px-[10px]
-                  text-[14px]
-                  text-[#555]
-                  outline-none
-                  focus:border-[#970000]
-                  sm:h-[31px]
-                  sm:text-[16px]
-                "
+                onChange={(event) => setEventType(event.target.value)}
+                className="h-[40px] w-full cursor-pointer rounded border border-[#c9c9c9] bg-white px-3 text-[14px] text-[#555] outline-none focus:border-[#970000] sm:text-[16px]"
               >
                 {eventTypes.map((type) => (
-                  <option
-                    key={type}
-                    value={type}
-                  >
+                  <option key={type} value={type}>
                     {type}
                   </option>
                 ))}
@@ -598,87 +439,31 @@ const PortfolioSectionForm = ({
           </div>
 
           {/* EVENT DATE */}
-
-          <div className="mt-[13px] w-full max-w-[347px]">
-            <label
-              className="
-                mb-[5px]
-                block
-                text-[16px]
-                font-semibold
-                text-[#333]
-                sm:text-[18px]
-              "
-            >
-              Event Date
+          <div className="mt-4 w-full max-w-[347px]">
+            <label className="mb-1 block text-[16px] font-semibold text-[#333] sm:text-[18px]">
+              Event Date <span className="text-[#d00000]">*</span>
             </label>
 
             <input
               type="date"
               value={eventDate}
               max={getTodayDate()}
-              onChange={(event) => {
-                const selectedDate = event.target.value;
-
-                if (selectedDate <= getTodayDate()) {
-                  setEventDate(selectedDate);
-                }
-              }}
-              className="
-                h-[36px]
-                w-full
-                rounded-[4px]
-                border
-                border-[#c9c9c9]
-                px-[10px]
-                text-[14px]
-                text-[#555]
-                outline-none
-                focus:border-[#970000]
-                sm:h-[31px]
-              "
+              onChange={(event) => setEventDate(event.target.value)}
+              className="h-[40px] w-full rounded border border-[#c9c9c9] px-3 text-[14px] text-[#555] outline-none focus:border-[#970000]"
             />
           </div>
 
           {/* ABOUT EVENT */}
-
-          <div className="mt-[13px]">
-            <div
-              className="
-                mb-[5px]
-                flex
-                flex-col
-                items-start
-                gap-[4px]
-                sm:flex-row
-                sm:items-center
-                sm:justify-between
-                sm:gap-2
-              "
-            >
-              <label
-                className="
-                  text-[16px]
-                  font-semibold
-                  text-[#333]
-                  sm:text-[18px]
-                "
-              >
+          <div className="mt-4">
+            <div className="mb-1 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+              <label className="text-[16px] font-semibold text-[#333] sm:text-[18px]">
                 About Event
-
-                <span
-                  className="
-                    ml-1
-                    font-normal
-                    italic
-                    text-[#777]
-                  "
-                >
+                <span className="ml-1 font-normal italic text-[#777]">
                   (Optional)
                 </span>
               </label>
 
-              <span className="shrink-0 text-[12px] text-[#333] sm:text-[13px]">
+              <span className="text-[12px] text-[#555] sm:text-[13px]">
                 {aboutEvent.length} / {MAX_ABOUT_LENGTH} Characters
               </span>
             </div>
@@ -686,141 +471,54 @@ const PortfolioSectionForm = ({
             <textarea
               value={aboutEvent}
               maxLength={MAX_ABOUT_LENGTH}
-              onChange={(event) =>
-                setAboutEvent(event.target.value)
-              }
-              placeholder="Ex : Universal media hired us for this auspicious event, we are glad to..."
-              style={{
-                resize: "none",
-                overflowY: "hidden",
-              }}
-              className="
-                min-h-[55px]
-                w-full
-                rounded-[4px]
-                border
-                border-[#c9c9c9]
-                px-[10px]
-                py-[7px]
-                text-[13px]
-                text-[#555]
-                outline-none
-                placeholder:text-[#999]
-                focus:border-[#970000]
-                sm:h-[31px]
-                sm:min-h-[31px]
-              "
+              onChange={(event) => setAboutEvent(event.target.value)}
+              placeholder="Describe your event..."
+              rows={3}
+              className="min-h-[80px] w-full resize-none rounded border border-[#c9c9c9] px-3 py-2 text-[14px] text-[#555] outline-none placeholder:text-[#999] focus:border-[#970000] sm:text-[15px]"
             />
           </div>
 
           {/* MEDIA HEADER */}
-
-          <div
-            className="
-              mt-[18px]
-              flex
-              flex-col
-              items-start
-              gap-[5px]
-              border-b
-              border-[#eeeeee]
-              pb-[7px]
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
-            "
-          >
-            <h2
-              className="
-                text-[22px]
-                font-medium
-                text-[#777]
-                sm:text-[26px]
-              "
-            >
+          <div className="mt-6 flex flex-col gap-2 border-b border-[#eeeeee] pb-2 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-[22px] font-medium text-[#777] sm:text-[26px]">
               Media Upload
             </h2>
 
             <button
               type="button"
-              className="
-                m-0
-                cursor-pointer
-                border-0
-                bg-transparent
-                p-0
-                text-[13px]
-                text-[#2E2E2E]
-                underline
-                underline-offset-2
-              "
+              onClick={() => setShowGridPreview((previous) => !previous)}
+              className="flex cursor-pointer items-center gap-2 self-start text-[13px] font-medium text-[#970000] underline underline-offset-2"
             >
-              Grid Preview
+              {showGridPreview ? <FiEyeOff /> : <FiEye />}
+              {showGridPreview ? "Hide Preview" : "Grid Preview"}
             </button>
           </div>
 
           {/* MEDIA AREA */}
+          <div className="mt-4 flex min-w-0 flex-col gap-5 lg:flex-row lg:items-start">
 
-          <div
-            className="
-              mt-[12px]
-              flex
-              min-w-0
-              flex-col
-              items-stretch
-              gap-[14px]
-              lg:flex-row
-              lg:items-start
-            "
-          >
             {/* UPLOAD BOX */}
-
-            <div
-              className="
-                flex
-                min-h-[250px]
-                w-full
-                shrink-0
-                flex-col
-                items-center
-                justify-center
-                rounded-[4px]
-                border
-                border-dashed
-                border-[#777]
-                px-[12px]
-                sm:min-h-[292px]
-                lg:max-w-[500px]
-              "
-            >
-              <div
-                className="
-                  mb-[7px]
-                  flex
-                  h-[34px]
-                  w-[34px]
-                  items-center
-                  justify-center
-                  rounded-full
-                  border
-                  border-[#eeeeee]
-                "
-              >
-                <FiUploadCloud className="h-[16px] w-[16px] text-[#e11]" />
+            <div className="flex min-h-[250px] w-full shrink-0 flex-col items-center justify-center rounded border border-dashed border-[#999] px-4 py-6 lg:max-w-[390px]">
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-[#eeeeee]">
+                <FiUploadCloud className="h-6 w-6 text-[#d22]" />
               </div>
 
-              <p className="text-center text-[14px] text-[#6D6D6D] sm:text-[16px]">
-                Upload photos, clips of the event
+              <p className="text-center text-[15px] font-medium text-[#555]">
+                Upload photos and videos of the event
               </p>
 
-              <p className="mt-[1px] text-center text-[12px] text-[#6D6D6D] sm:text-[13px]">
-                (.jpg, png, webp supported)
+              <p className="mt-1 text-center text-[12px] text-[#777]">
+                Photos: JPG, PNG, WEBP
+              </p>
+
+              <p className="text-center text-[12px] text-[#777]">
+                Maximum 4 photos
               </p>
 
               <input
                 ref={photoInputRef}
                 type="file"
-                accept="image/*"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                 multiple
                 className="hidden"
                 onChange={handlePhotoChange}
@@ -835,47 +533,20 @@ const PortfolioSectionForm = ({
                 onChange={handleVideoChange}
               />
 
-              <div className="mt-[10px] flex w-full max-w-[210px] items-center gap-[7px]">
+              <div className="mt-4 flex w-full max-w-[230px] gap-2">
                 <button
                   type="button"
-                  onClick={() =>
-                    photoInputRef.current?.click()
-                  }
-                  className="
-                    h-[32px]
-                    min-w-0
-                    flex-1
-                    cursor-pointer
-                    rounded-[2px]
-                    bg-[#d83c3c]
-                    px-[8px]
-                    text-[11px]
-                    font-bold
-                    text-white
-                  "
+                  onClick={() => photoInputRef.current?.click()}
+                  disabled={photos.length >= MAX_FILES}
+                  className="h-[38px] flex-1 rounded bg-[#d83c3c] px-2 text-[12px] font-bold text-white hover:bg-[#b92d2d] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  PHOTOS
+                  PHOTOS ({photos.length}/{MAX_FILES})
                 </button>
 
                 <button
                   type="button"
-                  onClick={() =>
-                    videoInputRef.current?.click()
-                  }
-                  className="
-                    h-[32px]
-                    min-w-0
-                    flex-1
-                    cursor-pointer
-                    rounded-[2px]
-                    border
-                    border-[#bdbdbd]
-                    bg-white
-                    px-[8px]
-                    text-[11px]
-                    font-bold
-                    text-[#555]
-                  "
+                  onClick={() => videoInputRef.current?.click()}
+                  className="h-[38px] flex-1 rounded border border-[#bdbdbd] bg-white px-2 text-[12px] font-bold text-[#555] hover:bg-[#f7f7f7]"
                 >
                   VIDEOS
                 </button>
@@ -883,308 +554,125 @@ const PortfolioSectionForm = ({
             </div>
 
             {/* GRID PREVIEW */}
+            {showGridPreview && (
+              <div className="min-w-0 flex-1">
+                <div className="mb-2 flex items-center justify-between">
+                  <h3 className="text-[15px] font-semibold text-[#444]">
+                    Photo Preview
+                  </h3>
 
-            <div className="min-w-0 flex-1">
-              <div
-                className="
-                  grid
-                  w-full
-                  grid-cols-2
-                  gap-[8px]
-                  sm:grid-cols-4
-                "
-              >
-                {/* BOX 1 */}
-
-                <div
-                  className="
-                    relative
-                    flex
-                    h-[98px]
-                    min-w-0
-                    flex-col
-                    items-center
-                    rounded-[4px]
-                    border
-                    border-[#a9a9a9]
-                    bg-white
-                  "
-                >
-                  <span
-                    className="
-                      absolute
-                      left-[6px]
-                      top-[5px]
-                      text-[7px]
-                      font-medium
-                      leading-none
-                      text-[#000]
-                    "
-                  >
-                    {photos.length} images
+                  <span className="text-[12px] text-[#777]">
+                    {photos.length} / {MAX_FILES} photos
                   </span>
+                </div>
 
-                  <div
-                    className="
-                      absolute
-                      top-[25px]
-                      flex
-                      h-[35px]
-                      w-[27px]
-                      items-center
-                      justify-center
-                      overflow-hidden
-                      rounded-[2px]
-                      bg-[#eeeeee]
-                    "
-                  >
-                    {photos.length > 0 ? (
-                      <div className="flex h-full w-full gap-[1px]">
-                        {photos
-                          .slice(0, 3)
-                          .map((photo) => (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {Array.from({ length: MAX_FILES }).map((_, index) => {
+                    const photo = photos[index];
+
+                    return (
+                      <div
+                        key={photo?.id || `empty-${index}`}
+                        className="relative flex aspect-[4/5] min-w-0 items-center justify-center overflow-hidden rounded border border-[#c8c8c8] bg-[#f7f7f7]"
+                      >
+                        {photo?.url ? (
+                          <>
                             <img
-                              key={photo.id}
                               src={photo.url}
-                              alt=""
-                              className="
-                                h-full
-                                min-w-0
-                                flex-1
-                                object-cover
-                              "
+                              alt={photo.name || `Portfolio photo ${index + 1}`}
+                              className="h-full w-full object-cover"
                             />
-                          ))}
+
+                            <button
+                              type="button"
+                              onClick={() => handleRemovePhoto(photo.id)}
+                              aria-label="Remove photo"
+                              className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-white hover:bg-red-700"
+                            >
+                              <FiTrash2 size={14} />
+                            </button>
+
+                            <span className="absolute bottom-0 left-0 right-0 truncate bg-black/60 px-1 py-1 text-center text-[10px] text-white">
+                              {photo.name || `Photo ${index + 1}`}
+                            </span>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center gap-2 text-[#999]">
+                            <FiImage size={24} />
+                            <span className="text-[11px]">
+                              Photo {index + 1}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    ) : (
-                      <FiImage className="h-[15px] w-[15px] text-[#777]" />
-                    )}
-                  </div>
-
-                  <span
-                    className="
-                      absolute
-                      bottom-[7px]
-                      whitespace-nowrap
-                      text-[8px]
-                      font-medium
-                      leading-none
-                      text-[#737373]
-                    "
-                  >
-                    (1080 X 1920)
-                  </span>
+                    );
+                  })}
                 </div>
 
-                {/* BOX 2 */}
+                {/* VIDEO PREVIEW */}
+                <div className="mt-5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h3 className="text-[15px] font-semibold text-[#444]">
+                      Video Preview
+                    </h3>
 
-                <div
-                  className="
-                    relative
-                    flex
-                    h-[98px]
-                    min-w-0
-                    flex-col
-                    items-center
-                    rounded-[4px]
-                    border
-                    border-[#a9a9a9]
-                    bg-white
-                  "
-                >
-                  <div
-                    className="
-                      absolute
-                      top-[24px]
-                      flex
-                      h-[27px]
-                      w-[38px]
-                      items-center
-                      justify-center
-                      overflow-hidden
-                      rounded-[2px]
-                      bg-[#eeeeee]
-                    "
-                  >
-                    {photos[3]?.url ? (
-                      <img
-                        src={photos[3].url}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <FiImage className="h-[15px] w-[15px] text-[#777]" />
-                    )}
+                    <span className="text-[12px] text-[#777]">
+                      {videos.length} videos
+                    </span>
                   </div>
 
-                  <span
-                    className="
-                      absolute
-                      bottom-[7px]
-                      whitespace-nowrap
-                      text-[8px]
-                      font-medium
-                      leading-none
-                      text-[#737373]
-                    "
-                  >
-                    (1920 X 1080)
-                  </span>
+                  {videos.length === 0 ? (
+                    <div className="flex min-h-[75px] items-center justify-center gap-2 rounded border border-dashed border-[#ccc] text-[13px] text-[#999]">
+                      <FiVideo size={18} />
+                      No videos uploaded
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {videos.map((video) => (
+                        <div
+                          key={video.id}
+                          className="relative min-w-0 overflow-hidden rounded border border-[#ddd] bg-[#f7f7f7] p-2"
+                        >
+                          <video
+                            src={video.url}
+                            controls
+                            className="max-h-[180px] w-full rounded bg-black"
+                          />
+
+                          <div className="mt-2 flex items-center justify-between gap-2">
+                            <span className="min-w-0 truncate text-[12px] text-[#555]">
+                              {video.name || "Uploaded video"}
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveVideo(video.id)}
+                              aria-label="Remove video"
+                              className="shrink-0 text-[#a60000] hover:text-red-800"
+                            >
+                              <FiTrash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                {/* BOX 3 */}
-
-                <div
-                  className="
-                    relative
-                    flex
-                    h-[98px]
-                    min-w-0
-                    flex-col
-                    items-center
-                    rounded-[4px]
-                    border
-                    border-[#a9a9a9]
-                    bg-white
-                  "
-                >
-                  <div
-                    className="
-                      absolute
-                      top-[24px]
-                      flex
-                      h-[27px]
-                      w-[27px]
-                      items-center
-                      justify-center
-                      rounded-[3px]
-                      bg-[#eeeeee]
-                    "
-                  >
-                    <FiImage className="h-[15px] w-[15px] text-[#777]" />
-                  </div>
-
-                  <span
-                    className="
-                      absolute
-                      bottom-[7px]
-                      whitespace-nowrap
-                      text-[8px]
-                      font-medium
-                      leading-none
-                      text-[#737373]
-                    "
-                  >
-                    (1080 X 1080)
-                  </span>
-                </div>
-
-                {/* BOX 4 */}
-
-                <div
-                  className="
-                    relative
-                    flex
-                    h-[98px]
-                    min-w-0
-                    flex-col
-                    items-center
-                    rounded-[4px]
-                    border
-                    border-[#a9a9a9]
-                    bg-white
-                  "
-                >
-                  <div
-                    className="
-                      absolute
-                      top-[24px]
-                      flex
-                      h-[27px]
-                      w-[27px]
-                      items-center
-                      justify-center
-                      rounded-[3px]
-                      bg-[#eeeeee]
-                    "
-                  >
-                    <FiImage className="h-[15px] w-[15px] text-[#777]" />
-                  </div>
-
-                  <span
-                    className="
-                      absolute
-                      bottom-[7px]
-                      whitespace-nowrap
-                      text-[8px]
-                      font-medium
-                      leading-none
-                      text-[#737373]
-                    "
-                  >
-                    (1080 X 1080)
-                  </span>
-                </div>
+                <p className="mt-3 text-[12px] leading-5 text-[#777] sm:text-[13px]">
+                  <strong>Note:</strong> Upload clear, high-quality photos for the best portfolio viewing experience.
+                </p>
               </div>
-
-              {/* NOTE */}
-
-              <p
-                className="
-                  mt-[10px]
-                  text-[12px]
-                  font-light
-                  leading-[20px]
-                  text-[#6D6D6D]
-                  sm:text-[14px]
-                  sm:leading-[24px]
-                "
-              >
-                <span className="font-medium">
-                  Note :
-                </span>{" "}
-                Kindly upload the photos according
-                to the mentioned dimensions for the
-                best HD grid viewing experience for
-                the clients.
-              </p>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* =================================================
-            BOTTOM ACTION BAR
-        ================================================= */}
-
-        <div
-          className="
-            flex
-            flex-col
-            items-stretch
-            gap-[12px]
-            border-t
-            border-[#e6e6e6]
-            px-[14px]
-            py-[12px]
-            sm:flex-row
-            sm:items-center
-            sm:justify-end
-            sm:gap-[20px]
-            sm:px-[28px]
-            lg:px-[38px]
-          "
-        >
+        {/* BOTTOM ACTION BAR */}
+        <div className="flex flex-col-reverse gap-3 border-t border-[#e6e6e6] px-[14px] py-4 sm:flex-row sm:items-center sm:justify-end sm:gap-6 sm:px-7 lg:px-[38px]">
           <button
             type="button"
-            className="
-              cursor-pointer
-              text-center
-              text-[15px]
-              font-semibold
-              text-[#970000]
-              hover:text-[#780000]
-              sm:text-[18px]
-            "
+            onClick={handleSaveDraft}
+            className="cursor-pointer text-center text-[15px] font-semibold text-[#970000] hover:text-[#780000] sm:text-[16px]"
           >
             Save Draft
           </button>
@@ -1192,24 +680,7 @@ const PortfolioSectionForm = ({
           <button
             type="button"
             onClick={handleSave}
-            className="
-              flex
-              h-[45px]
-              w-full
-              cursor-pointer
-              items-center
-              justify-center
-              gap-2
-              rounded-[5px]
-              bg-[#303030]
-              px-5
-              text-[15px]
-              font-semibold
-              text-white
-              hover:bg-[#222]
-              sm:w-[158px]
-              sm:text-[16px]
-            "
+            className="flex h-[45px] w-full cursor-pointer items-center justify-center gap-2 rounded-[5px] bg-[#303030] px-5 text-[15px] font-semibold text-white hover:bg-[#222] sm:w-[158px] sm:text-[16px]"
           >
             Save Section
           </button>
