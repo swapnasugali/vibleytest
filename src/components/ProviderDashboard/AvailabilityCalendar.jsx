@@ -29,6 +29,24 @@ const getDateKey = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+// Get consecutive dates starting from a selected date.
+// The range automatically continues into the next month/year.
+const getDateRangeKeys = (startDate, numberOfDays) => {
+  if (!startDate) return [];
+
+  const safeDays = Math.max(1, Math.min(365, Number(numberOfDays) || 1));
+
+  return Array.from({ length: safeDays }, (_, index) => {
+    const date = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate() + index
+    );
+
+    return getDateKey(date);
+  });
+};
+
 // Display date
 const formatDate = (date) => {
   return date
@@ -218,7 +236,7 @@ const CalendarGrid = ({
               dateStyle = "bg-transparent";
             } else if (isBlocked) {
               dateStyle =
-                "bg-[#d00000] font-semibold text-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]";
+                "bg-[#f5bd00] font-semibold text-[#292000] shadow-[0_1px_3px_rgba(0,0,0,0.18)]";
             } else if (isMarked || isEvent) {
               dateStyle =
                 "bg-[#f5bd00] font-semibold text-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]";
@@ -337,8 +355,12 @@ const AvailabilityCalendar = () => {
     }
   });
 
-  // Draft note
+  // Draft note and event name for the selected blocked date range.
   const [note, setNote] = useState("");
+  const [eventName, setEventName] = useState("");
+
+  // Number of consecutive days to block for one event.
+  const [blockDays, setBlockDays] = useState(2);
 
   // Save notes in localStorage
   useEffect(() => {
@@ -381,23 +403,36 @@ const AvailabilityCalendar = () => {
   const handleMainCalendarDateClick = (day) => {
     if (!day) return;
 
-    setMainSelectedDate(new Date(currentYear, currentMonth, day));
+    const date = new Date(currentYear, currentMonth, day);
+    setMainSelectedDate(date);
+    setEventName(blockedDates[getDateKey(date)]?.eventName || "");
   };
 
-  // Block or unblock the date selected on the dashboard calendar
+  // Block or unblock the selected date range from the dashboard calendar.
   const handleToggleMainBlockedDate = () => {
     if (!mainSelectedDate) return;
 
-    const key = getDateKey(mainSelectedDate);
+    const dateKeys = getDateRangeKeys(mainSelectedDate, blockDays);
+    const shouldUnblock = dateKeys.some((key) => Boolean(blockedDates[key]));
+
+    if (!shouldUnblock && !eventName.trim()) {
+      window.alert("Please enter an event name before blocking the dates.");
+      return;
+    }
 
     setBlockedDates((prev) => {
       const updatedBlockedDates = { ...prev };
 
-      if (updatedBlockedDates[key]) {
-        delete updatedBlockedDates[key];
-      } else {
-        updatedBlockedDates[key] = true;
-      }
+      dateKeys.forEach((key) => {
+        if (shouldUnblock) {
+          delete updatedBlockedDates[key];
+        } else {
+          updatedBlockedDates[key] = {
+            eventName: eventName.trim(),
+            groupId: `${getDateKey(mainSelectedDate)}-${Date.now()}`,
+          };
+        }
+      });
 
       return updatedBlockedDates;
     });
@@ -449,6 +484,7 @@ const AvailabilityCalendar = () => {
 
     setSelectedDate(initialDate);
     setNote(notes[getDateKey(initialDate)] || "");
+    setEventName(blockedDates[getDateKey(initialDate)]?.eventName || "");
     setIsEditOpen(true);
   };
 
@@ -476,6 +512,7 @@ const AvailabilityCalendar = () => {
 
     setSelectedDate(firstDate);
     setNote(notes[getDateKey(firstDate)] || "");
+    setEventName(blockedDates[getDateKey(firstDate)]?.eventName || "");
   };
 
   // Next month in popup
@@ -496,6 +533,7 @@ const AvailabilityCalendar = () => {
 
     setSelectedDate(firstDate);
     setNote(notes[getDateKey(firstDate)] || "");
+    setEventName(blockedDates[getDateKey(firstDate)]?.eventName || "");
   };
 
   // Select date in popup calendar
@@ -510,12 +548,14 @@ const AvailabilityCalendar = () => {
 
     setSelectedDate(date);
     setNote(notes[getDateKey(date)] || "");
+    setEventName(blockedDates[getDateKey(date)]?.eventName || "");
   };
 
   // Select date in popup left-side list
   const handleSelectListDate = (date) => {
     setSelectedDate(date);
     setNote(notes[getDateKey(date)] || "");
+    setEventName(blockedDates[getDateKey(date)]?.eventName || "");
   };
 
   // Note change
@@ -545,23 +585,42 @@ const AvailabilityCalendar = () => {
     setNote("");
   };
 
-  // Block or unblock the selected date directly from the UI
+  // Block or unblock the selected date range from the edit popup.
   const handleToggleBlockedDate = () => {
     if (!selectedDate) return;
 
-    const key = getDateKey(selectedDate);
+    const dateKeys = getDateRangeKeys(selectedDate, blockDays);
+    const shouldUnblock = dateKeys.some((key) => Boolean(blockedDates[key]));
+
+    if (!shouldUnblock && !eventName.trim()) {
+      window.alert("Please enter an event name before blocking the dates.");
+      return;
+    }
 
     setBlockedDates((prev) => {
       const updatedBlockedDates = { ...prev };
 
-      if (updatedBlockedDates[key]) {
-        delete updatedBlockedDates[key];
-      } else {
-        updatedBlockedDates[key] = true;
-      }
+      dateKeys.forEach((key) => {
+        if (shouldUnblock) {
+          delete updatedBlockedDates[key];
+        } else {
+          updatedBlockedDates[key] = {
+            eventName: eventName.trim(),
+            groupId: `${getDateKey(selectedDate)}-${Date.now()}`,
+          };
+        }
+      });
 
       return updatedBlockedDates;
     });
+  };
+
+  const isSelectedRangeBlocked = (date) => {
+    if (!date) return false;
+
+    return getDateRangeKeys(date, blockDays).some((key) =>
+      Boolean(blockedDates[key])
+    );
   };
 
   // View all dates
@@ -574,7 +633,9 @@ const AvailabilityCalendar = () => {
     const key = getDateKey(date);
 
     if (blockedDates[key]) {
-      return "Blocked";
+      return typeof blockedDates[key] === "object"
+        ? blockedDates[key].eventName || "Blocked"
+        : "Blocked";
     }
 
     if (notes[key]) {
@@ -588,8 +649,12 @@ const AvailabilityCalendar = () => {
   const getStatusColor = (date) => {
     const key = getDateKey(date);
 
-    if (blockedDates[key] || notes[key]) {
-      return "text-[#d00000]";
+    if (blockedDates[key]) {
+      return "text-[#b88600]";
+    }
+
+    if (notes[key]) {
+      return "text-[#b88600]";
     }
 
     const status = getDateStatus(date, today);
@@ -773,17 +838,50 @@ const AvailabilityCalendar = () => {
                       <p className="text-[12px] font-semibold text-[#333]">
                         {formatDate(mainSelectedDate)}
                       </p>
-                      <p className={`mt-1 text-[12px] font-semibold ${blockedDates[getDateKey(mainSelectedDate)] ? "text-[#d00000]" : "text-green-600"}`}>
-                        {blockedDates[getDateKey(mainSelectedDate)] ? "Blocked" : "Available"}
+                      <p className={`mt-1 text-[12px] font-semibold ${isSelectedRangeBlocked(mainSelectedDate) ? "text-[#b88600]" : "text-green-600"}`}>
+                        {isSelectedRangeBlocked(mainSelectedDate)
+                          ? `${blockDays} day${Number(blockDays) === 1 ? "" : "s"} blocked`
+                          : "Available"}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleToggleMainBlockedDate}
-                      className={`rounded-[7px] px-[13px] py-[8px] text-[12px] font-semibold text-white transition ${blockedDates[getDateKey(mainSelectedDate)] ? "bg-[#36834a] hover:bg-[#286b39]" : "bg-[#d00000] hover:bg-[#ad0000]"}`}
-                    >
-                      {blockedDates[getDateKey(mainSelectedDate)] ? "Unblock Date" : "Block Date"}
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {!isSelectedRangeBlocked(mainSelectedDate) && (
+                        <input
+                          type="text"
+                          value={eventName}
+                          onChange={(event) => setEventName(event.target.value)}
+                          placeholder="Event name"
+                          maxLength={80}
+                          className="h-[34px] w-[110px] rounded-[6px] border border-[#d2d2d2] bg-white px-2 text-[11px] outline-none focus:border-[#d99d00]"
+                        />
+                      )}
+                      <label className="flex items-center gap-2 text-[11px] font-medium text-[#555]">
+                        Days
+                        <input
+                          type="number"
+                          min="1"
+                          max="365"
+                          value={blockDays}
+                          onChange={(event) =>
+                            setBlockDays(Math.max(1, Math.min(365, Number(event.target.value) || 1)))
+                          }
+                          className="h-[34px] w-[58px] rounded-[6px] border border-[#d2d2d2] bg-white px-2 text-center text-[12px] outline-none focus:border-[#d99d00]"
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleToggleMainBlockedDate}
+                        className={`rounded-[7px] px-[13px] py-[8px] text-[12px] font-semibold transition ${
+                          isSelectedRangeBlocked(mainSelectedDate)
+                            ? "bg-[#eeeeee] text-[#333333] hover:bg-[#dddddd]"
+                            : "bg-[#f5bd00] text-[#292000] hover:bg-[#e5ad00]"
+                        }`}
+                      >
+                        {isSelectedRangeBlocked(mainSelectedDate)
+                          ? `Unblock ${blockDays} Day${Number(blockDays) === 1 ? "" : "s"}`
+                          : `Block ${blockDays} Day${Number(blockDays) === 1 ? "" : "s"}`}
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <p className="text-center text-[11px] text-[#777]">Select a date to block or unblock it</p>
@@ -943,31 +1041,67 @@ const AvailabilityCalendar = () => {
                   <FaInfoCircle className="mt-[2px] shrink-0 text-[20px] text-[#f0ae00]" />
 
                   <span className="leading-[1.5]">
-                    Select any date on the calendar, then use the button below to block or unblock it.
+                    Select a starting date, choose the event duration, then block or unblock the consecutive dates.
                   </span>
+                </div>
+
+                {/* EVENT NAME */}
+                <div className="mt-[18px]">
+                  <label className="mb-2 block text-[13px] font-semibold text-[#333]">
+                    Event name
+                  </label>
+                  <input
+                    type="text"
+                    value={eventName}
+                    onChange={(event) => setEventName(event.target.value)}
+                    placeholder="Enter event name (e.g. Wedding Event)"
+                    maxLength={80}
+                    className="h-[44px] w-full rounded-[6px] border border-[#d2d2d2] bg-white px-3 text-[13px] outline-none focus:border-[#d99d00]"
+                  />
+                </div>
+
+                {/* EVENT DURATION */}
+                <div className="mt-[18px] flex flex-wrap items-center justify-between gap-3 rounded-[8px] bg-[#fff9e6] px-3 py-3">
+                  <div>
+                    <p className="text-[13px] font-semibold text-[#333]">Event duration</p>
+                    <p className="mt-1 text-[11px] text-[#777]">Block consecutive dates from the selected date</p>
+                  </div>
+                  <label className="flex items-center gap-2 text-[12px] font-medium text-[#555]">
+                    Number of days
+                    <input
+                      type="number"
+                      min="1"
+                      max="365"
+                      value={blockDays}
+                      onChange={(event) =>
+                        setBlockDays(Math.max(1, Math.min(365, Number(event.target.value) || 1)))
+                      }
+                      className="h-[38px] w-[70px] rounded-[6px] border border-[#d2d2d2] bg-white px-2 text-center text-[13px] outline-none focus:border-[#d99d00]"
+                    />
+                  </label>
                 </div>
 
                 {/* BLOCK / UNBLOCK SELECTED DATE */}
                 <div className="mt-[18px] flex flex-wrap items-center justify-between gap-3">
                   <p className="text-[14px] font-medium text-[#444] sm:text-[15px]">
-                    {selectedDate && blockedDates[selectedDateKey]
-                      ? "This date is currently blocked"
-                      : "This date is currently available"}
+                    {selectedDate && isSelectedRangeBlocked(selectedDate)
+                      ? `Blocked dates found in this ${blockDays}-day range`
+                      : `All ${blockDays} days are available`}
                   </p>
 
                   <button
                     type="button"
                     onClick={handleToggleBlockedDate}
                     disabled={!selectedDate}
-                    className={`min-w-[145px] rounded-[8px] px-[20px] py-[11px] text-[14px] font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50 sm:text-[16px] ${
-                      selectedDate && blockedDates[selectedDateKey]
-                        ? "bg-[#36834a] hover:bg-[#286b39]"
-                        : "bg-[#d00000] hover:bg-[#ad0000]"
+                    className={`min-w-[145px] rounded-[8px] px-[20px] py-[11px] text-[14px] font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 sm:text-[16px] ${
+                      selectedDate && isSelectedRangeBlocked(selectedDate)
+                        ? "bg-[#eeeeee] text-[#333333] hover:bg-[#dddddd]"
+                        : "bg-[#f5bd00] text-[#292000] hover:bg-[#e5ad00]"
                     }`}
                   >
-                    {selectedDate && blockedDates[selectedDateKey]
-                      ? "Unblock Date"
-                      : "Block Date"}
+                    {selectedDate && isSelectedRangeBlocked(selectedDate)
+                      ? `Unblock ${blockDays} Day${Number(blockDays) === 1 ? "" : "s"}`
+                      : `Block ${blockDays} Day${Number(blockDays) === 1 ? "" : "s"}`}
                   </button>
                 </div>
 

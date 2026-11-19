@@ -30,12 +30,19 @@ const eventTypes = [
   "Other",
 ];
 
+// Always calculate today's date using India time, regardless of the
+// computer/browser timezone. This prevents the date from shifting to yesterday.
 const getTodayDate = () => {
-  const today = new Date();
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
 
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
 
   return `${year}-${month}-${day}`;
 };
@@ -66,6 +73,7 @@ const PortfolioSectionForm = ({
   const [showGridPreview, setShowGridPreview] = useState(true);
 
   // Load existing data while editing, or restore a saved draft.
+  // Event Date always starts with today's date whenever this form is opened.
   useEffect(() => {
     if (initialData) {
       setEventTitle(initialData.title || "");
@@ -75,7 +83,9 @@ const PortfolioSectionForm = ({
       setEventType(
         initialData.eventType || "Corporate Event"
       );
-      setEventDate(initialData.eventDate || getTodayDate());
+      // Every time this form opens, show the actual current date in India.
+      // Do not reuse an older event date or draft date as the initial value.
+      setEventDate(getTodayDate());
       setAboutEvent(initialData.aboutEvent || "");
       setFeatured(initialData.featured ?? true);
 
@@ -106,7 +116,9 @@ const PortfolioSectionForm = ({
           draft.serviceType || "General Photography"
         );
         setEventType(draft.eventType || "Corporate Event");
-        setEventDate(draft.eventDate || getTodayDate());
+        // A new form should start with today's India date, not an old
+        // date left in localStorage by a previous draft/session.
+        setEventDate(getTodayDate());
         setAboutEvent(draft.aboutEvent || "");
         setFeatured(draft.featured ?? true);
       } else {
