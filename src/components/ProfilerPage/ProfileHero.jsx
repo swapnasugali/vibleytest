@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   FaStar,
   FaClock,
@@ -10,28 +12,28 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { GiPartyPopper } from "react-icons/gi";
 import { PiSealCheckFill } from "react-icons/pi";
 
-
 const ProfileHero = () => {
+  const navigate = useNavigate();
+
+  const handleViewPublicPage = () => {
+    navigate("/portfolio/photography/artlane");
+  };
+
   return (
-    <section className="w-full overflow-hidden rounded-[6px] border border-[#777] bg-[#eeeeee]"
-    style={{ fontFamily: "Poppins, sans-serif" }}>
-
-      {/* ================================================= */}
+    <section
+      className="w-full overflow-hidden rounded-[6px] border border-[#777] bg-[#eeeeee]"
+      style={{ fontFamily: "Poppins, sans-serif" }}
+    >
       {/* COVER IMAGE */}
-      {/* ================================================= */}
-
       <div className="relative w-full overflow-hidden bg-[#eeeeee]">
         <img
-          src={"https://res.cloudinary.com/porwmjke/image/upload/v1791545365/photography1.png"}
+          src="https://res.cloudinary.com/porwmjke/image/upload/v1791545365/photography1.png"
           alt="Artlane Studio Cover"
           className="block h-auto w-full object-contain"
         />
       </div>
 
-      {/* ================================================= */}
       {/* PROFILE INFORMATION */}
-      {/* ================================================= */}
-
       <div
         className="
           relative
@@ -62,11 +64,7 @@ const ProfileHero = () => {
           lg:pt-0
         "
       >
-
-        {/* ================================================= */}
         {/* PROFILE LOGO */}
-        {/* ================================================= */}
-
         <div
           className="
             absolute
@@ -102,16 +100,13 @@ const ProfileHero = () => {
           "
         >
           <img
-            src={"https://res.cloudinary.com/porwmjke/image/upload/v1791779873/artlane-logo.png"}
+            src="https://res.cloudinary.com/porwmjke/image/upload/v1791779873/artlane-logo.png"
             alt="Artlane Studio Logo"
             className="block h-full w-full object-contain"
           />
         </div>
 
-        {/* ================================================= */}
         {/* BUSINESS INFORMATION */}
-        {/* ================================================= */}
-
         <div
           className="
             relative
@@ -124,11 +119,8 @@ const ProfileHero = () => {
             lg:w-auto
           "
         >
-
           {/* BUSINESS NAME */}
-
           <div className="flex flex-wrap items-center gap-[7px]">
-
             <h1
               className="
                 text-[22px]
@@ -145,7 +137,6 @@ const ProfileHero = () => {
             </h1>
 
             {/* VERIFIED */}
-
             <span
               className="
                 flex
@@ -167,11 +158,9 @@ const ProfileHero = () => {
               <PiSealCheckFill className="text-[13px]" />
               VERIFIED
             </span>
-
           </div>
 
           {/* BUSINESS DETAILS */}
-
           <div
             className="
               mt-[8px]
@@ -182,9 +171,7 @@ const ProfileHero = () => {
               gap-y-[5px]
             "
           >
-
             {/* RATING */}
-
             <div className="flex items-center gap-[3px]">
               <FaStar className="text-[15px] text-[#f2b900]" />
 
@@ -198,24 +185,18 @@ const ProfileHero = () => {
             </div>
 
             {/* LOCATION */}
-
             <span className="text-[12px] text-[#6B7280] sm:text-[13px] lg:text-[14px]">
               Kondapur, Hyderabad
             </span>
 
             {/* MEMBER */}
-
             <span className="text-[12px] text-[#6B7280] sm:text-[13px] lg:text-[14px]">
               Member since 2018
             </span>
-
           </div>
         </div>
 
-        {/* ================================================= */}
         {/* ACTION BUTTONS */}
-        {/* ================================================= */}
-
         <div
           className="
             relative
@@ -235,9 +216,7 @@ const ProfileHero = () => {
             lg:mt-0
           "
         >
-
-          {/* EDIT PROFILE */}
-
+          {/* EDIT PROFILE - NO NAVIGATION */}
           <button
             type="button"
             className="
@@ -263,9 +242,9 @@ const ProfileHero = () => {
           </button>
 
           {/* VIEW PUBLIC PAGE */}
-
           <button
             type="button"
+            onClick={handleViewPublicPage}
             className="
               flex
               h-[42px]
@@ -292,13 +271,9 @@ const ProfileHero = () => {
 
             <FiArrowUpRight className="text-[18px] lg:text-[20px]" />
           </button>
-
         </div>
 
-        {/* ================================================= */}
         {/* STATS */}
-        {/* ================================================= */}
-
         <div
           className="
             relative
@@ -318,7 +293,6 @@ const ProfileHero = () => {
             lg:w-auto
           "
         >
-
           <div
             className="
               grid
@@ -335,13 +309,8 @@ const ProfileHero = () => {
               lg:gap-[30px]
             "
           >
-
-            {/* ================================================= */}
             {/* TOTAL EVENTS */}
-            {/* ================================================= */}
-
             <div className="flex min-w-0 items-center gap-[7px]">
-
               <div
                 className="
                   flex
@@ -358,7 +327,6 @@ const ProfileHero = () => {
               </div>
 
               <div className="min-w-0">
-
                 <p className="truncate text-[11px] text-[#6B7280] sm:text-[12px] lg:text-[14px]">
                   Total Events
                 </p>
@@ -366,16 +334,11 @@ const ProfileHero = () => {
                 <p className="text-[17px] font-semibold text-[#1C180D] sm:text-[18px] lg:text-[20px]">
                   160+
                 </p>
-
               </div>
             </div>
 
-            {/* ================================================= */}
             {/* EXPERIENCE */}
-            {/* ================================================= */}
-
             <div className="flex min-w-0 items-center gap-[7px]">
-
               <div
                 className="
                   flex
@@ -392,7 +355,6 @@ const ProfileHero = () => {
               </div>
 
               <div className="min-w-0">
-
                 <p className="truncate text-[11px] text-[#6B7280] sm:text-[12px] lg:text-[14px]">
                   Experience
                 </p>
@@ -400,16 +362,11 @@ const ProfileHero = () => {
                 <p className="text-[17px] font-semibold text-[#1C180D] sm:text-[18px] lg:text-[20px]">
                   12 Years
                 </p>
-
               </div>
             </div>
 
-            {/* ================================================= */}
             {/* TEAM SIZE */}
-            {/* ================================================= */}
-
             <div className="flex min-w-0 items-center gap-[7px]">
-
               <div
                 className="
                   flex
@@ -426,7 +383,6 @@ const ProfileHero = () => {
               </div>
 
               <div className="min-w-0">
-
                 <p className="truncate text-[11px] text-[#6B7280] sm:text-[12px] lg:text-[14px]">
                   Team Size
                 </p>
@@ -434,16 +390,11 @@ const ProfileHero = () => {
                 <p className="text-[17px] font-semibold text-[#1C180D] sm:text-[18px] lg:text-[20px]">
                   15 People
                 </p>
-
               </div>
             </div>
 
-            {/* ================================================= */}
             {/* RESPONSE RATE */}
-            {/* ================================================= */}
-
             <div className="flex min-w-0 items-center gap-[7px]">
-
               <div
                 className="
                   flex
@@ -460,7 +411,6 @@ const ProfileHero = () => {
               </div>
 
               <div className="min-w-0">
-
                 <p className="truncate text-[11px] text-[#6B7280] sm:text-[12px] lg:text-[14px]">
                   Response Rate
                 </p>
@@ -468,13 +418,10 @@ const ProfileHero = () => {
                 <p className="text-[17px] font-semibold text-[#1C180D] sm:text-[18px] lg:text-[20px]">
                   98%
                 </p>
-
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
     </section>
   );

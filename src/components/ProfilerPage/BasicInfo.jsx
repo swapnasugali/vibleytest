@@ -1,28 +1,55 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+const STORAGE_KEY = "vibleyBasicInfo";
+const PROFILE_UPDATE_EVENT = "vibleyProfileUpdated";
+
+const DEFAULT_LANGUAGES = ["English", "Telugu", "Hindi"];
+
+const DEFAULT_FORM_DATA = {
+  businessName: "",
+  businessType: "",
+  serviceType: "",
+  specializedIn: "",
+  experience: "",
+  teamSize: "",
+};
 
 const BasicInfo = () => {
-  const [languages, setLanguages] = useState([
-    "English",
-    "Telugu",
-    "Hindi",
-  ]);
+  const [languages, setLanguages] = useState(DEFAULT_LANGUAGES);
 
   const [showLanguageInput, setShowLanguageInput] = useState(false);
   const [newLanguage, setNewLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [formData, setFormData] = useState({
-    businessName: "",
-    businessType: "",
-    serviceType: "",
-    specializedIn: "",
-    experience: "",
-    teamSize: "",
-  });
+  const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
 
-  // Common input change handler
+  // LOAD SAVED BASIC INFO WHEN COMPONENT OPENS
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+
+        setFormData({
+          ...DEFAULT_FORM_DATA,
+          ...parsedData,
+        });
+
+        setLanguages(
+          Array.isArray(parsedData.languages)
+            ? parsedData.languages
+            : DEFAULT_LANGUAGES
+        );
+      }
+    } catch (error) {
+      console.error("Unable to load Basic Info:", error);
+    }
+  }, []);
+
+  // COMMON INPUT CHANGE HANDLER
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -45,11 +72,10 @@ const BasicInfo = () => {
     setSuccessMessage("");
   };
 
-  // Validate form
+  // VALIDATE FORM
   const validateForm = () => {
     const newErrors = {};
 
-    // Business Name
     if (!formData.businessName.trim()) {
       newErrors.businessName = "Business name is required.";
     } else if (formData.businessName.trim().length < 2) {
@@ -63,7 +89,6 @@ const BasicInfo = () => {
         "Only alphabets and spaces are allowed.";
     }
 
-    // Business Type
     if (
       !["Company", "Individual", "Partnership"].includes(
         formData.businessType
@@ -72,7 +97,6 @@ const BasicInfo = () => {
       newErrors.businessType = "Please select a business type.";
     }
 
-    // Service Type
     if (
       !["Photography", "Catering", "Venue", "Decoration"].includes(
         formData.serviceType
@@ -81,7 +105,6 @@ const BasicInfo = () => {
       newErrors.serviceType = "Please select a service type.";
     }
 
-    // Specialized In
     if (!formData.specializedIn.trim()) {
       newErrors.specializedIn = "Specialization is required.";
     } else if (formData.specializedIn.trim().length > 100) {
@@ -94,7 +117,6 @@ const BasicInfo = () => {
         "Only alphabets and spaces are allowed.";
     }
 
-    // Experience
     if (formData.experience === "") {
       newErrors.experience = "Experience is required.";
     } else if (
@@ -105,7 +127,6 @@ const BasicInfo = () => {
         "Enter a whole number between 0 and 100.";
     }
 
-    // Team Size
     if (formData.teamSize === "") {
       newErrors.teamSize = "Team size is required.";
     } else if (
@@ -117,7 +138,6 @@ const BasicInfo = () => {
         "Enter a whole number between 1 and 1000.";
     }
 
-    // Languages
     if (languages.length === 0) {
       newErrors.languages = "Add at least one language.";
     } else if (languages.length > 10) {
@@ -126,10 +146,11 @@ const BasicInfo = () => {
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
-  // Add language
+  // ADD LANGUAGE
   const handleAddLanguage = () => {
     if (languages.length >= 10) {
       setErrors((prev) => ({
@@ -149,7 +170,7 @@ const BasicInfo = () => {
     }));
   };
 
-  // Save language
+  // SAVE LANGUAGE
   const handleSaveLanguage = () => {
     const language = newLanguage.trim();
 
@@ -210,7 +231,7 @@ const BasicInfo = () => {
     setSuccessMessage("");
   };
 
-  // Cancel language input
+  // CANCEL LANGUAGE INPUT
   const handleCancelLanguage = () => {
     setShowLanguageInput(false);
     setNewLanguage("");
@@ -221,7 +242,7 @@ const BasicInfo = () => {
     }));
   };
 
-  // Enter and Escape keyboard support
+  // ENTER AND ESCAPE KEY SUPPORT
   const handleLanguageKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -233,7 +254,7 @@ const BasicInfo = () => {
     }
   };
 
-  // Remove language
+  // REMOVE LANGUAGE
   const handleRemoveLanguage = (languageToRemove) => {
     setLanguages((prev) =>
       prev.filter((language) => language !== languageToRemove)
@@ -247,7 +268,7 @@ const BasicInfo = () => {
     setSuccessMessage("");
   };
 
-  // Submit form
+  // SUBMIT AND SAVE BASIC INFO
   const handleSubmit = (event) => {
     event.preventDefault();
     setSuccessMessage("");
@@ -262,17 +283,42 @@ const BasicInfo = () => {
       specializedIn: formData.specializedIn.trim(),
       experience: Number(formData.experience),
       teamSize: Number(formData.teamSize),
-      languages,
+      languages: [...languages],
     };
 
-    console.log("Basic Info:", basicInfo);
+    try {
+      // SAVE DATA IN LOCAL STORAGE
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(basicInfo)
+      );
 
-    setSuccessMessage(
-      "Basic information validated successfully."
-    );
+      // NOTIFY OTHER COMPONENTS
+      window.dispatchEvent(
+        new Event(PROFILE_UPDATE_EVENT)
+      );
+
+      setFormData({
+        ...basicInfo,
+        experience: String(basicInfo.experience),
+        teamSize: String(basicInfo.teamSize),
+      });
+
+      setSuccessMessage(
+        "Basic information saved successfully."
+      );
+
+      console.log("Basic Info Saved:", basicInfo);
+    } catch (error) {
+      console.error("Unable to save Basic Info:", error);
+
+      setErrors((prev) => ({
+        ...prev,
+        submit: "Unable to save details. Please try again.",
+      }));
+    }
   };
 
-  // Common styles
   const labelClass =
     "mb-[6px] block text-[16px] font-semibold text-[#2E2E2E]";
 
@@ -287,7 +333,6 @@ const BasicInfo = () => {
       className="w-full overflow-hidden rounded-[5px] border border-[#eeeeee] bg-white shadow-sm"
       style={{ fontFamily: "Poppins, sans-serif" }}
     >
-      {/* Number Input Spinner Styling */}
       <style>{`
         input.number-input-no-spinner {
           appearance: textfield !important;
@@ -319,7 +364,7 @@ const BasicInfo = () => {
         }
       `}</style>
 
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex items-center justify-between border-b border-[#e5e5e5] px-[16px] py-[12px]">
         <h2 className="text-[19px] font-semibold tracking-wide text-[#1C1C1C]">
           BASIC INFO
@@ -331,9 +376,8 @@ const BasicInfo = () => {
         noValidate
         className="px-[16px] pb-[20px] pt-[16px]"
       >
-        {/* Business Name and Business Type */}
+        {/* BUSINESS NAME AND TYPE */}
         <div className="grid grid-cols-1 gap-[14px] sm:grid-cols-2">
-
           <div>
             <label htmlFor="businessName" className={labelClass}>
               Business Name *
@@ -354,9 +398,7 @@ const BasicInfo = () => {
             />
 
             {errors.businessName && (
-              <p className={errorClass}>
-                {errors.businessName}
-              </p>
+              <p className={errorClass}>{errors.businessName}</p>
             )}
           </div>
 
@@ -382,14 +424,12 @@ const BasicInfo = () => {
             </select>
 
             {errors.businessType && (
-              <p className={errorClass}>
-                {errors.businessType}
-              </p>
+              <p className={errorClass}>{errors.businessType}</p>
             )}
           </div>
         </div>
 
-        {/* Service Type */}
+        {/* SERVICE TYPE */}
         <div className="mt-[14px]">
           <label htmlFor="serviceType" className={labelClass}>
             Service Type *
@@ -413,13 +453,11 @@ const BasicInfo = () => {
           </select>
 
           {errors.serviceType && (
-            <p className={errorClass}>
-              {errors.serviceType}
-            </p>
+            <p className={errorClass}>{errors.serviceType}</p>
           )}
         </div>
 
-        {/* Specialized In */}
+        {/* SPECIALIZED IN */}
         <div className="mt-[14px]">
           <label htmlFor="specializedIn" className={labelClass}>
             Specialized in *
@@ -440,15 +478,12 @@ const BasicInfo = () => {
           />
 
           {errors.specializedIn && (
-            <p className={errorClass}>
-              {errors.specializedIn}
-            </p>
+            <p className={errorClass}>{errors.specializedIn}</p>
           )}
         </div>
 
-        {/* Experience and Team Size */}
+        {/* EXPERIENCE AND TEAM SIZE */}
         <div className="mt-[14px] grid grid-cols-1 gap-[14px] sm:grid-cols-2">
-
           <div>
             <label htmlFor="experience" className={labelClass}>
               Experience in Years *
@@ -471,9 +506,7 @@ const BasicInfo = () => {
             />
 
             {errors.experience && (
-              <p className={errorClass}>
-                {errors.experience}
-              </p>
+              <p className={errorClass}>{errors.experience}</p>
             )}
           </div>
 
@@ -499,14 +532,12 @@ const BasicInfo = () => {
             />
 
             {errors.teamSize && (
-              <p className={errorClass}>
-                {errors.teamSize}
-              </p>
+              <p className={errorClass}>{errors.teamSize}</p>
             )}
           </div>
         </div>
 
-        {/* Languages Known */}
+        {/* LANGUAGES KNOWN */}
         <div className="mt-[16px]">
           <div className="mb-[8px] flex items-center justify-between">
             <label className={labelClass}>
@@ -518,9 +549,7 @@ const BasicInfo = () => {
             </span>
           </div>
 
-          {/* Language Chips */}
           <div className="flex flex-wrap items-center gap-[8px]">
-
             {languages.map((language) => (
               <span
                 key={language}
@@ -553,10 +582,8 @@ const BasicInfo = () => {
             )}
           </div>
 
-          {/* Add Language Input */}
           {showLanguageInput && (
             <div className="mt-[12px] flex flex-wrap items-start gap-[8px]">
-
               <div>
                 <input
                   autoFocus
@@ -579,9 +606,7 @@ const BasicInfo = () => {
                 />
 
                 {errors.newLanguage && (
-                  <p className={errorClass}>
-                    {errors.newLanguage}
-                  </p>
+                  <p className={errorClass}>{errors.newLanguage}</p>
                 )}
               </div>
 
@@ -604,15 +629,12 @@ const BasicInfo = () => {
           )}
 
           {errors.languages && (
-            <p className={errorClass}>
-              {errors.languages}
-            </p>
+            <p className={errorClass}>{errors.languages}</p>
           )}
         </div>
 
-        {/* Submit Section */}
+        {/* SUBMIT SECTION */}
         <div className="mt-[22px] flex flex-wrap items-center gap-[12px] border-t border-[#eeeeee] pt-[15px]">
-
           <button
             type="submit"
             className="cursor-pointer rounded-[5px] bg-[#970000] px-[22px] py-[10px] text-[13px] font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:bg-[#790000] hover:shadow-md active:translate-y-0"
@@ -628,6 +650,10 @@ const BasicInfo = () => {
               <span>✓</span>
               {successMessage}
             </p>
+          )}
+
+          {errors.submit && (
+            <p className={errorClass}>{errors.submit}</p>
           )}
         </div>
       </form>
